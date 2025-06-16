@@ -208,15 +208,17 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }: PageP
         outsideCurveStrength * outsideCurveIntensity * targetRotation +
         turningCurveStrength * turningIntensity * targetRotation;
       let foldRotationAngle = degToRad(Math.sign(targetRotation) * 2);
+      
       if (bookClosed) {
         if (i === 0) {
-          rotationAngle = targetRotation;
+          rotationAngle = Math.PI / 2;
           foldRotationAngle = 0;
         } else {
           rotationAngle = 0;
           foldRotationAngle = 0;
         }
       }
+
       easing.dampAngle(
         target.rotation,
         "y",
@@ -239,9 +241,13 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }: PageP
     }
   });
 
-  const [_, setPage] = useAtom(pageAtom);
+  const [pageState, setPage] = useAtom(pageAtom);
   const [highlighted, setHighlighted] = useState(false);
   useCursor(highlighted);
+
+  useEffect(() => {
+    setPage(0);
+  }, []);
 
   return (
     <group
@@ -249,11 +255,11 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }: PageP
       ref={group}
       onClick={(e) => {
         e.stopPropagation();
-        if (number === page) {
-          setPage(page + 1);
+        if (number === pageState) {
+          setPage(pageState + 1);
           playPageFlipSound();
-        } else if (number === page - 1) {
-          setPage(page - 1);
+        } else if (number === pageState - 1) {
+          setPage(pageState - 1);
           playPageFlipSound();
         }
       }}

@@ -24,21 +24,27 @@ const pictures = [
   "DSC02069",
 ];
 
+// Initialize page state to 0 (closed book)
 export const pageAtom = atom(0);
+
+// Create pages array with proper ordering
 export const pages: Page[] = [
+  // Front cover
   {
     front: "book-cover",
-    back: pictures[0],
-  },
+    back: "book-back",
+  }
 ];
 
-for (let i = 1; i < pictures.length - 1; i += 2) {
+// Add content pages
+for (let i = 0; i < pictures.length - 1; i += 2) {
   pages.push({
-    front: pictures[i % pictures.length],
-    back: pictures[(i + 1) % pictures.length],
+    front: pictures[i],
+    back: pictures[i + 1],
   });
 }
 
+// Add back cover
 pages.push({
   front: pictures[pictures.length - 1],
   back: "book-back",

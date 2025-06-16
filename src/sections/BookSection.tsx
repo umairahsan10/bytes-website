@@ -23,7 +23,7 @@ export const BookSection = () => {
         <div className="mt-20 h-[600px] relative">
           <Canvas
             camera={{
-              position: [0, 0, 3],
+              position: [0, 0, 4],
               fov: 45,
               near: 0.1,
               far: 1000,
@@ -46,15 +46,18 @@ export const BookSection = () => {
                 castShadow
                 shadow-mapSize={[1024, 1024]}
               />
-              <Book position={[0, 0, 0]} rotation={[0, 0, 0]} />
+              <Book position={[0, 0, 0]} rotation={[0, -Math.PI / 2, 0]} />
               <OrbitControls
                 enableZoom={true}
                 enablePan={true}
-                minDistance={2}
-                maxDistance={5}
-                minPolarAngle={Math.PI / 6}
-                maxPolarAngle={Math.PI * 5/6}
+                minDistance={3}
+                maxDistance={6}
+                minPolarAngle={Math.PI / 4}
+                maxPolarAngle={Math.PI * 3/4}
                 target={[0, 0, 0]}
+                enableDamping={true}
+                dampingFactor={0.05}
+                initialPosition={[0, 0, 4]}
               />
             </Suspense>
           </Canvas>
