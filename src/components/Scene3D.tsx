@@ -58,7 +58,7 @@ const Model = () => {
 
 const Scene3DContent = () => {
     return (
-        <Canvas style={{ background: 'transparent' }}>
+        <Canvas style={{ background: 'transparent', pointerEvents: 'none' }}>
             <Suspense fallback={null}>
                 <Model />
                 <directionalLight intensity={2} position={[0, 2, 3]}/>
