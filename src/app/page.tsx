@@ -4,6 +4,7 @@ import { ProjectsSection } from "@/sections/Projects";
 import { TapeSection } from "@/sections/Tape";
 import { TestimonialsSection } from "@/sections/Testimonials";
 import { AboutSection } from "@/sections/About";
+import { BookSection } from "@/sections/BookSection";
 import { Footer } from "@/sections/Footer";
 import { ContactSection } from "@/sections/Contact";
 
@@ -16,6 +17,7 @@ export default function Home() {
       <TapeSection />
       <TestimonialsSection />
       <AboutSection />
+      <BookSection />
       <ContactSection />
       <Footer />
     </div>
