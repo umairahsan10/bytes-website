@@ -22,7 +22,7 @@
             className="absolute top-0 left-0 w-full h-full object-cover opacity-50"
             onError={(e) => console.error('Video error:', e)}
           >
-            <source src="/hong-kong.mp4" type="video/mp4" />
+            <source src="/public/mediashong-kong.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
           <Scene3D />
