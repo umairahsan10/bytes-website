@@ -32,15 +32,15 @@ export const pages: Page[] = [
   // Front cover
   {
     front: "book-cover",
-    back: "book-back",
+    back: pictures[0], // First content image on the back of cover
   }
 ];
 
 // Add content pages
-for (let i = 0; i < pictures.length - 1; i += 2) {
+for (let i = 0; i < pictures.length - 2; i += 2) {
   pages.push({
-    front: pictures[i],
-    back: pictures[i + 1],
+    front: pictures[i + 1],
+    back: pictures[i + 2],
   });
 }
 

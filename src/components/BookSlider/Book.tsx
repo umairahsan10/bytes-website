@@ -245,28 +245,63 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }: PageP
   const [highlighted, setHighlighted] = useState(false);
   useCursor(highlighted);
 
-  useEffect(() => {
-    setPage(0);
-  }, []);
-
   return (
     <group
       {...props}
       ref={group}
       onClick={(e) => {
         e.stopPropagation();
+        
+        // Handle book closed state (pageState === 0)
+        if (pageState === 0) {
+          if (number === 0) {
+            // Clicking front cover when closed - open to first page
+            setPage(1);
+            playPageFlipSound();
+          } else if (number === pages.length - 1) {
+            // Clicking back cover when closed - open from back to last page
+            setPage(pages.length - 1);
+            playPageFlipSound();
+          }
+          return;
+        }
+
+        // Handle book open state
         if (number === pageState) {
-          setPage(pageState + 1);
-          playPageFlipSound();
+          // If we're on the last page, show back cover
+          if (pageState === pages.length - 1) {
+            setPage(pages.length);
+            playPageFlipSound();
+          } else {
+            // Otherwise go to next page
+            setPage(pageState + 1);
+            playPageFlipSound();
+          }
         } else if (number === pageState - 1) {
+          // Go to previous page
           setPage(pageState - 1);
           playPageFlipSound();
+        } else if (pageState === pages.length) {
+          // When showing back cover
+          if (number === pages.length - 1) {
+            // Clicking back cover reopens to last page
+            setPage(pages.length - 1);
+            playPageFlipSound();
+          } else if (number === 0) {
+            // Clicking front cover opens to first page
+            setPage(1);
+            playPageFlipSound();
+          }
         }
       }}
       onPointerOver={() => setHighlighted(true)}
       onPointerOut={() => setHighlighted(false)}
     >
-      <primitive object={manualSkinnedMesh} ref={skinnedMeshRef} />
+      <primitive 
+        object={manualSkinnedMesh} 
+        ref={skinnedMeshRef}
+        position-z={-number * PAGE_DEPTH + pageState * PAGE_DEPTH}
+      />
     </group>
   );
 };
@@ -276,8 +311,38 @@ interface BookProps {
 }
 
 export const Book = ({ ...props }: BookProps) => {
-  const [page] = useAtom(pageAtom);
+  const [page, setPage] = useAtom(pageAtom);
+  const [delayedPage, setDelayedPage] = useState(page);
   const [scale, setScale] = useState(getResponsiveScale());
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    const goToPage = () => {
+      setDelayedPage((delayedPage) => {
+        if (page === delayedPage) {
+          return delayedPage;
+        } else {
+          timeout = setTimeout(
+            () => {
+              goToPage();
+            },
+            Math.abs(page - delayedPage) > 2 ? 50 : 150
+          );
+          if (page > delayedPage) {
+            return delayedPage + 1;
+          }
+          if (page < delayedPage) {
+            return delayedPage - 1;
+          }
+          return delayedPage;
+        }
+      });
+    };
+    goToPage();
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [page]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -289,16 +354,16 @@ export const Book = ({ ...props }: BookProps) => {
   }, []);
 
   return (
-    <group {...props} scale={scale}>
+    <group {...props} scale={scale} rotation-y={-Math.PI / 2}>
       {pages.map((pageData, index) => (
         <Page
           key={index}
           number={index}
           front={pageData.front}
           back={pageData.back}
-          page={page}
-          opened={page > index}
-          bookClosed={page === 0}
+          page={delayedPage}
+          opened={delayedPage > index}
+          bookClosed={delayedPage === 0}
         />
       ))}
     </group>

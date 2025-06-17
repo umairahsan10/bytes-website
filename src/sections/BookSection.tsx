@@ -48,7 +48,7 @@ export const BookSection = () => {
               />
               <Book position={[0, 0, 0]} rotation={[0, -Math.PI / 2, 0]} />
               <OrbitControls
-                enableZoom={true}
+                enableZoom={false}
                 enablePan={true}
                 minDistance={3}
                 maxDistance={6}
@@ -57,7 +57,6 @@ export const BookSection = () => {
                 target={[0, 0, 0]}
                 enableDamping={true}
                 dampingFactor={0.05}
-                initialPosition={[0, 0, 4]}
               />
             </Suspense>
           </Canvas>
