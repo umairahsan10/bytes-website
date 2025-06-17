@@ -27,8 +27,10 @@ export const Experience = () => {
   return (
     <>
       <Float
-        position={[0, 0, 0]}
-        rotation={[0, page === 0 ? Math.PI : 0, 0]}
+        position={[0, 0.3, 0.9]}
+        rotation-x={-0.5}
+        rotation-y={0}
+        rotation-z={0}
         floatIntensity={0.5}
         speed={1}
         rotationIntensity={1}
