@@ -18,10 +18,8 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
-        // Set mounted to true after component mounts
         setIsMounted(true);
 
-        // Initialize loading animation for logo-name
         const logoAnimation = gsap.to(".logo-name", {
             opacity: 0.5,
             yoyo: true,
@@ -31,14 +29,11 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
         });
 
         const fadeOutLoader = () => {
-            // Stop the logo name animation
             logoAnimation.kill();
-
             gsap.to(".logo-name", {
                 opacity: 1,
                 duration: 0.5
             });
-
             gsap.to(".loading-page", {
                 opacity: 0,
                 duration: 1.5,
@@ -50,12 +45,10 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
             });
         };
 
-        // Wait for everything to load
         const handleLoad = () => {
             setTimeout(fadeOutLoader, loadingDuration);
         };
 
-        // Ensure minimum loading time
         const minTimer = setTimeout(() => {
             if (document.readyState === 'complete') {
                 handleLoad();
@@ -64,7 +57,6 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
             }
         }, minLoadingTime);
 
-        // Fallback: If load event doesn't fire after 30 seconds
         const fallbackTimer = setTimeout(() => {
             if (isVisible) {
                 fadeOutLoader();
@@ -83,16 +75,19 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
 
     return (
         <>
-            <style jsx>{`
+            <style jsx global>{`
                 @import url("https://fonts.googleapis.com/css2?family=Michroma&display=swap");
                 @import url('https://fonts.googleapis.com/css2?family=Roboto+Serif:opsz,wght@8..144,700&display=swap');
 
-                /* Ensure the loading page is hidden until styles are applied */
+                body {
+                    margin: 0;
+                    overflow: hidden; /* Prevent scroll during loading */
+                }
+
                 .loading-page {
                     position: fixed;
                     top: 0;
                     left: 0;
-                    background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
                     height: 100vh;
                     width: 100vw;
                     display: flex;
@@ -100,11 +95,31 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
                     gap: 0.5rem;
                     align-items: center;
                     justify-content: center;
-                    color: #191654;
-                    z-index: 9999;
+                    background: linear-gradient(
+                        45deg,
+                        #2c5364,
+                        #ff00ff,
+                        #00ffcc,
+                        #ff5733
+                    );
+                    background-size: 400%;
+                    animation: gradientShift 8s ease infinite;
+                    z-index: 10001;
                     overflow: hidden;
-                    opacity: 0; /* Start hidden */
-                    animation: fadeIn 0.2s forwards; /* Quick fade-in once mounted */
+                    opacity: 0;
+                    animation: fadeIn 0.2s forwards;
+                }
+
+                @keyframes gradientShift {
+                    0% {
+                        background-position: 0% 50%;
+                    }
+                    50% {
+                        background-position: 100% 50%;
+                    }
+                    100% {
+                        background-position: 0% 50%;
+                    }
                 }
 
                 @keyframes fadeIn {
@@ -117,101 +132,159 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
                 .loading-page::after {
                     content: '';
                     position: absolute;
-                    width: 300px;
-                    height: 300px;
+                    width: 20vw;
+                    height: 20vw;
                     border-radius: 50%;
-                    background: rgba(255, 255, 255, 0.05);
-                    animation: float 15s infinite linear;
+                    background: radial-gradient(
+                        circle,
+                        rgba(255, 255, 255, 0.2),
+                        rgba(255, 0, 255, 0.3),
+                        rgba(0, 255, 204, 0.1)
+                    );
+                    animation: pulse 4s ease-in-out infinite, erraticFloat 6s ease-in-out infinite;
                 }
 
                 .loading-page::before {
-                    top: -100px;
-                    left: -100px;
-                    animation-delay: -5s;
+                    top: -5vw;
+                    left: -5vw;
+                    animation-delay: -2s, -1s;
                 }
 
                 .loading-page::after {
-                    bottom: -100px;
-                    right: -100px;
-                    animation-delay: -2.5s;
+                    bottom: -5vw;
+                    right: -5vw;
+                    animation-delay: -3s, -2s;
                 }
 
                 .bg-circle {
                     position: absolute;
                     border-radius: 50%;
-                    background: rgba(255, 255, 255, 0.025);
-                    animation: float 20s infinite ease-in-out;
+                    background: radial-gradient(
+                        circle,
+                        rgba(255, 255, 255, 0.15),
+                        rgba(255, 165, 0, 0.2),
+                        rgba(0, 0, 255, 0.1)
+                    );
+                    animation: pulse 5s ease-in-out infinite, erraticFloat 7s ease-in-out infinite;
                 }
 
                 .bg-circle:nth-child(1) {
-                    width: 200px;
-                    height: 200px;
+                    width: 15vw;
+                    height: 15vw;
                     top: 20%;
                     left: 20%;
-                    animation-delay: -1s;
+                    animation-delay: -1s, -3s;
                 }
 
                 .bg-circle:nth-child(2) {
-                    width: 150px;
-                    height: 150px;
+                    width: 10vw;
+                    height: 10vw;
                     top: 40%;
                     right: 20%;
-                    animation-delay: -3s;
+                    animation-delay: -2s, -4s;
                 }
 
                 .bg-circle:nth-child(3) {
-                    width: 250px;
-                    height: 250px;
+                    width: 18vw;
+                    height: 18vw;
                     bottom: 20%;
                     left: 30%;
-                    animation-delay: -5s;
+                    animation-delay: -3s, -5s;
                 }
 
-                @keyframes float {
+                @keyframes pulse {
                     0% {
-                        transform: rotate(0deg) translate(50px) rotate(0deg);
+                        transform: scale(1);
+                        opacity: 0.6;
+                    }
+                    50% {
+                        transform: scale(1.5);
+                        opacity: 0.3;
                     }
                     100% {
-                        transform: rotate(360deg) translate(50px) rotate(-360deg);
+                        transform: scale(1);
+                        opacity: 0.6;
+                    }
+                }
+
+                @keyframes erraticFloat {
+                    0% {
+                        transform: translate(0, 0) rotate(0deg);
+                    }
+                    20% {
+                        transform: translate(5vw, -3vw) rotate(30deg);
+                    }
+                    40% {
+                        transform: translate(-3vw, 4vw) rotate(-20deg);
+                    }
+                    60% {
+                        transform: translate(4vw, 2vw) rotate(40deg);
+                    }
+                    80% {
+                        transform: translate(-2vw, -5vw) rotate(-10deg);
+                    }
+                    100% {
+                        transform: translate(0, 0) rotate(0deg);
                     }
                 }
 
                 #svg {
-                    height: 200px;
-                    width: 200px;
-                    stroke: white;
+                    width: 40vw;
+                    height: 40vw;
+                    max-width: 200px;
+                    max-height: 200px;
+                    stroke: #fff;
                     fill-opacity: 0;
-                    stroke-width: 3.5px;
+                    stroke-width: 4px;
                     stroke-linecap: round;
                     stroke-linejoin: round;
-                    margin-bottom: -20px;
+                    animation: spinAndGlow 6s ease-in-out infinite;
                 }
 
                 .letter {
                     stroke-dasharray: 1500;
                     stroke-dashoffset: 1500;
                     opacity: 0;
-                    animation: draw 3.5s cubic-bezier(0.4, 0, 0.2, 1) forwards, glow 3s ease-in-out infinite;
-                    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7));
+                    animation: draw 3s cubic-bezier(0.4, 0, 0.2, 1) forwards,
+                        colorShift 4s ease-in-out infinite;
+                    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
                     transform-origin: center;
                 }
 
                 .letter:nth-child(2) {
-                    animation-delay: 2s, 5.5s;
+                    animation-delay: 1.5s, 2s;
                 }
 
-                @keyframes glow {
+                @keyframes spinAndGlow {
                     0% {
-                        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7));
-                        transform: scale(1);
+                        transform: rotate(0deg) scale(1);
+                        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
                     }
                     50% {
-                        filter: drop-shadow(0 0 20px rgba(255, 255, 255, 1));
-                        transform: scale(1.02);
+                        transform: rotate(180deg) scale(1.2);
+                        filter: drop-shadow(0 0 20px rgba(0, 255, 255, 1));
                     }
                     100% {
-                        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7));
-                        transform: scale(1);
+                        transform: rotate(360deg) scale(1);
+                        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+                    }
+                }
+
+                @keyframes colorShift {
+                    0% {
+                        stroke: #fff;
+                    }
+                    25% {
+                        stroke: #ff00ff;
+                    }
+                    50% {
+                        stroke: #00ffcc;
+                    }
+                    75% {
+                        stroke: #ff5733;
+                    }
+                    100% {
+                        stroke: #fff;
                     }
                 }
 
@@ -230,27 +303,138 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
                 }
 
                 .name-container {
-                    height: 30px;
+                    height: 2rem;
                     overflow: hidden;
                 }
 
                 .logo-name {
                     color: #fff;
-                    font-size: 20px;
-                    letter-spacing: 12px;
+                    font-size: 1.5rem;
+                    letter-spacing: 0.75rem;
                     text-transform: uppercase;
-                    margin-left: 20px;
+                    margin-left: 1rem;
                     font-weight: bolder;
-                    transition: opacity 0.3s ease;
                     font-family: "Michroma", sans-serif;
-                    opacity: 0; /* Start hidden */
-                    animation: textFadeIn 0.2s forwards; /* Quick fade-in */
+                    animation: glitch 2s linear infinite, bounce 1.5s ease-in-out infinite;
+                    text-shadow: 0 0 10px rgba(255, 0, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.6);
                 }
 
-                @keyframes textFadeIn {
-                    to {
-                        opacity: 1;
+                @keyframes glitch {
+                    0% {
+                        transform: translate(0);
+                        text-shadow: 0 0 10px rgba(255, 0, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.6);
                     }
+                    2% {
+                        transform: translate(-2px, 2px);
+                        text-shadow: -2px 2px 10px rgba(255, 0, 255, 1), 2px -2px 20px rgba(0, 255, 255, 1);
+                    }
+                    4% {
+                        transform: translate(2px, -2px);
+                        text-shadow: 2px -2px 10px rgba(255, 0, 255, 1), -2px 2px 20px rgba(0, 255, 255, 1);
+                    }
+                    6% {
+                        transform: translate(0);
+                        text-shadow: 0 0 10px rgba(255, 0, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.6);
+                    }
+                    100% {
+                        transform: translate(0);
+                        text-shadow: 0 0 10px rgba(255, 0, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.6);
+                    }
+                }
+
+                @keyframes bounce {
+                    0%, 100% {
+                        transform: translateY(0);
+                    }
+                    50% {
+                        transform: translateY(-10px);
+                    }
+                }
+
+                /* Mobile devices (up to 768px) */
+                @media (max-width: 768px) {
+                    .loading-page::before,
+                    .loading-page::after {
+                        width: 30vw;
+                        height: 30vw;
+                    }
+
+                    .bg-circle:nth-child(1) {
+                        width: 20vw;
+                        height: 20vw;
+                    }
+
+                    .bg-circle:nth-child(2) {
+                        width: 15vw;
+                        height: 15vw;
+                    }
+
+                    .bg-circle:nth-child(3) {
+                        width: 25vw;
+                        height: 25vw;
+                    }
+
+                    #svg {
+                        width: 60vw;
+                        height: 60vw;
+                        max-width: 150px;
+                        max-height: 150px;
+                    }
+
+                    .logo-name {
+                        font-size: 1rem;
+                        letter-spacing: 0.5rem;
+                        margin-left: 0.5rem;
+                    }
+
+                    .name-container {
+                        height: 1.5rem;
+                    }
+                }
+
+                /* Small mobile devices (up to 480px) */
+                @media (max-width: 480px) {
+                    #svg {
+                        width: 80vw;
+                        height: 80vw;
+                        max-width: 120px;
+                        max-height: 120px;
+                    }
+
+                    .logo-name {
+                        font-size: 0.8rem;
+                        letter-spacing: 0.4rem;
+                    }
+
+                    .name-container {
+                        height: 1.2rem;
+                    }
+                }
+
+                /* Portrait orientation */
+                @media (orientation: portrait) {
+                    #svg {
+                        width: 50vw;
+                        height: 50vw;
+                        max-width: 180px;
+                        max-height: 180px;
+                    }
+                }
+
+                /* High-resolution devices */
+                @media (min-resolution: 2dppx) {
+                    #svg {
+                        stroke-width: 5px; /* Thicker stroke for clarity */
+                    }
+
+                    .logo-name {
+                        text-shadow: 0 0 12px rgba(255, 0, 255, 0.9), 0 0 24px rgba(0, 255, 255, 0.7);
+                    }
+                }
+
+                /* Hide main content until loading is complete */
+                .main-content {
+                    display: none;
                 }
             `}</style>
             <head>
@@ -262,7 +446,7 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
                 />
                 <link
                     rel="preload"
-                    href="https://fonts.googleapis.com/css2?family=Roboto+Serif:opsz,wght@8..144,700&display=swap"
+                    href=" queues://fonts.googleapis.com/css2?family=Roboto+Serif:opsz,wght@8..144,700&display=swap"
                     as="style"
                     crossOrigin="anonymous"
                 />
@@ -275,7 +459,6 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
                     id="svg"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 500 400"
-                    style={{ width: '200px', height: '200px', overflow: 'hidden' }}
                 >
                     <path
                         className="letter"
