@@ -60,13 +60,17 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ logoSrc, heroImageSrc, 
     return () => ctx?.revert();
   }, [isOpen]);
 
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
   return (
     <>
       {/* Top Nav */}
       <nav className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4">
         <Image src={logoSrc} alt="logo" width={120} height={40} />
         <button
-          className="text-white uppercase tracking-widest text-sm menu-open"
+          className="text-white uppercase tracking-widest text-sm menu-open hover:opacity-75 transition-opacity"
           onClick={() => setIsOpen(true)}
         >
           Menu
@@ -75,14 +79,13 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ logoSrc, heroImageSrc, 
 
       {/* Overlay Menu */}
       <div
-        className={`menu-overlay fixed inset-0 bg-[#101010] z-40 flex flex-col md:flex-row pointer-events-$
-          {isOpen ? 'auto' : 'none'}`}
+        className={`menu-overlay fixed inset-0 bg-[#101010] ${isOpen ? 'z-[60] pointer-events-auto' : 'z-[-1] pointer-events-none'} flex flex-col md:flex-row`}
       >
         {/* Close */}
         <div className="absolute top-0 right-0 p-6">
           <button
-            className="text-white uppercase tracking-widest text-sm menu-close"
-            onClick={() => setIsOpen(false)}
+            className="text-white uppercase tracking-widest text-sm menu-close hover:opacity-75 transition-opacity"
+            onClick={handleClose}
           >
             Close
           </button>
@@ -94,11 +97,10 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ logoSrc, heroImageSrc, 
           {[1, 2, 3, 4].map((i) => (
             <Image
               key={i}
-              src={heroImageSrc}
+              src={heroImageSrc} 
               alt="hero"
               fill
-              className={`object-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-$
-                {i === 1 ? '90' : i === 2 ? '70' : i === 3 ? '50' : '30'}`}
+              className={`object-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-${i === 1 ? '90' : i === 2 ? '70' : i === 3 ? '50' : '30'}`}
             />
           ))}
         </div>
@@ -108,10 +110,10 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ logoSrc, heroImageSrc, 
           {links.map((label) => (
             <li
               key={label}
-              className="menu-link text-white text-3xl md:text-4xl font-semibold cursor-pointer"
+              className="menu-link text-white text-3xl md:text-4xl font-semibold cursor-pointer hover:opacity-75 transition-opacity"
               onClick={() => {
                 onNavigate(label);
-                setIsOpen(false);
+                handleClose();
               }}
             >
               {label}
@@ -134,4 +136,4 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ logoSrc, heroImageSrc, 
   );
 };
 
-export default NavigationMenu; 
+export default NavigationMenu;
