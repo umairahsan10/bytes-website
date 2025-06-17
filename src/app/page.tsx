@@ -1,10 +1,8 @@
 'use client';
 
-<<<<<<< Updated upstream
-import React, { useState } from 'react';
-=======
+
 import React, { useState, useEffect } from 'react';
->>>>>>> Stashed changes
+
 import { Header } from "@/sections/Header";
 import { HeroSection } from "@/sections/Hero";
 import { ProjectsSection } from "@/sections/Projects";
@@ -13,12 +11,7 @@ import { TestimonialsSection } from "@/sections/Testimonials";
 import { AboutSection } from "@/sections/About";
 import { Footer } from "@/sections/Footer";
 import { ContactSection } from "@/sections/Contact";
-<<<<<<< Updated upstream
-import LoadingPage from "@/components/LoadingPage"; // Adjust path based on where you place the component
 
-export default function Home() {
-  const [isLoading, setIsLoading] = useState(true);
-=======
 import LoadingPage from "@/components/LoadingPage";
 
 export default function Home() {
@@ -45,7 +38,7 @@ export default function Home() {
 
     loadGSAP();
   }, []);
->>>>>>> Stashed changes
+
 
   const handleLoadingComplete = () => {
     setIsLoading(false);
@@ -78,13 +71,9 @@ export default function Home() {
       {isLoading && (
         <LoadingPage 
           onLoadingComplete={handleLoadingComplete}
-<<<<<<< Updated upstream
-          loadingDuration={1500} // 5 seconds (adjust as needed)
-          minLoadingTime={1500}  // Minimum 2 seconds
-=======
+
           loadingDuration={7000}
           minLoadingTime={2000}
->>>>>>> Stashed changes
         />
       )}
       
