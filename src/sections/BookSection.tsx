@@ -3,17 +3,69 @@ import { SectionHeader } from "@/components/SectionHeader";
 import { Canvas } from "@react-three/fiber";
 import { Book } from "@/components/BookSlider/Book";
 import { initializeAudio } from "@/components/BookSlider/sound";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Suspense } from "react";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, Float } from "@react-three/drei";
+import { useAtom } from "jotai";
+import { pageAtom } from "@/components/BookSlider/state";
 
 export const BookSection = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [hasTriggered, setHasTriggered] = useState(false);
+  const [, setPage] = useAtom(pageAtom);
+
   useEffect(() => {
     initializeAudio();
   }, []);
 
+  // Observe when the book section enters the viewport and trigger first-page flip
+  useEffect(() => {
+    if (!sectionRef.current || hasTriggered) return;
+
+    let timer: NodeJS.Timeout | null = null;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry.isIntersecting) {
+          setHasTriggered(true);
+          // Delay a bit so the user sees the book before flipping
+          timer = setTimeout(() => setPage(1), 2500);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "0px 0px -20% 0px", threshold: 0.1 }
+    );
+
+    observer.observe(sectionRef.current);
+
+    // Clean up
+    return () => {
+      observer.disconnect();
+      if (timer) clearTimeout(timer);
+    };
+  }, [hasTriggered, setPage]);
+
+  // Fallback scroll listener in case IntersectionObserver misses
+  useEffect(() => {
+    if (hasTriggered) return;
+    const onScroll = () => {
+      if (hasTriggered || !sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const visible = rect.top < window.innerHeight * 0.8 && rect.bottom > 0;
+      if (visible) {
+        setHasTriggered(true);
+        setTimeout(() => setPage(1), 2500);
+        window.removeEventListener('scroll', onScroll);
+      }
+    };
+    window.addEventListener('scroll', onScroll);
+    // run once on mount
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [hasTriggered, setPage]);
+
   return (
-    <div id="book" className="py-20 lg:py-28">
+    <div id="book" className="py-20 lg:py-28" ref={sectionRef}>
       <div className="container">
         <SectionHeader
           eyebrow="Interactive Book"
@@ -46,7 +98,18 @@ export const BookSection = () => {
                 castShadow
                 shadow-mapSize={[1024, 1024]}
               />
-              <Book position={[0, 0, 0]} rotation={[0, -Math.PI / 2, 0]} />
+              {/* Float gives a gentle idle motion */}
+              <Float
+                position={[0, 0.3, 0.9]}
+                rotation-x={-0.5}
+                rotation-y={0}
+                rotation-z={0}
+                floatIntensity={0.5}
+                speed={1}
+                rotationIntensity={1}
+              >
+                <Book />
+              </Float>
               <OrbitControls
                 enableZoom={false}
                 enablePan={true}
