@@ -12,7 +12,7 @@
     return (
       <div id="home" className="relative overflow-hidden min-h-screen">
         {/* Video and 3D Scene */}
-        <div className="absolute inset-0 z-0">
+        {/* <div className="absolute inset-0 z-0">
           <video
             autoPlay
             loop
@@ -26,7 +26,7 @@
             Your browser does not support the video tag.
           </video>
           <Scene3D />
-        </div>
+        </div> */}
 
         {/* Overlay gradient */}
         <div className="absolute inset-0 z-10 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_70%,transparent)]" />
