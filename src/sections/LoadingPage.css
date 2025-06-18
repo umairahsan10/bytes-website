@@ -98,20 +98,20 @@
 
 @media (max-width: 768px) {
   .bytes {
-    font-size: 60px;
+    font-size: 120px;
   }
   
   .platform {
-    font-size: 30px;
+    font-size: 80px;
   }
 }
 
 @media (max-width: 480px) {
   .bytes {
-    font-size: 50px;
+    font-size: 100px;
   }
   
   .platform {
-    font-size: 30px;
+    font-size: 60px;
   }
 } 
