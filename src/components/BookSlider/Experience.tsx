@@ -1,33 +1,25 @@
-import { Environment, Float, PerspectiveCamera } from "@react-three/drei";
+import { Environment, Float } from "@react-three/drei";
 import { Book } from "./Book";
 import { useEffect } from "react";
-import { useAtom } from "jotai";
-import { pageAtom } from "./state";
 import { useThree } from "@react-three/fiber";
+import { useBookScroll } from "./useBookScroll";
 
 export const Experience = () => {
-  const [page] = useAtom(pageAtom);
   const { camera } = useThree();
 
-  useEffect(() => {
-    // Prevent ALL wheel events
-    const preventWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-    };
+  // Enable wheel-to-page-flip globally (full-screen so no container needed)
+  useBookScroll();
 
+  useEffect(() => {
     // Lock camera position
     camera.position.set(0, 0, 2.5);
     camera.updateProjectionMatrix();
-
-    window.addEventListener('wheel', preventWheel, { passive: false });
-    return () => window.removeEventListener('wheel', preventWheel);
   }, [camera]);
 
   return (
     <>
       <Float
-        position={[0, 0.3, 0.9]}
+        position={[0, 0, 0.9]}
         rotation-x={-0.5}
         rotation-y={0}
         rotation-z={0}

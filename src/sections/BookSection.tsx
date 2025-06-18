@@ -8,15 +8,20 @@ import { Suspense } from "react";
 import { OrbitControls, Float } from "@react-three/drei";
 import { useAtom } from "jotai";
 import { pageAtom } from "@/components/BookSlider/state";
+import { useBookScroll } from "@/components/BookSlider/useBookScroll";
 
 export const BookSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const bookAreaRef = useRef<HTMLDivElement>(null);
   const [hasTriggered, setHasTriggered] = useState(false);
   const [, setPage] = useAtom(pageAtom);
 
   useEffect(() => {
     initializeAudio();
   }, []);
+
+  // Bind wheel-to-page-flip only while the book area is fully visible
+  useBookScroll(bookAreaRef);
 
   // Observe when the book section enters the viewport and trigger first-page flip
   useEffect(() => {
@@ -72,7 +77,7 @@ export const BookSection = () => {
           title="Explore Our Story"
           description="Click through the pages to discover our journey"
         />
-        <div className="mt-20 h-[600px] relative">
+        <div className="mt-20 h-[600px] relative" ref={bookAreaRef}>
           <Canvas
             camera={{
               position: [0, 0, 4],
@@ -100,7 +105,7 @@ export const BookSection = () => {
               />
               {/* Float gives a gentle idle motion */}
               <Float
-                position={[0, 0.3, 0.9]}
+                position={[0, 0, 0.9]}
                 rotation-x={-0.5}
                 rotation-y={0}
                 rotation-z={0}
