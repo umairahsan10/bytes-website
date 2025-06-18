@@ -15,9 +15,16 @@ export const BookSection = () => {
   const bookAreaRef = useRef<HTMLDivElement>(null);
   const [hasTriggered, setHasTriggered] = useState(false);
   const [, setPage] = useAtom(pageAtom);
+  const [isTouch, setIsTouch] = useState(false);
 
   useEffect(() => {
     initializeAudio();
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsTouch(window.matchMedia('(pointer: coarse)').matches);
+    }
   }, []);
 
   // Bind wheel-to-page-flip only while the book area is fully visible
@@ -115,17 +122,19 @@ export const BookSection = () => {
               >
                 <Book />
               </Float>
-              <OrbitControls
-                enableZoom={false}
-                enablePan={true}
-                minDistance={3}
-                maxDistance={6}
-                minPolarAngle={Math.PI / 4}
-                maxPolarAngle={Math.PI * 3/4}
-                target={[0, 0, 0]}
-                enableDamping={true}
-                dampingFactor={0.05}
-              />
+              {!isTouch && (
+                <OrbitControls
+                  enableZoom={false}
+                  enablePan={true}
+                  minDistance={3}
+                  maxDistance={6}
+                  minPolarAngle={Math.PI / 4}
+                  maxPolarAngle={Math.PI * 3/4}
+                  target={[0, 0, 0]}
+                  enableDamping={true}
+                  dampingFactor={0.05}
+                />
+              )}
             </Suspense>
           </Canvas>
         </div>
