@@ -9,10 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.2",
     "@react-three/drei": "^9.88.7",
     "@react-three/fiber": "^8.13.6",
+    "@studio-freight/react-lenis": "^0.0.47",
     "@svgr/webpack": "^8.1.0",
     "framer-motion": "^11.3.21",
+    "gsap": "^3.13.0",
+    "jotai": "^2.12.5",
+    "maath": "^0.5.3",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",

@@ -1,0 +1,447 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+/* Limit base resets only to the cards area to avoid overriding global site styles */
+.cards-container, .cards-container * {
+    box-sizing: border-box;
+}
+
+/* Provide enough scrollable height for the GSAP pinning sequence */
+.cards-container {
+    width: 100%;
+    height: 500vh; /* same scroll span as original implementation */
+    position: relative;
+    font-family: "Inter", sans-serif;
+}
+
+/* Local utility for the cards stage */
+.cards {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-color: transparent;
+}
+
+.cards-container {
+    width: 100%;
+    height: 100%;
+}
+
+.cards-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Scroll stage inside the cards container */
+.cards {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-color: transparent;
+}
+
+/* (Optional heading styles if you add a title inside the cards area) */
+.cards-heading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    text-align: center;
+    font-size: 5vw;
+    font-weight: lighter;
+    line-height: 100%;
+}
+
+.card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(280px, 90vw);
+    height: min(380px, 122vw);
+    perspective: 1000px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.card.focused {
+    z-index: 10;
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.card.focused .flip-card-front,
+.card.focused .flip-card-back {
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.25);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 5;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Add responsive styles for cards */
+@media screen and (max-width: 1200px) {
+    .card {
+        width: 240px;
+        height: 326px;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .card {
+        width: 220px;
+        height: 299px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .card {
+        width: 200px;
+        height: 272px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .card {
+        width: 180px;
+        height: 245px;
+    }
+}
+
+/* Adjust font sizes for smaller screens */
+@media screen and (max-width: 992px) {
+    .card-category {
+        font-size: 16px;
+    }
+    
+    .card-icon {
+        font-size: 20px;
+    }
+    
+    .card-title {
+        font-size: 13px;
+    }
+    
+    .service-item {
+        font-size: 13px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .card-category {
+        font-size: 14px;
+    }
+    
+    .card-icon {
+        font-size: 18px;
+    }
+    
+    .card-title {
+        font-size: 12px;
+    }
+    
+    .service-item {
+        font-size: 12px;
+    }
+}
+
+/* Adjust padding for smaller screens */
+@media screen and (max-width: 992px) {
+    .card-header {
+        padding: 16px 16px 12px 16px;
+    }
+    
+    .card-content {
+        padding: 16px 16px 20px 16px;
+    }
+    
+    .services-list {
+        gap: 8px;
+    }
+    
+    .service-item {
+        padding: 6px 0;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .card-header {
+        padding: 12px 12px 8px 12px;
+    }
+    
+    .card-content {
+        padding: 12px 12px 16px 12px;
+    }
+    
+    .services-list {
+        gap: 6px;
+    }
+    
+    .service-item {
+        padding: 4px 0;
+    }
+}
+
+/* Adjust card positions for different screen sizes */
+@media screen and (max-width: 576px) {
+    #card-1 {
+        left: 35% !important;
+    }
+    #card-2 {
+        left: 45% !important;
+    }
+    #card-3 {
+        left: 55% !important;
+    }
+    #card-4 {
+        left: 65% !important;
+    }
+}
+
+@media screen and (min-width: 577px) and (max-width: 768px) {
+    #card-1 {
+        left: 25% !important;
+    }
+    #card-2 {
+        left: 42% !important;
+    }
+    #card-3 {
+        left: 58% !important;
+    }
+    #card-4 {
+        left: 75% !important;
+    }
+}
+
+@media screen and (min-width: 769px) and (max-width: 992px) {
+    #card-1 {
+        left: 20% !important;
+    }
+    #card-2 {
+        left: 40% !important;
+    }
+    #card-3 {
+        left: 60% !important;
+    }
+    #card-4 {
+        left: 80% !important;
+    }
+}
+
+.card:hover {
+    transform: translate(-50%, -50%) scale(1.02);
+}
+
+.card-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    animation: floating 3s infinite ease-in-out;
+}
+
+#card-1 .card-wrapper {
+    animation-delay: 0s;
+}
+#card-2 .card-wrapper {
+    animation-delay: 0.2s;
+}
+#card-3 .card-wrapper {
+    animation-delay: 0.4s;
+}
+#card-4 .card-wrapper {
+    animation-delay: 0.6s;
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+}
+ 
+.flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 1em;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+.card:hover .flip-card-front,
+.card:hover .flip-card-back {
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+}
+
+.flip-card-back {
+    transform: rotateY(180deg);
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.flip-card-back::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.92);
+    z-index: 1;
+}
+
+/* Card Header */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: clamp(12px, 3vw, 24px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    position: relative;
+    z-index: 2;
+}
+
+.card-category {
+    font-size: clamp(14px, 2vw, 18px);
+    font-weight: 600;
+    color: #1a1a1a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+.card-icon {
+    font-size: clamp(18px, 2.5vw, 24px);
+    font-weight: 900;
+    color: #1a1a1a;
+    line-height: 1;
+}
+
+/* Card Content */
+.card-content {
+    flex: 1;
+    padding: clamp(12px, 3vw, 24px);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 2;
+}
+
+.card-title {
+    font-size: clamp(12px, 1.5vw, 14px);
+    font-weight: 500;
+    color: #666;
+    margin-bottom: clamp(12px, 2vw, 16px);
+    text-transform: capitalize;
+}
+
+.services-list {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(6px, 1.5vw, 12px);
+    flex: 1;
+}
+
+.service-item {
+    font-size: clamp(12px, 1.5vw, 15px);
+    font-weight: 400;
+    color: #333;
+    line-height: 1.4;
+    padding: clamp(4px, 1vw, 8px) 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.service-item:last-child {
+    border-bottom: none;
+}
+
+/* Card specific colors and backgrounds */
+#card-1 .flip-card-back {
+    background-image: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=600&fit=crop&crop=center');
+}
+
+#card-1 .card-header {
+    background: linear-gradient(135deg, rgba(248, 250, 252, 0.95) 0%, rgba(226, 232, 240, 0.95) 100%);
+}
+
+#card-1 .card-category,
+#card-1 .card-icon {
+    color: #1e293b;
+}
+
+#card-2 .flip-card-back {
+    background-image: url('https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=400&h=600&fit=crop&crop=center');
+}
+
+#card-2 .card-header {
+    background: linear-gradient(135deg, rgba(240, 253, 244, 0.95) 0%, rgba(220, 252, 231, 0.95) 100%);
+}
+
+#card-2 .card-category,
+#card-2 .card-icon {
+    color: #166534;
+}
+
+#card-3 .flip-card-back {
+    background-image: url('https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?w=400&h=600&fit=crop&crop=center');
+}
+
+#card-3 .card-header {
+    background: linear-gradient(135deg, rgba(239, 246, 255, 0.95) 0%, rgba(219, 234, 254, 0.95) 100%);
+}
+
+#card-3 .card-category,
+#card-3 .card-icon {
+    color: #1e40af;
+}
+
+#card-4 .flip-card-back {
+    background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&h=600&fit=crop&crop=center');
+}
+
+#card-4 .card-header {
+    background: linear-gradient(135deg, rgba(236, 254, 255, 0.95) 0%, rgba(207, 250, 254, 0.95) 100%);
+}
+
+#card-4 .card-category,
+#card-4 .card-icon {
+    color: #0e7490;
+}
+
+@keyframes floating {
+    0% {
+        transform: translate(-50%, -50%);
+    }
+    50% {
+        transform: translate(-50%, -60%);
+    }
+    100% {
+        transform: translate(-50%, -50%);
+    }
+} 
