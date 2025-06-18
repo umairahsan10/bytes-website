@@ -8,6 +8,7 @@ import { BookSection } from "@/sections/BookSection";
 import { Footer } from "@/sections/Footer";
 import { ContactSection } from "@/sections/Contact";
 import CardsSection from "@/sections/CardsSection";
+import { LineAnimationSection } from "@/sections/LineAnimationSection";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
       <ProjectsSection />
       <TapeSection />
       <TestimonialsSection />
+      <LineAnimationSection />
       {/* <AboutSection /> */}
       <CardsSection />
       <BookSection />
