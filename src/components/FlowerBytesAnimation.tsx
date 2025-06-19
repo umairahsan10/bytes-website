@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState, useMemo } from 'react'
+import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
@@ -7,19 +7,22 @@ import { EffectComposer, Bloom } from '@react-three/postprocessing'
 function TextLine() {
   const tubeRefs = useRef<(THREE.Mesh | null)[]>([])
   const sphereRefs = useRef<(THREE.Mesh | null)[]>([])
-  const [scrollProgress, setScrollProgress] = useState(0)
-  const [targetProgress, setTargetProgress] = useState(0)
+
+  // Use refs for animation values to prevent re-renders inside useFrame
+  const scrollProgressRef = useRef(0)
+  const targetProgressRef = useRef(0)
+
   const [dimensions, setDimensions] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight
+    width: typeof window !== 'undefined' ? window.innerWidth : 0,
+    height: typeof window !== 'undefined' ? window.innerHeight : 0,
   })
 
-  // Calculate responsive values
   const tubeRadius = useMemo(() => {
-    return dimensions.width < 768 ? 0.20 : 0.4 // Increased from 0.15/0.3 to 0.25/0.5 for thicker lines
+    return dimensions.width < 768 ? 0.2 : 0.4
   }, [dimensions.width])
 
-  // Define separate curves for each letter
+  // "CACHE IN THE POINTS": The letter path data (the "points") is calculated 
+  // only once here or when the window resizes, not on every frame.
   const letterCurves = useMemo(() => {
     let scale = dimensions.width < 768 ? 0.8 : 2.5 // Much larger scale
     
@@ -165,113 +168,110 @@ function TextLine() {
     return letters
   }, [dimensions.width])
 
-  // Pre-compute all points for each letter
-  const allLetterPoints = useMemo(() => {
-    return letterCurves.map(curve => curve.getPoints(600)) // Increased from 200 to 300 points for even smoother curves
-  }, [letterCurves])
+  // "DRAW THE IMAGE ONCE": The 3D tube model (the "image") for each letter is 
+  // built here one time. This is the expensive part, so we do it only when the
+  // path or radius changes, and never inside the animation loop.
+  const fullGeometries = useMemo(() => {
+    return letterCurves.map(curve => {
+      // Reduced segment counts for better performance, shape is maintained.
+      const geo = new THREE.TubeGeometry(curve, 300, tubeRadius, 16, false)
+      geo.setDrawRange(0, 0) // Start with nothing visible
+      return geo
+    })
+  }, [letterCurves, tubeRadius])
 
   // Handle window resize
   useEffect(() => {
     const handleResize = () => {
       setDimensions({
         width: window.innerWidth,
-        height: window.innerHeight
+        height: window.innerHeight,
       })
     }
-
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   useEffect(() => {
-    const section = document.getElementById('about');
+    const section = document.getElementById('about')
 
     const handleScroll = () => {
-      if (!section) return;
+      if (!section) return
 
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.offsetHeight;
+      const sectionTop = section.offsetTop
+      const sectionHeight = section.offsetHeight
 
-      const currentScroll = window.scrollY;
+      const currentScroll = window.scrollY
 
-      let progress = 0;
+      let progress = 0
 
-      // We want the animation to start slightly BEFORE the section fully arrives
-      // and to finish well before the visitor leaves the section.
+      const startOffset = window.innerHeight * 0.6
+      const effectiveHeight = (sectionHeight - window.innerHeight) * 0.5
 
-      const startOffset = window.innerHeight * 0.6; // start a bit earlier (10% of viewport)
-      const effectiveHeight = (sectionHeight - window.innerHeight) * 0.5; // spread animation over 90% of scrollable distance
-
-      const startScroll = sectionTop - startOffset;
-      const endScroll = startScroll + effectiveHeight;
+      const startScroll = sectionTop - startOffset
+      const endScroll = startScroll + effectiveHeight
 
       if (currentScroll < startScroll) {
-        progress = 0;
+        progress = 0
       } else if (currentScroll > endScroll) {
-        progress = 1;
+        progress = 1
       } else {
-        progress = (currentScroll - startScroll) / effectiveHeight;
+        progress = (currentScroll - startScroll) / effectiveHeight
       }
 
-      setTargetProgress(progress);
-    };
+      targetProgressRef.current = progress
+    }
 
-    handleScroll();
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    handleScroll()
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  useFrame((state, delta) => {
-    const smoothingFactor = 0.2 // lower factor = slower interpolation, gives smoother/slower draw
-    setScrollProgress(prev => prev + (targetProgress - prev) * smoothingFactor)
+  // "DON'T DRAW IT AGAIN AND AGAIN": Inside the animation loop (useFrame),
+  // we are NOT re-creating the geometry. We are just telling the GPU
+  // "how much" of the pre-built, cached geometry to render using `setDrawRange`.
+  // This is extremely fast and efficient.
+  useFrame(() => {
+    // Smooth the scroll progress without causing re-renders
+    scrollProgressRef.current += (targetProgressRef.current - scrollProgressRef.current) * 0.2
 
     const totalLetters = letterCurves.length
-    const revealMultiplier = 1.5; // higher => later curves appear sooner
-    const lettersToShow = Math.floor(scrollProgress * totalLetters * revealMultiplier)
+    const revealMultiplier = 1.5
 
     letterCurves.forEach((curve, letterIndex) => {
       const tubeRef = tubeRefs.current[letterIndex]
       const sphereRef = sphereRefs.current[letterIndex]
-      
-      if (tubeRef && sphereRef) {
-        if (letterIndex <= lettersToShow) {
-          // Calculate progress within this letter
-          const letterProgress = Math.max(0, Math.min(1, 
-            (scrollProgress * totalLetters * (revealMultiplier + 0.1)) - letterIndex
-          ))
-          
-          const letterPoints = allLetterPoints[letterIndex]
-          const visiblePointCount = Math.floor(letterProgress * letterPoints.length)
-          const visiblePoints = letterPoints.slice(0, Math.max(2, visiblePointCount))
+      const geom = fullGeometries[letterIndex]
 
-          if (visiblePoints.length >= 2) {
-            const visibleCurve = new THREE.CatmullRomCurve3(visiblePoints)
-            const tubeGeometry = new THREE.TubeGeometry(visibleCurve, Math.max(2, visiblePoints.length), tubeRadius, 64, false) // Increased segments from 32 to 64
-            
-            tubeRef.geometry.dispose()
-            tubeRef.geometry = tubeGeometry
-            tubeRef.visible = true
+      if (!tubeRef || !sphereRef || !geom) return
 
-            const headPosition = visiblePoints[visiblePoints.length - 1]
-            sphereRef.position.copy(headPosition)
-            sphereRef.visible = letterProgress > 0.1
-          }
-        } else {
-          tubeRef.visible = false
-          sphereRef.visible = false
-        }
+      const letterProgress = Math.max(0, Math.min(1,
+        (scrollProgressRef.current * totalLetters * (revealMultiplier + 0.1)) - letterIndex
+      ))
+
+      if (letterProgress > 0) {
+        // This is the core optimization: just reveal part of the existing geometry.
+        const indexCount = geom.index ? geom.index.count : 0
+        const drawCount = Math.floor(indexCount * letterProgress)
+        geom.setDrawRange(0, drawCount)
+        tubeRef.visible = true
+
+        const headPoint = curve.getPoint(letterProgress)
+        sphereRef.position.copy(headPoint)
+        sphereRef.visible = letterProgress > 0.02 // Prevents dot appearing too early
+      } else {
+        tubeRef.visible = false
+        sphereRef.visible = false
       }
     })
   })
-
-  // Initialize empty geometries for each letter
-  const initialGeometry = useMemo(() => {
-    const emptyCurve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0, 0, 0)
-    ])
-    return new THREE.TubeGeometry(emptyCurve, 2, tubeRadius, 64, false) // Increased segments from 32 to 64
-  }, [tubeRadius])
+  
+  // Cleanup geometries on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      fullGeometries.forEach(g => g.dispose())
+    }
+  }, [fullGeometries])
 
   return (
     <>
@@ -279,7 +279,7 @@ function TextLine() {
         <React.Fragment key={`letter-${index}`}>
           <mesh
             ref={(ref) => { tubeRefs.current[index] = ref }}
-            geometry={initialGeometry.clone()}
+            geometry={fullGeometries[index]}
             material={new THREE.MeshBasicMaterial({ color: '#00b7ca' })}
             visible={false}
           />

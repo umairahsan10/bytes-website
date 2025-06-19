@@ -19,3 +19,21 @@
     @apply lg:max-w-5xl
   }
 }
+
+/* Ensure testimonials animation works */
+@keyframes move-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.testimonials-scroll {
+  animation: move-left 90s linear infinite;
+}
+
+.testimonials-scroll:hover {
+  animation-play-state: paused;
+}
