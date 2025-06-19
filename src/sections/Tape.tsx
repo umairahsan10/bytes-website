@@ -28,8 +28,8 @@ export const TapeSection = () => {
             {[...new Array(2)].fill(0).map((_, idx) => (
               <Fragment key={idx}>
                 {
-                  words.map((word) => (
-                    <div key={word} className="inline-flex gap-4 items-center">
+                  words.map((word, wordIndex) => (
+                    <div key={`${idx}-${wordIndex}`} className="inline-flex gap-4 items-center">
                       <span className="text-gray-900 uppercase font-extrabold text-sm">{word}</span>
                       <StarIcon className="size-6 text-gray-900" />
                     </div>

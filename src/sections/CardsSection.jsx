@@ -2,17 +2,48 @@
 import { useEffect, useRef, useState } from "react";
 
 import Card from "./Card.jsx";
-import ReactLenis from "@studio-freight/react-lenis";
+import Lenis from "lenis";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Custom hook to initialize Lenis
+const useLenis = () => {
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      direction: 'vertical',
+      gestureDirection: 'vertical',
+      smooth: true,
+      mouseMultiplier: 1,
+      smoothTouch: false,
+      touchMultiplier: 2,
+      infinite: false,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
+};
+
 export default function Home() {
   const container = useRef(null);
   const cardRefs = useRef([]);
   const [focusedCard, setFocusedCard] = useState(null);
+
+  // Initialize Lenis
+  useLenis();
 
   const cardData = [
     {
@@ -156,30 +187,28 @@ export default function Home() {
   }, []);
 
   return (
-    <ReactLenis root>
-      <div className="cards-container" ref={container}>
-        <section className="cards">
-          <div 
-            className={`overlay ${focusedCard !== null ? 'active' : ''}`} 
-            onClick={handleOverlayClick}
+    <div className="cards-container" ref={container}>
+      <section className="cards">
+        <div 
+          className={`overlay ${focusedCard !== null ? 'active' : ''}`} 
+          onClick={handleOverlayClick}
+        />
+        {cardData.map((card, index) => (
+          <Card
+            key={index}
+            id={`card-${index + 1}`}
+            frontSrc="/card-front.jpg"
+            frontAlt={`${card.category} service card`}
+            category={card.category}
+            title={card.title}
+            services={card.services}
+            icon={card.icon}
+            ref={(el) => (cardRefs.current[index] = el)}
+            className={focusedCard === index ? 'focused' : ''}
+            onClick={() => handleCardClick(index)}
           />
-          {cardData.map((card, index) => (
-            <Card
-              key={index}
-              id={`card-${index + 1}`}
-              frontSrc="/card-front.jpg"
-              frontAlt={`${card.category} service card`}
-              category={card.category}
-              title={card.title}
-              services={card.services}
-              icon={card.icon}
-              ref={(el) => (cardRefs.current[index] = el)}
-              className={focusedCard === index ? 'focused' : ''}
-              onClick={() => handleCardClick(index)}
-            />
-          ))}
-        </section>
-      </div>
-    </ReactLenis>
+        ))}
+      </section>
+    </div>
   );
 } 

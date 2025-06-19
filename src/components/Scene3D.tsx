@@ -8,14 +8,11 @@ import { useRef, Suspense } from 'react'
 import { GLTF } from 'three-stdlib'
 import * as THREE from 'three'
 
-type GLTFResult = GLTF & {
-  nodes: {
-    Torus002: THREE.Mesh
-  }
-}
-
 const Model = () => {
-    const { nodes } = useGLTF("/medias/torrus.glb") as GLTFResult;
+    const gltf = useGLTF("/medias/torrus.glb") as GLTF & {
+        nodes: { [key: string]: THREE.Mesh }
+    };
+    const { nodes } = gltf;
     const { viewport } = useThree()
     const torus = useRef<THREE.Mesh>(null);
     
@@ -68,10 +65,14 @@ const Scene3DContent = () => {
     )
 }
 
-// Use dynamic import with no SSR
+// Use dynamic import with no SSR and proper error handling
 const Scene3D = dynamic(() => Promise.resolve(Scene3DContent), {
     ssr: false,
-    loading: () => <div className="absolute inset-0 -z-10" />
+    loading: () => <div className="absolute inset-0 -z-10" />,
+    onError: (error) => {
+        console.error('Scene3D component failed to load:', error);
+        return <div className="absolute inset-0 -z-10" />;
+    }
 })
 
 export { Scene3D } 
