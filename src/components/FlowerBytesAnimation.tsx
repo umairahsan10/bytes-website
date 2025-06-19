@@ -184,32 +184,50 @@ function TextLine() {
   }, [])
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight
-      const currentScroll = window.scrollY
-      
-      const buffer = 5
-      const adjustedScroll = Math.max(0, currentScroll - buffer)
-      const progress = Math.min(Math.max(adjustedScroll / scrollHeight, 0), 1)
-      
-      if (currentScroll <= buffer) {
-        setTargetProgress(0)
-      } else {
-        setTargetProgress(progress)
-      }
-    }
+    const section = document.getElementById('about');
 
-    handleScroll()
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    const handleScroll = () => {
+      if (!section) return;
+
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.offsetHeight;
+
+      const currentScroll = window.scrollY;
+
+      let progress = 0;
+
+      // We want the animation to start slightly BEFORE the section fully arrives
+      // and to finish well before the visitor leaves the section.
+
+      const startOffset = window.innerHeight * 0.6; // start a bit earlier (10% of viewport)
+      const effectiveHeight = (sectionHeight - window.innerHeight) * 0.5; // spread animation over 90% of scrollable distance
+
+      const startScroll = sectionTop - startOffset;
+      const endScroll = startScroll + effectiveHeight;
+
+      if (currentScroll < startScroll) {
+        progress = 0;
+      } else if (currentScroll > endScroll) {
+        progress = 1;
+      } else {
+        progress = (currentScroll - startScroll) / effectiveHeight;
+      }
+
+      setTargetProgress(progress);
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [])
 
   useFrame((state, delta) => {
-    const smoothingFactor = 0.5 // Reduced from 0.1 to 0.08 for even smoother transitions
+    const smoothingFactor = 0.2 // lower factor = slower interpolation, gives smoother/slower draw
     setScrollProgress(prev => prev + (targetProgress - prev) * smoothingFactor)
 
     const totalLetters = letterCurves.length
-    const lettersToShow = Math.floor(scrollProgress * totalLetters * 1.1) // 1.2 Show letters progressively
+    const revealMultiplier = 1.5; // higher => later curves appear sooner
+    const lettersToShow = Math.floor(scrollProgress * totalLetters * revealMultiplier)
 
     letterCurves.forEach((curve, letterIndex) => {
       const tubeRef = tubeRefs.current[letterIndex]
@@ -219,7 +237,7 @@ function TextLine() {
         if (letterIndex <= lettersToShow) {
           // Calculate progress within this letter
           const letterProgress = Math.max(0, Math.min(1, 
-            (scrollProgress * totalLetters * 1.2) - letterIndex
+            (scrollProgress * totalLetters * (revealMultiplier + 0.1)) - letterIndex
           ))
           
           const letterPoints = allLetterPoints[letterIndex]
@@ -282,13 +300,13 @@ function TextLine() {
 function FlowerBytesAnimation() {
   return (
     <div style={{ 
-      position: 'fixed', 
+      position: 'absolute', 
       top: 0, 
       left: 0, 
       width: '100%', 
       height: '100vh', 
       zIndex: -1,
-      background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)'
+      background: 'transparent'
     }}>
       <Canvas camera={{ position: [0, 0, 25] }}>
         <TextLine />
@@ -300,39 +318,6 @@ function FlowerBytesAnimation() {
           />
         </EffectComposer>
       </Canvas>
-      
-      {/* Scrollable content to demonstrate the animation */}
-      <div style={{
-        position: 'absolute',
-        top: '100vh',
-        left: 0,
-        right: 0,
-        height: '300vh',
-        background: 'transparent',
-        pointerEvents: 'none'
-      }}>
-        <div style={{
-          padding: '2rem',
-          color: '#00b7ca',
-          fontSize: '1.2rem',
-          textAlign: 'center',
-          pointerEvents: 'all'
-        }}>
-          <h2 style={{ marginBottom: '2rem' }}>Scroll to see each letter animate separately</h2>
-          <p style={{ marginBottom: '2rem' }}>
-            Each letter in &quot;bytes platform&quot; will draw itself individually as you scroll.
-          </p>
-          <div style={{ height: '50rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <p>Keep scrolling to see each letter...</p>
-          </div>
-          <div style={{ height: '50rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <p>Letters appear one by one</p>
-          </div>
-          <div style={{ height: '50rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <p>Almost there...</p>
-          </div>
-        </div>
-      </div>
     </div>
   )
 }

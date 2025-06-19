@@ -12,6 +12,8 @@ import { Footer } from "@/sections/Footer";
 import { ContactSection } from "@/sections/Contact";
 import CardsSection from "@/sections/CardsSection";
 import { LoadingPage } from "@/sections/LoadingPage";
+import { LineAnimationSection } from "@/sections/LineAnimationSection";
+
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -26,6 +28,7 @@ export default function Home() {
           <ProjectsSection />
           <TapeSection />
           <TestimonialsSection />
+          <LineAnimationSection />
           {/* <AboutSection /> */}
           <CardsSection />
           <BookSection />
