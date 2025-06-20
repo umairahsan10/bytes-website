@@ -1,3 +1,5 @@
+'use client';
+
 import darkSaasLandingPage from "@/assets/images/dark-saas-landing-page.png";
 import lightSaasLandingPage from "@/assets/images/light-saas-landing-page.png";
 import aiStartupLandingPage from "@/assets/images/ai-startup-landing-page.png";
@@ -6,8 +8,6 @@ import CheckIcon from "@/assets/icons/check-circle.svg"
 import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg"
 import { SectionHeader } from "@/components/SectionHeader"
 import { Card } from "@/components/Card"
-import grainImage from "@/public/images/grain.png" 
-import { useState, useEffect } from "react";
 
 const portfolioProjects = [
   {
@@ -49,74 +49,73 @@ const portfolioProjects = [
 ];
 
 export const ProjectsSection = () => {
-  const [headerHeight, setHeaderHeight] = useState(64);
-
-  useEffect(() => {
-    const updateHeaderHeight = () => {
-      const header = document.querySelector('.bytes-nav');
-      if (header) {
-        const height = header.getBoundingClientRect().height;
-        setHeaderHeight(height);
-      }
-    };
-
-    updateHeaderHeight();
-    window.addEventListener('resize', updateHeaderHeight);
-    
-    return () => window.removeEventListener('resize', updateHeaderHeight);
-  }, []);
-
   return (
-    <section id="projects" className="pb-16 lg:py-24 relative z-[101]">
-      <div className="container">
+    <section 
+      id="projects" 
+      className="pb-16 lg:py-24"
+    >
+      <div className="container mx-auto px-4">
         <SectionHeader
           eyebrow="Real-world Results"
           title="Featured Projects"
-          description="See how i transformed concepts into engaging digital experience"
+          description="See how I transformed concepts into engaging digital experiences"
         />
-        <div className=" gap-20 flex flex-col mt-10 md:mt-20 ">
+        
+        {/* Projects container with proper spacing */}
+        <div className="mt-10 md:mt-20 flex flex-col gap-20">
           {portfolioProjects.map((project, projectIndex) => (
             <Card
               key={project.title} 
-              className="px-8 pt-8 pb-0 md:pt-12 md:px-10 lg:px-20 lg:pt-16 bg-gray-900 sticky"
+              className="px-8 pt-8 pb-0 md:pt-12 md:px-10 lg:px-20 lg:pt-16 sticky bg-gray-800"
               style={{
-                top: `${headerHeight + (projectIndex * 40)}px`,
+                top: `calc(64px + ${projectIndex * 40}px)`, // Use fixed pixel values instead of rem
               }}
             >
               <div className="lg:grid lg:grid-cols-2 lg:gap-16">
                 <div className="lg:pb-16">
-                  <div className="bg-gradient-to-r from-emerald-300 to-sky-400 inline-flex gap-2 font-bold upercase tracking-widset text-sm text-transparent bg-clip-text">
+                  <div className="bg-gradient-to-r from-emerald-300 to-sky-400 inline-flex gap-2 font-bold uppercase tracking-widest text-sm text-transparent bg-clip-text">
                     <span>{project.company}</span>
                     <span>&bull;</span>
                     <span>{project.year}</span>
                   </div>
-                  <h3 className="font-serif text-2xl md:text-4xl mt-2 md:mt-4">{project.title}</h3>
+                  <h3 className="font-serif text-2xl md:text-4xl mt-2 md:mt-4 text-white">
+                    {project.title}
+                  </h3>
                   <hr className="border-t-2 border-white/5 mt-4 md:mt-5" />
                   <ul className="flex flex-col gap-4 mt-4 md:mt-5">
                     {project.results.map((result, index) => (
-                      <li key={`${project.title}-result-${index}`} className="flex gap-2 text-sm md:text-base text-white/50">
-                        <CheckIcon className="size-5 md:mt-6 lg:mt-0 text-emerald-300" />
-                        <span>{result.title}</span></li>
+                      <li 
+                        key={`${project.title}-result-${index}`} 
+                        className="flex gap-2 text-sm md:text-base text-white/50"
+                      >
+                        <CheckIcon className="size-5 md:size-6 text-emerald-300 flex-shrink-0 mt-0.5" />
+                        <span>{result.title}</span>
+                      </li>
                     ))}
                   </ul>
-                  <a href={project.link}>
-                    <button className="bg-white text-gray-950 h-12 w-full md:w-auto md:px-8 rounded-xl font-semibold inline-flex items-center justify-center gap-2 mt-8">
+                  <a href={project.link} target="_blank" rel="noopener noreferrer">
+                    <button className="bg-white text-gray-950 h-12 w-full md:w-auto md:px-8 rounded-xl font-semibold inline-flex items-center justify-center gap-2 mt-8 hover:bg-gray-100 transition-colors">
                       <span>Visit Live Site</span>
                       <ArrowUpRightIcon className="size-4" />
                     </button>
                   </a>
                 </div>
-                <div className="relative">
+                
+                <div className="relative mt-8 lg:mt-0">
                   <Image 
                     src={project.image} 
                     alt={project.title} 
-                    className="mt-8 -mb-4 md:-mb-0 lg:mt-0 lg:absolute lg:h-full lg:w-auto lg:max-w-none w-full h-auto max-w-full object-contain" 
+                    className="-mb-4 md:-mb-0 lg:absolute lg:h-full lg:w-auto lg:max-w-none w-full h-auto max-w-full object-contain" 
+                    priority={projectIndex === 0}
                   />
                 </div>
               </div>
             </Card>
           ))}
         </div>
+        
+        {/* Add sufficient bottom spacing */}
+        <div className="h-96" />
       </div>
     </section>
   );

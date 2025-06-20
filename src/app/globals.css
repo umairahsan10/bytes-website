@@ -1,8 +1,7 @@
 @reference "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/preflight";
+@import "tailwindcss/utilities";
 
 @layer base {
   .nav-item {
@@ -38,19 +37,35 @@
   animation-play-state: paused;
 }
 
-/* Remove horizontal scroll and hide the scrollbar */
-html, body {
-  max-width: 100%;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+/* Only prevent horizontal scroll on the root element */
+html {
+  /* overflow-x: hidden; */
 }
 
-/* Hide horizontal scrollbar in Webkit-based browsers (Chrome, Safari, Edge Chromium) */
-body::-webkit-scrollbar {
-  height: 0px;
+/* Remove overflow-x: hidden from body - this was breaking sticky positioning */
+body {
+  max-width: 100%;
+  /* DON'T set overflow-x: hidden here - it breaks sticky positioning */
+}
+
+/* Hide horizontal scrollbar while preserving functionality */
+body::-webkit-scrollbar-x {
+  display: none;
 }
 
 /* Hide horizontal scrollbar in Firefox */
 body {
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
+}
+
+/* Ensure any child elements don't create horizontal overflow */
+* {
+  box-sizing: border-box;
+}
+
+/* Prevent any element from creating horizontal overflow */
+img, video, iframe, object, embed {
+  max-width: 100%;
+  height: auto;
 }
