@@ -13,6 +13,7 @@ import { ContactSection } from "@/sections/Contact";
 import CardsSection from "@/sections/CardsSection";
 import { LoadingPage } from "@/sections/LoadingPage";
 import { LineAnimationSection } from "@/sections/LineAnimationSection";
+import { CareersSection } from "@/sections/Careers";
 
 
 export default function Home() {
@@ -32,6 +33,7 @@ export default function Home() {
           {/* <AboutSection /> */}
           <CardsSection />
           <BookSection />
+          <CareersSection />
           <ContactSection />
           <Footer />
         </>

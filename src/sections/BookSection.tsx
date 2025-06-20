@@ -77,7 +77,7 @@ export const BookSection = () => {
   }, [hasTriggered, setPage]);
 
   return (
-    <div id="book" className="py-20 lg:py-28" ref={sectionRef}>
+    <div id="technologies" className="py-20 lg:py-28" ref={sectionRef}>
       <div className="container">
         <SectionHeader
           eyebrow="Interactive Book"

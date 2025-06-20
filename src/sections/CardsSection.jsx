@@ -188,7 +188,7 @@ export default function Home() {
 
   return (
     <div className="cards-container" ref={container}>
-      <section className="cards">
+      <section id="services" className="cards">
         <div 
           className={`overlay ${focusedCard !== null ? 'active' : ''}`} 
           onClick={handleOverlayClick}

@@ -43,9 +43,15 @@ const Header: React.FC<HeaderProps> = ({
     checkScreenSize();
 
     // Initial GSAP setup - set starting positions for animation elements
-    gsap.set(".menu-logo img", { y: 50 });
-    gsap.set(".menu-link p", { y: 40 });
-    gsap.set(".menu-sub-item p", { y: 12 });
+    gsap.set(".menu-logo img", { y: 50, opacity: 0 });
+    gsap.set(".menu-link p", { y: 40, opacity: 0 });
+    gsap.set(".menu-sub-item p", { y: 12, opacity: 0 });
+    
+    // Set initial clip-path for menu (closed state - showing only top edge)
+    gsap.set(".menu", { 
+      clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
+      pointerEvents: "none"
+    });
     
     // Set initial positions for images 2, 3, 4 based on screen size
     setInitialImagePositions();
@@ -116,10 +122,11 @@ const Header: React.FC<HeaderProps> = ({
     });
   };
 
-  // Open menu animation
+  // Open menu animation - TOP TO BOTTOM
   const openMenu = () => {
+    // Menu opens from top to bottom
     gsap.to(".menu", {
-      clipPath: "polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%)",
+      clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
       pointerEvents: "all",
       duration: 1.25,
       ease: defaultEase,
@@ -135,24 +142,27 @@ const Header: React.FC<HeaderProps> = ({
 
     gsap.to(".menu-logo img", {
       y: 0,
-      duration: 1,
-      delay: 0.75,
+      opacity: 1,
+      duration: 0.8,
+      delay: 0.6,
       ease: "power3.out",
     });
 
     gsap.to(".menu-link p", {
       y: 0,
-      duration: 1,
-      stagger: 0.075,
-      delay: 1,
+      opacity: 1,
+      duration: 0.8,
+      stagger: 0.06,
+      delay: 0.8,
       ease: "power3.out",
     });
 
     gsap.to(".menu-sub-item p", {
       y: 0,
-      duration: 0.75,
-      stagger: 0.05,
-      delay: 1,
+      opacity: 1,
+      duration: 0.6,
+      stagger: 0.03,
+      delay: 1.1,
       ease: "power3.out",
     });
 
@@ -181,8 +191,9 @@ const Header: React.FC<HeaderProps> = ({
     }
   };
 
-  // Close menu animation
+  // Close menu animation - BOTTOM TO TOP
   const closeMenu = () => {
+    console.log('closeMenu function called');
     // Animate images out first (reverse of opening)
     if (isMobile) {
       gsap.to(["#img-2, #img-3, #img-4"], {
@@ -204,32 +215,38 @@ const Header: React.FC<HeaderProps> = ({
     // Animate menu content out
     gsap.to(".menu-sub-item p", {
       y: 12,
-      duration: 0.6,
-      stagger: 0.03,
+      opacity: 0,
+      duration: 0.4,
+      stagger: 0.02,
       ease: "power3.in",
     });
 
     gsap.to(".menu-link p", {
       y: 40,
-      duration: 0.7,
-      stagger: 0.05,
+      opacity: 0,
+      duration: 0.5,
+      stagger: 0.03,
+      delay: 0.1,
       ease: "power3.in",
     });
 
     gsap.to(".menu-logo img", {
       y: 50,
-      duration: 0.8,
+      opacity: 0,
+      duration: 0.6,
+      delay: 0.2,
       ease: "power3.in",
     });
 
-    // Animate the main menu clip path
+    // Menu closes from bottom to top
     gsap.to(".menu", {
-      clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
+      clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
       pointerEvents: "none",
       duration: 1.25,
       ease: defaultEase,
-      delay: 0.3,
+      delay: 0.4,
       onComplete: () => {
+        console.log('Menu close animation completed');
         setIsOpen(false);
         setButtonText('Menu');
       }
@@ -246,6 +263,27 @@ const Header: React.FC<HeaderProps> = ({
   const handleMenuClose = () => {
     if (!isOpen) return;
     closeMenu();
+  };
+
+  // Handle menu link clicks - close menu and scroll to section
+  const handleMenuLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const href = e.currentTarget.getAttribute('href');
+    if (!href) return;
+
+    // Always initiate menu close animation
+    closeMenu();
+
+    // Scroll after the close animation duration (matches closeMenu timeline ~1.25s)
+    setTimeout(() => {
+      const targetElement = document.querySelector(href);
+      if (targetElement) {
+        targetElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }
+    }, 1300); // slightly longer than closeMenu duration
   };
 
   // Helper function to set image refs for GSAP animations
@@ -309,25 +347,25 @@ const Header: React.FC<HeaderProps> = ({
           {/* Main navigation links */}
           <div className="menu-links">
             <div className="menu-link">
-              <p><a href="#home">Home</a></p>
+              <p><a href="#home" onClick={handleMenuLinkClick}>Home</a></p>
             </div>
             <div className="menu-link">
-              <p><a href="#about">About</a></p>
+              <p><a href="#about" onClick={handleMenuLinkClick}>About</a></p>
             </div>
             <div className="menu-link">
-              <p><a href="#services">Services</a></p>
+              <p><a href="#services" onClick={handleMenuLinkClick}>Services</a></p>
             </div>
             <div className="menu-link">
-              <p><a href="#technologies">Technologies</a></p>
+              <p><a href="#technologies" onClick={handleMenuLinkClick}>Technologies</a></p>
             </div>
             <div className="menu-link">
-              <p><a href="#careers">Careers</a></p>
+              <p><a href="#careers" onClick={handleMenuLinkClick}>Careers</a></p>
             </div>
             <div className="menu-link">
-              <p><a href="#portfolio">Portfolio</a></p>
+              <p><a href="#portfolio" onClick={handleMenuLinkClick}>Portfolio</a></p>
             </div>
             <div className="menu-link">
-              <p><a href="#contact">Contact Us</a></p>
+              <p><a href="#contact" onClick={handleMenuLinkClick}>Contact Us</a></p>
             </div>
           </div>
 
