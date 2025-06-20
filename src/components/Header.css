@@ -2,7 +2,7 @@
 .bytes-menu-container {
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: auto;
     overflow: hidden;
     font-family: "Saans TRIAL", sans-serif;
     background: #000;
@@ -58,7 +58,7 @@
     white-space: nowrap;
   }
   
-  .hero {
+  /* .hero {
     position: absolute;
     top: 0;
     width: 100vw;
@@ -96,7 +96,7 @@
     color: #fff;
     font-size: 1.5vw;
     opacity: 0.8;
-  }
+  } */
   
   .menu {
     position: fixed;
@@ -120,6 +120,7 @@
     position: relative;
     flex: 2;
     overflow: hidden;
+    z-index: 0;
   }
   
   .menu-items {
@@ -128,7 +129,7 @@
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    z-index: -1;
+    z-index: 1;
     height: 100%;
     box-sizing: border-box;
   }
