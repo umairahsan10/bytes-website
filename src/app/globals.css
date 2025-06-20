@@ -37,3 +37,20 @@
 .testimonials-scroll:hover {
   animation-play-state: paused;
 }
+
+/* Remove horizontal scroll and hide the scrollbar */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Hide horizontal scrollbar in Webkit-based browsers (Chrome, Safari, Edge Chromium) */
+body::-webkit-scrollbar {
+  height: 0px;
+}
+
+/* Hide horizontal scrollbar in Firefox */
+body {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
