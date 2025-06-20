@@ -17,34 +17,22 @@ export const useBookScroll = (containerRef?: RefObject<HTMLElement | null>) => {
   const lastFlipTime = useRef(0);
   const engaged = useRef(false);
   const touchStartY = useRef<number | null>(null);
-  const lastRectCheck = useRef(0);
-  const cachedRect = useRef<DOMRect | null>(null);
 
   useEffect(() => {
     pageRef.current = page;
   }, [page]);
 
-  // Throttled function to get element rect (max once per 100ms)
-  const getElementRect = () => {
-    const now = Date.now();
-    if (now - lastRectCheck.current > 100) {
-      cachedRect.current = containerRef?.current?.getBoundingClientRect() || null;
-      lastRectCheck.current = now;
-    }
-    return cachedRect.current;
-  };
-
   useEffect(() => {
     const isTouchDevice = () => typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
 
     const isElementInViewport = (): boolean => {
-      const rect = getElementRect();
+      const rect = containerRef?.current?.getBoundingClientRect();
       if (!rect) return false;
       return rect.top < window.innerHeight && rect.bottom > 0;
     };
 
     const isElementCentered = (): boolean => {
-      const rect = getElementRect();
+      const rect = containerRef?.current?.getBoundingClientRect();
       if (!rect) return true;
       const elemCenter = rect.top + rect.height / 2;
       const viewportCenter = window.innerHeight / 2;
@@ -54,7 +42,7 @@ export const useBookScroll = (containerRef?: RefObject<HTMLElement | null>) => {
     const handleWheel = (e: WheelEvent) => {
       const inViewport = isElementInViewport();
       const centered = isElementCentered();
-      const rect = getElementRect();
+      const rect = containerRef?.current?.getBoundingClientRect();
       const elemCenter = rect ? rect.top + rect.height / 2 : 0;
       const viewportCenter = window.innerHeight / 2;
 
@@ -101,7 +89,7 @@ export const useBookScroll = (containerRef?: RefObject<HTMLElement | null>) => {
       e.stopPropagation();
 
       const now = Date.now();
-      if (now - lastFlipTime.current < 300) return; // Reduced debounce time
+      if (now - lastFlipTime.current < 400) return;
 
       if (scrollingDown && currentPage < pages.length) {
         setPage(currentPage + 1);
@@ -148,7 +136,7 @@ export const useBookScroll = (containerRef?: RefObject<HTMLElement | null>) => {
       const inViewport = isElementInViewport();
       const centered = isElementCentered();
 
-      const rect = getElementRect();
+      const rect = containerRef?.current?.getBoundingClientRect();
       const elemCenter = rect ? rect.top + rect.height / 2 : 0;
       const viewportCenter = window.innerHeight / 2;
 
@@ -199,7 +187,7 @@ export const useBookScroll = (containerRef?: RefObject<HTMLElement | null>) => {
       e.stopPropagation();
 
       const now = Date.now();
-      if (now - lastFlipTime.current < 300) { // Reduced debounce time
+      if (now - lastFlipTime.current < 400) {
         return;
       }
 

@@ -55,7 +55,7 @@ export const TestimonialsSection = () => {
                     {[...new Array(2)].fill(0).map((_,index) => (
                     <Fragment key={index}>
                       {testimonials.map((testimonial) => (
-                        <Card key={testimonial.name} className="max-w-sm md:max-w-md p-6 md:p-8 hover:scale-150 transition duration-300">
+                        <Card key={testimonial.name} className="max-w-sm md:max-w-md p-6 md:p-8 hover:scale-150 transition duration-300 relative hover:z-20">
                             <div className="flex">
                                 <div className="size-14 bg-gray-700 inline-flex items-center justify-center rounded-full flex-shrink-0">
                                     <Image
