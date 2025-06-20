@@ -5,7 +5,7 @@ import TextAnimation from "@/components/TextAnimation";
 
 export const LineAnimationSection = () => {
   return (
-    <section id="about" className="relative w-full min-h-[300vh] overflow-hidden">
+    <section id="about" className="relative w-full min-h-[100vh] overflow-hidden">
       {/* Sticky container keeps animation and text pinned together */}
       <div className="sticky top-0 h-screen w-full">
         {/* Background line animation */}
