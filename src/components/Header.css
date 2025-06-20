@@ -32,12 +32,13 @@
     justify-content: space-between;
     align-items: center;
     z-index: 100;
-    overflow-x: hidden;
+    box-sizing: border-box;
   }
   
   .bytes-nav .logo {
     width: 120px;
     height: auto;
+    flex-shrink: 0;
   }
   
   .bytes-nav .logo img {
@@ -53,6 +54,8 @@
     letter-spacing: 0.05em;
     color: #fff;
     transition: all 0.3s ease;
+    flex-shrink: 0;
+    white-space: nowrap;
   }
   
   .hero {
@@ -227,6 +230,18 @@
   
   /* Mobile responsive */
   @media (max-width: 900px) {
+    .bytes-nav {
+      padding: 1em 1.5em;
+    }
+    
+    .bytes-nav .logo {
+      width: 100px;
+    }
+    
+    .bytes-nav .menu-toggle {
+      font-size: 14px;
+    }
+    
     .menu {
       flex-direction: column;
     }

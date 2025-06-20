@@ -183,37 +183,57 @@ const Header: React.FC<HeaderProps> = ({
 
   // Close menu animation
   const closeMenu = () => {
+    // Animate images out first (reverse of opening)
+    if (isMobile) {
+      gsap.to(["#img-2, #img-3, #img-4"], {
+        right: "-50%",
+        top: "50%",
+        duration: 0.8,
+        ease: defaultEase,
+        stagger: 0.05,
+      });
+    } else {
+      gsap.to(["#img-2, #img-3, #img-4"], {
+        top: "150%",
+        duration: 0.8,
+        ease: defaultEase,
+        stagger: 0.05,
+      });
+    }
+
+    // Animate menu content out
+    gsap.to(".menu-sub-item p", {
+      y: 12,
+      duration: 0.6,
+      stagger: 0.03,
+      ease: "power3.in",
+    });
+
+    gsap.to(".menu-link p", {
+      y: 40,
+      duration: 0.7,
+      stagger: 0.05,
+      ease: "power3.in",
+    });
+
+    gsap.to(".menu-logo img", {
+      y: 50,
+      duration: 0.8,
+      ease: "power3.in",
+    });
+
+    // Animate the main menu clip path
     gsap.to(".menu", {
       clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
       pointerEvents: "none",
       duration: 1.25,
       ease: defaultEase,
-    });
-
-    gsap.to({}, {
-      duration: 0.5,
       delay: 0.3,
       onComplete: () => {
+        setIsOpen(false);
         setButtonText('Menu');
       }
     });
-
-    gsap.set(".menu", {
-      clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
-    });
-    
-    gsap.set(".menu-logo img", { y: 50 });
-    gsap.set(".menu-link p", { y: 40 });
-    gsap.set(".menu-sub-item p", { y: 12 });
-    gsap.set(".menu-items", { opacity: 1, top: "0px" });
-    
-    if (isMobile) {
-      gsap.set(["#img-2, #img-3, #img-4"], { right: "auto", top: "150%" });
-    } else {
-      gsap.set(["#img-2, #img-3, #img-4"], { right: "auto", top: "150%" });
-    }
-
-    setIsOpen(false);
   };
 
   // Handle menu open button click
