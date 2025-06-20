@@ -7,6 +7,7 @@ import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg"
 import { SectionHeader } from "@/components/SectionHeader"
 import { Card } from "@/components/Card"
 import grainImage from "@/public/images/grain.png" 
+import { useState, useEffect } from "react";
 
 const portfolioProjects = [
   {
@@ -48,8 +49,25 @@ const portfolioProjects = [
 ];
 
 export const ProjectsSection = () => {
+  const [headerHeight, setHeaderHeight] = useState(64);
+
+  useEffect(() => {
+    const updateHeaderHeight = () => {
+      const header = document.querySelector('.bytes-nav');
+      if (header) {
+        const height = header.getBoundingClientRect().height;
+        setHeaderHeight(height);
+      }
+    };
+
+    updateHeaderHeight();
+    window.addEventListener('resize', updateHeaderHeight);
+    
+    return () => window.removeEventListener('resize', updateHeaderHeight);
+  }, []);
+
   return (
-    <section id="projects" className="pb-16 lg:py-24">
+    <section id="projects" className="pb-16 lg:py-24 relative z-[101]">
       <div className="container">
         <SectionHeader
           eyebrow="Real-world Results"
@@ -60,9 +78,9 @@ export const ProjectsSection = () => {
           {portfolioProjects.map((project, projectIndex) => (
             <Card
               key={project.title} 
-              className="px-8 pt-8 pb-0 md:pt-12 md:px-10 lg:px-20 lg:pt-16 lg:px-20 bg-gray-900 sticky"
+              className="px-8 pt-8 pb-0 md:pt-12 md:px-10 lg:px-20 lg:pt-16 bg-gray-900 sticky"
               style={{
-                top: `calc(64px + ${projectIndex * 40}px)`,
+                top: `${headerHeight + (projectIndex * 40)}px`,
               }}
             >
               <div className="lg:grid lg:grid-cols-2 lg:gap-16">
@@ -89,7 +107,11 @@ export const ProjectsSection = () => {
                   </a>
                 </div>
                 <div className="relative">
-                  <Image src={project.image} alt={project.title} className="mt-8 -mb-4 md:-mb-0 lg:mt-0 lg:absolute lg:h-full lg:w-auto lg:max-w-none" />
+                  <Image 
+                    src={project.image} 
+                    alt={project.title} 
+                    className="mt-8 -mb-4 md:-mb-0 lg:mt-0 lg:absolute lg:h-full lg:w-auto lg:max-w-none w-full h-auto max-w-full object-contain" 
+                  />
                 </div>
               </div>
             </Card>
