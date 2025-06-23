@@ -30,6 +30,9 @@ export const pageAtom = atom(0);
 // Track whether the user has interacted (clicked/tapped) with the book once.
 export const userInteractedAtom = atom(false);
 
+// Indicates that a page flip animation is currently in progress. Used to throttle rapid clicks.
+export const flipInProgressAtom = atom(false);
+
 // Create pages array with proper ordering
 export const pages: Page[] = [
   // Front cover
