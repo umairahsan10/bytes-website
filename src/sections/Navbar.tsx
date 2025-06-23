@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import '../components/Header.css';
 
 interface HeaderProps {
@@ -278,10 +279,29 @@ const Header: React.FC<HeaderProps> = ({
     setTimeout(() => {
       const targetElement = document.querySelector(href);
       if (targetElement) {
-        targetElement.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
+        const isServices = href === '#services';
+
+        if (isServices) {
+          // Immediate jump for Services section (per earlier requirement)
+          targetElement.scrollIntoView({ behavior: 'auto', block: 'start' });
+        } else {
+          // Use Lenis for a controlled, smooth scroll so the cards section has
+          // enough time to fully animate before leaving the viewport.
+          const lenisInstance = (window as any).lenis;
+          if (lenisInstance && typeof lenisInstance.scrollTo === 'function') {
+            // Make the scroll a bit slower for a calmer transition
+            lenisInstance.scrollTo(targetElement, {
+              duration: 3.5, // slower than previous 2s
+              easing: (t: number) => 1 - Math.pow(1 - t, 3) // ease-out cubic
+            });
+          } else {
+            // Fallback to native smooth scroll if Lenis isn't available yet.
+            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+
+          // Ensure ScrollTrigger timelines stay in sync in edge-cases
+          setTimeout(() => completeCardAnimations(), 2200);
+        }
       }
     }, 1300); // slightly longer than closeMenu duration
   };
@@ -292,6 +312,21 @@ const Header: React.FC<HeaderProps> = ({
       imagesRef.current[index] = el;
     }
   };
+
+  // Helper to instantly finish card animations when navigating away from the Services section
+  const completeCardAnimations = () => {
+    if (typeof window === 'undefined' || !(window as any).ScrollTrigger) return;
+
+    const triggers = (window as any).ScrollTrigger.getAll();
+    triggers.forEach((t: any) => {
+      const id = t.vars && t.vars.id;
+      if (typeof id === 'string' && (id.startsWith('spread-') || id.startsWith('rotate-flip-'))) {
+        t.progress(1, false); // jump to the end of the animation
+      }
+    });
+  };
+
+  gsap.registerPlugin(ScrollTrigger);
 
   return (
     <div className={`bytes-menu-container ${className}`}>
@@ -366,49 +401,6 @@ const Header: React.FC<HeaderProps> = ({
             </div>
             <div className="menu-link">
               <p><a href="#contact" onClick={handleMenuLinkClick}>Contact Us</a></p>
-            </div>
-          </div>
-
-          {/* Menu footer with contact info and social links */}
-          <div className="menu-footer">
-            <div className="menu-sub-col">
-              <div className="menu-sub-item">
-                <p className="section-title">Contact Us</p>
-              </div>
-              <div className="menu-sub-item">
-                <p>+12149374683</p>
-              </div>
-              <div className="menu-sub-item">
-                <p>info@bytesplatform.com</p>
-              </div>
-              <br />
-              <div className="menu-sub-item">
-                <p className="section-title">Location</p>
-              </div>
-              <div className="menu-sub-item">
-                <p>Bytes Platform Production Office</p>
-              </div>
-              <div className="menu-sub-item">
-                <p>14-C 2nd Commercial Ln</p>
-              </div>
-              <div className="menu-sub-item">
-                <p>Defence V</p>
-              </div>
-            </div>
-            <div className="menu-sub-col">
-              <div className="menu-sub-item">
-                <p className="section-title">Follow Us</p>
-              </div>
-              <div className="menu-sub-item">
-                <p><a href="#">LinkedIn</a></p>
-              </div>
-              <div className="menu-sub-item">
-                <p><a href="https://www.instagram.com/bytesplatform/">Instagram</a></p>
-              </div>
-              <div className="menu-sub-item">
-                <p><a href="#">Twitter</a></p>
-              </div>
-              <br />
             </div>
           </div>
         </div>
