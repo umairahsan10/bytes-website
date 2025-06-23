@@ -18,7 +18,7 @@ import {
   Group,
 } from "three";
 import { degToRad } from "three/src/math/MathUtils.js";
-import { pageAtom, pages, userInteractedAtom } from "./state";
+import { pageAtom, pages, userInteractedAtom, flipInProgressAtom } from "./state";
 import { playPageFlipSound } from "./sound";
 
 const easingFactor = 0.5;
@@ -243,6 +243,7 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }: PageP
 
   const [pageState, setPage] = useAtom(pageAtom);
   const [, setUserInteracted] = useAtom(userInteractedAtom);
+  const [flipInProgress, setFlipInProgress] = useAtom(flipInProgressAtom);
   const [highlighted, setHighlighted] = useState(false);
   useCursor(highlighted);
 
@@ -251,6 +252,8 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }: PageP
       {...props}
       ref={group}
       onPointerDown={(e) => {
+        // Ignore clicks while a flip is already underway
+        if (flipInProgress) return;
         e.stopPropagation();
         
         // Handle book closed state (pageState === 0)
@@ -297,6 +300,10 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }: PageP
 
         // Mark interaction cue as consumed
         setUserInteracted(true);
+
+        // Set flip lock and release it after animation duration (~600ms)
+        setFlipInProgress(true);
+        setTimeout(() => setFlipInProgress(false), 900);
       }}
       onPointerOver={() => setHighlighted(true)}
       onPointerOut={() => setHighlighted(false)}

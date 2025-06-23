@@ -124,30 +124,18 @@ export const BookSection = () => {
                 castShadow
                 shadow-mapSize={[1024, 1024]}
               />
-              {/*
-               * Float wrapper disabled for now to keep the book fixed.
-               * Re-enable by uncommenting the block below and removing the static group.
-               *
-               * <Float
-               *   position={[0, 0, 0.9]}
-               *   rotation-x={-0.5}
-               *   rotation-y={0}
-               *   rotation-z={0}
-               *   floatIntensity={0.5}
-               *   speed={1}
-               *   rotationIntensity={1}
-               * >
-               *   <Book />
-               * </Float>
-               */}
-              <group
+              {/* Idle floating motion (no user drag) */}
+              <Float
                 position={[0, 0, 0.9]}
                 rotation-x={-0.5}
                 rotation-y={0}
                 rotation-z={0}
+                floatIntensity={0.5}
+                rotationIntensity={0.5}
+                speed={1}
               >
                 <Book />
-              </group>
+              </Float>
               {!isTouch && (
                 /* Disable OrbitControls to prevent camera interaction */
                 <OrbitControls enabled={false} />
