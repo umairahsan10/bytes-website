@@ -45,6 +45,25 @@
     width: 120px;
     height: auto;
     flex-shrink: 0;
+    cursor: pointer;
+  }
+  
+  .bytes-nav .logo:hover {
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+  }
+  
+  /* Hide navbar logo when menu is open */
+  .menu[style*="clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)"] ~ .bytes-nav .logo,
+  .menu:not([style*="clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)"]) ~ .bytes-nav .logo {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Alternative approach using JavaScript state */
+  .bytes-menu-container.menu-open .bytes-nav .logo {
+    opacity: 0;
+    pointer-events: none;
   }
   
   .bytes-nav .logo img {
@@ -171,6 +190,12 @@
   .menu-logo {
     width: 120px;
     margin-bottom: 1.5rem;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+  
+  .menu-logo:hover {
+    opacity: 0.8;
   }
   
   .menu-logo img {

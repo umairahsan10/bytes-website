@@ -185,9 +185,6 @@ const Header: React.FC<HeaderProps> = ({
         ease: defaultEase,
         stagger: 0.1,
         delay: 0.25,
-        onComplete: () => {
-          setIsOpen(true);
-        }
       });
     } else {
       gsap.to(["#img-2, #img-3, #img-4"], {
@@ -196,9 +193,6 @@ const Header: React.FC<HeaderProps> = ({
         ease: defaultEase,
         stagger: 0.1,
         delay: 0.25,
-        onComplete: () => {
-          setIsOpen(true);
-        }
       });
     }
   };
@@ -271,6 +265,8 @@ const Header: React.FC<HeaderProps> = ({
   // Handle menu open button click
   const handleMenuOpen = () => {
     if (isOpen) return;
+    // Immediately set menu as open to hide logo instantly
+    setIsOpen(true);
     openMenu();
   };
 
@@ -278,6 +274,25 @@ const Header: React.FC<HeaderProps> = ({
   const handleMenuClose = () => {
     if (!isOpen) return;
     closeMenu();
+  };
+
+  // Handle logo click - scroll to hero section
+  const handleLogoClick = () => {
+    // Don't scroll if menu is open
+    if (isOpen) return;
+    
+    const heroElement = document.querySelector('#home') || document.querySelector('.hero') || document.querySelector('main');
+    if (heroElement) {
+      const lenisInstance = (window as any).lenis;
+      if (lenisInstance && typeof lenisInstance.scrollTo === 'function') {
+        lenisInstance.scrollTo(heroElement, {
+          duration: 3.5,
+          easing: (t: number) => 1 - Math.pow(1 - t, 3)
+        });
+      } else {
+        heroElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
   };
 
   // Handle Services dropdown toggle
@@ -402,10 +417,10 @@ const Header: React.FC<HeaderProps> = ({
   gsap.registerPlugin(ScrollTrigger);
 
   return (
-    <div className={`bytes-menu-container ${className}`}>
+    <div className={`bytes-menu-container ${className} ${isOpen ? 'menu-open' : ''}`}>
       {/* Navigation bar */}
       <nav className="bytes-nav">
-        <div className="logo">
+        <div className="logo" onClick={handleLogoClick}>
           <img src={logoImage} alt="Bytes Platform Logo" />
         </div>
         <p className="menu-toggle" onClick={isOpen ? handleMenuClose : handleMenuOpen}>
@@ -448,7 +463,7 @@ const Header: React.FC<HeaderProps> = ({
         {/* Menu content - navigation links and footer */}
         <div className="menu-col menu-items">
           {/* Menu logo */}
-          <div className="menu-logo">
+          <div className="menu-logo" onClick={handleLogoClick}>
             <img src={logoImage} alt="Bytes Platform Logo" />
           </div>
 
