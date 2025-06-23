@@ -144,7 +144,12 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -45%);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    opacity: 0.7;
   }
   
   #img-1 {
@@ -256,9 +261,9 @@
     .menu-col.menu-img {
       display: block;
       position: relative;
-      flex: 2;
-      height: 180px;
-      margin: 2rem 0;
+      flex: 0 0 auto;
+      height: 140px;
+      margin: 3rem 0 2rem 0;
       overflow: hidden;
       border-radius: 8px;
       width: 100%;
@@ -269,10 +274,14 @@
       flex-direction: column;
       padding: 1rem;
       width: 100%;
+      flex: 1;
+      overflow-y: auto;
+      max-height: calc(100vh - 200px);
     }
   
     .menu-links {
       margin-bottom: 2rem;
+      flex-shrink: 0;
     }
   
     .menu-col.menu-img img {
@@ -298,6 +307,7 @@
   
     .menu-footer {
       margin-top: 2rem;
+      flex-shrink: 0;
     }
   
     /* .hero .header h1 {
@@ -307,4 +317,147 @@
     .hero .header sup {
       font-size: 3vw;
     } */
+  }
+
+  /* Services Dropdown Styles */
+  .services-dropdown {
+    position: relative;
+  }
+
+  .dropdown-arrow {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 12px;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: rotate(-90deg);
+    opacity: 0.7;
+  }
+
+  .dropdown-arrow.open {
+    transform: rotate(0deg);
+  }
+
+  .dropdown-menu {
+    position: relative;
+    left: 0;
+    top: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    min-width: 200px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+    margin-top: 0;
+    margin-bottom: 0;
+    pointer-events: none;
+    max-height: 0;
+    overflow: hidden;
+  }
+
+  .dropdown-menu.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+    max-height: 300px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+
+  .dropdown-item {
+    padding: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dropdown-menu.open .dropdown-item {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Staggered animation for dropdown items */
+  .dropdown-menu.open .dropdown-item:nth-child(1) { transition-delay: 0.1s; }
+  .dropdown-menu.open .dropdown-item:nth-child(2) { transition-delay: 0.2s; }
+  .dropdown-menu.open .dropdown-item:nth-child(3) { transition-delay: 0.3s; }
+  .dropdown-menu.open .dropdown-item:nth-child(4) { transition-delay: 0.4s; }
+  .dropdown-menu.open .dropdown-item:nth-child(5) { transition-delay: 0.5s; }
+
+  .dropdown-item a {
+    display: block;
+    padding: 8px 0;
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-radius: 0;
+    margin: 0;
+    opacity: 0.7;
+  }
+
+  .dropdown-item a:hover {
+    background: transparent;
+    color: #fff;
+    opacity: 1;
+  }
+
+  /* Mobile responsive for dropdown */
+  @media (max-width: 900px) {
+    .dropdown-menu {
+      position: relative;
+      background: transparent;
+      border: none;
+      padding: 0;
+      margin-top: 0;
+      margin-left: 20px;
+      min-width: auto;
+      max-height: 0;
+      overflow: hidden;
+      margin-bottom: 0;
+    }
+
+    .dropdown-menu.open {
+      max-height: 300px;
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
+
+    .dropdown-item a {
+      padding: 8px 0;
+      font-size: 16px;
+      margin: 0;
+      opacity: 0.7;
+    }
+
+    .dropdown-item a:hover {
+      opacity: 1;
+    }
+
+    .dropdown-arrow {
+      font-size: 14px;
+    }
+
+    /* Ensure menu items container can scroll if needed */
+    .menu-items {
+      overflow-y: auto;
+      max-height: calc(100vh - 200px);
+      padding-bottom: 20px;
+    }
+
+    /* Reduce image height further on smaller screens */
+    @media (max-width: 600px) {
+      .menu-col.menu-img {
+        height: 120px;
+        margin: 2rem 0 1rem 0;
+      }
+
+      .menu-items {
+        max-height: calc(100vh - 180px);
+      }
+    }
   }

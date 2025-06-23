@@ -17,6 +17,7 @@ const Header: React.FC<HeaderProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [buttonText, setButtonText] = useState('Menu');
+  const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
   
   // Refs for DOM elements
   const menuRef = useRef<HTMLDivElement>(null);
@@ -72,14 +73,24 @@ const Header: React.FC<HeaderProps> = ({
       setInitialImagePositions();
     };
 
+    // Click outside handler for dropdown
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (!target.closest('.services-dropdown')) {
+        setIsServicesDropdownOpen(false);
+      }
+    };
+
     // Add event listeners
     document.body.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('resize', handleResize);
+    document.addEventListener('click', handleClickOutside);
 
     // Cleanup event listeners
     return () => {
       document.body.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
+      document.removeEventListener('click', handleClickOutside);
     };
   }, []);
 
@@ -195,6 +206,9 @@ const Header: React.FC<HeaderProps> = ({
   // Close menu animation - BOTTOM TO TOP
   const closeMenu = () => {
     console.log('closeMenu function called');
+    // Close Services dropdown if open
+    setIsServicesDropdownOpen(false);
+    
     // Animate images out first (reverse of opening)
     if (isMobile) {
       gsap.to(["#img-2, #img-3, #img-4"], {
@@ -264,6 +278,65 @@ const Header: React.FC<HeaderProps> = ({
   const handleMenuClose = () => {
     if (!isOpen) return;
     closeMenu();
+  };
+
+  // Handle Services dropdown toggle
+  const handleServicesDropdownToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsServicesDropdownOpen(!isServicesDropdownOpen);
+  };
+
+  // Handle Services dropdown item click
+  const handleServicesDropdownClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const href = e.currentTarget.getAttribute('href');
+    if (!href) return;
+
+    // Close dropdown
+    setIsServicesDropdownOpen(false);
+
+    // Always initiate menu close animation
+    closeMenu();
+
+    // Scroll after the close animation duration
+    setTimeout(() => {
+      // Handle different service categories
+      if (href === '#services') {
+        // Scroll to main services section
+        const targetElement = document.querySelector(href);
+        if (targetElement) {
+          const lenisInstance = (window as any).lenis;
+          if (lenisInstance && typeof lenisInstance.scrollTo === 'function') {
+            lenisInstance.scrollTo(targetElement, {
+              duration: 3.5,
+              easing: (t: number) => 1 - Math.pow(1 - t, 3)
+            });
+          } else {
+            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      } else {
+        // For other service categories, show a placeholder message
+        // You can replace this with actual section navigation when sections are created
+        const serviceName = href.replace('#', '').replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+        alert(`${serviceName} services coming soon! For now, please check our main Services section.`);
+        
+        // Optionally scroll to services section as fallback
+        const servicesElement = document.querySelector('#services');
+        if (servicesElement) {
+          const lenisInstance = (window as any).lenis;
+          if (lenisInstance && typeof lenisInstance.scrollTo === 'function') {
+            lenisInstance.scrollTo(servicesElement, {
+              duration: 3.5,
+              easing: (t: number) => 1 - Math.pow(1 - t, 3)
+            });
+          } else {
+            servicesElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      }
+    }, 1300);
   };
 
   // Handle menu link clicks - close menu and scroll to section
@@ -387,8 +460,30 @@ const Header: React.FC<HeaderProps> = ({
             <div className="menu-link">
               <p><a href="#about" onClick={handleMenuLinkClick}>About</a></p>
             </div>
-            <div className="menu-link">
-              <p><a href="#services" onClick={handleMenuLinkClick}>Services</a></p>
+            <div className="menu-link services-dropdown">
+              <p>
+                <a href="#services" onClick={handleServicesDropdownToggle}>
+                  Services
+                  <span className={`dropdown-arrow ${isServicesDropdownOpen ? 'open' : ''}`}>▼</span>
+                </a>
+              </p>
+              <div className={`dropdown-menu ${isServicesDropdownOpen ? 'open' : ''}`}>
+                <div className="dropdown-item">
+                  <a href="#services" onClick={handleServicesDropdownClick}>All Services</a>
+                </div>
+                <div className="dropdown-item">
+                  <a href="#cloud" onClick={handleServicesDropdownClick}>Cloud</a>
+                </div>
+                <div className="dropdown-item">
+                  <a href="#digital-marketing" onClick={handleServicesDropdownClick}>Digital Marketing</a>
+                </div>
+                <div className="dropdown-item">
+                  <a href="#digital-consultancy" onClick={handleServicesDropdownClick}>Digital Consultancy</a>
+                </div>
+                <div className="dropdown-item">
+                  <a href="#advanced-services" onClick={handleServicesDropdownClick}>Advanced Services</a>
+                </div>
+              </div>
             </div>
             <div className="menu-link">
               <p><a href="#technologies" onClick={handleMenuLinkClick}>Technologies</a></p>
