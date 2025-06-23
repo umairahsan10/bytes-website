@@ -18,7 +18,7 @@ import {
   Group,
 } from "three";
 import { degToRad } from "three/src/math/MathUtils.js";
-import { pageAtom, pages } from "./state";
+import { pageAtom, pages, userInteractedAtom } from "./state";
 import { playPageFlipSound } from "./sound";
 
 const easingFactor = 0.5;
@@ -242,6 +242,7 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }: PageP
   });
 
   const [pageState, setPage] = useAtom(pageAtom);
+  const [, setUserInteracted] = useAtom(userInteractedAtom);
   const [highlighted, setHighlighted] = useState(false);
   useCursor(highlighted);
 
@@ -249,7 +250,7 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }: PageP
     <group
       {...props}
       ref={group}
-      onClick={(e) => {
+      onPointerDown={(e) => {
         e.stopPropagation();
         
         // Handle book closed state (pageState === 0)
@@ -293,6 +294,9 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }: PageP
             playPageFlipSound();
           }
         }
+
+        // Mark interaction cue as consumed
+        setUserInteracted(true);
       }}
       onPointerOver={() => setHighlighted(true)}
       onPointerOut={() => setHighlighted(false)}

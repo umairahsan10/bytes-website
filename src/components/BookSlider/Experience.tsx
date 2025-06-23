@@ -2,13 +2,13 @@ import { Environment, Float } from "@react-three/drei";
 import { Book } from "./Book";
 import { useEffect } from "react";
 import { useThree } from "@react-three/fiber";
-import { useBookScroll } from "./useBookScroll";
+// import { useBookScroll } from "./useBookScroll";
 
 export const Experience = () => {
   const { camera } = useThree();
 
-  // Enable wheel-to-page-flip globally (full-screen so no container needed)
-  useBookScroll();
+  // Enable wheel-to-page-flip globally (full-screen so no container needed) — disabled
+  // useBookScroll();
 
   useEffect(() => {
     // Lock camera position

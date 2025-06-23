@@ -27,6 +27,9 @@ const pictures = [
 // Initialize page state to 0 (closed book)
 export const pageAtom = atom(0);
 
+// Track whether the user has interacted (clicked/tapped) with the book once.
+export const userInteractedAtom = atom(false);
+
 // Create pages array with proper ordering
 export const pages: Page[] = [
   // Front cover

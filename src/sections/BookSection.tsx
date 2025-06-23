@@ -7,15 +7,17 @@ import { useEffect, useRef, useState } from "react";
 import { Suspense } from "react";
 import { OrbitControls, Float } from "@react-three/drei";
 import { useAtom } from "jotai";
-import { pageAtom } from "@/components/BookSlider/state";
-import { useBookScroll } from "@/components/BookSlider/useBookScroll";
+import { pageAtom, userInteractedAtom } from "@/components/BookSlider/state";
+// import { useBookScroll } from "@/components/BookSlider/useBookScroll";
 
 export const BookSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const bookAreaRef = useRef<HTMLDivElement>(null);
   const [hasTriggered, setHasTriggered] = useState(false);
   const [, setPage] = useAtom(pageAtom);
+  const [userInteracted] = useAtom(userInteractedAtom);
   const [isTouch, setIsTouch] = useState(false);
+  const [showRipple, setShowRipple] = useState(false);
 
   useEffect(() => {
     initializeAudio();
@@ -27,25 +29,27 @@ export const BookSection = () => {
     }
   }, []);
 
-  // Bind wheel-to-page-flip only while the book area is fully visible
-  useBookScroll(bookAreaRef);
+  // Bind wheel-to-page-flip only while the book area is fully visible — disabled for now
+  // useBookScroll(bookAreaRef);
 
   // Observe when the book section enters the viewport and trigger first-page flip
   useEffect(() => {
     if (!sectionRef.current || hasTriggered) return;
 
-    let timer: NodeJS.Timeout | null = null;
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
-        if (entry.isIntersecting) {
+        if (entry.intersectionRatio >= 0.4) {
           setHasTriggered(true);
-          // Delay a bit so the user sees the book before flipping
-          timer = setTimeout(() => setPage(1), 2500);
+          // Flip immediately with no delay when 40% of section is visible
+          setPage(1);
+          if (!userInteracted) {
+            setShowRipple(true);
+          }
           observer.disconnect();
         }
       },
-      { rootMargin: "0px 0px -20% 0px", threshold: 0.1 }
+      { threshold: 0.4 }
     );
 
     observer.observe(sectionRef.current);
@@ -53,9 +57,8 @@ export const BookSection = () => {
     // Clean up
     return () => {
       observer.disconnect();
-      if (timer) clearTimeout(timer);
     };
-  }, [hasTriggered, setPage]);
+  }, [hasTriggered, setPage, userInteracted]);
 
   // Fallback scroll listener in case IntersectionObserver misses
   useEffect(() => {
@@ -63,10 +66,14 @@ export const BookSection = () => {
     const onScroll = () => {
       if (hasTriggered || !sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
-      const visible = rect.top < window.innerHeight * 0.8 && rect.bottom > 0;
-      if (visible) {
+      const visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+      const visibleRatio = visibleHeight / rect.height;
+      if (visibleRatio >= 0.4) {
         setHasTriggered(true);
-        setTimeout(() => setPage(1), 2500);
+        setPage(1);
+        if (!userInteracted) {
+          setShowRipple(true);
+        }
         window.removeEventListener('scroll', onScroll);
       }
     };
@@ -74,7 +81,14 @@ export const BookSection = () => {
     // run once on mount
     onScroll();
     return () => window.removeEventListener('scroll', onScroll);
-  }, [hasTriggered, setPage]);
+  }, [hasTriggered, setPage, userInteracted]);
+
+  // When user interacts, hide the ripple
+  useEffect(() => {
+    if (userInteracted) {
+      setShowRipple(false);
+    }
+  }, [userInteracted]);
 
   return (
     <div id="technologies" className="py-20 lg:py-28" ref={sectionRef}>
@@ -110,33 +124,59 @@ export const BookSection = () => {
                 castShadow
                 shadow-mapSize={[1024, 1024]}
               />
-              {/* Float gives a gentle idle motion */}
-              <Float
+              {/*
+               * Float wrapper disabled for now to keep the book fixed.
+               * Re-enable by uncommenting the block below and removing the static group.
+               *
+               * <Float
+               *   position={[0, 0, 0.9]}
+               *   rotation-x={-0.5}
+               *   rotation-y={0}
+               *   rotation-z={0}
+               *   floatIntensity={0.5}
+               *   speed={1}
+               *   rotationIntensity={1}
+               * >
+               *   <Book />
+               * </Float>
+               */}
+              <group
                 position={[0, 0, 0.9]}
                 rotation-x={-0.5}
                 rotation-y={0}
                 rotation-z={0}
-                floatIntensity={0.5}
-                speed={1}
-                rotationIntensity={1}
               >
                 <Book />
-              </Float>
+              </group>
               {!isTouch && (
-                <OrbitControls
-                  enableZoom={false}
-                  enablePan={true}
-                  minDistance={3}
-                  maxDistance={6}
-                  minPolarAngle={Math.PI / 4}
-                  maxPolarAngle={Math.PI * 3/4}
-                  target={[0, 0, 0]}
-                  enableDamping={true}
-                  dampingFactor={0.05}
-                />
+                /* Disable OrbitControls to prevent camera interaction */
+                <OrbitControls enabled={false} />
               )}
             </Suspense>
           </Canvas>
+          {/* Ripple cue overlay */}
+          {showRipple && (
+            <div className="pointer-events-none absolute inset-0">
+              <div
+                className="ripple-animation" 
+                style={{
+                  position: 'absolute',
+                  // Desktop position (fine-pointer devices)
+                  ...(isTouch
+                    ? {
+                        /* TODO: adjust these values for mobile as desired */
+                        top: '45%',
+                        left: '70%',
+                      }
+                    : {
+                        top: '45%',
+                        left: '63%',
+                      }),
+                  transform: 'translate(-50%, -50%)',
+                }}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

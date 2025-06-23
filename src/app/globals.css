@@ -69,3 +69,42 @@ img, video, iframe, object, embed {
   max-width: 100%;
   height: auto;
 }
+
+/* Ripple cue animation */
+@keyframes ripple {
+  0% {
+    transform: scale(0.2);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+/* Mobile-specific smaller ripple */
+@keyframes rippleMobile {
+  0% {
+    transform: scale(0.2);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+}
+
+.ripple-animation {
+  width: 80px;
+  height: 80px;
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  border-radius: 9999px;
+  animation: ripple 1.6s ease-out infinite;
+}
+
+/* Override animation on touch devices */
+@media (pointer: coarse) {
+  .ripple-animation {
+    animation: rippleMobile 1.6s ease-out infinite;
+  }
+}
