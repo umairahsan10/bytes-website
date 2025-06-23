@@ -14,6 +14,7 @@ import CardsSection from "@/sections/CardsSection";
 import { LoadingPage } from "@/sections/LoadingPage";
 import { LineAnimationSection } from "@/sections/LineAnimationSection";
 import { CareersSection } from "@/sections/Careers";
+import { ByteBotsSection } from "@/sections/ByteBots";
 
 
 export default function Home() {
@@ -26,6 +27,7 @@ export default function Home() {
         <>
           <Header />
           <HeroSection />
+          <ByteBotsSection />
           <ProjectsSection />
           <TapeSection />
           <TestimonialsSection />
