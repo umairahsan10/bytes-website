@@ -9,78 +9,61 @@ interface LoadingPageProps {
 }
 
 export const LoadingPage: React.FC<LoadingPageProps> = ({ onLoadComplete }) => {
-  // Marks whether the loading sequence has already completed (to avoid duplicate completion in React Strict Mode)
   const completedRef = useRef(false);
+  const logoRef = useRef<HTMLImageElement>(null);
 
-  // We intentionally set up our timers *every* time the component mounts.
-  // In React 18 Strict Mode (development), the component mounts, unmounts, and mounts again.
-  // By guarding the completion logic with `completedRef`, we guarantee that we only run `onLoadComplete` once
-  // while still allowing each mount to set up its own timers.
   useEffect(() => {
     document.body.style.overflow = 'hidden';
 
-    gsap.set(".loading-page", {
-      opacity: 1,
-      display: "flex"
-    });
-
-    const MINIMUM_DISPLAY_TIME = 2500; // 2 seconds minimum display time
-    const FADE_OUT_DURATION = 800; // 0.8 seconds fade out
-
-    const completeLoading = () => {
-      if (completedRef.current) return; // Ensure we only finish once
-      completedRef.current = true;
-      gsap.to(".loading-page", {
-        opacity: 0,
-        duration: FADE_OUT_DURATION / 1000,
-        ease: "power2.inOut",
-        onComplete: () => {
-          gsap.set(".loading-page", { display: "none" });
-          document.body.style.overflow = 'auto';
-          onLoadComplete();
-        }
+    gsap.timeline()
+      .to(".loading-page", {
+        background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
+        duration: 0.1,
+        ease: "none"
       });
-    };
 
-    // Single timeout for the main animation
-    const loadTimeout = setTimeout(completeLoading, MINIMUM_DISPLAY_TIME);
+    // Glow animation for logo
+    if (logoRef.current) {
+      gsap.fromTo(
+        logoRef.current,
+        { opacity: 0.2, filter: 'brightness(0.4) drop-shadow(0 0 0px #00A3FF)' },
+        { opacity: 1, filter: 'brightness(1) drop-shadow(0 0 20px #00A3FF)', duration: 1.2, ease: 'power2.out' }
+      );
+    }
 
-    // Fallback timeout
-    const fallbackTimeout = setTimeout(completeLoading, MINIMUM_DISPLAY_TIME + FADE_OUT_DURATION + 2000);
+    // Auto-dismiss after 3 seconds
+    const timeout = setTimeout(() => handleFinish(), 3000);
 
     return () => {
-      clearTimeout(loadTimeout);
-      clearTimeout(fallbackTimeout);
+      clearTimeout(timeout);
       document.body.style.overflow = 'auto';
     };
-  }, [onLoadComplete]);
+  }, []);
+
+  const handleFinish = () => {
+    if (completedRef.current) return;
+    completedRef.current = true;
+
+    gsap.to(".loading-page", {
+      opacity: 0,
+      duration: 0.8,
+      ease: "power2.inOut",
+      onComplete: () => {
+        onLoadComplete();
+        document.body.style.overflow = 'auto';
+      }
+    });
+  };
 
   return (
     <div className="loading-page">
-      <svg id="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-        <text 
-          className="letter bytes" 
-          x="50%" 
-          y="45%" 
-          textAnchor="middle" 
-          dominantBaseline="middle" 
-          fontFamily="Montserrat, sans-serif" 
-          fontWeight="700"
-        >
-          BYTES.
-        </text>
-        <text 
-          className="letter platform" 
-          x="50%" 
-          y="65%" 
-          textAnchor="middle" 
-          dominantBaseline="middle" 
-          fontFamily="Montserrat, sans-serif" 
-          fontWeight="700"
-        >
-          PLATFORM
-        </text>
-      </svg>
+      <img
+        ref={logoRef}
+        src="/assets/bytes-logo.png"
+        alt="Bytes Logo"
+        className="loading-logo"
+        onClick={handleFinish}
+      />
     </div>
   );
 };
