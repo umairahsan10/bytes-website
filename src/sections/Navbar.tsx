@@ -278,22 +278,14 @@ const Header: React.FC<HeaderProps> = ({
     closeMenu();
   };
 
-  // Handle logo click - scroll to hero section
+  // Handle logo click – always navigate to the home page
   const handleLogoClick = () => {
-    // Don't scroll if menu is open
-    if (isOpen) return;
-    
-    const heroElement = document.querySelector('#home') || document.querySelector('.hero') || document.querySelector('main');
-    if (heroElement) {
-      const lenisInstance = (window as any).lenis;
-      if (lenisInstance && typeof lenisInstance.scrollTo === 'function') {
-        lenisInstance.scrollTo(heroElement, {
-          duration: 3.5,
-          easing: (t: number) => 1 - Math.pow(1 - t, 3)
-        });
-      } else {
-        heroElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+    if (isOpen) {
+      // Close the menu first, then navigate
+      closeMenu();
+      setTimeout(() => router.push('/'), 1300);
+    } else {
+      router.push('/');
     }
   };
 
@@ -424,7 +416,7 @@ const Header: React.FC<HeaderProps> = ({
                   <a href="/services/digital-marketing" onClick={handleServicesDropdownClick}>Digital Marketing</a>
                 </div>
                 <div className="dropdown-item">
-                  <a href="/services/digital-consultancy" onClick={handleServicesDropdownClick}>Digital Consultancy</a>
+                  <a href="/services/full-stack-digital-services" onClick={handleServicesDropdownClick}>Full-Stack Digital Services</a>
                 </div>
                 <div className="dropdown-item">
                   <a href="/services/advanced-services" onClick={handleServicesDropdownClick}>Advanced Services</a>
