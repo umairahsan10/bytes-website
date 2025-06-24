@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import '../components/Header.css';
+import { useRouter } from 'next/navigation';
 
 interface HeaderProps {
   heroImage?: string;
@@ -18,6 +19,7 @@ const Header: React.FC<HeaderProps> = ({
   const [isMobile, setIsMobile] = useState(false);
   const [buttonText, setButtonText] = useState('Menu');
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
+  const router = useRouter();
   
   // Refs for DOM elements
   const menuRef = useRef<HTMLDivElement>(null);
@@ -307,50 +309,10 @@ const Header: React.FC<HeaderProps> = ({
     e.preventDefault();
     const href = e.currentTarget.getAttribute('href');
     if (!href) return;
-
-    // Close dropdown
     setIsServicesDropdownOpen(false);
-
-    // Always initiate menu close animation
     closeMenu();
-
-    // Scroll after the close animation duration
     setTimeout(() => {
-      // Handle different service categories
-      if (href === '#services') {
-        // Scroll to main services section
-        const targetElement = document.querySelector(href);
-        if (targetElement) {
-          const lenisInstance = (window as any).lenis;
-          if (lenisInstance && typeof lenisInstance.scrollTo === 'function') {
-            lenisInstance.scrollTo(targetElement, {
-              duration: 3.5,
-              easing: (t: number) => 1 - Math.pow(1 - t, 3)
-            });
-          } else {
-            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }
-      } else {
-        // For other service categories, show a placeholder message
-        // You can replace this with actual section navigation when sections are created
-        const serviceName = href.replace('#', '').replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
-        alert(`${serviceName} services coming soon! For now, please check our main Services section.`);
-        
-        // Optionally scroll to services section as fallback
-        const servicesElement = document.querySelector('#services');
-        if (servicesElement) {
-          const lenisInstance = (window as any).lenis;
-          if (lenisInstance && typeof lenisInstance.scrollTo === 'function') {
-            lenisInstance.scrollTo(servicesElement, {
-              duration: 3.5,
-              easing: (t: number) => 1 - Math.pow(1 - t, 3)
-            });
-          } else {
-            servicesElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }
-      }
+      router.push(href);
     }, 1300);
   };
 
@@ -359,39 +321,8 @@ const Header: React.FC<HeaderProps> = ({
     e.preventDefault();
     const href = e.currentTarget.getAttribute('href');
     if (!href) return;
-
-    // Always initiate menu close animation
     closeMenu();
-
-    // Scroll after the close animation duration (matches closeMenu timeline ~1.25s)
-    setTimeout(() => {
-      const targetElement = document.querySelector(href);
-      if (targetElement) {
-        const isServices = href === '#services';
-
-        if (isServices) {
-          // Immediate jump for Services section (per earlier requirement)
-          targetElement.scrollIntoView({ behavior: 'auto', block: 'start' });
-        } else {
-          // Use Lenis for a controlled, smooth scroll so the cards section has
-          // enough time to fully animate before leaving the viewport.
-          const lenisInstance = (window as any).lenis;
-          if (lenisInstance && typeof lenisInstance.scrollTo === 'function') {
-            // Make the scroll a bit slower for a calmer transition
-            lenisInstance.scrollTo(targetElement, {
-              duration: 3.5, // slower than previous 2s
-              easing: (t: number) => 1 - Math.pow(1 - t, 3) // ease-out cubic
-            });
-          } else {
-            // Fallback to native smooth scroll if Lenis isn't available yet.
-            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-
-          // Ensure ScrollTrigger timelines stay in sync in edge-cases
-          setTimeout(() => completeCardAnimations(), 2200);
-        }
-      }
-    }, 1300); // slightly longer than closeMenu duration
+    setTimeout(() => router.push(href), 1300);
   };
 
   // Helper function to set image refs for GSAP animations
@@ -470,47 +401,47 @@ const Header: React.FC<HeaderProps> = ({
           {/* Main navigation links */}
           <div className="menu-links">
             <div className="menu-link">
-              <p><a href="#home" onClick={handleMenuLinkClick}>Home</a></p>
+              <p><a href="/" onClick={handleMenuLinkClick}>Home</a></p>
             </div>
             <div className="menu-link">
-              <p><a href="#about" onClick={handleMenuLinkClick}>About</a></p>
+              <p><a href="/about" onClick={handleMenuLinkClick}>About</a></p>
             </div>
             <div className="menu-link services-dropdown">
               <p>
-                <a href="#services" onClick={handleServicesDropdownToggle}>
+                <a href="/services" onClick={handleServicesDropdownToggle}>
                   Services
                   <span className={`dropdown-arrow ${isServicesDropdownOpen ? 'open' : ''}`}>▼</span>
                 </a>
               </p>
               <div className={`dropdown-menu ${isServicesDropdownOpen ? 'open' : ''}`}>
                 <div className="dropdown-item">
-                  <a href="#services" onClick={handleServicesDropdownClick}>All Services</a>
+                  <a href="/services" onClick={handleServicesDropdownClick}>All Services</a>
                 </div>
                 <div className="dropdown-item">
-                  <a href="#cloud" onClick={handleServicesDropdownClick}>Cloud</a>
+                  <a href="/services/cloud" onClick={handleServicesDropdownClick}>Cloud</a>
                 </div>
                 <div className="dropdown-item">
-                  <a href="#digital-marketing" onClick={handleServicesDropdownClick}>Digital Marketing</a>
+                  <a href="/services/digital-marketing" onClick={handleServicesDropdownClick}>Digital Marketing</a>
                 </div>
                 <div className="dropdown-item">
-                  <a href="#digital-consultancy" onClick={handleServicesDropdownClick}>Digital Consultancy</a>
+                  <a href="/services/digital-consultancy" onClick={handleServicesDropdownClick}>Digital Consultancy</a>
                 </div>
                 <div className="dropdown-item">
-                  <a href="#advanced-services" onClick={handleServicesDropdownClick}>Advanced Services</a>
+                  <a href="/services/advanced-services" onClick={handleServicesDropdownClick}>Advanced Services</a>
                 </div>
               </div>
             </div>
             <div className="menu-link">
-              <p><a href="#technologies" onClick={handleMenuLinkClick}>Technologies</a></p>
+              <p><a href="/technologies" onClick={handleMenuLinkClick}>Technologies</a></p>
             </div>
             <div className="menu-link">
-              <p><a href="#careers" onClick={handleMenuLinkClick}>Careers</a></p>
+              <p><a href="/careers" onClick={handleMenuLinkClick}>Careers</a></p>
             </div>
             <div className="menu-link">
-              <p><a href="#portfolio" onClick={handleMenuLinkClick}>Portfolio</a></p>
+              <p><a href="/portfolio" onClick={handleMenuLinkClick}>Portfolio</a></p>
             </div>
             <div className="menu-link">
-              <p><a href="#contact" onClick={handleMenuLinkClick}>Contact Us</a></p>
+              <p><a href="/contact" onClick={handleMenuLinkClick}>Contact Us</a></p>
             </div>
           </div>
         </div>
