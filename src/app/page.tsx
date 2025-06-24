@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Header } from "@/sections/Navbar";
-import { HeroSection } from "@/sections/Hero";
+import { Hero } from "@/sections/Hero";
 import { ProjectsSection } from "@/sections/Projects";
 import { TapeSection } from "@/sections/Tape";
 import { TestimonialsSection } from "@/sections/Testimonials";
@@ -25,7 +25,7 @@ export default function Home() {
       {!isLoading && (
         <>
           <Header />
-          <HeroSection />
+          <Hero />
           <ProjectsSection />
           <TapeSection />
           <TestimonialsSection />
