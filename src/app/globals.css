@@ -108,3 +108,8 @@ img, video, iframe, object, embed {
     animation: rippleMobile 1.6s ease-out infinite;
   }
 }
+
+/* Hide Spline watermark badge globally */
+a[aria-label="Built with Spline"] {
+  display: none !important;
+}

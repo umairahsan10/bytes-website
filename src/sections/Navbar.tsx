@@ -510,6 +510,9 @@ const Header: React.FC<HeaderProps> = ({
               <p><a href="#portfolio" onClick={handleMenuLinkClick}>Portfolio</a></p>
             </div>
             <div className="menu-link">
+              <p><a href="/byte-bot">Byte Bot</a></p>
+            </div>
+            <div className="menu-link">
               <p><a href="#contact" onClick={handleMenuLinkClick}>Contact Us</a></p>
             </div>
           </div>
