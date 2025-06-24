@@ -15,9 +15,13 @@ export const BookSection = () => {
   const bookAreaRef = useRef<HTMLDivElement>(null);
   const [hasTriggered, setHasTriggered] = useState(false);
   const [, setPage] = useAtom(pageAtom);
+  const [page] = useAtom(pageAtom);
   const [userInteracted] = useAtom(userInteractedAtom);
   const [isTouch, setIsTouch] = useState(false);
   const [showRipple, setShowRipple] = useState(false);
+  const [scrollFlipDone, setScrollFlipDone] = useState(false);
+  const [scrollReady, setScrollReady] = useState(false);
+  const touchStartYRef = useRef<number | null>(null);
 
   useEffect(() => {
     initializeAudio();
@@ -46,6 +50,8 @@ export const BookSection = () => {
           if (!userInteracted) {
             setShowRipple(true);
           }
+          // Allow scroll flip only after initial animation (~900ms)
+          setTimeout(() => setScrollReady(true), 900);
           observer.disconnect();
         }
       },
@@ -74,6 +80,8 @@ export const BookSection = () => {
         if (!userInteracted) {
           setShowRipple(true);
         }
+        // Allow scroll flip only after initial animation (~900ms)
+        setTimeout(() => setScrollReady(true), 900);
         window.removeEventListener('scroll', onScroll);
       }
     };
@@ -89,6 +97,55 @@ export const BookSection = () => {
       setShowRipple(false);
     }
   }, [userInteracted]);
+
+  // Allow a single wheel scroll to flip from page 1 ➜ 2 after auto flip
+  useEffect(() => {
+    if (scrollFlipDone) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      if (page !== 1 || scrollFlipDone) return;
+
+      // Stop outer page scroll while we're on page 1
+      e.preventDefault();
+
+      if (!scrollReady) return; // wait until auto flip animation done
+
+      setPage(2);
+      setScrollFlipDone(true);
+      // ripple already showing; keep it until user interacts
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (page !== 1 || scrollFlipDone) return;
+      touchStartYRef.current = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (page !== 1 || scrollFlipDone) return;
+      const startY = touchStartYRef.current;
+      if (startY === null) return;
+
+      // Prevent page scroll
+      e.preventDefault();
+
+      const deltaY = startY - e.touches[0].clientY; // positive when swiping up
+      if (!scrollReady) return;
+      if (Math.abs(deltaY) > 40) {
+        setPage(2);
+        setScrollFlipDone(true);
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { passive: false });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel as any);
+      window.removeEventListener('touchstart', handleTouchStart as any);
+      window.removeEventListener('touchmove', handleTouchMove as any);
+    };
+  }, [page, scrollFlipDone, scrollReady, setPage]);
 
   return (
     <div id="technologies" className="py-20 lg:py-28" ref={sectionRef}>
