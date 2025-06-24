@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import '../components/Header.css';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 interface HeaderProps {
   heroImage?: string;
@@ -20,6 +20,7 @@ const Header: React.FC<HeaderProps> = ({
   const [buttonText, setButtonText] = useState('Menu');
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
   
   // Refs for DOM elements
   const menuRef = useRef<HTMLDivElement>(null);
@@ -280,9 +281,16 @@ const Header: React.FC<HeaderProps> = ({
 
   // Handle logo click - scroll to hero section
   const handleLogoClick = () => {
-    // Don't scroll if menu is open
+    // Don't handle when menu is open
     if (isOpen) return;
-    
+
+    // If we're not on the home page, navigate there first
+    if (pathname !== '/') {
+      router.push('/');
+      return;
+    }
+
+    // If on home page, scroll to the hero section
     const heroElement = document.querySelector('#home') || document.querySelector('.hero') || document.querySelector('main');
     if (heroElement) {
       const lenisInstance = (window as any).lenis;

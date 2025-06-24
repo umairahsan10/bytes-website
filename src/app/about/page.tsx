@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { Header } from '@/sections/Navbar';
 
 const AboutUsPage = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -140,29 +141,8 @@ const AboutUsPage = () => {
       {/* Decorative shapes & mouse-follow gradient */}
       <GeometricShapes />
 
-      {/* Navigation */}
-      <motion.nav
-        className="fixed top-0 left-0 right-0 z-50 p-6"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        <div className="flex justify-between items-center max-w-7xl mx-auto">
-          <motion.div className="text-2xl font-bold" whileHover={{ scale: 1.05 }}>
-            BYTES PLATFORM
-          </motion.div>
-          <div className="flex items-center gap-8">
-            <span className="text-sm">+971 50 000 999</span>
-            <motion.button
-              className="bg-yellow-400 text-black px-6 py-2 rounded font-medium"
-              whileHover={{ scale: 1.05, backgroundColor: '#fbbf24' }}
-              whileTap={{ scale: 0.95 }}
-            >
-              START PROJECT
-            </motion.button>
-          </div>
-        </div>
-      </motion.nav>
+      {/* Site-wide Navigation Bar */}
+      <Header />
 
       {/* Hero Section */}
       <section ref={heroRef} className="min-h-screen flex items-center px-6 pt-20 relative z-10">
