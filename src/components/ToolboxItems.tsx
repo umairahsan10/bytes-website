@@ -7,6 +7,7 @@ export const ToolboxItems = ({
     items,
     className,
     itemsWrapperClassName,
+    style,
 }: {
     items: {
         title: string;
@@ -14,6 +15,7 @@ export const ToolboxItems = ({
     }[];
     className?: string;
     itemsWrapperClassName?: string;
+    style?: React.CSSProperties;
 }) => {
     return (
         <div 
@@ -22,10 +24,13 @@ export const ToolboxItems = ({
             className
          )}
         >
-            <div className={twMerge(
-                "flex flex-none py-0.5 gap-6 pr-6",
-                itemsWrapperClassName
-            )}>
+            <div 
+                className={twMerge(
+                    "flex flex-none py-0.5 gap-6 pr-6",
+                    itemsWrapperClassName
+                )}
+                style={style}
+            >
                 {[...new Array(2)].fill(0).map((_,index) => (
                     <Fragment key={index}>
                         {items.map((item) => (

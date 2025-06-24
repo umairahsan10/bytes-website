@@ -27,8 +27,8 @@ const config: Config = {
       },
       animation: {
         // 'ping-large': "ping-large 1s ease-in-out infinite",
-        'move-left': "move-left 90s linear infinite",
-        'move-right': "move-right 90s linear infinite",
+        'slide-in-left': "slide-in-left 1s ease-out forwards",
+        'slide-in-right': "slide-in-right 1s ease-out forwards",
       },
       keyframes: {
         // 'ping-large': {
@@ -37,20 +37,24 @@ const config: Config = {
         //     opacity: '0',
         //   },
         // },
-        'move-left': {
+        'slide-in-left': {
           '0%': {
-            transform: 'translateX(0%)',
+            transform: 'translateX(-100%)',
+            opacity: '0',
           },
           '100%': {
-            transform: 'translateX(-50%)',
+            transform: 'translateX(0%)',
+            opacity: '1',
           },
         },
-        'move-right': {
+        'slide-in-right': {
           '0%': {
-            transform: 'translateX(-50%)',
+            transform: 'translateX(100%)',
+            opacity: '0',
           },
           '100%': {
             transform: 'translateX(0%)',
+            opacity: '1',
           },
         },
       },

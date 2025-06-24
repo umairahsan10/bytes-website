@@ -1,6 +1,6 @@
 @keyframes stroke-white {
   0% {
-    fill: rgba(255, 255, 255, 0);
+    fill: rgba(6, 1, 56, 0);
     stroke: white;
     stroke-dashoffset: 100%;
     stroke-dasharray: 100%;
@@ -60,7 +60,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: #000;
+  background:rgb(4, 1, 44);
   display: flex;
   justify-content: center;
   align-items: center;

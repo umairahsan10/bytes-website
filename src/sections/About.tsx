@@ -14,7 +14,7 @@ import { ToolboxItems } from "@/components/ToolboxItems"
 import Image from "next/image"
 import bookImage from "@/assets/images/book-cover.png"
 import {motion} from "framer-motion"
-import { useRef } from "react"
+import { useRef, useEffect, useState } from "react"
 
 const toolboxItems = [
     {
@@ -89,8 +89,41 @@ const hobbiesItems = [
 ]   
 export const AboutSection = () => {
     const containerRef = useRef(null);
+    const [scrollProgress, setScrollProgress] = useState(0);
+    const sectionRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (!sectionRef.current) return;
+            
+            const rect = sectionRef.current.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
+            
+            // Calculate how much of the section has been scrolled through
+            const sectionTop = rect.top;
+            const sectionHeight = rect.height;
+            
+            // Start animation when section enters viewport, complete when it leaves
+            const progress = Math.max(0, Math.min(1, 
+                (windowHeight - sectionTop) / (windowHeight + sectionHeight)
+            ));
+            
+            setScrollProgress(progress);
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll(); // Initial calculation
+        
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    // Calculate transforms based on scroll progress
+    const translateXLeft = -100 + (scrollProgress * 100); // From -100% to 0%
+    const translateXRight = 100 - (scrollProgress * 100); // From 100% to 0%
+    const opacity = scrollProgress; // From 0 to 1
+
     return (
-        <div id="about" className="py-20 lg:py-28">
+        <div ref={sectionRef} id="about" className="py-20 lg:py-28">
             <div className="container">  
             <SectionHeader 
                 eyebrow="About Me" 
@@ -116,11 +149,20 @@ export const AboutSection = () => {
                       />
                       <ToolboxItems items={toolboxItems} 
                        className="" 
-                       itemsWrapperClassName="animate-move-left [animation-duration:20s] hover:[animation-play-state:paused]" /> 
+                       itemsWrapperClassName="transition-none"
+                       style={{
+                           transform: `translateX(${translateXLeft}%)`,
+                           opacity: opacity,
+                       }}
+                       /> 
                       <ToolboxItems 
                         items={toolboxItems} 
                         className="mt-6 "
-                        itemsWrapperClassName="animate-move-right [animation-duration:20s] hover:[animation-play-state:paused]"
+                        itemsWrapperClassName="transition-none"
+                        style={{
+                            transform: `translateX(${translateXRight}%)`,
+                            opacity: opacity,
+                        }}
                       />
                   </Card>
                 </div>

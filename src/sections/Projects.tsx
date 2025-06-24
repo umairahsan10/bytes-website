@@ -8,6 +8,11 @@ import CheckIcon from "@/assets/icons/check-circle.svg"
 import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg"
 import { SectionHeader } from "@/components/SectionHeader"
 import { Card } from "@/components/Card"
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const portfolioProjects = [
   {
@@ -49,10 +54,101 @@ const portfolioProjects = [
 ];
 
 export const ProjectsSection = () => {
+  const sectionRef = useRef(null);
+  const imagesContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const imagesContainer = imagesContainerRef.current;
+    if (!imagesContainer) return;
+    
+    const imageElements = imagesContainer.querySelectorAll('.project-image');
+    
+    // Check if mobile
+    const isMobile = window.innerWidth <= 1024;
+    
+    // Set initial position for all images (off-screen to the left on desktop, top on mobile)
+    gsap.set(imageElements, { 
+      x: isMobile ? '0%' : '-100%', 
+      y: isMobile ? '-100%' : '0%',
+      opacity: 0 
+    });
+    
+    // Create scroll trigger for the images container
+    ScrollTrigger.create({
+      trigger: imagesContainer,
+      start: 'top 80%',
+      end: 'bottom 20%',
+      onEnter: () => {
+        // Animate images with different directions based on screen size
+        gsap.to(imageElements, {
+          x: isMobile ? '0%' : '0%',
+          y: isMobile ? '0%' : '0%',
+          opacity: 1,
+          duration: 3.0,
+          ease: 'power2.out',
+          stagger: isMobile ? 0.3 : 0.5
+        });
+      },
+      onLeave: () => {
+        gsap.to(imageElements, {
+          x: isMobile ? '0%' : '100%',
+          y: isMobile ? '100%' : '0%',
+          opacity: 0,
+          duration: 2.5,
+          ease: 'power2.in'
+        });
+      },
+      onEnterBack: () => {
+        gsap.to(imageElements, {
+          x: isMobile ? '0%' : '0%',
+          y: isMobile ? '0%' : '0%',
+          opacity: 1,
+          duration: 3.0,
+          ease: 'power2.out'
+        });
+      },
+      onLeaveBack: () => {
+        gsap.to(imageElements, {
+          x: isMobile ? '0%' : '-100%',
+          y: isMobile ? '-100%' : '0%',
+          opacity: 0,
+          duration: 2.5,
+          ease: 'power2.in'
+        });
+      }
+    });
+
+    // Handle window resize
+    const handleResize = () => {
+      const newIsMobile = window.innerWidth <= 1024;
+      if (newIsMobile !== isMobile) {
+        // Recreate scroll triggers on resize
+        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+        // Re-run the effect
+        setTimeout(() => {
+          const newImageElements = imagesContainer.querySelectorAll('.project-image');
+          gsap.set(newImageElements, { 
+            x: newIsMobile ? '0%' : '-100%', 
+            y: newIsMobile ? '-100%' : '0%',
+            opacity: 0 
+          });
+        }, 100);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <section 
       id="portfolio" 
-      className="pb-16 lg:py-24"
+      className="pb-16 lg:py-24 relative overflow-hidden"
+      ref={sectionRef}
     >
       <div className="container mx-auto px-4">
         <SectionHeader
@@ -61,57 +157,40 @@ export const ProjectsSection = () => {
           description="See how I transformed concepts into engaging digital experiences"
         />
         
-        {/* Projects container with proper spacing */}
-        <div className="mt-10 md:mt-20 flex flex-col gap-20">
-          {portfolioProjects.map((project, projectIndex) => (
-            <Card
-              key={project.title} 
-              className="px-8 pt-8 pb-0 md:pt-12 md:px-10 lg:px-20 lg:pt-16 sticky bg-gray-800"
-              style={{
-                top: `calc(64px + ${projectIndex * 40}px)`, // Use fixed pixel values instead of rem
-              }}
-            >
-              <div className="lg:grid lg:grid-cols-2 lg:gap-16">
-                <div className="lg:pb-16">
-                  <div className="bg-gradient-to-r from-emerald-300 to-sky-400 inline-flex gap-2 font-bold uppercase tracking-widest text-sm text-transparent bg-clip-text">
+        {/* Projects container with new layout */}
+        <div className="mt-10 md:mt-20 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
+          {/* Left side - All project titles */}
+          <div className="flex flex-col gap-8 md:gap-12 lg:gap-16 order-2 lg:order-1">
+            {portfolioProjects.map((project, projectIndex) => (
+              <div key={project.title} className="flex items-center min-h-[120px] md:min-h-[160px] lg:min-h-[200px]">
+                <div className="w-full">
+                  <div className="bg-gradient-to-r from-emerald-300 to-sky-400 inline-flex gap-2 font-bold uppercase tracking-widest text-xs md:text-sm text-transparent bg-clip-text">
                     <span>{project.company}</span>
                     <span>&bull;</span>
                     <span>{project.year}</span>
                   </div>
-                  <h3 className="font-serif text-2xl md:text-4xl mt-2 md:mt-4 text-white">
+                  <h3 className="font-serif text-xl md:text-2xl lg:text-4xl mt-2 md:mt-4 text-white">
                     {project.title}
                   </h3>
-                  <hr className="border-t-2 border-white/5 mt-4 md:mt-5" />
-                  <ul className="flex flex-col gap-4 mt-4 md:mt-5">
-                    {project.results.map((result, index) => (
-                      <li 
-                        key={`${project.title}-result-${index}`} 
-                        className="flex gap-2 text-sm md:text-base text-white/50"
-                      >
-                        <CheckIcon className="size-5 md:size-6 text-emerald-300 flex-shrink-0 mt-0.5" />
-                        <span>{result.title}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <a href={project.link} target="_blank" rel="noopener noreferrer">
-                    <button className="bg-white text-gray-950 h-12 w-full md:w-auto md:px-8 rounded-xl font-semibold inline-flex items-center justify-center gap-2 mt-8 hover:bg-gray-100 transition-colors">
-                      <span>Visit Live Site</span>
-                      <ArrowUpRightIcon className="size-4" />
-                    </button>
-                  </a>
-                </div>
-                
-                <div className="relative mt-8 lg:mt-0">
-                  <Image 
-                    src={project.image} 
-                    alt={project.title} 
-                    className="-mb-4 md:-mb-0 lg:absolute lg:h-full lg:w-auto lg:max-w-none w-full h-auto max-w-full object-contain" 
-                    priority={projectIndex === 0}
-                  />
                 </div>
               </div>
-            </Card>
-          ))}
+            ))}
+          </div>
+          
+          {/* Right side - Stacked animated project images */}
+          <div className="flex justify-center lg:justify-end relative order-1 lg:order-2" ref={imagesContainerRef}>
+            <div className="relative w-full max-w-sm md:max-w-md lg:max-w-xl xl:max-w-2xl h-[300px] md:h-[400px] lg:h-[600px]">
+              {portfolioProjects.map((project, projectIndex) => (
+                <Image 
+                  key={project.title}
+                  src={project.image} 
+                  alt={project.title} 
+                  className="project-image absolute inset-0 w-full h-full object-cover rounded-lg shadow-xl md:shadow-2xl" 
+                  priority={projectIndex === 0}
+                />
+              ))}
+            </div>
+          </div>
         </div>
         
         {/* Add sufficient bottom spacing */}
