@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -28,7 +30,8 @@ const Header: React.FC<HeaderProps> = ({
   
   // Mouse tracking for tilt effect
   const mouse = useRef({ x: 0, y: 0 });
-  const center = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+  // Initialize with zeros; set real values in effect to prevent SSR window reference
+  const center = useRef({ x: 0, y: 0 });
 
   // Animation settings
   const defaultEase = "power4.inOut";
@@ -43,8 +46,10 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   useEffect(() => {
-    // Initial screen size check
+    // Initial screen size check and center setup
     checkScreenSize();
+    center.current.x = window.innerWidth / 2;
+    center.current.y = window.innerHeight / 2;
 
     // Initial GSAP setup - set starting positions for animation elements
     gsap.set(".menu-logo img", { y: 50, opacity: 0 });
@@ -280,9 +285,16 @@ const Header: React.FC<HeaderProps> = ({
 
   // Handle logo click - scroll to hero section
   const handleLogoClick = () => {
-    // Don't scroll if menu is open
+    // When the menu is open, ignore logo clicks
     if (isOpen) return;
-    
+
+    // If we're not already on the home route, navigate there
+    if (window.location.pathname !== '/') {
+      router.push('/');
+      return;
+    }
+
+    // If we're on the home page, smoothly scroll to the hero section (original behaviour)
     const heroElement = document.querySelector('#home') || document.querySelector('.hero') || document.querySelector('main');
     if (heroElement) {
       const lenisInstance = (window as any).lenis;
