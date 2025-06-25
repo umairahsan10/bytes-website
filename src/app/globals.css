@@ -126,3 +126,14 @@ a[aria-label="Built with Spline"] {
 .font-goldrops {
   font-family: 'Goldrops', 'GOLDROPS PERSONAL USE', serif;
 }
+
+
+@layer components {
+  .image {
+      -webkit-mask-image:url(/assets/o.png);
+      -webkit-mask-position: center;
+      -webkit-mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      height: 100%;
+  }
+}
