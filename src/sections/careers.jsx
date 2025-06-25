@@ -26,7 +26,7 @@ function App() {
         ScrollTrigger.getAll().forEach(trigger => trigger.kill());
         gsap.registerPlugin(ScrollTrigger);
 
-        const scaleFactor = 2.8;
+        const scaleFactor = 2.7;
 
         const ctx = gsap.context(() => {
             // Ensure elements exist before animating
