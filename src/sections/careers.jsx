@@ -104,6 +104,13 @@ function App() {
 
     return (
         <div className="w-full min-h-screen overflow-x-hidden">
+            {/* Back to Home Button */}
+            <Link href="/">
+                <button className="fixed top-4 left-4 z-50 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white font-semibold px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl shadow-lg backdrop-blur-sm transition-all duration-300">
+                    ← Home
+                </button>
+            </Link>
+
             {/* Hero Section */}
             <section ref={heroRef} className="relative h-screen w-full overflow-hidden">
                 <div className="bg bg-[#141414] absolute inset-0"></div>
