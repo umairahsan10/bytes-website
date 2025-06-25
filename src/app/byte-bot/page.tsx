@@ -1,4 +1,4 @@
-+"use client";
+"use client";
 
 import ByteBotsPage from "../../pages/ByteBots";
 
