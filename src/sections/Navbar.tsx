@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import '../components/Header.css';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface HeaderProps {
   heroImage?: string;
@@ -19,6 +20,7 @@ const Header: React.FC<HeaderProps> = ({
   const [isMobile, setIsMobile] = useState(false);
   const [buttonText, setButtonText] = useState('Menu');
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
+  const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
   const router = useRouter();
   
   // Refs for DOM elements
@@ -28,7 +30,10 @@ const Header: React.FC<HeaderProps> = ({
   
   // Mouse tracking for tilt effect
   const mouse = useRef({ x: 0, y: 0 });
-  const center = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+  const center = useRef({
+    x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0,
+    y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0,
+  });
 
   // Animation settings
   const defaultEase = "power4.inOut";
@@ -42,12 +47,49 @@ const Header: React.FC<HeaderProps> = ({
     setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
   };
 
+  // Set initial image positions based on screen size
+  const setInitialImagePositions = () => {
+    if (isMobile) {
+      gsap.set(["#img-2, #img-3, #img-4"], { right: "-50%", top: "50%" });
+    } else {
+      gsap.set(["#img-2, #img-3, #img-4"], { top: "150%", right: "auto" });
+    }
+  };
+
+  // 3D tilt effect based on mouse position
+  const updateTilt = () => {
+    if (!menuImgContainerRef.current || !imagesRef.current) return;
+
+    const dx = mouse.current.x - center.current.x;
+    const dy = mouse.current.y - center.current.y;
+
+    const tiltx = (dy / center.current.y) * 20;
+    const tilty = (dx / center.current.x) * 20;
+
+    gsap.to(menuImgContainerRef.current, {
+      duration: 2,
+      transform: `rotate3d(${tiltx}, ${tilty}, 0, 15deg)`,
+      ease: "power3.out",
+    });
+
+    imagesRef.current.forEach((img, index) => {
+      if (!img) return;
+      const parallaxX = -(dx * (index + 1)) / 100;
+      const parallaxY = -(dy * (index + 1)) / 100;
+      const transformStyles = `translate(calc(-50% + ${parallaxX}px), calc(-50% + ${parallaxY}px)) scale(${scales[index]})`;
+      gsap.to(img, {
+        duration: 2,
+        transform: transformStyles,
+        ease: "power3.out",
+      });
+    });
+  };
+
   useEffect(() => {
     // Initial screen size check
     checkScreenSize();
 
     // Initial GSAP setup - set starting positions for animation elements
-    gsap.set(".menu-logo img", { y: 50, opacity: 0 });
     gsap.set(".menu-link p", { y: 40, opacity: 0 });
     gsap.set(".menu-sub-item p", { y: 12, opacity: 0 });
     
@@ -81,6 +123,9 @@ const Header: React.FC<HeaderProps> = ({
       if (!target.closest('.services-dropdown')) {
         setIsServicesDropdownOpen(false);
       }
+      if (!target.closest('.products-dropdown')) {
+        setIsProductsDropdownOpen(false);
+      }
     };
 
     // Add event listeners
@@ -94,47 +139,8 @@ const Header: React.FC<HeaderProps> = ({
       window.removeEventListener('resize', handleResize);
       document.removeEventListener('click', handleClickOutside);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // Set initial image positions based on screen size
-  const setInitialImagePositions = () => {
-    if (isMobile) {
-      gsap.set(["#img-2, #img-3, #img-4"], { right: "-50%", top: "50%" });
-    } else {
-      gsap.set(["#img-2, #img-3, #img-4"], { top: "150%", right: "auto" });
-    }
-  };
-
-  // 3D tilt effect based on mouse position
-  const updateTilt = () => {
-    if (!menuImgContainerRef.current || !imagesRef.current) return;
-
-    const dx = mouse.current.x - center.current.x;
-    const dy = mouse.current.y - center.current.y;
-
-    const tiltx = (dy / center.current.y) * 20;
-    const tilty = (dx / center.current.x) * 20;
-
-    gsap.to(menuImgContainerRef.current, {
-      duration: 2,
-      transform: `rotate3d(${tiltx}, ${tilty}, 0, 15deg)`,
-      ease: "power3.out",
-    });
-
-    imagesRef.current.forEach((img, index) => {
-      if (!img) return;
-      
-      const parallaxX = -(dx * (index + 1)) / 100;
-      const parallaxY = -(dy * (index + 1)) / 100;
-
-      const transformStyles = `translate(calc(-50% + ${parallaxX}px), calc(-50% + ${parallaxY}px)) scale(${scales[index]})`;
-      gsap.to(img, {
-        duration: 2,
-        transform: transformStyles,
-        ease: "power3.out",
-      });
-    });
-  };
 
   // Open menu animation - TOP TO BOTTOM
   const openMenu = () => {
@@ -154,20 +160,12 @@ const Header: React.FC<HeaderProps> = ({
       }
     });
 
-    gsap.to(".menu-logo img", {
-      y: 0,
-      opacity: 1,
-      duration: 0.8,
-      delay: 0.6,
-      ease: "power3.out",
-    });
-
     gsap.to(".menu-link p", {
       y: 0,
       opacity: 1,
       duration: 0.8,
       stagger: 0.06,
-      delay: 0.8,
+      delay: 0.6,
       ease: "power3.out",
     });
 
@@ -176,7 +174,7 @@ const Header: React.FC<HeaderProps> = ({
       opacity: 1,
       duration: 0.6,
       stagger: 0.03,
-      delay: 1.1,
+      delay: 0.9,
       ease: "power3.out",
     });
 
@@ -202,8 +200,9 @@ const Header: React.FC<HeaderProps> = ({
   // Close menu animation - BOTTOM TO TOP
   const closeMenu = () => {
     console.log('closeMenu function called');
-    // Close Services dropdown if open
+    // Close all dropdowns if open
     setIsServicesDropdownOpen(false);
+    setIsProductsDropdownOpen(false);
     
     // Animate images out first (reverse of opening)
     if (isMobile) {
@@ -238,14 +237,6 @@ const Header: React.FC<HeaderProps> = ({
       duration: 0.5,
       stagger: 0.03,
       delay: 0.1,
-      ease: "power3.in",
-    });
-
-    gsap.to(".menu-logo img", {
-      y: 50,
-      opacity: 0,
-      duration: 0.6,
-      delay: 0.2,
       ease: "power3.in",
     });
 
@@ -296,12 +287,31 @@ const Header: React.FC<HeaderProps> = ({
     setIsServicesDropdownOpen(!isServicesDropdownOpen);
   };
 
+  // Handle Products dropdown toggle
+  const handleProductsDropdownToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsProductsDropdownOpen(!isProductsDropdownOpen);
+  };
+
   // Handle Services dropdown item click
   const handleServicesDropdownClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     const href = e.currentTarget.getAttribute('href');
     if (!href) return;
     setIsServicesDropdownOpen(false);
+    closeMenu();
+    setTimeout(() => {
+      router.push(href);
+    }, 1300);
+  };
+
+  // Handle Products dropdown item click
+  const handleProductsDropdownClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const href = e.currentTarget.getAttribute('href');
+    if (!href) return;
+    setIsProductsDropdownOpen(false);
     closeMenu();
     setTimeout(() => {
       router.push(href);
@@ -342,20 +352,22 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <div className={`bytes-menu-container ${className} ${isOpen ? 'menu-open' : ''}`}>
       {/* Navigation bar */}
-      <nav className="bytes-nav">
+      <nav className="bytes-nav bg-slate-900/80 backdrop-blur-md h-14 flex items-center py-0 px-4 z-[200]">
         <div className="logo" onClick={handleLogoClick}>
-          <img src={logoImage} alt="Bytes Platform Logo" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={logoImage} alt="Bytes Platform Logo" className="h-12 w-auto" />
         </div>
-        <p className="menu-toggle" onClick={isOpen ? handleMenuClose : handleMenuOpen}>
+        <p className="menu-toggle relative z-[400]" onClick={isOpen ? handleMenuClose : handleMenuOpen}>
           {buttonText}
         </p>
       </nav>
 
       {/* Full-screen menu overlay */}
-      <div className="menu" ref={menuRef}>
+      <div className="menu bg-slate-900" ref={menuRef} style={{ zIndex: 300 }}>
         {/* Image container with layered images and 3D tilt effect */}
         <div className="menu-col menu-img" ref={menuImgContainerRef}>
           {/* Main hero image - always visible */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             id="img-1"
             src={heroImage}
@@ -363,18 +375,21 @@ const Header: React.FC<HeaderProps> = ({
             ref={setImageRef(0)}
           />
           {/* Additional layered images that animate in */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             id="img-2"
             src={heroImage}
             alt=""
             ref={setImageRef(1)}
           />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             id="img-3"
             src={heroImage}
             alt=""
             ref={setImageRef(2)}
           />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             id="img-4"
             src={heroImage}
@@ -385,14 +400,10 @@ const Header: React.FC<HeaderProps> = ({
 
         {/* Menu content - navigation links and footer */}
         <div className="menu-col menu-items">
-          {/* Menu logo */}
-          <div className="menu-logo" onClick={handleLogoClick}>
-            <img src={logoImage} alt="Bytes Platform Logo" />
-          </div>
-
           {/* Main navigation links */}
           <div className="menu-links">
             <div className="menu-link">
+              {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
               <p><a href="/" onClick={handleMenuLinkClick}>Home</a></p>
             </div>
             <div className="menu-link">
@@ -410,27 +421,43 @@ const Header: React.FC<HeaderProps> = ({
                   <a href="/services" onClick={handleServicesDropdownClick}>All Services</a>
                 </div>
                 <div className="dropdown-item">
-                  <a href="/services/cloud" onClick={handleServicesDropdownClick}>Cloud</a>
+                  <a href="/services/app" onClick={handleServicesDropdownClick}>App Development</a>
                 </div>
                 <div className="dropdown-item">
-                  <a href="/services/digital-marketing" onClick={handleServicesDropdownClick}>Digital Marketing</a>
+                  <a href="/services/web" onClick={handleServicesDropdownClick}>Web Development</a>
                 </div>
                 <div className="dropdown-item">
-                  <a href="/services/full-stack-digital-services" onClick={handleServicesDropdownClick}>Full-Stack Digital Services</a>
+                  <a href="/services/seo" onClick={handleServicesDropdownClick}>SEO</a>
+                </div>
+                <div className="dropdown-item">
+                  <a href="/services/marketing" onClick={handleServicesDropdownClick}>Marketing</a>
                 </div>
                 <div className="dropdown-item">
                   <a href="/services/advanced-services" onClick={handleServicesDropdownClick}>Advanced Services</a>
                 </div>
               </div>
             </div>
+            <div className="menu-link products-dropdown">
+              <p>
+                <a href="#" onClick={handleProductsDropdownToggle}>
+                  Products
+                  <span className={`dropdown-arrow ${isProductsDropdownOpen ? 'open' : ''}`}>▼</span>
+                </a>
+              </p>
+              <div className={`dropdown-menu ${isProductsDropdownOpen ? 'open' : ''}`}>
+                <div className="dropdown-item">
+                  <a href="/products/byte-bots" onClick={handleProductsDropdownClick}>Byte Bots</a>
+                </div>
+                <div className="dropdown-item">
+                  <a href="/products/byte-suites" onClick={handleProductsDropdownClick}>Byte Suites</a>
+                </div>
+              </div>
+            </div>
             <div className="menu-link">
-              <p><a href="/technologies" onClick={handleMenuLinkClick}>Technologies</a></p>
+              <p><a href="/industries" onClick={handleMenuLinkClick}>Industries</a></p>
             </div>
             <div className="menu-link">
               <p><a href="/careers" onClick={handleMenuLinkClick}>Careers</a></p>
-            </div>
-            <div className="menu-link">
-              <p><a href="/portfolio" onClick={handleMenuLinkClick}>Portfolio</a></p>
             </div>
             <div className="menu-link">
               <p><a href="/contact" onClick={handleMenuLinkClick}>Contact Us</a></p>

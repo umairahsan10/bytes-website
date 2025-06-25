@@ -31,7 +31,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 90;
+    z-index: 200;
     box-sizing: border-box;
     pointer-events: none;
   }
@@ -53,18 +53,18 @@
     transition: opacity 0.3s ease;
   }
   
-  /* Hide navbar logo when menu is open */
-  .menu[style*="clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)"] ~ .bytes-nav .logo,
+  /* Hide navbar logo when menu is open - DISABLED to keep header logo visible */
+  /* .menu[style*="clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)"] ~ .bytes-nav .logo,
   .menu:not([style*="clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)"]) ~ .bytes-nav .logo {
     opacity: 0;
     pointer-events: none;
-  }
+  } */
 
-  /* Alternative approach using JavaScript state */
-  .bytes-menu-container.menu-open .bytes-nav .logo {
+  /* Alternative approach using JavaScript state - DISABLED to keep header logo visible */
+  /* .bytes-menu-container.menu-open .bytes-nav .logo {
     opacity: 0;
     pointer-events: none;
-  }
+  } */
   
   .bytes-nav .logo img {
     width: 100%;
@@ -81,6 +81,7 @@
     transition: all 0.3s ease;
     flex-shrink: 0;
     white-space: nowrap;
+    z-index: 400;
   }
   
   /* .hero {
@@ -125,18 +126,18 @@
   
   .menu {
     position: fixed;
-    top: 0;
+    top: 56px; /* Start below the header (h-14 = 56px) */
     left: 0;
     padding: 1rem;
     width: 100%;
-    height: 100vh;
+    height: calc(100vh - 56px); /* Subtract header height from viewport height */
     background: #101010;
     color: #fff;
     display: flex;
     gap: 1rem;
     clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
     overflow: hidden;
-    z-index: 30;
+    z-index: 300;
     pointer-events: auto;
     box-sizing: border-box;
   }
@@ -157,6 +158,7 @@
     z-index: 1;
     height: 100%;
     box-sizing: border-box;
+    justify-content: flex-start; /* Start content from the top */
   }
   
   .menu-img img {
@@ -187,7 +189,8 @@
     opacity: 0.3;
   }
   
-  .menu-logo {
+  /* Menu logo styles removed since menu logo is no longer used */
+  /* .menu-logo {
     width: 120px;
     margin-bottom: 1.5rem;
     cursor: pointer;
@@ -203,7 +206,7 @@
     width: 100%;
     height: auto;
     object-fit: contain;
-  }
+  } */
   
   .menu-links {
     margin-bottom: 1rem;
@@ -281,6 +284,8 @@
     
     .menu {
       flex-direction: column;
+      top: 56px; /* Ensure menu starts below header on mobile too */
+      height: calc(100vh - 56px); /* Adjust height for mobile */
     }
   
     .menu-col.menu-img {
@@ -301,7 +306,7 @@
       width: 100%;
       flex: 1;
       overflow-y: auto;
-      max-height: calc(100vh - 200px);
+      max-height: calc(100vh - 256px); /* Adjust for header height (56px) + menu-img height (140px) + margins */
     }
   
     .menu-links {
@@ -346,6 +351,11 @@
 
   /* Services Dropdown Styles */
   .services-dropdown {
+    position: relative;
+  }
+
+  /* Products Dropdown Styles */
+  .products-dropdown {
     position: relative;
   }
 
@@ -482,7 +492,7 @@
       }
 
       .menu-items {
-        max-height: calc(100vh - 180px);
+        max-height: calc(100vh - 236px); /* Adjust for header (56px) + image (120px) + margins */
       }
     }
   }
