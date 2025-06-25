@@ -1,53 +1,750 @@
-"use client";
+'use client';
 
-import { Header } from "@/sections/Navbar";
-import { Footer } from "@/sections/Footer";
+import React, { useEffect, useRef, useState } from 'react';
+import { motion, useInView } from 'framer-motion';
+import Image from 'next/image';
+import { Header } from '@/sections/Navbar';
+import { Footer } from '@/sections/Footer';
 
-export default function IndustriesPage() {
-  return (
-    <>
-      <Header />
-      <main className="min-h-screen bg-slate-900 text-white">
-        <div className="container mx-auto px-4 py-16">
-          <h1 className="text-4xl font-bold mb-8">Industries We Serve</h1>
-          <p className="text-lg text-gray-300 mb-6">
-            We deliver tailored digital solutions across diverse industries, helping businesses thrive in the digital age.
-          </p>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-            <div className="bg-slate-800 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-4">Healthcare</h3>
-              <p className="text-gray-300">
-                Digital health solutions and patient care management systems.
-              </p>
-            </div>
-            <div className="bg-slate-800 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-4">Finance</h3>
-              <p className="text-gray-300">
-                Fintech solutions and digital banking platforms.
-              </p>
-            </div>
-            <div className="bg-slate-800 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-4">Education</h3>
-              <p className="text-gray-300">
-                EdTech platforms and learning management systems.
-              </p>
-            </div>
-            <div className="bg-slate-800 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-4">Retail</h3>
-              <p className="text-gray-300">
-                E-commerce solutions and retail management systems.
-              </p>
-            </div>
-            <div className="bg-slate-800 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-4">Manufacturing</h3>
-              <p className="text-gray-300">
-                Industry 4.0 solutions and smart manufacturing platforms.
-              </p>
-            </div>
-          </div>
-        </div>
-      </main>
-      <Footer />
-    </>
+const IndustriesPage = () => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  // Animated sections refs
+  const heroRef = useRef<HTMLDivElement | null>(null);
+  const fintechRef = useRef<HTMLDivElement | null>(null);
+  const healthcareRef = useRef<HTMLDivElement | null>(null);
+  const ecommerceRef = useRef<HTMLDivElement | null>(null);
+  const educationRef = useRef<HTMLDivElement | null>(null);
+
+  // Animation controls - removing once: true to allow re-triggering on reverse scroll
+  const heroInView = useInView(heroRef, { amount: 0.3 });
+  const fintechInView = useInView(fintechRef, { amount: 0.3 });
+  const healthcareInView = useInView(healthcareRef, { amount: 0.3 });
+  const ecommerceInView = useInView(ecommerceRef, { amount: 0.3 });
+  const educationInView = useInView(educationRef, { amount: 0.3 });
+
+  // State to track if animations have been triggered
+  const [animationsTriggered, setAnimationsTriggered] = useState({
+    hero: false,
+    fintech: false,
+    healthcare: false,
+    ecommerce: false,
+    education: false
+  });
+
+  // Update animation states when sections come into view
+  useEffect(() => {
+    if (heroInView) {
+      setAnimationsTriggered(prev => ({ ...prev, hero: true }));
+    } else {
+      setAnimationsTriggered(prev => ({ ...prev, hero: false }));
+    }
+    if (fintechInView) {
+      setAnimationsTriggered(prev => ({ ...prev, fintech: true }));
+    } else {
+      setAnimationsTriggered(prev => ({ ...prev, fintech: false }));
+    }
+    if (healthcareInView) {
+      setAnimationsTriggered(prev => ({ ...prev, healthcare: true }));
+    } else {
+      setAnimationsTriggered(prev => ({ ...prev, healthcare: false }));
+    }
+    if (ecommerceInView) {
+      setAnimationsTriggered(prev => ({ ...prev, ecommerce: true }));
+    } else {
+      setAnimationsTriggered(prev => ({ ...prev, ecommerce: false }));
+    }
+    if (educationInView) {
+      setAnimationsTriggered(prev => ({ ...prev, education: true }));
+    } else {
+      setAnimationsTriggered(prev => ({ ...prev, education: false }));
+    }
+  }, [heroInView, fintechInView, healthcareInView, ecommerceInView, educationInView]);
+
+  const StarField = () => {
+    // Avoid rendering randomised stars on the server to prevent hydration mismatch
+    const [stars, setStars] = useState<React.ReactElement[]>([]);
+
+    useEffect(() => {
+      const generated = Array.from({ length: 100 }, (_, i) => (
+        <motion.div
+          // eslint-disable-next-line react/no-array-index-key
+          key={i}
+          className="absolute bg-white rounded-full"
+          style={{
+            width: `${Math.random() * 3 + 1}px`,
+            height: `${Math.random() * 3 + 1}px`,
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+          animate={{
+            opacity: [0.3, 1, 0.3],
+            scale: [1, 1.5, 1],
+          }}
+          transition={{
+            duration: 2 + Math.random() * 3,
+            repeat: Infinity,
+            delay: Math.random() * 2,
+          }}
+        />
+      ));
+      setStars(generated);
+    }, []);
+
+    // Render nothing on the server / first client render
+    if (stars.length === 0) return null;
+
+    return (
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {stars}
+      </div>
+    );
+  };
+
+  const GeometricShapes = () => (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+      <StarField />
+    </div>
   );
-} 
+
+  // Enhanced Animation Variants
+  const headerVariants: any = {
+    hidden: { opacity: 0, y: 100, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 1.2,
+        ease: [0.25, 0.46, 0.45, 0.94],
+        type: "spring",
+        stiffness: 100,
+        damping: 15
+      },
+    },
+  };
+
+  const bulletPointVariants: any = {
+    hidden: { opacity: 0, x: -50, scale: 0.8 },
+    visible: (i: number) => ({
+      opacity: 1,
+      x: 0,
+      scale: 1,
+      transition: {
+        delay: i * 0.2,
+        duration: 0.8,
+        ease: [0.25, 0.46, 0.45, 0.94],
+        type: "spring",
+        stiffness: 120,
+        damping: 20
+      },
+    }),
+  };
+
+  const paragraphVariants: any = {
+    hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      transition: {
+        duration: 1,
+        ease: "easeOut",
+        delay: 0.3
+      },
+    },
+  };
+
+  const staggerContainer: any = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const slideInLeft: any = {
+    hidden: { opacity: 0, x: -100 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.8, ease: 'easeOut' },
+    },
+  };
+
+  const slideInRight: any = {
+    hidden: { opacity: 0, x: 100 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.8, ease: 'easeOut' },
+    },
+  };
+
+  const scaleIn: any = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.8, ease: 'easeOut' },
+    },
+  };
+
+  // Animated Text Components
+  const AnimatedHeader = ({ children, className, variants = headerVariants, inView, ...props }: any) => (
+    <motion.h1
+      className={className}
+      variants={variants}
+      initial="hidden"
+      animate={inView ? "visible" : "hidden"}
+      {...props}
+    >
+      {children}
+    </motion.h1>
+  );
+
+  const AnimatedBulletPoints = ({ points, className = "", inView }: any) => (
+    <motion.div
+      className={`space-y-3 ${className}`}
+      initial="hidden"
+      animate={inView ? "visible" : "hidden"}
+      variants={staggerContainer}
+    >
+      {points.map((point: string, index: number) => (
+        <motion.div
+          key={index}
+          className="flex items-start gap-3"
+          variants={bulletPointVariants}
+          custom={index}
+        >
+          <motion.div
+            className="w-2 h-2 bg-yellow-400 rounded-full mt-2 flex-shrink-0"
+            initial={{ scale: 0, rotate: 0 }}
+            animate={inView ? { scale: 1, rotate: 360 } : { scale: 0, rotate: 0 }}
+            transition={{ 
+              delay: index * 0.2 + 0.5, 
+              duration: 0.5,
+              type: "spring",
+              stiffness: 200
+            }}
+          />
+          <motion.span
+            className="text-sm sm:text-base lg:text-lg"
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ delay: index * 0.2 + 0.7, duration: 0.5 }}
+          >
+            {point}
+          </motion.span>
+        </motion.div>
+      ))}
+    </motion.div>
+  );
+
+  const HeroAnimatedText = ({ text }: { text: string }) => {
+    return (
+      <motion.div
+        className="text-4xl lg:text-6xl leading-none bg-gradient-to-r from-gray-900 via-black to-gray-800 bg-clip-text text-transparent drop-shadow-lg tracking-wider uppercase"
+        style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 900 }}
+        initial="hidden"
+        animate={animationsTriggered.hero ? "visible" : "hidden"}
+        variants={staggerContainer}
+      >
+        <motion.div
+          className="overflow-hidden"
+          variants={{
+            hidden: { y: 100, opacity: 0 },
+            visible: {
+              y: 0,
+              opacity: 1,
+              transition: {
+                duration: 1.2,
+                ease: [0.25, 0.46, 0.45, 0.94],
+                type: "spring",
+                stiffness: 100,
+                damping: 15
+              }
+            }
+          }}
+        >
+          <motion.span
+            className="inline-block"
+            variants={{
+              hidden: { y: 100, opacity: 0 },
+              visible: {
+                y: 0,
+                opacity: 1,
+                transition: {
+                  duration: 1.2,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 15
+                }
+              }
+            }}
+          >
+            {text}
+          </motion.span>
+        </motion.div>
+      </motion.div>
+    );
+  };
+
+  return (
+    <div ref={containerRef} className="min-h-screen bg-black text-white overflow-hidden relative">
+      {/* Site-wide Navigation Bar */}
+      <Header />
+
+      {/* Hero Section */}
+      <section ref={heroRef} className="min-h-screen flex items-center px-6 pt-20 relative z-10">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/assets/industry-bg.png"
+            alt="Industry Background"
+            fill
+            className="object-cover"
+            priority
+          />
+          {/* Overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/20"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+          <motion.div
+            variants={staggerContainer as any}
+            initial="hidden"
+            animate={animationsTriggered.hero ? 'visible' : 'hidden'}
+            className="space-y-8"
+          >
+            <motion.div variants={staggerContainer as any} className="space-y-6">
+              <HeroAnimatedText text="INDUSTRIES WE SERVE" />
+              <motion.div 
+                className="h-1 bg-yellow-400"
+                initial={{ width: 0 }}
+                animate={animationsTriggered.hero ? { width: "100%" } : { width: 0 }}
+                transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
+              />
+            </motion.div>
+
+            <motion.p 
+              variants={paragraphVariants as any} 
+              className="text-lg text-black max-w-md"
+            >
+              We deliver cutting-edge solutions across diverse industries, transforming businesses with innovative technology.
+            </motion.p>
+
+            <motion.div variants={paragraphVariants as any} className="flex items-center gap-4">
+              <motion.div 
+                className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center"
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              >
+                <span className="text-black font-bold text-xl">▶</span>
+              </motion.div>
+              <motion.span 
+                className="text-sm text-black"
+                initial={{ opacity: 0, x: -20 }}
+                animate={animationsTriggered.hero ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+                transition={{ delay: 1.5, duration: 0.5 }}
+              >
+                Explore our expertise
+              </motion.span>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            variants={scaleIn as any}
+            initial="hidden"
+            animate={animationsTriggered.hero ? 'visible' : 'hidden'}
+            className="relative"
+          >
+            {/* Placeholder for industries image */}
+            <div className="relative w-96 h-96 mx-auto bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center">
+              <div className="w-80 h-80 bg-black rounded-full flex items-center justify-center">
+                <motion.div 
+                  className="text-6xl text-yellow-400 font-bold"
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={animationsTriggered.hero ? { scale: 1, rotate: 0 } : { scale: 0, rotate: -180 }}
+                  transition={{ delay: 0.5, duration: 1, type: "spring", stiffness: 100 }}
+                >
+                  INDUSTRIES
+                </motion.div>
+              </div>
+            </div>
+
+            <motion.div
+              className="absolute top-8 right-8 bg-black/80 backdrop-blur-sm rounded-lg p-4"
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 3, repeat: Infinity }}
+            >
+              <motion.div 
+                className="text-yellow-400 text-2xl font-bold"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={animationsTriggered.hero ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
+                transition={{ delay: 1.2, duration: 0.5 }}
+              >
+                15+
+              </motion.div>
+              <motion.div 
+                className="text-xs text-white"
+                initial={{ opacity: 0 }}
+                animate={animationsTriggered.hero ? { opacity: 1 } : { opacity: 0 }}
+                transition={{ delay: 1.4, duration: 0.5 }}
+              >
+                Industries served
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Fintech Section */}
+      <section ref={fintechRef} className="py-12 bg-white text-black px-6 relative">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <motion.div
+            variants={slideInLeft as any}
+            initial="hidden"
+            animate={animationsTriggered.fintech ? 'visible' : 'hidden'}
+            className="relative order-2 lg:order-1"
+          >
+            {/* Banking image */}
+            <div className="relative w-[500px] h-[500px] mx-auto">
+              <div className="absolute inset-0 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={animationsTriggered.fintech ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+                  transition={{ delay: 0.5, duration: 0.8, type: "spring" }}
+                  className="w-full h-full"
+                >
+                  <img
+                    src="/assets/money.jpg"
+                    alt="Banking and Financial Services"
+                    className="w-full h-full object-cover rounded-full"
+                  />
+                </motion.div>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            variants={staggerContainer as any}
+            initial="hidden"
+            animate={animationsTriggered.fintech ? 'visible' : 'hidden'}
+            className="space-y-8 order-1 lg:order-2"
+          >
+            <motion.div variants={staggerContainer as any} className="space-y-6">
+              <AnimatedHeader
+                className="text-4xl lg:text-6xl font-bold leading-none"
+                inView={animationsTriggered.fintech}
+              >
+                BANKING &amp;
+                <br />
+                FINANCIAL SECTOR
+              </AnimatedHeader>
+              <motion.div 
+                className="h-1 bg-yellow-400"
+                initial={{ width: 0 }}
+                animate={animationsTriggered.fintech ? { width: "100%" } : { width: 0 }}
+                transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+              />
+            </motion.div>
+
+            <motion.p 
+              variants={paragraphVariants as any} 
+              initial="hidden"
+              animate={animationsTriggered.fintech ? "visible" : "hidden"}
+              className="text-lg text-gray-600 max-w-md"
+            >
+              Secure, scalable digital solutions for modern banking and financial institutions.
+            </motion.p>
+
+            <AnimatedBulletPoints
+              points={[
+                "Empowering banks, fintechs, and investment firms with secure, scalable digital solutions",
+                "Streamlining operations through intelligent automation and data-driven decision-making",
+                "Enhancing customer engagement with seamless digital experiences",
+                "Ensuring compliance and risk mitigation through robust security architectures"
+              ]}
+              className="text-gray-500"
+              inView={animationsTriggered.fintech}
+            />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Healthcare Section */}
+      <section ref={healthcareRef} className="py-12 bg-black text-white px-6 relative z-10">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <motion.div
+            variants={staggerContainer as any}
+            initial="hidden"
+            animate={animationsTriggered.healthcare ? 'visible' : 'hidden'}
+            className="space-y-8"
+          >
+            <motion.div variants={staggerContainer as any} className="space-y-6">
+              <AnimatedHeader
+                className="text-4xl lg:text-6xl font-bold leading-none"
+                inView={animationsTriggered.healthcare}
+              >
+                HEALTH
+                <br />
+                SECTOR
+              </AnimatedHeader>
+              <motion.div 
+                className="h-1 bg-yellow-400"
+                initial={{ width: 0 }}
+                animate={animationsTriggered.healthcare ? { width: "100%" } : { width: 0 }}
+                transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+              />
+            </motion.div>
+            
+            <motion.p 
+              variants={paragraphVariants as any} 
+              initial="hidden"
+              animate={animationsTriggered.healthcare ? "visible" : "hidden"}
+              className="text-lg text-gray-300 max-w-md"
+            >
+              Digital health solutions that improve patient care and streamline medical operations.
+            </motion.p>
+            
+            <motion.div variants={staggerContainer as any} className="space-y-4">
+              <motion.div 
+                className="bg-yellow-400 text-black px-8 py-6 inline-block"
+                initial={{ opacity: 0, scale: 0.8, rotateY: -90 }}
+                animate={animationsTriggered.healthcare ? { opacity: 1, scale: 1, rotateY: 0 } : { opacity: 0, scale: 0.8, rotateY: -90 }}
+                transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
+              >
+                <h3 className="text-4xl font-bold">HEALTH</h3>
+              </motion.div>
+              
+              <motion.div className="ml-4">
+                <AnimatedBulletPoints
+                  points={[
+                    "Supporting patient-centric care through digital transformation",
+                    "Developing HIPAA-compliant solutions for clinics, hospitals, and health systems",
+                    "Improving health outcomes with data interoperability and AI-driven insights",
+                    "Enhancing patient engagement via mobile apps and portals"
+                  ]}
+                  className="text-gray-400"
+                  inView={animationsTriggered.healthcare}
+                />
+              </motion.div>
+            </motion.div>
+          </motion.div>
+          
+          <motion.div
+            variants={slideInRight as any}
+            initial="hidden"
+            animate={animationsTriggered.healthcare ? 'visible' : 'hidden'}
+            className="relative"
+          >
+            {/* Placeholder for healthcare image */}
+            <div className="relative w-96 h-96 mx-auto">
+              <div className="absolute inset-0 bg-gray-800 rounded-lg overflow-hidden">
+                <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+                  <motion.div 
+                    className="text-4xl text-yellow-400 font-bold"
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={animationsTriggered.healthcare ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+                    transition={{ delay: 0.5, duration: 0.8 }}
+                  >
+                    HEALTH
+                  </motion.div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* E-commerce Section */}
+      <section ref={ecommerceRef} className="py-12 bg-white text-black px-6 relative">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <motion.div
+            variants={slideInLeft as any}
+            initial="hidden"
+            animate={animationsTriggered.ecommerce ? 'visible' : 'hidden'}
+            className="relative order-2 lg:order-1"
+          >
+            {/* Placeholder for e-commerce mockup */}
+            <div className="relative w-80 h-96 mx-auto">
+              <div className="w-full h-full bg-yellow-400 rounded-3xl p-6 flex flex-col">
+                <div className="flex-1 bg-white rounded-2xl p-4 flex items-center justify-center">
+                  <motion.div 
+                    className="text-3xl text-black font-bold"
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={animationsTriggered.ecommerce ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+                    transition={{ delay: 0.5, duration: 0.8, type: "spring" }}
+                  >
+                    RETAIL
+                  </motion.div>
+                </div>
+                <div className="mt-4 space-y-2">
+                  <div className="flex justify-between items-center">
+                    <motion.span 
+                      className="text-xs"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={animationsTriggered.ecommerce ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+                      transition={{ delay: 0.8, duration: 0.5 }}
+                    >
+                      ONLINE STORES
+                    </motion.span>
+                    <motion.span 
+                      className="text-xs"
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={animationsTriggered.ecommerce ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
+                      transition={{ delay: 0.9, duration: 0.5 }}
+                    >
+                      MARKETPLACES
+                    </motion.span>
+                  </div>
+                </div>
+              </div>
+              <motion.div
+                className="absolute -top-4 -right-4 bg-black text-white px-4 py-2 rounded-lg text-sm"
+                animate={{ x: [0, 10, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <div className="text-yellow-400 font-bold">SHOP</div>
+              </motion.div>
+            </div>
+          </motion.div>
+          
+          <motion.div
+            variants={staggerContainer as any}
+            initial="hidden"
+            animate={animationsTriggered.ecommerce ? 'visible' : 'hidden'}
+            className="space-y-8 order-1 lg:order-2"
+          >
+            <motion.div variants={staggerContainer as any} className="space-y-6">
+              <AnimatedHeader
+                className="text-4xl lg:text-6xl font-bold leading-none"
+                inView={animationsTriggered.ecommerce}
+              >
+                RETAIL
+                <br />
+                SOLUTIONS
+              </AnimatedHeader>
+              <motion.div 
+                className="h-1 bg-yellow-400"
+                initial={{ width: 0 }}
+                animate={animationsTriggered.ecommerce ? { width: "100%" } : { width: 0 }}
+                transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+              />
+            </motion.div>
+            
+            <motion.p 
+              variants={paragraphVariants as any} 
+              initial="hidden"
+              animate={animationsTriggered.ecommerce ? "visible" : "hidden"}
+              className="text-lg text-gray-600 max-w-md"
+            >
+              Comprehensive retail solutions that drive sales and enhance customer experience.
+            </motion.p>
+            
+            <AnimatedBulletPoints
+              points={[
+                "Driving omnichannel retail strategies for better customer experiences",
+                "Leveraging data analytics to optimize inventory and personalization",
+                "Enhancing e-commerce platforms with fast, responsive interfaces",
+                "Enabling supply chain visibility and operational efficiency"
+              ]}
+              className="text-gray-500"
+              inView={animationsTriggered.ecommerce}
+            />
+            
+            <motion.button
+              className="bg-yellow-400 text-black px-8 py-3 rounded font-medium"
+              initial={{ opacity: 0, y: 20, scale: 0.9 }}
+              animate={animationsTriggered.ecommerce ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.9 }}
+              transition={{ delay: 1.2, duration: 0.5, type: "spring", stiffness: 200 }}
+            >
+              Start project
+            </motion.button>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Education Section */}
+      <section ref={educationRef} className="py-12 bg-black text-white px-6 relative z-10">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <motion.div
+            variants={staggerContainer as any}
+            initial="hidden"
+            animate={animationsTriggered.education ? 'visible' : 'hidden'}
+            className="space-y-8"
+          >
+            <motion.div variants={staggerContainer as any} className="space-y-6">
+              <AnimatedHeader
+                className="text-4xl lg:text-6xl font-bold leading-none"
+                inView={animationsTriggered.education}
+              >
+                FEDERAL GOVERNMENT
+                <br />
+                CONTRACTORS
+              </AnimatedHeader>
+              <motion.div 
+                className="h-1 bg-yellow-400"
+                initial={{ width: 0 }}
+                animate={animationsTriggered.education ? { width: "100%" } : { width: 0 }}
+                transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+              />
+            </motion.div>
+            
+            <motion.p 
+              variants={paragraphVariants as any} 
+              initial="hidden"
+              animate={animationsTriggered.education ? "visible" : "hidden"}
+              className="text-lg text-gray-300 max-w-md"
+            >
+              Innovative digital solutions tailored for federal government contractors.
+            </motion.p>
+            
+            <AnimatedBulletPoints
+              points={[
+                "Delivering secure, compliant technology for federal and state agencies",
+                "Supporting digital modernization initiatives across public services",
+                "Improving efficiency with workflow automation and cloud infrastructure",
+                "Partnering with government contractors to meet mission-critical needs"
+              ]}
+              className="text-gray-400"
+              inView={animationsTriggered.education}
+            />
+          </motion.div>
+          
+          <motion.div
+            variants={slideInRight as any}
+            initial="hidden"
+            animate={animationsTriggered.education ? 'visible' : 'hidden'}
+            className="relative"
+          >
+            {/* Placeholder for federal government image */}
+            <div className="relative w-96 h-96 mx-auto">
+              <div className="absolute inset-0 bg-gray-800 rounded-lg overflow-hidden">
+                <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+                  <motion.div 
+                    className="text-4xl text-yellow-400 font-bold"
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={animationsTriggered.education ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+                    transition={{ delay: 0.5, duration: 0.8 }}
+                  >
+                    FEDERAL
+                  </motion.div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <Footer />
+    </div>
+  );
+};
+
+export default IndustriesPage;
