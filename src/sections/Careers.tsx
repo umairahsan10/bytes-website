@@ -1,4 +1,5 @@
 import { SectionHeader } from "@/components/SectionHeader";
+import Link from "next/link";
 
 export const CareersSection = () => {
   return (
@@ -18,9 +19,16 @@ export const CareersSection = () => {
               We're always looking for talented individuals to join our team. 
               Check back soon for current openings or send us your resume.
             </p>
-            <button className="bg-gradient-to-r from-emerald-300 to-sky-400 text-gray-900 px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
-              Send Resume
-            </button>
+            <div className="flex flex-col md:flex-row gap-4 justify-center">
+              <button className="bg-gradient-to-r from-emerald-300 to-sky-400 text-gray-900 px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+                Send Resume
+              </button>
+              <Link href="/careers" passHref>
+                <button className="border border-emerald-300 text-white px-8 py-3 rounded-xl font-semibold hover:bg-white hover:text-gray-900 transition-colors">
+                  View All Careers
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>

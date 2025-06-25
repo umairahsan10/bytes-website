@@ -108,3 +108,13 @@ img, video, iframe, object, embed {
     animation: rippleMobile 1.6s ease-out infinite;
   }
 }
+
+@layer components {
+    .image {
+        -webkit-mask-image:url(../assets/images/o.png);
+        -webkit-mask-position: center;
+        -webkit-mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        height: 100%;
+    }
+}
