@@ -340,13 +340,13 @@ const AppDevelopmentPage = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { name: "React Native", category: "Cross-Platform", icon: "/assets/react-native-icon.png" },
-              { name: "Flutter", category: "Cross-Platform", icon: "/assets/flutter-icon.png`" },
-              { name: "Swift/SwiftUI", category: "iOS Native", icon: "/assets/swift-icon.png`" },
-              { name: "Kotlin/Java", category: "Android Native", icon: "/assets/kotlin-icon.png`" },
-              { name: "Node.js", category: "Backend", icon: "/assets/nodejs-icon.png`" },
-              { name: "Firebase", category: "Backend", icon: "/assets/firebase-icon.png`" },
-              { name: "MongoDB", category: "Database", icon: "/assets/mongodb-icon.png`" },
-              { name: "AWS/Azure", category: "Cloud", icon: "/assets/aws-icon.png`" }
+              { name: "Flutter", category: "Cross-Platform", icon: "/assets/flutter-icon.png" },
+              { name: "Swift/SwiftUI", category: "iOS Native", icon: "/assets/swift-icon.png" },
+              { name: "Kotlin/Java", category: "Android Native", icon: "/assets/kotlin-icon.png" },
+              { name: "Node.js", category: "Backend", icon: "/assets/nodejs-icon.png" },
+              { name: "Firebase", category: "Backend", icon: "/assets/firebase-icon.png" },
+              { name: "MongoDB", category: "Database", icon: "/assets/mongodb-icon.png" },
+              { name: "AWS/Azure", category: "Cloud", icon: "/assets/aws-icon.png" }
             ].map((tech, index) => (
               <motion.div
                 key={index}
