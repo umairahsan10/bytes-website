@@ -460,7 +460,9 @@ const Header: React.FC<HeaderProps> = ({
               <p><a href="/careers" onClick={handleMenuLinkClick}>Careers</a></p>
             </div>
             <div className="menu-link">
+
               <p><a href="/contact" onClick={handleMenuLinkClick}>Contact Us</a></p>
+
             </div>
           </div>
         </div>
