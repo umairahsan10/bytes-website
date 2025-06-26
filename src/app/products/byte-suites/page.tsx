@@ -504,7 +504,10 @@ const ByteSuitePage: React.FC = () => {
                   <img
                     src="/assets/bytesuite-hero.png"
                     alt="ByteSuite CRM Dashboard"
-                    className="w-full h-auto max-w-2xl mx-auto rounded-2xl shadow-2xl"
+                    className="w-full h-auto max-w-2xl mx-auto rounded-2xl"
+                    style={{ 
+                      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 10px 20px -5px rgba(0, 0, 0, 0.3)'
+                    }}
                     onError={(e) => {
                       e.currentTarget.src = 'https://via.placeholder.com/800x600/1f2937/ffffff?text=ByteSuite+CRM+Dashboard';
                     }}
@@ -923,8 +926,11 @@ const ByteSuitePage: React.FC = () => {
                       whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
                       transition={{ duration: 0.5 }}
                       whileHover={{ scale: 1.05, rotate: 2 }}
-                      className="relative overflow-hidden rounded-lg shadow-2xl"
-                      style={{ backgroundColor: '#D6E4F0' }}
+                      className="relative overflow-hidden rounded-lg"
+                      style={{ 
+                        backgroundColor: '#D6E4F0',
+                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 10px 20px -5px rgba(0, 0, 0, 0.3)'
+                      }}
                     >
                       <img
                         src={section.image}
@@ -1398,19 +1404,19 @@ const ByteSuitePage: React.FC = () => {
           viewport={{ margin: '-100px' }}
           variants={containerVariants}
           className="py-20 px-8"
-          style={{ backgroundColor: '#F6F6F6' }}
+          style={{ backgroundColor: '#163172' }}
         >
           <div className="max-w-7xl mx-auto">
             <motion.div variants={bounceIn} className="text-center mb-12">
               <motion.h2 
-                className="text-4xl lg:text-6xl font-black mb-6 bg-gradient-to-r from-[#1E56A0] to-[#163172] bg-clip-text text-transparent"
+                className="text-4xl lg:text-6xl font-black mb-6 bg-gradient-to-r from-[#D6E4F0] to-[#F6F6F6] bg-clip-text text-transparent"
                 variants={fadeInDown}
               >
                 Implementation & Support
               </motion.h2>
               <motion.div 
                 className="w-16 h-1 mx-auto"
-                style={{ background: 'linear-gradient(to bottom, #1E56A0, #163172)' }}
+                style={{ background: 'linear-gradient(to bottom, #D6E4F0, #F6F6F6)' }}
                 variants={slideInFromLeft}
               />
             </motion.div>
@@ -1419,7 +1425,7 @@ const ByteSuitePage: React.FC = () => {
               <motion.div variants={slideInFromLeft}>
                 <motion.h3 
                   className="text-3xl font-bold mb-6"
-                  style={{ color: '#163172' }}
+                  style={{ color: '#F6F6F6' }}
                   variants={bounceIn}
                 >
                   Getting Started
@@ -1440,12 +1446,12 @@ const ByteSuitePage: React.FC = () => {
                     >
                       <motion.span 
                         className="text-xl"
-                        style={{ color: '#1E56A0' }}
+                        style={{ color: '#D6E4F0' }}
                         variants={bounceIn}
                       >
                         ✓
                       </motion.span>
-                      <span className="text-base" style={{ color: '#1E56A0' }}>{item}</span>
+                      <span className="text-base" style={{ color: '#D6E4F0' }}>{item}</span>
                     </motion.div>
                   ))}
                 </div>
@@ -1454,7 +1460,7 @@ const ByteSuitePage: React.FC = () => {
               <motion.div variants={slideInFromRight}>
                 <motion.h3 
                   className="text-3xl font-bold mb-6"
-                  style={{ color: '#163172' }}
+                  style={{ color: '#F6F6F6' }}
                   variants={bounceIn}
                 >
                   Ongoing Support
@@ -1475,12 +1481,12 @@ const ByteSuitePage: React.FC = () => {
                     >
                       <motion.span 
                         className="text-xl"
-                        style={{ color: '#1E56A0' }}
+                        style={{ color: '#D6E4F0' }}
                         variants={bounceIn}
                       >
                         ✓
                       </motion.span>
-                      <span className="text-base" style={{ color: '#1E56A0' }}>{item}</span>
+                      <span className="text-base" style={{ color: '#D6E4F0' }}>{item}</span>
                     </motion.div>
                   ))}
                 </div>
@@ -1496,7 +1502,7 @@ const ByteSuitePage: React.FC = () => {
           viewport={{ margin: '-100px' }}
           variants={containerVariants}
           className="py-20 px-8 text-center"
-          style={{ backgroundColor: '#163172' }}
+          style={{ backgroundColor: '#F6F6F6' }}
         >
           <motion.div variants={bounceIn} className="max-w-7xl mx-auto">
             <motion.h2 
@@ -1504,13 +1510,13 @@ const ByteSuitePage: React.FC = () => {
               initial={{ scale: 0.5, opacity: 0 }} 
               whileInView={{ scale: 1, opacity: 1 }} 
               transition={{ duration: 0.5, type: "spring", stiffness: 200 }}
-              style={{ color: '#F6F6F6' }}
+              style={{ color: '#163172' }}
             >
               Ready to Transform Your
-              <span className="block bg-gradient-to-r from-[#D6E4F0] to-[#1E56A0] bg-clip-text text-transparent">Customer Relationships?</span>
+              <span className="block bg-gradient-to-r from-[#1E56A0] to-[#163172] bg-clip-text text-transparent">Customer Relationships?</span>
             </motion.h2>
 
-            <motion.p variants={fadeInUp} className="text-xl max-w-2xl mx-auto mt-6" style={{ color: '#D6E4F0' }}>
+            <motion.p variants={fadeInUp} className="text-xl max-w-2xl mx-auto mt-6" style={{ color: '#1E56A0' }}>
               Join 10,000+ businesses already growing with ByteSuite CRM
             </motion.p>
 
@@ -1528,19 +1534,19 @@ const ByteSuitePage: React.FC = () => {
               </motion.button>
 
               <motion.button 
-                whileHover={{ scale: 1.05, borderColor: '#D6E4F0', color: '#D6E4F0' }} 
+                whileHover={{ scale: 1.05, borderColor: '#163172', color: '#163172' }} 
                 whileTap={{ scale: 0.95 }} 
                 className="border-2 px-8 py-3 font-black tracking-wide text-lg"
                 style={{ 
-                  borderColor: '#D6E4F0',
-                  color: '#D6E4F0'
+                  borderColor: '#163172',
+                  color: '#163172'
                 }}
               >
                 SCHEDULE DEMO
               </motion.button>
             </motion.div>
 
-            <motion.div variants={fadeInUp} className="text-sm space-y-2 mt-6" style={{ color: '#D6E4F0' }}>
+            <motion.div variants={fadeInUp} className="text-sm space-y-2 mt-6" style={{ color: '#1E56A0' }}>
               <p className="text-base">No credit card required • Full access to all features</p>
               <p className="text-base">Free data migration included • Cancel anytime</p>
             </motion.div>
@@ -1554,25 +1560,25 @@ const ByteSuitePage: React.FC = () => {
           viewport={{ margin: '-100px' }}
           variants={containerVariants}
           className="py-20 px-8"
-          style={{ backgroundColor: '#F6F6F6' }}
+          style={{ backgroundColor: '#163172' }}
         >
           <div className="max-w-7xl mx-auto">
             <motion.div variants={bounceIn} className="text-center mb-12">
               <motion.h2 
-                className="text-4xl lg:text-6xl font-black mb-6 bg-gradient-to-r from-[#1E56A0] to-[#163172] bg-clip-text text-transparent"
+                className="text-4xl lg:text-6xl font-black mb-6 bg-gradient-to-r from-[#D6E4F0] to-[#F6F6F6] bg-clip-text text-transparent"
                 variants={fadeInDown}
               >
                 Need More Than CRM?
               </motion.h2>
               <motion.h3 
-                className="text-xl lg:text-2xl font-bold mb-6 bg-gradient-to-r from-[#1E56A0] to-[#163172] bg-clip-text text-transparent"
+                className="text-xl lg:text-2xl font-bold mb-6 bg-gradient-to-r from-[#D6E4F0] to-[#F6F6F6] bg-clip-text text-transparent"
                 variants={bounceIn}
               >
                 Looking for Complete Business Management?
               </motion.h3>
                   <motion.div
                 className="w-16 h-1 mx-auto"
-                style={{ background: 'linear-gradient(to bottom, #1E56A0, #163172)' }}
+                style={{ background: 'linear-gradient(to bottom, #D6E4F0, #F6F6F6)' }}
                 variants={slideInFromLeft}
                     />
                   </motion.div>
@@ -1611,7 +1617,7 @@ const ByteSuitePage: React.FC = () => {
                   >
                     <motion.h3 
                       className="text-3xl lg:text-4xl font-bold"
-                      style={{ color: '#163172' }}
+                      style={{ color: '#F6F6F6' }}
                       variants={bounceIn}
                     >
                       {section.title}
@@ -1627,12 +1633,12 @@ const ByteSuitePage: React.FC = () => {
                       >
                         <motion.span 
                             className="text-xl"
-                            style={{ color: '#1E56A0' }}
+                            style={{ color: '#D6E4F0' }}
                           variants={bounceIn}
                         >
                             ✓
                         </motion.span>
-                          <span className="leading-relaxed text-base" style={{ color: '#1E56A0' }}>{feature}</span>
+                          <span className="leading-relaxed text-base" style={{ color: '#D6E4F0' }}>{feature}</span>
                       </motion.li>
                     ))}
                   </ul>
@@ -1646,8 +1652,11 @@ const ByteSuitePage: React.FC = () => {
                       whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
                       transition={{ duration: 0.5 }}
                       whileHover={{ scale: 1.05, rotate: 2 }}
-                      className="relative overflow-hidden rounded-lg shadow-2xl"
-                      style={{ backgroundColor: '#D6E4F0' }}
+                      className="relative overflow-hidden rounded-lg"
+                      style={{ 
+                        backgroundColor: '#D6E4F0',
+                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 10px 20px -5px rgba(0, 0, 0, 0.3)'
+                      }}
                     >
                       <img
                         src={section.image}
@@ -1672,14 +1681,14 @@ const ByteSuitePage: React.FC = () => {
             <motion.div variants={fadeInUp} className="text-center mt-12">
                 <motion.h4 
                 className="text-2xl font-bold mb-4"
-                style={{ color: '#163172' }}
+                style={{ color: '#F6F6F6' }}
                   variants={bounceIn}
                 >
                   Ready to Explore ERP?
                 </motion.h4>
                 <motion.div 
                 className="space-y-2"
-                style={{ color: '#1E56A0' }}
+                style={{ color: '#D6E4F0' }}
                   variants={fadeInUp}
                 >
                 <p className="text-lg">Enterprise Contact: enterprise@bytesuite.com</p>
@@ -1696,25 +1705,25 @@ const ByteSuitePage: React.FC = () => {
         whileInView={{ opacity: 1 }} 
         transition={{ duration: 1 }} 
         className="py-12 px-8 text-center"
-        style={{ backgroundColor: '#163172' }}
+        style={{ backgroundColor: '#F6F6F6' }}
       >
         <div className="max-w-7xl mx-auto">
-          <motion.div whileHover={{ scale: 1.05 }} className="text-4xl font-black mb-4" style={{ color: '#F6F6F6' }}>
+          <motion.div whileHover={{ scale: 1.05 }} className="text-4xl font-black mb-4" style={{ color: '#163172' }}>
             BYTESUITE CRM
           </motion.div>
-          <p className="text-sm tracking-wide mb-4" style={{ color: '#D6E4F0' }}>
+          <p className="text-sm tracking-wide mb-4" style={{ color: '#1E56A0' }}>
             The Smart Choice for Growing Businesses
           </p>
-          <p className="text-sm mb-8" style={{ color: '#D6E4F0' }}>
+          <p className="text-sm mb-8" style={{ color: '#1E56A0' }}>
             Built by Bytes Platform | Apple & Google-listed developers
           </p>
-          <p className="text-sm mb-4" style={{ color: '#D6E4F0' }}>
+          <p className="text-sm mb-4" style={{ color: '#1E56A0' }}>
             Enterprise-grade security | 99.9% uptime | GDPR compliant
           </p>
-          <p className="text-sm mb-8" style={{ color: '#D6E4F0' }}>
+          <p className="text-sm mb-8" style={{ color: '#1E56A0' }}>
             Contact: hello@bytesuite.com | 1-800-BYTESUITE
           </p>
-          <p className="text-sm" style={{ color: '#D6E4F0' }}>
+          <p className="text-sm" style={{ color: '#1E56A0' }}>
             Support: 24/7 live chat | help.bytesuite.com
           </p>
         </div>
