@@ -29,29 +29,55 @@ export const ByteBotsSection = () => {
     if (typeof window === "undefined") return;
 
     let splineApp: any; // store reference to dispose on unmount
+    let isComponentMounted = true;
 
     (async () => {
+      try {
       const { Application } = await import("@splinetool/runtime");
-      if (canvasRef.current) {
+        
+        if (!isComponentMounted || !canvasRef.current) return;
+        
         splineApp = new Application(canvasRef.current);
-        try {
+        
+        // Override console.error temporarily to catch Spline runtime errors
+        const originalError = console.error;
+        console.error = (...args) => {
+          const message = args.join(' ');
+          if (message.includes('Missing property') || message.includes('buildTimeline')) {
+            // Suppress Spline runtime errors that don't affect functionality
+            return;
+          }
+          originalError(...args);
+        };
+        
           await splineApp.load(SPLINE_URL);
+        
+        // Restore original console.error
+        console.error = originalError;
+        
           // Hide Spline watermark if present
+        setTimeout(() => {
           const badge = document.querySelector('a[aria-label="Built with Spline"]') as HTMLElement | null;
           if (badge) badge.style.display = 'none';
+        }, 100);
+        
         } catch (err) {
-          // Silently ignore missing-property warnings from the Spline runtime
-          console.warn("Spline load warning:", err);
+        // Only log actual loading errors, not animation property warnings
+        if (err instanceof Error && !err.message.includes('Missing property')) {
+          console.warn("Spline load error:", err);
         }
       }
     })();
 
     // Clean up when component unmounts to prevent duplicate apps / errors
     return () => {
+      isComponentMounted = false;
       if (splineApp) {
         try {
           splineApp.dispose?.();
-        } catch {}
+        } catch {
+          // Ignore disposal errors
+        }
       }
     };
   }, []);
