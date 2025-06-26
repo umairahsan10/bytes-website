@@ -40,9 +40,9 @@ export const HeroSection = () => {
           </div>
         </div>
 
-        <div className="max-w-lg mx-auto">
-          <p className="text-center text-white-60 mt-4 md:text-lg">
-            {/* Hero description text here */}
+        <div className="max-w-4xl md:max-w-5xl lg:max-w-6xl mx-auto">
+          <p className="text-center text-white/90 mt-4 text-3xl md:text-4xl lg:text-5xl font-extrabold leading-relaxed">
+            We deliver cutting-edge solutions across diverse industries, transforming businesses with innovative technology.
           </p>
         </div>
 

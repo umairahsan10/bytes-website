@@ -11,7 +11,7 @@ export const ToolboxItems = ({
 }: {
     items: {
         title: string;
-        iconType: React.ElementType;
+        iconType: React.ComponentType<React.SVGProps<SVGSVGElement>>;
     }[];
     className?: string;
     itemsWrapperClassName?: string;

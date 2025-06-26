@@ -58,6 +58,10 @@ const config: Config = {
           },
         },
       },
+      spacing: {
+        '90': '22.5rem', // 360px equivalent
+        '100': '25rem',  // 400px equivalent
+      },
     },
   },
   plugins: [],
