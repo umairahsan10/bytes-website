@@ -9,12 +9,16 @@ interface HeaderProps {
   heroImage?: string;
   logoImage?: string;
   className?: string;
+  transparentNav?: boolean;
+  logoOnly?: boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({
   heroImage = '/assets/hero.jpg',
   logoImage = '/assets/bytes-logo.png',
-  className = 'bytes-header'
+  className = 'bytes-header',
+  transparentNav = false,
+  logoOnly = false
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -90,6 +94,7 @@ const Header: React.FC<HeaderProps> = ({
     checkScreenSize();
 
     // Initial GSAP setup - set starting positions for animation elements
+    gsap.set(".menu-logo img", { y: 50, opacity: 0 });
     gsap.set(".menu-link p", { y: 40, opacity: 0 });
     gsap.set(".menu-sub-item p", { y: 12, opacity: 0 });
     
@@ -160,12 +165,20 @@ const Header: React.FC<HeaderProps> = ({
       }
     });
 
+    gsap.to(".menu-logo img", {
+      y: 0,
+      opacity: 1,
+      duration: 0.8,
+      delay: 0.6,
+      ease: "power3.out",
+    });
+
     gsap.to(".menu-link p", {
       y: 0,
       opacity: 1,
       duration: 0.8,
       stagger: 0.06,
-      delay: 0.6,
+      delay: 0.8,
       ease: "power3.out",
     });
 
@@ -237,6 +250,14 @@ const Header: React.FC<HeaderProps> = ({
       duration: 0.5,
       stagger: 0.03,
       delay: 0.1,
+      ease: "power3.in",
+    });
+
+    gsap.to(".menu-logo img", {
+      y: 50,
+      opacity: 0,
+      duration: 0.6,
+      delay: 0.2,
       ease: "power3.in",
     });
 
@@ -327,6 +348,15 @@ const Header: React.FC<HeaderProps> = ({
     setTimeout(() => router.push(href), 1300);
   };
 
+  // Handle Brand Building Flow click - navigate to brand flow page
+  const handleBrandFlowClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    closeMenu();
+    setTimeout(() => {
+      router.push('/brand-flow');
+    }, 1300);
+  };
+
   // Helper function to set image refs for GSAP animations
   const setImageRef = (index: number) => (el: HTMLImageElement | null) => {
     if (imagesRef.current) {
@@ -352,18 +382,25 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <div className={`bytes-menu-container ${className} ${isOpen ? 'menu-open' : ''}`}>
       {/* Navigation bar */}
-      <nav className="bytes-nav bg-slate-900/80 backdrop-blur-md h-14 flex items-center py-0 px-4 z-[200]">
+      <nav className={`bytes-nav h-14 flex items-center py-0 px-4 z-[200] ${
+        transparentNav 
+          ? 'bg-transparent' 
+          : 'bg-slate-900/80 backdrop-blur-md'
+      }`}>
         <div className="logo" onClick={handleLogoClick}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={logoImage} alt="Bytes Platform Logo" className="h-12 w-auto" />
         </div>
-        <p className="menu-toggle relative z-[400]" onClick={isOpen ? handleMenuClose : handleMenuOpen}>
-          {buttonText}
-        </p>
+        {!logoOnly && (
+          <p className="menu-toggle relative z-[400]" onClick={isOpen ? handleMenuClose : handleMenuOpen}>
+            {buttonText}
+          </p>
+        )}
       </nav>
 
       {/* Full-screen menu overlay */}
-      <div className="menu bg-slate-900" ref={menuRef} style={{ zIndex: 300 }}>
+      {!logoOnly && (
+        <div className="menu bg-slate-900" ref={menuRef} style={{ zIndex: 300 }}>
         {/* Image container with layered images and 3D tilt effect */}
         <div className="menu-col menu-img" ref={menuImgContainerRef}>
           {/* Main hero image - always visible */}
@@ -400,6 +437,12 @@ const Header: React.FC<HeaderProps> = ({
 
         {/* Menu content - navigation links and footer */}
         <div className="menu-col menu-items">
+          {/* Menu logo */}
+          <div className="menu-logo" onClick={handleLogoClick}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={logoImage} alt="Bytes Platform Logo" />
+          </div>
+
           {/* Main navigation links */}
           <div className="menu-links">
             <div className="menu-link">
@@ -460,13 +503,15 @@ const Header: React.FC<HeaderProps> = ({
               <p><a href="/careers" onClick={handleMenuLinkClick}>Careers</a></p>
             </div>
             <div className="menu-link">
-
               <p><a href="/contact" onClick={handleMenuLinkClick}>Contact Us</a></p>
-
+            </div>
+            <div className="menu-link">
+              <p><a href="#" onClick={handleBrandFlowClick}>The Brand Building Flow</a></p>
             </div>
           </div>
         </div>
       </div>
+      )}
     </div>
   );
 };

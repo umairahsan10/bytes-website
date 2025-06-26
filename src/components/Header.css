@@ -189,15 +189,25 @@
     opacity: 0.3;
   }
   
-  /* Menu logo styles removed since menu logo is no longer used */
-  /* .menu-logo {
-    width: 120px;
+  /* Menu logo styles */
+  .menu-logo {
+    width: 100px;
     margin-bottom: 1.5rem;
     cursor: pointer;
     transition: opacity 0.3s ease;
   }
   
   .menu-logo:hover {
+    opacity: 0.8;
+  }
+  
+  .menu-logo img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  
+  /* .old-menu-logo {
     opacity: 0.8;
   }
   
@@ -352,6 +362,22 @@
   /* Services Dropdown Styles */
   .services-dropdown {
     position: relative;
+    z-index: 10;
+  }
+
+  /* Add smooth transitions to menu link text */
+  .menu-link p {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Active state for Services when dropdown is open */
+  .services-dropdown.open .menu-link p,
+  .products-dropdown.open .menu-link p {
+    font-size: 28px;
+    font-weight: 800;
+    transform: scale(1.1);
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
   }
 
   /* Products Dropdown Styles */
@@ -373,104 +399,148 @@
   }
 
   .dropdown-menu {
-    position: relative;
-    left: 0;
+    position: absolute;
+    left: auto;
+    right: 0;
     top: 0;
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    padding: 0;
+    background: rgba(20, 20, 20, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1rem;
     min-width: 200px;
+    max-width: 250px;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-10px);
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 100;
-    margin-top: 0;
-    margin-bottom: 0;
+    transform: translateX(-10px) scale(0.95);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
     pointer-events: none;
-    max-height: 0;
-    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   }
 
   .dropdown-menu.open {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+    transform: translateX(0) scale(1);
     pointer-events: auto;
-    max-height: 300px;
-    margin-top: 4px;
-    margin-bottom: 4px;
   }
 
   .dropdown-item {
     padding: 0;
     opacity: 0;
-    transform: translateY(-10px);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(-10px);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 0.2rem;
   }
 
   .dropdown-menu.open .dropdown-item {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
   }
 
   /* Staggered animation for dropdown items */
-  .dropdown-menu.open .dropdown-item:nth-child(1) { transition-delay: 0.1s; }
-  .dropdown-menu.open .dropdown-item:nth-child(2) { transition-delay: 0.2s; }
-  .dropdown-menu.open .dropdown-item:nth-child(3) { transition-delay: 0.3s; }
-  .dropdown-menu.open .dropdown-item:nth-child(4) { transition-delay: 0.4s; }
-  .dropdown-menu.open .dropdown-item:nth-child(5) { transition-delay: 0.5s; }
+  .dropdown-menu.open .dropdown-item:nth-child(1) { transition-delay: 0.05s; }
+  .dropdown-menu.open .dropdown-item:nth-child(2) { transition-delay: 0.1s; }
+  .dropdown-menu.open .dropdown-item:nth-child(3) { transition-delay: 0.15s; }
+  .dropdown-menu.open .dropdown-item:nth-child(4) { transition-delay: 0.2s; }
+  .dropdown-menu.open .dropdown-item:nth-child(5) { transition-delay: 0.25s; }
 
   .dropdown-item a {
     display: block;
-    padding: 8px 0;
+    padding: 4px 8px;
     color: #fff;
     text-decoration: none;
     font-size: 16px;
     font-weight: 500;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     border-radius: 0;
     margin: 0;
     opacity: 0.7;
+    background: transparent;
   }
 
   .dropdown-item a:hover {
     background: transparent;
     color: #fff;
     opacity: 1;
+    transform: translateX(2px);
+  }
+
+  /* Tablet responsive for dropdown */
+  @media (max-width: 1200px) {
+    .dropdown-menu {
+      left: auto;
+      right: 0;
+      transform: translateX(20px) scale(0.95);
+      min-width: 180px;
+      max-width: 200px;
+    }
+
+    .dropdown-menu.open {
+      transform: translateX(0) scale(1);
+    }
   }
 
   /* Mobile responsive for dropdown */
   @media (max-width: 900px) {
     .dropdown-menu {
-      position: relative;
-      background: transparent;
-      border: none;
-      padding: 0;
-      margin-top: 0;
-      margin-left: 20px;
-      min-width: auto;
+      position: absolute;
+      left: auto;
+      right: 0;
+      top: 100%;
+      background: rgba(30, 30, 30, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 0.8rem;
+      margin-top: 0.5rem;
+      margin-left: 0;
+      min-width: 180px;
+      max-width: 220px;
       max-height: 0;
       overflow: hidden;
       margin-bottom: 0;
+      transform: translateY(-10px) scale(0.95);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     }
 
     .dropdown-menu.open {
       max-height: 300px;
-      margin-top: 4px;
-      margin-bottom: 4px;
+      transform: translateY(0) scale(1);
+    }
+
+    .dropdown-item {
+      margin-bottom: 0.3rem;
     }
 
     .dropdown-item a {
-      padding: 8px 0;
-      font-size: 16px;
+      padding: 10px 12px;
+      font-size: 15px;
       margin: 0;
-      opacity: 0.7;
+      opacity: 0.8;
+      border-radius: 4px;
+      background: transparent;
     }
 
     .dropdown-item a:hover {
       opacity: 1;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(2px);
+    }
+  }
+
+  /* Small mobile screens */
+  @media (max-width: 600px) {
+    .dropdown-menu {
+      min-width: 160px;
+      max-width: 180px;
+      padding: 0.6rem;
+      right: 0;
+    }
+
+    .dropdown-item a {
+      padding: 8px 10px;
+      font-size: 14px;
     }
 
     .dropdown-arrow {
@@ -482,6 +552,11 @@
       overflow-y: auto;
       max-height: calc(100vh - 200px);
       padding-bottom: 20px;
+    }
+
+    .menu-logo {
+      width: 60px;
+      margin-bottom: 1rem;
     }
 
     /* Reduce image height further on smaller screens */

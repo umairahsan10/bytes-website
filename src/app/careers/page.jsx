@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { Header } from '@/sections/Navbar';
 
 // Image paths adjusted to reference the public/assets directory
 const bg = "/assets/bg.jpg";
@@ -106,15 +107,10 @@ function App() {
 
     return (
         <div className="w-full min-h-screen overflow-x-hidden">
-            {/* Back to Home Button */}
-            <Link href="/">
-                <button className="fixed top-4 left-4 z-50 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white font-semibold px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl shadow-lg backdrop-blur-sm transition-all duration-300">
-                    ← Home
-                </button>
-            </Link>
+            <Header />
 
             {/* Hero Section */}
-            <section ref={heroRef} className="relative h-screen w-full overflow-hidden">
+            <section ref={heroRef} className="relative h-screen w-full overflow-hidden pt-20">
                 <div className="bg bg-[#141414] absolute inset-0"></div>
                 <div className="img-container relative flex flex-col gap-8 items-center justify-center h-full w-full will-change-transform transform-gpu">
                     <Image className="image" src={bg} alt="Background" fill priority />
@@ -128,9 +124,9 @@ function App() {
                     </div>
                 </div>
 
-               {/* Info overlay - Fixed positioning and scrolling */}
-               <div ref={overlayRef} className="info-overlay pointer-events-auto absolute inset-0 will-change-transform transform-gpu bg-white/90 backdrop-blur-xl overflow-y-auto">
-                    <div className="min-h-full flex flex-col items-center justify-start text-center px-4 py-8 sm:py-12">
+               {/* Info overlay - Shows jobs section after animation */}
+               <div ref={overlayRef} className="info-overlay pointer-events-auto absolute inset-0 will-change-transform transform-gpu bg-white/90 backdrop-blur-xl">
+                    <div className="h-full flex flex-col items-center justify-center text-center px-4 py-8 sm:py-12">
                         <div className="w-full max-w-7xl mx-auto space-y-6 sm:space-y-8">
                             <div className="pt-4 sm:pt-8">
                                 <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">
@@ -141,108 +137,130 @@ function App() {
                                 </p>
                             </div>
 
-                            {/* Job cards */}
-                            <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 w-full transition-all duration-700 ease-out ${canInteract ? 'opacity-100 pointer-events-auto' : 'pointer-events-none opacity-60'}`}>
-                                {[
-                                    {
-                                      title: "Frontend Engineer",
-                                      image: img1,
-                                      location: "Remote / Pakistan",
-                                      type: "Full-time",
-                                      requirements: [
-                                        "3+ years React / Next.js",
-                                        "Strong CSS / Tailwind",
-                                        "Experience with GSAP is a plus"
-                                      ]
-                                    },
-                                    {
-                                      title: "Backend Engineer",
-                                      image: img2,
-                                      location: "Remote / Pakistan",
-                                      type: "Full-time",
-                                      requirements: [
-                                        "3+ years Node.js / TypeScript",
-                                        "Familiar with micro-services & REST",
-                                        "Cloud experience (AWS/GCP)"
-                                      ]
-                                    },
-                                    {
-                                      title: "UI / UX Designer",
-                                      image: img3,
-                                      location: "Remote",
-                                      type: "Contract",
-                                      requirements: [
-                                        "Proficient in Figma / Adobe XD",
-                                        "Solid portfolio of web & mobile apps",
-                                        "Basic prototyping skills"
-                                      ]
-                                    },
-                                    {
-                                      title: "Digital Marketer",
-                                      image: img4,
-                                      location: "Lahore",
-                                      type: "Internship",
-                                      requirements: [
-                                        "Knowledge of SEO & SEM",
-                                        "Hands-on with social media ads",
-                                        "Analytical mindset"
-                                      ]
-                                    },
-                                    {
-                                      title: "Cloud DevOps",
-                                      image: img2,
-                                      location: "Remote",
-                                      type: "Full-time",
-                                      requirements: [
-                                        "IaC (Terraform/CDK)",
-                                        "CI/CD pipelines (GitHub Actions)",
-                                        "Monitoring & logging"
-                                      ]
-                                    },
-                                    {
-                                      title: "Project Manager",
-                                      image: img3,
-                                      location: "Hybrid",
-                                      type: "Full-time",
-                                      requirements: [
-                                        "5+ years managing software teams",
-                                        "Agile / Scrum mastery",
-                                        "Excellent communication"
-                                      ]
-                                    }
-                                ].map((job) => {
-                                    if (selectedJob && selectedJob.title === job.title) return null;
-                                    return (
-                                        <motion.div 
-                                            layoutId={`card-${job.title}`} 
-                                            key={job.title} 
-                                            className="group cursor-pointer bg-gradient-to-br from-blue-100 via-white to-purple-100 p-[1px] rounded-xl sm:rounded-2xl w-full hover:shadow-lg hover:shadow-blue-200/60 transition-all duration-500 ease-out border border-gray-200 transform hover:scale-105" 
-                                            onClick={() => canInteract && setSelectedJob(job)}
-                                            whileHover={{ y: -4 }}
-                                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                        >
-                                            <div className="rounded-xl sm:rounded-2xl h-full w-full bg-white/90 backdrop-blur-sm p-4 sm:p-6 min-h-[140px] sm:min-h-[160px] flex flex-col justify-between group-hover:bg-white transition-all duration-500 ease-out">
-                                                {job.image && (
-                                                    <Image src={job.image} alt={job.title} width={400} height={200} className="w-full h-24 sm:h-32 rounded-lg sm:rounded-xl object-cover mb-3 sm:mb-4" />
-                                                )}
-                                                <div>
-                                                    <h3 className="text-gray-900 text-lg sm:text-xl md:text-2xl font-semibold mb-2 group-hover:text-blue-700 transition-colors duration-300">{job.title}</h3>
-                                                    <p className="text-gray-600 text-xs sm:text-sm md:text-base group-hover:text-gray-700 transition-colors duration-300">{job.location}</p>
-                                                    <span className="inline-block mt-2 px-2 sm:px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full border border-blue-200 group-hover:bg-blue-200 group-hover:border-blue-300 transition-all duration-300">{job.type}</span>
-                                                </div>
-                                                <p className="mt-3 sm:mt-4 text-blue-600 text-xs sm:text-sm font-medium opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-500 ease-out">View details →</p>
-                                            </div>
-                                        </motion.div>
-                                    );
-                                })}
+                            {/* Scroll indicator */}
+                            <div className="mt-8">
+                                <p className="text-blue-600 font-semibold animate-bounce">↓ Scroll down to view available positions ↓</p>
                             </div>
                             
-                            {/* Extra spacing at bottom to ensure scrollability */}
-                            <div className="pb-8 sm:pb-12">
-                                <p className="text-gray-500 text-sm">
-                                    Can't find the right role? <a href="mailto:careers@company.com" className="text-blue-600 hover:text-blue-700 underline">Contact us</a> to discuss other opportunities.
-                                </p>
-                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Jobs Section - Regular scrollable content */}
+            <section className="py-12 sm:py-16 lg:py-20 bg-white">
+                <div className="container mx-auto px-4">
+                    <div className="w-full max-w-7xl mx-auto space-y-6 sm:space-y-8">
+                        <div className="text-center">
+                            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+                                Available Positions
+                            </h2>
+                            <p className="max-w-2xl mx-auto text-center text-gray-600 text-sm sm:text-base md:text-lg lg:text-xl">
+                                Join our team and help shape the future of digital innovation.
+                            </p>
+                        </div>
+
+                        {/* Job cards */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 w-full">
+                            {[
+                                {
+                                  title: "Frontend Engineer",
+                                  image: img1,
+                                  location: "Remote / Pakistan",
+                                  type: "Full-time",
+                                  requirements: [
+                                    "3+ years React / Next.js",
+                                    "Strong CSS / Tailwind",
+                                    "Experience with GSAP is a plus"
+                                  ]
+                                },
+                                {
+                                  title: "Backend Engineer",
+                                  image: img2,
+                                  location: "Remote / Pakistan",
+                                  type: "Full-time",
+                                  requirements: [
+                                    "3+ years Node.js / TypeScript",
+                                    "Familiar with micro-services & REST",
+                                    "Cloud experience (AWS/GCP)"
+                                  ]
+                                },
+                                {
+                                  title: "UI / UX Designer",
+                                  image: img3,
+                                  location: "Remote",
+                                  type: "Contract",
+                                  requirements: [
+                                    "Proficient in Figma / Adobe XD",
+                                    "Solid portfolio of web & mobile apps",
+                                    "Basic prototyping skills"
+                                  ]
+                                },
+                                {
+                                  title: "Digital Marketer",
+                                  image: img4,
+                                  location: "Lahore",
+                                  type: "Internship",
+                                  requirements: [
+                                    "Knowledge of SEO & SEM",
+                                    "Hands-on with social media ads",
+                                    "Analytical mindset"
+                                  ]
+                                },
+                                {
+                                  title: "Cloud DevOps",
+                                  image: img2,
+                                  location: "Remote",
+                                  type: "Full-time",
+                                  requirements: [
+                                    "IaC (Terraform/CDK)",
+                                    "CI/CD pipelines (GitHub Actions)",
+                                    "Monitoring & logging"
+                                  ]
+                                },
+                                {
+                                  title: "Project Manager",
+                                  image: img3,
+                                  location: "Hybrid",
+                                  type: "Full-time",
+                                  requirements: [
+                                    "5+ years managing software teams",
+                                    "Agile / Scrum mastery",
+                                    "Excellent communication"
+                                  ]
+                                }
+                            ].map((job) => {
+                                if (selectedJob && selectedJob.title === job.title) return null;
+                                return (
+                                    <motion.div 
+                                        layoutId={`card-${job.title}`} 
+                                        key={job.title} 
+                                        className="group cursor-pointer bg-gradient-to-br from-blue-100 via-white to-purple-100 p-[1px] rounded-xl sm:rounded-2xl w-full hover:shadow-lg hover:shadow-blue-200/60 transition-all duration-500 ease-out border border-gray-200 transform hover:scale-105" 
+                                        onClick={() => setSelectedJob(job)}
+                                        whileHover={{ y: -4 }}
+                                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                    >
+                                        <div className="rounded-xl sm:rounded-2xl h-full w-full bg-white/90 backdrop-blur-sm p-4 sm:p-6 min-h-[140px] sm:min-h-[160px] flex flex-col justify-between group-hover:bg-white transition-all duration-500 ease-out">
+                                            {job.image && (
+                                                <Image src={job.image} alt={job.title} width={400} height={200} className="w-full h-24 sm:h-32 rounded-lg sm:rounded-xl object-cover mb-3 sm:mb-4" />
+                                            )}
+                                            <div>
+                                                <h3 className="text-gray-900 text-lg sm:text-xl md:text-2xl font-semibold mb-2 group-hover:text-blue-700 transition-colors duration-300">{job.title}</h3>
+                                                <p className="text-gray-600 text-xs sm:text-sm md:text-base group-hover:text-gray-700 transition-colors duration-300">{job.location}</p>
+                                                <span className="inline-block mt-2 px-2 sm:px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full border border-blue-200 group-hover:bg-blue-200 group-hover:border-blue-300 transition-all duration-300">{job.type}</span>
+                                            </div>
+                                            <p className="mt-3 sm:mt-4 text-blue-600 text-xs sm:text-sm font-medium opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-500 ease-out">View details →</p>
+                                        </div>
+                                    </motion.div>
+                                );
+                            })}
+                        </div>
+                        
+                        {/* Extra spacing and call to action */}
+                        <div className="text-center pt-8 sm:pt-12">
+                            <p className="text-gray-500 text-sm">
+                                Can't find the right role? <a href="mailto:careers@company.com" className="text-blue-600 hover:text-blue-700 underline">Contact us</a> to discuss other opportunities.
+                            </p>
                         </div>
                     </div>
                 </div>
