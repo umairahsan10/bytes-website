@@ -316,7 +316,8 @@ export const LoadingPage = () => {
 
     // Fallback: If load event doesn't fire after 30 seconds
     const fallbackTimeout = setTimeout(() => {
-      if (document.querySelector('.loading-page')?.style.display !== 'none') {
+      const loadingPage = document.querySelector('.loading-page') as HTMLElement;
+      if (loadingPage && loadingPage.style.display !== 'none') {
         fadeOutLoader();
       }
     }, 30000);
