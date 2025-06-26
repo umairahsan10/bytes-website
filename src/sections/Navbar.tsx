@@ -382,10 +382,10 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <div className={`bytes-menu-container ${className} ${isOpen ? 'menu-open' : ''}`}>
       {/* Navigation bar */}
-      <nav className={`bytes-nav h-14 flex items-center py-0 px-4 z-[200] ${
+      <nav className={`bytes-nav h-16 flex items-center py-0 px-4 z-[200] ${
         transparentNav 
           ? 'bg-transparent' 
-          : 'bg-slate-900/80 backdrop-blur-md'
+          : 'bg-[#101010]'
       }`}>
         <div className="logo" onClick={handleLogoClick}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -460,9 +460,6 @@ const Header: React.FC<HeaderProps> = ({
                 </a>
               </p>
               <div className={`dropdown-menu ${isServicesDropdownOpen ? 'open' : ''}`}>
-                <div className="dropdown-item">
-                  <a href="/services" onClick={handleServicesDropdownClick}>All Services</a>
-                </div>
                 <div className="dropdown-item">
                   <a href="/services/app" onClick={handleServicesDropdownClick}>App Development</a>
                 </div>
