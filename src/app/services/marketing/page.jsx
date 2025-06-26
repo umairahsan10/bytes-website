@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Header } from '@/sections/Navbar';
 
 const MarketingPage = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -179,8 +180,13 @@ const MarketingPage = () => {
 
   return (
     <div className="font-sans bg-gray-100 overflow-x-hidden" style={{ scrollBehavior: 'auto' }}>
+      {/* Header Navigation */}
+      <div className="fixed top-0 left-0 w-full z-50">
+        <Header />
+      </div>
+      
       {/* Section 1: Gallery */}
-      <section className="h-screen relative flex items-center justify-center">
+      <section className="h-screen relative flex items-center justify-center pt-20">
         <div className="relative w-full h-screen flex items-center justify-center">
           <div className="relative w-4/5 h-3/5 grid grid-cols-3 grid-rows-3 gap-8 items-center justify-items-center md:w-11/12 md:gap-4 md:grid-cols-3 md:grid-rows-3">
             {photoItems.map((item, index) => {
