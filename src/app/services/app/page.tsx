@@ -1,8 +1,8 @@
 'use client';
 import Image from "next/image";   // put this at the top with the other imports
 
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { useRef, useState, useEffect } from 'react';
 import { Header } from '@/sections/Navbar';
 
 // Helper component for word-by-word reveal
@@ -78,18 +78,327 @@ const AppDevelopmentPage = () => {
     }
   };
 
+  // Scrolling phone mockup data
+  const [currentScreen, setCurrentScreen] = useState(0);
+  const phoneContainerRef = useRef<HTMLDivElement>(null);
+  
+  // Feature cards state
+  const [selectedFeature, setSelectedFeature] = useState<number | null>(null);
+  
+  const { scrollYProgress: phoneScrollProgress } = useScroll({
+    target: phoneContainerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const springConfig = { stiffness: 300, damping: 30, restDelta: 0.001 };
+  const screenProgress = useSpring(phoneScrollProgress, springConfig);
+
+  const appScreens = [
+    {
+      id: "onboarding",
+      title: "Seamless Onboarding",
+      description: "Get users started with an intuitive onboarding experience that guides them through your app's key features.",
+      image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=300&h=600&fit=crop&crop=center",
+      features: ["User-friendly setup", "Progressive disclosure", "Interactive tutorials"]
+    },
+    {
+      id: "dashboard", 
+      title: "Powerful Dashboard",
+      description: "Clean, data-driven dashboards that provide users with actionable insights at a glance.",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=300&h=600&fit=crop&crop=center",
+      features: ["Real-time analytics", "Customizable widgets", "Mobile-optimized charts"]
+    },
+    {
+      id: "messaging",
+      title: "Smart Messaging", 
+      description: "Built-in communication features that keep your users connected and engaged.",
+      image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=300&h=600&fit=crop&crop=center",
+      features: ["Real-time chat", "Push notifications", "Media sharing"]
+    },
+    {
+      id: "profile",
+      title: "User Profiles",
+      description: "Personalized user experiences with comprehensive profile management and customization options.",
+      image: "https://images.unsplash.com/photo-1535303311164-664fc9ec6532?w=300&h=600&fit=crop&crop=center", 
+      features: ["Profile customization", "Privacy controls", "Social integration"]
+    }
+  ];
+
+  // Better scroll mapping with screen 1 well anchored and more time for scrolling back up and screen 4
+  useEffect(() => {
+    const unsubscribe = phoneScrollProgress.onChange((progress) => {
+      // Extended screen 1 visibility for better anchoring, more time for transitions when scrolling up and extended screen 4
+      let newScreen;
+      if (progress <= 0.25) {
+        newScreen = 0;        // First 25% = Screen 1 (Seamless Onboarding) - well anchored
+      } else if (progress <= 0.5) {
+        newScreen = 1;        // 25-50% = Screen 2 (Powerful Dashboard) - more time going up
+      } else if (progress <= 0.75) {
+        newScreen = 2;        // 50-75% = Screen 3 (Smart Messaging) - more time going up
+      } else {
+        newScreen = 3;        // 75-100% = Screen 4 (User Profiles) - more time going down
+      }
+      
+      if (newScreen !== currentScreen) {
+        setCurrentScreen(newScreen);
+      }
+    });
+    return () => unsubscribe();
+  }, [phoneScrollProgress, currentScreen]);
+
+  const phoneRotateY = useTransform(phoneScrollProgress, [0, 1], [0, 360]);
+  const phoneScale = useTransform(phoneScrollProgress, [0, 0.5, 1], [0.8, 1, 0.8]);
+
   return (
     <>
       <Header className="app-header" />
-      {/* Phone frame wrapper */}
-      <div className="relative w-full h-screen flex items-center justify-center bg-black overflow-hidden">
-        {/* Phone SVG as responsive background */}
-        <Image src="/assets/app-frame.svg" alt="Phone frame" fill className="object-contain select-none pointer-events-none" priority />
+      
+      {/* Simple Hero Section */}
+      <motion.section 
+        ref={heroRef}
+        style={{ y, opacity }}
+        className="relative h-screen flex items-center justify-start bg-[#E1E1E1] px-4 md:px-8 lg:px-16"
+      >
+        <Image
+          src="/assets/app-hero.png"
+          alt="Team brainstorming on mobile-app UI"
+          fill
+          className="object-cover opacity-100 absolute inset-0"
+        />
 
-        {/* Scrollable screen area */}
-        <div className="absolute top-[6%] left-1/2 -translate-x-1/2 w-[18%] h-[82%] overflow-y-auto scrollbar-thin" style={{ WebkitOverflowScrolling: 'touch' }}>
-          <div style={{ transform: 'scale(0.18)', transformOrigin: 'top left', width: '555%' }}>
-            <div ref={containerRef} className="min-h-full bg-white text-gray-900">
+        <div className="relative z-10 text-left w-full md:w-3/5 lg:w-1/2">
+          <motion.h1 
+            ref={titleRef}
+            className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight mb-6 md:mb-8"
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] as const }}
+          >
+            <span className="bg-gradient-to-r from-[#E1E3E2] to-purple-700 bg-clip-text text-transparent">
+              MOBILE
+            </span>
+            <br />
+            <span className="bg-gradient-to-r from-[#E1E3E2] to-purple-700 bg-clip-text text-transparent">
+              APPS
+            </span>
+          </motion.h1>
+          
+          <AnimatedParagraph
+            text="When innovation meets functionality, Bytes Platform delivers cutting-edge mobile applications that transform ideas into powerful digital experiences, building on years of development expertise."
+            className="text-base sm:text-lg md:text-xl lg:text-2xl text-white leading-relaxed max-w-2xl"
+          />
+        </div>
+      </motion.section>
+
+      {/* Scrolling Phone Mockup Section */}
+      <div ref={phoneContainerRef} className="relative min-h-[400vh] bg-white py-16 md:py-20 lg:py-24">
+        <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
+          <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+            
+            {/* Left - Phone mockup */}
+            <div className="flex-1 flex items-center justify-center order-2 lg:order-1 mb-8 lg:mb-0">
+              <motion.div
+                className="relative"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+              >
+                {/* Phone frame using the actual iPhone 14 SVG */}
+                <div className="relative w-[240px] sm:w-[280px] md:w-[300px] h-[488px] sm:h-[569px] md:h-[610px] mx-auto">
+                  {/* iPhone 14 frame */}
+                  <div className="absolute inset-0 z-20">
+                    <Image
+                      src="/assets/iPhone14-space-black.svg"
+                      alt="iPhone 14 Space Black"
+                      fill
+                      className="object-contain drop-shadow-2xl"
+                      priority
+                    />
+                  </div>
+
+                  {/* Screen content - responsive positioning to match iPhone 14 screen area */}
+                  <div className="absolute top-[26px] sm:top-[30px] md:top-[32px] left-[26px] sm:left-[30px] md:left-[33px] w-[188px] sm:w-[218px] md:w-[234px] h-[406px] sm:h-[472px] md:h-[507px] rounded-[36px] sm:rounded-[40px] md:rounded-[45px] overflow-hidden bg-gray-50">
+                    <motion.div
+                      key={currentScreen}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5 }}
+                      className="w-full h-full relative"
+                    >
+                      <Image
+                        src={appScreens[currentScreen]?.image || ''}
+                        alt={appScreens[currentScreen]?.title || ''}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 640px) 188px, (max-width: 768px) 218px, 234px"
+                      />
+                      
+                      {/* Simple number indicator - responsive sizing */}
+                      <div className="absolute top-3 sm:top-4 right-3 sm:right-4 w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 bg-white rounded-full shadow-lg flex items-center justify-center">
+                        <span className="text-xs sm:text-sm font-semibold text-gray-800">
+                          {currentScreen + 1}
+                        </span>
+                      </div>
+                    </motion.div>
+                  </div>
+
+
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Center - Clean Timeline connecting phone to content (Hidden on mobile) */}
+            <div className="hidden lg:flex relative flex-col items-center justify-center px-8 xl:px-12 order-2">
+              {/* Simple timeline line */}
+              <div className="relative w-px h-[50vh] lg:h-[60vh] bg-gray-200">
+                <motion.div
+                  className="w-full bg-gray-800 origin-top"
+                  style={{
+                    scaleY: phoneScrollProgress,
+                    transformOrigin: 'top'
+                  }}
+                />
+              </div>
+              
+              {/* Clean timeline dots for each screen */}
+              <div className="absolute inset-0 flex flex-col justify-around items-center py-12 lg:py-16">
+                {appScreens.map((screen, index) => (
+                  <motion.div
+                    key={screen.id}
+                    className="relative"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                  >
+                    {/* Simple dot */}
+                    <div className={`w-3 h-3 rounded-full border-2 bg-white transition-all duration-300 ${
+                      index === currentScreen
+                        ? 'border-gray-800 scale-125'
+                        : index < currentScreen
+                          ? 'border-gray-800 bg-gray-800'
+                          : 'border-gray-300'
+                    }`}></div>
+                    
+                    {/* Screen number */}
+                    <div className={`absolute -right-8 top-1/2 -translate-y-1/2 text-sm font-medium transition-all duration-300 ${
+                      index === currentScreen
+                        ? 'text-gray-800 font-semibold'
+                        : 'text-gray-400'
+                    }`}>
+                      {index + 1}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+              
+              {/* Simple connecting line to content */}
+              <div className="absolute right-0 top-1/2 w-8 lg:w-12 h-px bg-gray-300"></div>
+            </div>
+
+            {/* Right side - Clean Content Panel */}
+            <div className="flex-1 lg:pl-4 xl:pl-8 order-1 lg:order-3 mb-8 lg:mb-0">
+              <motion.div
+                key={currentScreen}
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                className="space-y-4 md:space-y-6 text-center lg:text-left"
+              >
+                {/* Mobile step indicator */}
+                <div className="lg:hidden mb-4">
+                  <div className="inline-flex items-center space-x-2 bg-gray-100 rounded-full px-4 py-2">
+                    <span className="text-sm font-semibold text-gray-800">Step {currentScreen + 1} of 4</span>
+                  </div>
+                </div>
+
+                {/* Clean title - responsive sizing */}
+                <motion.h2 
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-bold text-gray-900 leading-tight"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                >
+                  {appScreens[currentScreen]?.title}
+                </motion.h2>
+                
+                {/* Clean description - responsive sizing */}
+                <motion.p 
+                  className="text-base sm:text-lg md:text-lg lg:text-lg xl:text-lg text-gray-600 leading-relaxed max-w-2xl lg:max-w-none mx-auto lg:mx-0"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                >
+                  {appScreens[currentScreen]?.description}
+                </motion.p>
+                
+                {/* Simple Features list */}
+                <motion.div 
+                  className="space-y-3 md:space-y-4"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                >
+                  {appScreens[currentScreen]?.features.map((feature, index) => (
+                    <motion.div
+                      key={feature}
+                      className="flex items-center justify-center lg:justify-start space-x-3"
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
+                    >
+                      {/* Simple bullet point */}
+                      <div className="w-2 h-2 bg-gray-800 rounded-full flex-shrink-0"></div>
+                      <span className="text-sm sm:text-base text-gray-700 font-medium">
+                        {feature}
+                      </span>
+                    </motion.div>
+                  ))}
+                </motion.div>
+
+                {/* Simple Progress indicators */}
+                <motion.div 
+                  className="flex justify-center lg:justify-start space-x-2 pt-4 md:pt-6"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.6 }}
+                >
+                  {appScreens.map((_, index) => (
+                    <div
+                      key={index}
+                      className={`h-1 rounded-full transition-all duration-300 ${
+                        index === currentScreen 
+                          ? 'w-8 bg-gray-800' 
+                          : index < currentScreen
+                            ? 'w-6 bg-gray-800'
+                            : 'w-4 bg-gray-300'
+                      }`}
+                    />
+                  ))}
+                </motion.div>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Simple Scroll indicator */}
+          <motion.div
+            className="absolute bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 text-center"
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <div className="text-xs sm:text-sm text-gray-500 mb-2 font-medium">Scroll to explore</div>
+            <div className="w-1 h-6 sm:h-8 bg-gray-300 rounded-full mx-auto relative">
+              <motion.div
+                className="w-1 h-2 sm:h-3 bg-gray-800 rounded-full absolute top-0"
+                animate={{ y: [0, 16, 0] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              />
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Original content wrapped in container */}
+      <div ref={containerRef} className="bg-white text-gray-900">
               <div>
       {/* Hero Section */}
       <motion.section 
@@ -260,66 +569,130 @@ const AppDevelopmentPage = () => {
               {
                 title: "Native iOS Development",
                 description: "Swift and SwiftUI applications optimized for Apple's ecosystem with seamless integration and performance.",
-                gradient: "from-blue-500 to-cyan-500"
+                detailedDescription: "Build powerful iOS applications using Swift and SwiftUI that take full advantage of Apple's ecosystem. Our native development approach ensures optimal performance, seamless integration with iOS features like Face ID, Touch ID, and Apple Pay, and adherence to Apple's Human Interface Guidelines. We leverage Core Data for local storage, integrate with CloudKit for synchronization, and implement advanced features like ARKit for augmented reality experiences.",
+                gradient: "from-blue-500 to-cyan-500",
+                features: ["Swift & SwiftUI", "Core Data Integration", "CloudKit Sync", "ARKit Support", "Apple Pay Integration", "TestFlight Beta Testing"]
               },
               {
                 title: "Native Android Development", 
                 description: "Kotlin and Java applications leveraging Android's full capabilities for optimal user experience.",
-                gradient: "from-green-500 to-emerald-500"
+                detailedDescription: "Create robust Android applications using Kotlin and Java that harness the full power of the Android platform. Our development process includes Material Design implementation, integration with Google services, efficient memory management, and optimization for various screen sizes and Android versions. We implement advanced features like background processing, push notifications, and seamless integration with Google Play Services.",
+                gradient: "from-green-500 to-emerald-500",
+                features: ["Kotlin & Java", "Material Design", "Google Play Services", "Room Database", "WorkManager", "Firebase Integration"]
               },
               {
                 title: "Cross-Platform Solutions",
                 description: "React Native and Flutter apps that run efficiently on both iOS and Android with shared codebase.",
-                gradient: "from-purple-500 to-pink-500"
+                detailedDescription: "Develop cost-effective cross-platform applications using React Native and Flutter that deliver native-like performance on both iOS and Android. Our approach maximizes code reuse while maintaining platform-specific optimizations. We implement custom native modules when needed, ensure consistent UI/UX across platforms, and provide comprehensive testing on both operating systems.",
+                gradient: "from-purple-500 to-pink-500",
+                features: ["React Native", "Flutter", "Shared Codebase", "Platform Optimization", "Custom Native Modules", "Cross-Platform Testing"]
               },
               {
                 title: "UI/UX Design",
                 description: "Intuitive and engaging mobile interfaces designed with user-centered approach and modern aesthetics.",
-                gradient: "from-orange-500 to-red-500"
+                detailedDescription: "Design beautiful and functional mobile interfaces that prioritize user experience and accessibility. Our design process includes user research, wireframing, prototyping, and usability testing. We create design systems that ensure consistency across your app, implement smooth animations and transitions, and optimize for various screen sizes and accessibility requirements.",
+                gradient: "from-orange-500 to-red-500",
+                features: ["User Research", "Wireframing & Prototyping", "Design Systems", "Accessibility", "Animation Design", "Usability Testing"]
               },
               {
                 title: "Backend Integration",
                 description: "Robust API development and third-party service integration for seamless data synchronization.",
-                gradient: "from-indigo-500 to-blue-500"
+                detailedDescription: "Build and integrate powerful backend systems that support your mobile application's functionality. Our backend development includes RESTful API design, GraphQL implementation, real-time data synchronization, secure authentication systems, and integration with third-party services. We ensure scalable architecture, efficient caching strategies, and comprehensive error handling.",
+                gradient: "from-indigo-500 to-blue-500",
+                features: ["RESTful APIs", "GraphQL", "Real-time Sync", "Authentication", "Third-party Integration", "Scalable Architecture"]
               },
               {
                 title: "App Store Deployment",
                 description: "Complete deployment process including store optimization, testing, and post-launch support.",
-                gradient: "from-teal-500 to-green-500"
+                detailedDescription: "Navigate the complete app store deployment process with our expert guidance. We handle app store optimization (ASO), create compelling store listings with screenshots and descriptions, manage the submission process for both Apple App Store and Google Play Store, implement analytics tracking, and provide ongoing support for updates and maintenance.",
+                gradient: "from-teal-500 to-green-500",
+                features: ["App Store Optimization", "Store Listings", "Submission Management", "Analytics Integration", "Update Management", "Post-launch Support"]
               }
             ].map((feature, index) => (
               <motion.div
                 key={index}
-                  className="feature-card group relative bg-white rounded-2xl p-8 border border-purple-100 hover:border-purple-300 transition-all duration-500 shadow-sm"
+                className={`feature-card group relative bg-white rounded-2xl p-8 border transition-all duration-500 shadow-sm cursor-pointer ${
+                  selectedFeature === index 
+                    ? 'border-purple-400 shadow-xl scale-105' 
+                    : 'border-purple-100 hover:border-purple-300'
+                }`}
                 whileHover={{ 
-                  scale: 1.05,
-                  rotateY: 5,
+                  scale: selectedFeature === index ? 1.05 : 1.02,
+                  rotateY: selectedFeature === index ? 0 : 3,
                   z: 50
                 }}
                 style={{ transformStyle: 'preserve-3d' }}
+                onClick={() => setSelectedFeature(selectedFeature === index ? null : index)}
               >
-                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-500`} />
+                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} rounded-2xl transition-opacity duration-500 ${
+                  selectedFeature === index ? 'opacity-15' : 'opacity-0 group-hover:opacity-10'
+                }`} />
                 
                 <motion.div
                   className="relative z-10"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false }}
+                  viewport={{ once: false }}
                   transition={{ delay: index * 0.1 }}
                 >
                   <div className={`w-16 h-16 bg-gradient-to-br ${feature.gradient} rounded-xl mb-6 flex items-center justify-center`}>
                     <div className="w-8 h-8 bg-white/20 rounded-lg" />
                   </div>
                   
-                    <h3 className="text-2xl font-bold mb-4 text-gray-900 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text group-hover:from-purple-600 group-hover:to-purple-800 transition-all duration-300">
+                  <h3 className={`text-2xl font-bold mb-4 transition-all duration-300 ${
+                    selectedFeature === index 
+                      ? 'text-transparent bg-gradient-to-r bg-clip-text from-purple-600 to-purple-800'
+                      : 'text-gray-900 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text group-hover:from-purple-600 group-hover:to-purple-800'
+                  }`}>
                     {feature.title}
                   </h3>
                   
+                  {/* Basic description */}
+                  <div className={selectedFeature === index ? 'hidden' : 'block'}>
                     <AnimatedParagraph
                       text={feature.description}
                       className="text-gray-600 leading-relaxed"
                     />
-                  </motion.div>
+                    <div className="mt-4 flex items-center text-purple-600 text-sm font-medium">
+                      <span>Click to learn more</span>
+                      <svg className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                  </div>
+
+                  {/* Detailed description when expanded */}
+                  <div className={selectedFeature === index ? 'block' : 'hidden'}>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <p className="text-gray-700 leading-relaxed mb-6">
+                        {feature.detailedDescription}
+                      </p>
+                      
+                      <div className="space-y-3">
+                        <h4 className="text-lg font-semibold text-gray-900">Key Features:</h4>
+                        <div className="grid grid-cols-2 gap-2">
+                          {feature.features.map((feat, featIndex) => (
+                            <div key={featIndex} className="flex items-center text-sm text-gray-600">
+                              <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${feature.gradient} mr-2 flex-shrink-0`} />
+                              {feat}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <div className="mt-6 flex items-center text-purple-600 text-sm font-medium">
+                        <span>Click to collapse</span>
+                        <svg className="w-4 h-4 ml-2 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
+                    </motion.div>
+                  </div>
+                </motion.div>
               </motion.div>
             ))}
           </div>
@@ -427,16 +800,7 @@ const AppDevelopmentPage = () => {
         </motion.div>
       </section>
     </div>
-    </div> {/* containerRef */}
-  </div> {/* scale wrapper */}
-</div> {/* screen area */}
-</div> {/* phone wrapper */}
-  <style jsx global>{`
-    .app-header .bytes-nav {
-      background-color: transparent !important;
-      backdrop-filter: none !important;
-    }
-  `}</style>
+    </div>
   </>
   );
 };
