@@ -9,7 +9,7 @@ export default function AppDevelopmentPage() {
       <Header />
       <main className="min-h-screen bg-slate-900 text-white">
         <div className="container mx-auto px-4 py-16">
-          <h1 className="text-4xl font-bold mb-8">App Development</h1>
+          <h1 className="text-4xl font-bold mb-8"></h1>
           <p className="text-lg text-gray-300 mb-6">
             We specialize in creating cutting-edge mobile and web applications that drive business growth and user engagement.
           </p>
