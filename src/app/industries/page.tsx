@@ -34,7 +34,7 @@ const IndustriesPage = () => {
 
   // Component to cycle words inside hero badge without re-rendering whole page
   const CycleWord: React.FC = () => {
-    const words = ["FINANCE", "HEALTH", "RETAIL", "GOVERNMENT"];
+    const words = ["FINANCE", "HEALTH", "RETAIL", "FEDERAL"];
     const [index, setIndex] = useState(0);
 
     useEffect(() => {
