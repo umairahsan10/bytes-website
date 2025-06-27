@@ -317,7 +317,7 @@ const ByteSuitePage: React.FC = () => {
           {/* Animated Background Elements */}
           <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 2 }}>
             <motion.div
-              className="absolute top-1/3 left-1/3 w-56 h-56 rounded-full blur-3xl"
+              className="absolute top-1/3 left-1/3 w-26 h-26 rounded-full blur-3xl"
               style={{ backgroundColor: 'rgba(1, 10, 20, 0.05)' }}
               animate={{
                 scale: [1, 1.1, 1],
