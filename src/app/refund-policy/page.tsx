@@ -5,13 +5,13 @@ import FadeIn from '@/components/FadeIn';
 import { Header } from '@/sections/Navbar';
 
 export const metadata = {
-  title: 'Refund Policy | Bytes Platform',
+  title: 'Bytes Platform',
   description: 'Learn about our refund and return policy terms and conditions.'
 };
 
 export default function RefundPolicyPage() {
   return (
-    <main className="min-h-screen flex flex-col bg-white dark:bg-neutral-900">
+    <main className="min-h-screen flex flex-col bg-white">
       <Header />
       {/* Hero */}
       <section className="relative bg-[#0b1e3a] py-20 text-center text-white">
@@ -26,9 +26,9 @@ export default function RefundPolicyPage() {
       </section>
 
       {/* Content */}
-      <section className="flex-1 bg-white dark:bg-neutral-900 py-12 md:py-16">
+      <section className="flex-1 bg-white py-12 md:py-16">
         <FadeIn
-          className="prose md:prose-lg prose-gray dark:prose-invert max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 leading-relaxed space-y-8"
+          className="prose md:prose-lg prose-gray text-black max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 leading-relaxed space-y-8"
         >
           <h1>Refund &amp; Return Policy – Bytes Platform</h1>
           
@@ -37,7 +37,7 @@ export default function RefundPolicyPage() {
             This refund and return policy outlines the conditions under which refunds or cancellations may be considered.
           </p>
 
-          <div className="border-t border-gray-200 dark:border-gray-700 my-8"></div>
+          <div className="border-t border-gray-200 my-8"></div>
 
           <h2>1. Contract-Specific Terms</h2>
           <p>
@@ -48,7 +48,7 @@ export default function RefundPolicyPage() {
             Bytes Platform reserves the right to deny refunds where contractual terms are not met, or where substantial progress or delivery has been made.
           </p>
 
-          <div className="border-t border-gray-200 dark:border-gray-700 my-8"></div>
+          <div className="border-t border-gray-200 my-8"></div>
 
           <h2>2. Milestone-Based Payments</h2>
           <ul className="list-disc pl-6 space-y-2">
@@ -56,7 +56,7 @@ export default function RefundPolicyPage() {
             <li>Milestone payments are strictly non-refundable once a milestone has been crossed and approved, either through direct approval or by proceeding to the next phase of work.</li>
           </ul>
 
-          <div className="border-t border-gray-200 dark:border-gray-700 my-8"></div>
+          <div className="border-t border-gray-200 my-8"></div>
 
           <h2>3. Initial Payments &amp; SEO Services</h2>
           <ul className="list-disc pl-6 space-y-2">
@@ -65,7 +65,7 @@ export default function RefundPolicyPage() {
             <li>The remaining 50% is due upon completion of the month's deliverables, and becomes non-refundable once delivered.</li>
           </ul>
 
-          <div className="border-t border-gray-200 dark:border-gray-700 my-8"></div>
+          <div className="border-t border-gray-200 my-8"></div>
 
           <h2>4. App Development Projects</h2>
           <p>Refunds will not be issued for app development projects once:</p>
@@ -75,7 +75,7 @@ export default function RefundPolicyPage() {
             <li>The codebase or builds have been shared for review or deployment.</li>
           </ul>
 
-          <div className="border-t border-gray-200 dark:border-gray-700 my-8"></div>
+          <div className="border-t border-gray-200 my-8"></div>
 
           <h2>5. ByteBot &amp; ByteSuite Subscriptions</h2>
           <ul className="list-disc pl-6 space-y-2">
@@ -84,7 +84,7 @@ export default function RefundPolicyPage() {
             <li>No refunds are issued for the current billing period once payment has been processed.</li>
           </ul>
 
-          <div className="border-t border-gray-200 dark:border-gray-700 my-8"></div>
+          <div className="border-t border-gray-200 my-8"></div>
 
           <h2>6. Non-Refundable Scenarios</h2>
           <p>Refunds will not be provided in the following cases:</p>
@@ -97,7 +97,7 @@ export default function RefundPolicyPage() {
             <li>If work has been shared with or reassigned to another agency or service provider during execution.</li>
           </ul>
 
-          <div className="border-t border-gray-200 dark:border-gray-700 my-8"></div>
+          <div className="border-t border-gray-200 my-8"></div>
 
           <h2>7. Refund Request Procedure</h2>
           <p>
@@ -105,17 +105,17 @@ export default function RefundPolicyPage() {
             We may request supporting documentation. A detailed review will be completed within 15 business days.
           </p>
 
-          <div className="border-t border-gray-200 dark:border-gray-700 my-8"></div>
+          <div className="border-t border-gray-200 my-8"></div>
 
           <h2>8. Ownership Clause</h2>
           <p>
             If a refund is approved or a dispute is filed, all intellectual property created (designs, code, content, strategy) remains the exclusive property of Bytes Platform and may not be used by the client in any form.
           </p>
 
-          <div className="border-t border-gray-200 dark:border-gray-700 my-8"></div>
+          <div className="border-t border-gray-200 my-8"></div>
 
-          <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg border">
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-0">
+          <div className="bg-gray-50 p-6 rounded-lg border">
+            <p className="text-sm text-gray-600 mb-0">
               <strong>Note:</strong> This policy is a binding extension of our official Service Agreement and is enforceable under applicable law.
             </p>
           </div>

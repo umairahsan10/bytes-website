@@ -5,13 +5,13 @@ import FadeIn from '@/components/FadeIn';
 import { Header } from '@/sections/Navbar';
 
 export const metadata = {
-  title: 'Privacy Policy | Bytes Platform',
+  title: 'Bytes Platform',
   description: 'Learn how Bytes Platform collects, uses, and protects your data.'
 };
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="min-h-screen flex flex-col bg-white dark:bg-neutral-900">
+    <main className="min-h-screen flex flex-col bg-white">
       <Header />
       {/* Hero */}
       <section className="relative bg-[#0b1e3a] py-20 text-center text-white">
@@ -26,9 +26,9 @@ export default function PrivacyPolicyPage() {
       </section>
 
       {/* Content */}
-      <section className="flex-1 bg-white dark:bg-neutral-900 py-12 md:py-16">
+      <section className="flex-1 bg-white py-12 md:py-16">
         <FadeIn
-          className="prose md:prose-lg prose-gray dark:prose-invert max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 leading-relaxed space-y-8"
+          className="prose md:prose-lg prose-gray max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 leading-relaxed space-y-8"
         >
           <h1>Privacy Policy</h1>
 

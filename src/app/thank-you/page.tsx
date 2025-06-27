@@ -5,13 +5,13 @@ import FadeIn from '@/components/FadeIn';
 import { Header } from '@/sections/Navbar';
 
 export const metadata = {
-  title: 'Thank You | Bytes Platform',
+  title: 'Bytes Platform',
   description: 'Thank you for contacting Bytes Platform. We will get back to you soon.'
 };
 
 export default function ThankYouPage() {
   return (
-    <main className="min-h-screen flex flex-col bg-white dark:bg-neutral-900">
+    <main className="min-h-screen flex flex-col bg-white">
       <Header />
       
       {/* Hero */}
@@ -34,11 +34,11 @@ export default function ThankYouPage() {
       </section>
 
       {/* Content */}
-      <section className="flex-1 bg-white dark:bg-neutral-900 py-16 md:py-24">
-        <FadeIn className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="flex-1 bg-white py-16 md:py-24">
+        <FadeIn className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-black">
           <div className="space-y-8">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-white mb-4">
+              <h2 className="text-2xl sm:text-3xl font-semibold text-black mb-4">
                 What happens next?
               </h2>
               <div className="grid md:grid-cols-3 gap-8 mt-12">
@@ -46,8 +46,8 @@ export default function ThankYouPage() {
                   <div className="w-12 h-12 bg-[#0b1e3a] rounded-full flex items-center justify-center mb-4">
                     <span className="text-white font-bold">1</span>
                   </div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Review</h3>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">
+                  <h3 className="font-semibold text-black mb-2">Review</h3>
+                  <p className="text-black text-sm">
                     Our team will review your inquiry and requirements carefully.
                   </p>
                 </div>
@@ -56,8 +56,8 @@ export default function ThankYouPage() {
                   <div className="w-12 h-12 bg-[#0b1e3a] rounded-full flex items-center justify-center mb-4">
                     <span className="text-white font-bold">2</span>
                   </div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Connect</h3>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">
+                  <h3 className="font-semibold text-black mb-2">Connect</h3>
+                  <p className="text-black text-sm">
                     We'll reach out to you within 24 hours to discuss your project.
                   </p>
                 </div>
@@ -66,19 +66,19 @@ export default function ThankYouPage() {
                   <div className="w-12 h-12 bg-[#0b1e3a] rounded-full flex items-center justify-center mb-4">
                     <span className="text-white font-bold">3</span>
                   </div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Collaborate</h3>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">
+                  <h3 className="font-semibold text-black mb-2">Collaborate</h3>
+                  <p className="text-black text-sm">
                     Let's work together to bring your digital vision to life.
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-8 mt-12">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            <div className="bg-blue-100 rounded-lg p-8 mt-12">
+              <h3 className="text-lg font-semibold text-black mb-4">
                 Need immediate assistance?
               </h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <p className="text-black mb-6">
                 For urgent inquiries, feel free to reach out to us directly:
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -415,6 +415,14 @@ const Header: React.FC<HeaderProps> = ({
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={logoImage} alt="Bytes Platform Logo" className="h-12 w-auto" />
         </div>
+
+        {/* Center text link */}
+        <div className="flex-1 text-center">
+          <Link href="/contact" className="text-white font-semibold uppercase tracking-wide hover:underline font-['PPNeueMontreal']">
+            BOOK A FREE CONSULTATION
+          </Link>
+        </div>
+
         {!logoOnly && (
           <p className="menu-toggle relative z-[400]" onClick={isOpen ? handleMenuClose : handleMenuOpen}>
             {buttonText}
