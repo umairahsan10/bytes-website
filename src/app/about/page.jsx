@@ -8,6 +8,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ContactSection } from "@/sections/Contact";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useMotionValue, animate, useInView } from "framer-motion";
+import ReactIcon from "@/assets/icons/react.svg";
+import JsIcon from "@/assets/icons/square-js.svg";
+import HtmlIcon from "@/assets/icons/html5.svg";
+import CssIcon from "@/assets/icons/css3.svg";
+import GithubIcon from "@/assets/icons/github.svg";
+import ChromeIcon from "@/assets/icons/chrome.svg";
+import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg";
 
 // Animated counter component
 function Counter({ from = 0, to, duration = 2, className = "" }) {
@@ -285,7 +292,7 @@ export default function AboutPage() {
           <Image className="image" src="/assets/bg.jpg" alt="Background" fill priority />
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
             <h1 className="hero-title text-[12vw] sm:text-[10vw] md:text-[8vw] lg:text-8xl xl:text-9xl leading-none whitespace-nowrap will-change-transform transform-gpu">
-               <span className="bg-gradient-to-r from-purple-500 via-white to-purple-400 bg-clip-text text-transparent">About</span> <span className="bg-gradient-to-r from-purple-500 via-white to-purple-400 bg-clip-text text-transparent">Us</span>
+               <span className="bg-gradient-to-r from-purple-900 via-white to-purple-900 bg-clip-text text-transparent">About</span> <span className="bg-gradient-to-r from-purple-500 via-white to-purple-400 bg-clip-text text-transparent">Us</span>
             </h1>
             <p className="max-w-xl mt-4 text-base sm:text-lg md:text-xl lg:text-2xl text-[#bbbbbb]">
               Innovating the Future Together
@@ -298,10 +305,10 @@ export default function AboutPage() {
           <div className="h-full flex flex-col items-center justify-center text-center px-4 py-8 sm:py-12">
             <div className="w-full max-w-7xl mx-auto space-y-6 sm:space-y-8">
               <div className="pt-4 sm:pt-8">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 mb-4 sm:mb-6">
                   Who We Are
                 </h2>
-                <p className="max-w-2xl mx-auto text-center text-gray-600 text-sm sm:text-base md:text-lg lg:text-xl">
+                <p className="max-w-2xl mx-auto text-center text-gray-600 text-base sm:text-lg md:text-xl lg:text-2xl">
                   We're a passionate team of innovators, designers, and developers dedicated to crafting exceptional digital experiences that drive meaningful change.
                 </p>
               </div>
@@ -372,7 +379,7 @@ export default function AboutPage() {
         </div>
 
         {/* Hero Section - Full Width - Updated for white theme */}
-        <div className="w-full px-4 py-20">
+        <div className="relative z-10 w-full px-4 py-20">
           <motion.div 
             className="text-center space-y-8 max-w-6xl mx-auto"
             variants={fadeInUp}
@@ -419,7 +426,7 @@ export default function AboutPage() {
         </div>
 
         {/* Core Services - Asymmetric Layout */}
-        <div className="w-full space-y-32 py-20">
+        <div className="relative z-10 w-full space-y-32 py-20">
           <motion.h2 
             className="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent mb-20"
             variants={scaleIn}
@@ -435,7 +442,7 @@ export default function AboutPage() {
           <div className="container mx-auto px-4">
             <div className="flex flex-col lg:flex-row items-center gap-16 max-w-7xl">
               <motion.div 
-                className="lg:w-2/5 lg:ml-16"
+                className="w-full lg:w-2/5 lg:ml-16"
                 variants={slideInLeft}
                 initial="hidden"
                 whileInView="visible"
@@ -457,7 +464,7 @@ export default function AboutPage() {
                 </div>
               </motion.div>
               <motion.div 
-                className="lg:w-3/5 lg:mr-0"
+                className="w-full lg:w-3/5 lg:mr-0"
                 variants={slideInRight}
                 initial="hidden"
                 whileInView="visible"
@@ -482,7 +489,7 @@ export default function AboutPage() {
           <div className="container mx-auto px-4">
             <div className="flex flex-col lg:flex-row-reverse items-center gap-16 max-w-7xl mx-auto">
               <motion.div 
-                className="lg:w-2/5 lg:mr-16"
+                className="w-full lg:w-2/5 lg:mr-16"
                 variants={slideInRight}
                 initial="hidden"
                 whileInView="visible"
@@ -504,7 +511,7 @@ export default function AboutPage() {
                 </div>
               </motion.div>
               <motion.div 
-                className="lg:w-3/5"
+                className="w-full lg:w-3/5"
                 variants={slideInLeft}
                 initial="hidden"
                 whileInView="visible"
@@ -538,7 +545,7 @@ export default function AboutPage() {
               />
               <div className="flex flex-col lg:flex-row items-center gap-16 pt-12">
                 <motion.div 
-                  className="lg:w-1/2 transform lg:-skew-y-2"
+                  className="w-full lg:w-1/2 transform lg:-skew-y-2"
                   variants={rotateIn}
                   initial="hidden"
                   whileInView="visible"
@@ -560,7 +567,7 @@ export default function AboutPage() {
                   </div>
                 </motion.div>
                 <motion.div 
-                  className="lg:w-1/2 transform lg:skew-y-2"
+                  className="w-full lg:w-1/2 transform lg:skew-y-2"
                   variants={slideInRight}
                   initial="hidden"
                   whileInView="visible"
@@ -627,7 +634,7 @@ export default function AboutPage() {
                   exit="exit"
                   viewport={{ once: false, margin: "-100px" }}
                 >
-                  <div className="space-y-6 p-8 bg-gradient-to-br from-pink-500/10 to-orange-500/10 backdrop-blur-sm border border-pink-500/20 rounded-3xl">
+                  <div className="w-full space-y-6 p-8 bg-gradient-to-br from-pink-500/10 to-orange-500/10 backdrop-blur-sm border border-pink-500/20 rounded-3xl">
                     <motion.ul 
                       className="space-y-4 text-gray-600 text-lg"
                       variants={staggerContainer}
@@ -650,7 +657,7 @@ export default function AboutPage() {
           <div className="container mx-auto px-4">
             <div className="flex flex-col lg:flex-row items-stretch min-h-screen max-w-7xl mx-auto">
               <motion.div 
-                className="lg:w-1/2 flex items-center justify-center p-16"
+                className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-16"
                 variants={slideInLeft}
                 initial="hidden"
                 whileInView="visible"
@@ -658,10 +665,10 @@ export default function AboutPage() {
                 viewport={{ once: false, margin: "-100px" }}
               >
                 <div className="space-y-8 max-w-lg">
-                  <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyan-600 to-purple-700 bg-clip-text text-transparent">
+                  <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold bg-gradient-to-r from-cyan-600 to-purple-700 bg-clip-text text-transparent">
                     Our Philosophy
                   </h2>
-                  <p className="text-xl text-gray-900 leading-relaxed">
+                  <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-900 leading-relaxed">
                     We merge velocity with precision, creativity with strategy, and vision with execution. Our teams don't just build digital products — we architect experiences that drive exponential growth and redefine market standards.
                   </p>
                   <motion.div 
@@ -674,7 +681,7 @@ export default function AboutPage() {
               </motion.div>
               
               <motion.div 
-                className="lg:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-6 p-8"
+                className="w-full lg:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-6 p-4 lg:p-8"
                 variants={slideInRight}
                 initial="hidden"
                 whileInView="visible"
@@ -708,7 +715,7 @@ export default function AboutPage() {
         <div className="w-full py-20">
           <div className="container mx-auto px-4 max-w-7xl">
             <motion.h2 
-              className="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent mb-16"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent mb-16"
               variants={scaleIn}
               initial="hidden"
               whileInView="visible"
@@ -726,7 +733,7 @@ export default function AboutPage() {
               viewport={{ once: false, margin: "-100px" }}
             >
               <motion.div 
-                className="lg:row-span-1 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 backdrop-blur-sm border border-cyan-500/20 rounded-3xl p-8 hover:scale-105 transition-all duration-500"
+                className="w-full lg:row-span-1 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 backdrop-blur-sm border border-cyan-500/20 rounded-3xl p-6 sm:p-8 hover:scale-105 transition-all duration-500"
                 variants={rotateIn}
               >
                 <h3 className="text-2xl font-bold text-cyan-400 mb-4">Real-Time Development Visibility</h3>
@@ -736,18 +743,29 @@ export default function AboutPage() {
               </motion.div>
               
               <motion.div 
-                className="lg:row-span-2 bg-gradient-to-r from-purple-500/10 to-pink-500/10 backdrop-blur-sm border border-purple-500/20 rounded-3xl p-8 hover:scale-105 transition-all duration-500"
+                className="w-full lg:row-span-2 bg-gradient-to-r from-purple-500/10 to-pink-500/10 backdrop-blur-sm border border-purple-500/20 rounded-3xl p-6 sm:p-8 hover:scale-105 transition-all duration-500"
                 variants={slideInRight}
               >
                 <h3 className="text-2xl font-bold text-purple-400 mb-4">Hyper-Speed Delivery</h3>
                 <p className="text-gray-700 leading-relaxed mb-6">
                   Our agile methodology and parallel processing workflows deliver production-ready solutions 3x faster than industry benchmarks — without sacrificing quality or cutting corners.
                 </p>
-                <div className="w-full h-32 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-2xl"></div>
+                <motion.div 
+                  className="w-full h-32 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-2xl flex items-center justify-center"
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <motion.div
+                    animate={{ x: [0, 12, 0], y: [0, -12, 0] }}
+                    transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <ArrowUpRightIcon className="w-12 h-12 sm:w-16 sm:h-16 text-purple-500" />
+                  </motion.div>
+                </motion.div>
               </motion.div>
               
               <motion.div 
-                className="bg-gradient-to-r from-emerald-500/10 to-teal-500/10 backdrop-blur-sm border border-emerald-500/20 rounded-3xl p-8 hover:scale-105 transition-all duration-500"
+                className="w-full bg-gradient-to-r from-emerald-500/10 to-teal-500/10 backdrop-blur-sm border border-emerald-500/20 rounded-3xl p-6 sm:p-8 hover:scale-105 transition-all duration-500"
                 variants={fadeInUp}
               >
                 <h3 className="text-2xl font-bold text-emerald-400 mb-4">Bespoke Design Architecture</h3>
@@ -757,7 +775,7 @@ export default function AboutPage() {
               </motion.div>
               
               <motion.div 
-                className="bg-gradient-to-r from-pink-500/10 to-orange-500/10 backdrop-blur-sm border border-pink-500/20 rounded-3xl p-8 hover:scale-105 transition-all duration-500"
+                className="w-full bg-gradient-to-r from-pink-500/10 to-orange-500/10 backdrop-blur-sm border border-pink-500/20 rounded-3xl p-6 sm:p-8 hover:scale-105 transition-all duration-500"
                 variants={slideInLeft}
               >
                 <h3 className="text-2xl font-bold text-pink-400 mb-4">Infinite Scalability</h3>
@@ -774,7 +792,7 @@ export default function AboutPage() {
           <div className="container mx-auto px-4 max-w-7xl">
             <div className="flex flex-col lg:flex-row items-center gap-16">
               <motion.div 
-                className="lg:w-1/2"
+                className="w-full lg:w-1/2"
                 variants={rotateIn}
                 initial="hidden"
                 whileInView="visible"
@@ -792,21 +810,26 @@ export default function AboutPage() {
                           initial="hidden"
                           whileInView="visible"
                         >
-                          {[1,2,3,4,5,6].map((i) => (
-                            <motion.div 
-                              key={i}
-                              className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center"
+                          {[
+                            { Icon: ReactIcon, name: "React" },
+                            { Icon: JsIcon, name: "JavaScript" },
+                            { Icon: HtmlIcon, name: "HTML5" },
+                            { Icon: CssIcon, name: "CSS3" },
+                            { Icon: GithubIcon, name: "GitHub" },
+                            { Icon: ChromeIcon, name: "Chrome DevTools" },
+                          ].map(({ Icon, name }, idx) => (
+                            <motion.div
+                              key={name}
+                              className="w-16 h-16 sm:w-20 sm:h-20 bg-white/20 rounded-2xl flex items-center justify-center"
                               variants={scaleIn}
                               whileHover={{ scale: 1.1, rotate: 5 }}
                             >
-                              <svg className="w-10 h-10 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                              </svg>
+                              <Icon className="w-8 h-8 sm:w-10 sm:h-10 text-purple-600" aria-label={name} />
                             </motion.div>
                           ))}
                         </motion.div>
-                        <p className="text-gray-900 font-medium text-lg">Modern Tech Stack</p>
-                        <p className="text-sm text-gray-900 max-w-xs mx-auto">We harness the latest frameworks, languages, and cloud services to build resilient, future-proof applications tailored to your growth trajectory.</p>
+                        <p className="text-gray-900 font-medium text-base sm:text-lg">Modern Tech Stack</p>
+                        <p className="text-xs sm:text-sm text-gray-900 max-w-xs mx-auto">We harness the latest frameworks, languages, and cloud services to build resilient, future-proof applications tailored to your growth trajectory.</p>
                       </div>
                     </div>
                   </div>
@@ -814,7 +837,7 @@ export default function AboutPage() {
               </motion.div>
               
               <motion.div 
-                className="lg:w-1/2 grid grid-cols-2 gap-6"
+                className="w-full lg:w-1/2 grid grid-cols-2 gap-6 mt-8 lg:mt-0"
                 variants={slideInRight}
                 initial="hidden"
                 whileInView="visible"
@@ -848,7 +871,7 @@ export default function AboutPage() {
         <div className="w-full py-20">
           <div className="container mx-auto px-4 max-w-7xl">
             <motion.h2 
-              className="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent mb-16"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent mb-16"
               variants={scaleIn}
               initial="hidden"
               whileInView="visible"
@@ -865,7 +888,7 @@ export default function AboutPage() {
               whileInView="visible"
               viewport={{ once: false, margin: "-100px" }}
             >
-              <div className="space-y-6">
+              <div className="w-full space-y-6">
                 <motion.div 
                   className="bg-gray-50 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 hover:bg-gray-100 transition-all duration-500 hover:scale-105 hover:rotate-1"
                   variants={slideInLeft}
@@ -886,7 +909,7 @@ export default function AboutPage() {
                 </motion.div>
               </div>
               
-              <div className="space-y-6">
+              <div className="w-full space-y-6">
                 <motion.div 
                   className="bg-gray-50 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 hover:bg-gray-100 transition-all duration-500 hover:scale-105 hover:rotate-1"
                   variants={slideInRight}
@@ -911,7 +934,7 @@ export default function AboutPage() {
         </div>
 
         {/* Support & Growth - Full Width Banner */}
-        <div className="w-full py-32 relative overflow-hidden">
+        <div className="w-full py-24 sm:py-32 relative overflow-hidden">
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-white"></div>
             <motion.div 
@@ -950,17 +973,17 @@ export default function AboutPage() {
               exit="exit"
               viewport={{ once: false, margin: "-100px" }}
             >
-              <h2 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-cyan-600 to-purple-700 bg-clip-text text-transparent">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-cyan-600 to-purple-700 bg-clip-text text-transparent">
                 Beyond Launch
               </h2>
               <motion.p 
-                className="text-2xl md:text-3xl text-gray-900 max-w-4xl mx-auto leading-relaxed"
+                className="text-lg sm:text-xl md:text-2xl text-gray-900 max-w-4xl mx-auto leading-relaxed"
                 variants={fadeInUp}
               >
                 Premium hosting, proactive maintenance, security monitoring, and continuous optimization. Your success is our ongoing mission.
               </motion.p>
               <motion.div 
-                className="flex justify-center space-x-8 mt-12"
+                className="flex flex-wrap justify-center gap-6 sm:gap-8 mt-12"
                 variants={staggerContainer}
                 initial="hidden"
                 whileInView="visible"
@@ -981,7 +1004,7 @@ export default function AboutPage() {
                     variants={scaleIn}
                     whileHover={{ scale: 1.1, y: -5 }}
                   >
-                    <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-3 mx-auto backdrop-blur-sm border border-white/20">
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-3 mx-auto backdrop-blur-sm border border-white/20">
                       {item.icon}
                     </div>
                     <p className="text-gray-700 text-sm uppercase tracking-wider">{item.label}</p>
@@ -993,7 +1016,7 @@ export default function AboutPage() {
         </div>
 
         {/* Final CTA - Explosive */}
-        <div className="w-full py-32 relative overflow-hidden">
+        <div className="w-full py-24 sm:py-32 relative overflow-hidden">
           <div className="absolute inset-0">
             <motion.div 
               className="absolute inset-0 bg-gradient-to-br from-cyan-900/30 via-purple-900/30 to-pink-900/30"
@@ -1019,7 +1042,7 @@ export default function AboutPage() {
               viewport={{ once: false, margin: "-100px" }}
             >
               <motion.h2 
-                className="text-6xl md:text-8xl font-black bg-gradient-to-r from-cyan-600 to-purple-700 bg-clip-text text-transparent"
+                className="text-4xl sm:text-6xl md:text-8xl font-black bg-gradient-to-r from-cyan-600 to-purple-700 bg-clip-text text-transparent"
                 animate={{ 
                   backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
                 }}
@@ -1034,7 +1057,7 @@ export default function AboutPage() {
               </motion.h2>
               
               <motion.p 
-                className="text-2xl md:text-3xl text-gray-900 max-w-4xl mx-auto leading-relaxed"
+                className="text-lg sm:text-xl md:text-2xl text-gray-900 max-w-4xl mx-auto leading-relaxed"
                 variants={fadeInUp}
               >
                 Transform your vision into reality. Scale your impact. Dominate your market.
