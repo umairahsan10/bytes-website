@@ -445,9 +445,9 @@ const WebDevelopmentLanding = () => {
                 </div>
               </div>
 
-              <Link href="/contact" className="px-8 py-4 bg-blue-600 text-white rounded-full font-semibold hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 text-center inline-block">
+              {/* <Link href="/contact" className="px-8 py-4 bg-blue-600 text-white rounded-full font-semibold hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 text-center inline-block">
                 Start Your Web Project
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
@@ -458,19 +458,19 @@ const WebDevelopmentLanding = () => {
         {/* Background image */}
         <div
           className="absolute inset-0 bg-center bg-cover opacity-20 pointer-events-none"
-          // style={{ backgroundImage: "url('/assets/img-2.jpg')" }}
+          style={{ backgroundImage: "url('/assets/WebDev/connect.jpg')" }}
         />
 
         {/* Content */}
         <div className="relative z-10 container mx-auto px-6">
           <h2 className="text-4xl lg:text-5xl font-bold mb-8">
-            Ready to&nbsp;<span className="text-blue-200">build with us?</span>
+            Ready to&nbsp;<span className="text-white">build with us?</span>
           </h2>
           <Link
             href="/contact"
             className="inline-block px-10 py-4 bg-white text-blue-700 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
           >
-            Contact&nbsp;Us
+            Build&nbsp;With&nbsp;Us
           </Link>
         </div>
       </section>
