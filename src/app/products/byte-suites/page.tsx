@@ -317,15 +317,15 @@ const ByteSuitePage: React.FC = () => {
           {/* Animated Background Elements */}
           <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 2 }}>
             <motion.div
-              className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl"
-              style={{ backgroundColor: 'rgba(1, 10, 20, 0.1)' }}
+              className="absolute top-1/3 left-1/3 w-56 h-56 rounded-full blur-3xl"
+              style={{ backgroundColor: 'rgba(1, 10, 20, 0.05)' }}
               animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.2, 0.4, 0.2],
-                x: [0, 50, 0],
-                y: [0, -30, 0],
+                scale: [1, 1.1, 1],
+                opacity: [0.08, 0.16, 0.08],
+                x: [0, 40, 0],
+                y: [0, -20, 0],
               }}
-              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+              transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
             />
             <motion.div
               className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full blur-3xl"
