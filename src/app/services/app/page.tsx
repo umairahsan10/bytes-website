@@ -124,19 +124,21 @@ const AppDevelopmentPage = () => {
     }
   ];
 
-  // Better scroll mapping with screen 1 well anchored and more time for scrolling back up and screen 4
+  // Enhanced scroll mapping with smooth transitions
   useEffect(() => {
     const unsubscribe = phoneScrollProgress.onChange((progress) => {
-      // Extended screen 1 visibility for better anchoring, more time for transitions when scrolling up and extended screen 4
+      // Smooth transition between screens based on scroll progress
       let newScreen;
-      if (progress <= 0.25) {
-        newScreen = 0;        // First 25% = Screen 1 (Seamless Onboarding) - well anchored
-      } else if (progress <= 0.5) {
-        newScreen = 1;        // 25-50% = Screen 2 (Powerful Dashboard) - more time going up
-      } else if (progress <= 0.75) {
-        newScreen = 2;        // 50-75% = Screen 3 (Smart Messaging) - more time going up
+      if (progress <= 0.2) {
+        newScreen = 0;        // First 20% = Screen 1 (Seamless Onboarding)
+      } else if (progress <= 0.4) {
+        newScreen = 1;        // 20-40% = Screen 2 (Powerful Dashboard)
+      } else if (progress <= 0.6) {
+        newScreen = 2;        // 40-60% = Screen 3 (Smart Messaging)
+      } else if (progress <= 0.8) {
+        newScreen = 3;        // 60-80% = Screen 4 (User Profiles)
       } else {
-        newScreen = 3;        // 75-100% = Screen 4 (User Profiles) - more time going down
+        newScreen = 3;        // 80-100% = Stay on Screen 4
       }
       
       if (newScreen !== currentScreen) {
@@ -146,8 +148,9 @@ const AppDevelopmentPage = () => {
     return () => unsubscribe();
   }, [phoneScrollProgress, currentScreen]);
 
-  const phoneRotateY = useTransform(phoneScrollProgress, [0, 1], [0, 360]);
-  const phoneScale = useTransform(phoneScrollProgress, [0, 0.5, 1], [0.8, 1, 0.8]);
+  // Create smooth image movement transforms for vertical sliding
+  const mockupTranslateY = useTransform(phoneScrollProgress, [0, 1], [0, -300]);
+  const mockupScale = useTransform(phoneScrollProgress, [0, 0.5, 1], [1, 1.05, 1]);
 
   return (
     <>
@@ -195,15 +198,10 @@ const AppDevelopmentPage = () => {
         <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
           <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
             
-            {/* Left - Phone mockup */}
+            {/* Left - Mobile Phone */}
             <div className="flex-1 flex items-center justify-center order-2 lg:order-1 mb-8 lg:mb-0">
-              <motion.div
-                className="relative"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-              >
-                {/* Phone frame using the actual iPhone 14 SVG */}
+              <div className="relative">
+                {/* Phone frame */}
                 <div className="relative w-[240px] sm:w-[280px] md:w-[300px] h-[488px] sm:h-[569px] md:h-[610px] mx-auto">
                   {/* iPhone 14 frame */}
                   <div className="absolute inset-0 z-20">
@@ -216,14 +214,16 @@ const AppDevelopmentPage = () => {
                     />
                   </div>
 
-                  {/* Screen content - responsive positioning to match iPhone 14 screen area */}
+                  {/* Screen content with fade transitions */}
                   <div className="absolute top-[26px] sm:top-[30px] md:top-[32px] left-[26px] sm:left-[30px] md:left-[33px] w-[188px] sm:w-[218px] md:w-[234px] h-[406px] sm:h-[472px] md:h-[507px] rounded-[36px] sm:rounded-[40px] md:rounded-[45px] overflow-hidden bg-gray-50">
+                    {/* Current screen image with fade transition */}
                     <motion.div
                       key={currentScreen}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5 }}
-                      className="w-full h-full relative"
+                      className="absolute inset-0 w-full h-full"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.8, ease: "easeInOut" }}
                     >
                       <Image
                         src={appScreens[currentScreen]?.image || ''}
@@ -232,27 +232,18 @@ const AppDevelopmentPage = () => {
                         className="object-cover"
                         sizes="(max-width: 640px) 188px, (max-width: 768px) 218px, 234px"
                       />
-                      
-                      {/* Simple number indicator - responsive sizing */}
-                      <div className="absolute top-3 sm:top-4 right-3 sm:right-4 w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 bg-white rounded-full shadow-lg flex items-center justify-center">
-                        <span className="text-xs sm:text-sm font-semibold text-gray-800">
-                          {currentScreen + 1}
-                        </span>
-                      </div>
                     </motion.div>
                   </div>
-
-
                 </div>
-              </motion.div>
+              </div>
             </div>
 
-            {/* Center - Clean Timeline connecting phone to content (Hidden on mobile) */}
+            {/* Center - Vertical Timeline with Moving Number Icons */}
             <div className="hidden lg:flex relative flex-col items-center justify-center px-8 xl:px-12 order-2">
-              {/* Simple timeline line */}
-              <div className="relative w-px h-[50vh] lg:h-[60vh] bg-gray-200">
+              {/* Vertical timeline line */}
+              <div className="relative w-px h-[60vh] bg-gray-200">
                 <motion.div
-                  className="w-full bg-gray-800 origin-top"
+                  className="w-full bg-purple-600 origin-top"
                   style={{
                     scaleY: phoneScrollProgress,
                     transformOrigin: 'top'
@@ -260,126 +251,143 @@ const AppDevelopmentPage = () => {
                 />
               </div>
               
-              {/* Clean timeline dots for each screen */}
+              {/* Moving number icons */}
               <div className="absolute inset-0 flex flex-col justify-around items-center py-12 lg:py-16">
                 {appScreens.map((screen, index) => (
                   <motion.div
                     key={screen.id}
                     className="relative"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    initial={{ scale: 0, y: 50 }}
+                    animate={{ 
+                      scale: index <= currentScreen ? 1 : 0,
+                      y: index <= currentScreen ? 0 : 50
+                    }}
+                    transition={{ 
+                      duration: 0.5, 
+                      delay: index * 0.2,
+                      ease: "easeOut"
+                    }}
                   >
-                    {/* Simple dot */}
-                    <div className={`w-3 h-3 rounded-full border-2 bg-white transition-all duration-300 ${
+                    {/* Number circle */}
+                    <div className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
                       index === currentScreen
-                        ? 'border-gray-800 scale-125'
+                        ? 'border-purple-600 bg-purple-600 text-white shadow-lg scale-125'
                         : index < currentScreen
-                          ? 'border-gray-800 bg-gray-800'
-                          : 'border-gray-300'
-                    }`}></div>
-                    
-                    {/* Screen number */}
-                    <div className={`absolute -right-8 top-1/2 -translate-y-1/2 text-sm font-medium transition-all duration-300 ${
-                      index === currentScreen
-                        ? 'text-gray-800 font-semibold'
-                        : 'text-gray-400'
+                          ? 'border-purple-600 bg-purple-600 text-white'
+                          : 'border-gray-300 bg-white text-gray-400'
                     }`}>
-                      {index + 1}
+                      <span className="text-lg font-semibold">{String(index + 1).padStart(2, '0')}</span>
                     </div>
                   </motion.div>
                 ))}
               </div>
               
-              {/* Simple connecting line to content */}
+              {/* Connecting line to content */}
               <div className="absolute right-0 top-1/2 w-8 lg:w-12 h-px bg-gray-300"></div>
             </div>
 
-            {/* Right side - Clean Content Panel */}
+            {/* Right side - Text Sections that Slide Upward */}
             <div className="flex-1 lg:pl-4 xl:pl-8 order-1 lg:order-3 mb-8 lg:mb-0">
-              <motion.div
-                key={currentScreen}
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-                className="space-y-4 md:space-y-6 text-center lg:text-left"
-              >
-                {/* Mobile step indicator */}
-                <div className="lg:hidden mb-4">
-                  <div className="inline-flex items-center space-x-2 bg-gray-100 rounded-full px-4 py-2">
-                    <span className="text-sm font-semibold text-gray-800">Step {currentScreen + 1} of 4</span>
-                  </div>
-                </div>
-
-                {/* Clean title - responsive sizing */}
-                <motion.h2 
-                  className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-bold text-gray-900 leading-tight"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                >
-                  {appScreens[currentScreen]?.title}
-                </motion.h2>
-                
-                {/* Clean description - responsive sizing */}
-                <motion.p 
-                  className="text-base sm:text-lg md:text-lg lg:text-lg xl:text-lg text-gray-600 leading-relaxed max-w-2xl lg:max-w-none mx-auto lg:mx-0"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                >
-                  {appScreens[currentScreen]?.description}
-                </motion.p>
-                
-                {/* Simple Features list */}
-                <motion.div 
-                  className="space-y-3 md:space-y-4"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                >
-                  {appScreens[currentScreen]?.features.map((feature, index) => (
-                    <motion.div
-                      key={feature}
-                      className="flex items-center justify-center lg:justify-start space-x-3"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
-                    >
-                      {/* Simple bullet point */}
-                      <div className="w-2 h-2 bg-gray-800 rounded-full flex-shrink-0"></div>
-                      <span className="text-sm sm:text-base text-gray-700 font-medium">
-                        {feature}
-                      </span>
-                    </motion.div>
-                  ))}
-                </motion.div>
-
-                {/* Simple Progress indicators */}
-                <motion.div 
-                  className="flex justify-center lg:justify-start space-x-2 pt-4 md:pt-6"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.6 }}
-                >
-                  {appScreens.map((_, index) => (
-                    <div
-                      key={index}
-                      className={`h-1 rounded-full transition-all duration-300 ${
-                        index === currentScreen 
-                          ? 'w-8 bg-gray-800' 
+              <div className="space-y-16">
+                {appScreens.map((screen, index) => (
+                  <motion.div
+                    key={screen.id}
+                    className={`text-section ${index === currentScreen ? 'active' : ''}`}
+                    initial={{ opacity: 0, y: 100 }}
+                    animate={{ 
+                      opacity: index <= currentScreen ? 1 : 0.3,
+                      y: index <= currentScreen ? 0 : 50
+                    }}
+                    transition={{ 
+                      duration: 0.8, 
+                      delay: index * 0.3,
+                      ease: "easeOut"
+                    }}
+                  >
+                    {/* Section Number */}
+                    <div className="mb-6">
+                      <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all duration-300 ${
+                        index === currentScreen
+                          ? 'border-purple-600 bg-purple-600 text-white shadow-lg'
                           : index < currentScreen
-                            ? 'w-6 bg-gray-800'
-                            : 'w-4 bg-gray-300'
+                            ? 'border-purple-600 bg-purple-600 text-white'
+                            : 'border-gray-300 bg-white text-gray-400'
+                      }`}>
+                        <span className="text-lg font-semibold">{String(index + 1).padStart(2, '0')}</span>
+                      </div>
+                    </div>
+
+                    {/* Section Title */}
+                    <motion.h2 
+                      className={`text-2xl sm:text-3xl md:text-4xl font-bold leading-tight mb-4 transition-all duration-300 ${
+                        index === currentScreen ? 'text-purple-600' : 'text-gray-400'
                       }`}
-                    />
-                  ))}
-                </motion.div>
-              </motion.div>
+                    >
+                      {screen.title}
+                    </motion.h2>
+                    
+                    {/* Section Description */}
+                    <motion.p 
+                      className={`text-base sm:text-lg text-gray-600 leading-relaxed mb-6 transition-all duration-300 ${
+                        index === currentScreen ? 'text-gray-700' : 'text-gray-400'
+                      }`}
+                    >
+                      {screen.description}
+                    </motion.p>
+                    
+                    {/* Features list */}
+                    <motion.div 
+                      className={`space-y-3 transition-all duration-300 ${
+                        index === currentScreen ? 'opacity-100' : 'opacity-50'
+                      }`}
+                    >
+                      {screen.features.map((feature, featureIndex) => (
+                        <motion.div
+                          key={feature}
+                          className="flex items-center space-x-3"
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ 
+                            opacity: index === currentScreen ? 1 : 0.5,
+                            x: index === currentScreen ? 0 : 20
+                          }}
+                          transition={{ 
+                            duration: 0.4, 
+                            delay: index === currentScreen ? 0.5 + featureIndex * 0.1 : 0
+                          }}
+                        >
+                          {/* Bullet point */}
+                          <div className={`w-2 h-2 rounded-full flex-shrink-0 transition-all duration-300 ${
+                            index === currentScreen ? 'bg-purple-600' : 'bg-gray-400'
+                          }`}></div>
+                          <span className={`text-sm sm:text-base font-medium transition-all duration-300 ${
+                            index === currentScreen ? 'text-gray-700' : 'text-gray-400'
+                          }`}>
+                            {feature}
+                          </span>
+                        </motion.div>
+                      ))}
+                    </motion.div>
+
+                    {/* Action Button - only show for current section */}
+                    {index === currentScreen && (
+                      <motion.button
+                        className="mt-6 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.8 }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        Learn More
+                      </motion.button>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Simple Scroll indicator */}
+          {/* Scroll indicator */}
           <motion.div
             className="absolute bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 text-center"
             animate={{ y: [0, 8, 0] }}
@@ -446,27 +454,27 @@ const AppDevelopmentPage = () => {
         </div>
       </motion.section>
 
-      {/* App Development Science Section */}
-        <section className="py-32 px-6 bg-[#D6C3DF]">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
+        {/* App Development Science Section */}
+          <section className="py-32 px-6 bg-[#D6C3DF] overflow-hidden">
+          <div className="max-w-7xl mx-auto">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
               viewport={{ once: false, amount: 0.3 }}
-            variants={containerVariants}
-            className="text-center mb-20"
-          >
-            <motion.h2 
-              variants={itemVariants}
-              className="text-6xl md:text-7xl font-bold mb-6 animate-section"
+              variants={containerVariants}
+              className="text-center mb-20"
             >
-              MOBILE APP
-              <br />
-                <span className="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
-                DEVELOPMENT
-              </span>
-            </motion.h2>
-          </motion.div>
+              <motion.h2 
+                variants={itemVariants}
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 animate-section"
+              >
+                MOBILE APP
+                <br />
+                  <span className="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
+                  DEVELOPMENT
+                </span>
+              </motion.h2>
+            </motion.div>
 
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Content */}
@@ -475,15 +483,15 @@ const AppDevelopmentPage = () => {
               initial="hidden"
               whileInView="visible"
                 viewport={{ once: false, amount: 0.3 }}
-              className="space-y-8"
-            >
-              <motion.div variants={itemVariants} className="animate-section">
-                  <h3 className="text-3xl font-bold mb-6 text-purple-600">How do we build mobile apps?</h3>
-                  <AnimatedParagraph
-                    text="Bytes Platform crafts native and cross-platform mobile applications using cutting-edge technologies like React Native, Flutter, and Swift/Kotlin. From concept to deployment, we create apps that deliver exceptional user experiences across iOS and Android platforms, ensuring seamless performance and intuitive design."
-                    className="text-gray-600 text-lg leading-relaxed"
-                  />
-              </motion.div>
+                className="space-y-8"
+              >
+                <motion.div variants={itemVariants} className="animate-section">
+                    <h3 className="text-2xl sm:text-3xl font-bold mb-6 text-purple-600">How do we build mobile apps?</h3>
+                    <AnimatedParagraph
+                      text="Bytes Platform crafts native and cross-platform mobile applications using cutting-edge technologies like React Native, Flutter, and Swift/Kotlin. From concept to deployment, we create apps that deliver exceptional user experiences across iOS and Android platforms, ensuring seamless performance and intuitive design."
+                      className="text-gray-600 text-base sm:text-lg leading-relaxed"
+                    />
+                </motion.div>
 
               {/* App Development Process Image */}
               <motion.div 
@@ -506,58 +514,58 @@ const AppDevelopmentPage = () => {
               initial={{ opacity: 0, x: 100 }}
               whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: false, amount: 0.3 }}
-              transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] as const }}
-              className="relative"
-            >
-                <div className="bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl p-0 w-80 md:w-96 aspect-[2/3] flex items-center justify-center border border-purple-300/30 overflow-hidden">
-                  <Image
-                    src="/assets/app-img-2.png"
-                    alt="Mobile app launch illustration"
-                    width={1024}
-                    height={1536}
-                    className="object-contain w-full h-full"
-                  />
-              </div>
-              
-              {/* Floating Elements */}
-              <motion.div
-                animate={{ 
-                  y: [0, -20, 0],
-                  rotate: [0, 5, 0]
-                }}
-                transition={{ 
-                  duration: 6,
-                  repeat: Infinity,
-                  ease: [0.42, 0, 0.58, 1] as const
-                }}
-                  className="absolute -top-4 -right-4 w-16 h-16 bg-purple-300/30 rounded-full border border-purple-300/40"
-              />
-              
-              <motion.div
-                animate={{ 
-                  y: [0, 15, 0],
-                  rotate: [0, -3, 0]
-                }}
-                transition={{ 
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: [0.42, 0, 0.58, 1] as const,
-                  delay: 1
-                }}
-                  className="absolute -bottom-6 -left-6 w-12 h-12 bg-purple-200/40 rounded-full border border-purple-300/40"
-              />
-            </motion.div>
+                transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] as const }}
+                className="relative"
+              >
+                  <div className="bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl p-0 w-64 sm:w-80 md:w-96 aspect-[2/3] flex items-center justify-center border border-purple-300/30 overflow-hidden">
+                    <Image
+                      src="/assets/app-img-2.png"
+                      alt="Mobile app launch illustration"
+                      width={1024}
+                      height={1536}
+                      className="object-contain w-full h-full"
+                    />
+                </div>
+                
+                {/* Floating Elements */}
+                <motion.div
+                  animate={{ 
+                    y: [0, -20, 0],
+                    rotate: [0, 5, 0]
+                  }}
+                  transition={{ 
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: [0.42, 0, 0.58, 1] as const
+                  }}
+                    className="absolute -top-4 -right-4 w-12 h-12 sm:w-16 sm:h-16 bg-purple-300/30 rounded-full border border-purple-300/40"
+                />
+                
+                <motion.div
+                  animate={{ 
+                    y: [0, 15, 0],
+                    rotate: [0, -3, 0]
+                  }}
+                  transition={{ 
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: [0.42, 0, 0.58, 1] as const,
+                    delay: 1
+                  }}
+                    className="absolute -bottom-6 -left-6 w-8 h-8 sm:w-12 sm:h-12 bg-purple-200/40 rounded-full border border-purple-300/40"
+                />
+              </motion.div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Features Grid Section */}
-        <section className="py-32 px-6 bg-[#E1E1E1]">
-        <div className="max-w-7xl mx-auto">
-          <motion.h2 
-            className="text-5xl md:text-6xl font-bold text-center mb-20 animate-section"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
+        {/* Features Grid Section */}
+          <section className="py-32 px-6 bg-[#E1E1E1] overflow-hidden">
+          <div className="max-w-7xl mx-auto">
+            <motion.h2 
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-20 animate-section"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: false }}
             transition={{ duration: 0.8 }}
           >
