@@ -80,7 +80,7 @@ function App() {
                                 {
                                   title: "Frontend Engineer",
                                   image: img1,
-                                  location: "Remote / Pakistan",
+                                  location: "On-site",
                                   type: "Full-time",
                                   requirements: [
                                     "3+ years React / Next.js",
@@ -91,7 +91,7 @@ function App() {
                                 {
                                   title: "Backend Engineer",
                                   image: img2,
-                                  location: "Remote / Pakistan",
+                                  location: "On-site",
                                   type: "Full-time",
                                   requirements: [
                                     "3+ years Node.js / TypeScript",
@@ -102,7 +102,7 @@ function App() {
                                 {
                                   title: "UI / UX Designer",
                                   image: img3,
-                                  location: "Remote",
+                                  location: "On-site",
                                   type: "Contract",
                                   requirements: [
                                     "Proficient in Figma / Adobe XD",
@@ -113,7 +113,7 @@ function App() {
                                 {
                                   title: "Digital Marketer",
                                   image: img4,
-                                  location: "Lahore",
+                                  location: "On-site",
                                   type: "Internship",
                                   requirements: [
                                     "Knowledge of SEO & SEM",
@@ -124,7 +124,7 @@ function App() {
                                 {
                                   title: "Cloud DevOps",
                                   image: img2,
-                                  location: "Remote",
+                                  location: "On-site",
                                   type: "Full-time",
                                   requirements: [
                                     "IaC (Terraform/CDK)",
@@ -135,7 +135,7 @@ function App() {
                                 {
                                   title: "Project Manager",
                                   image: img3,
-                                  location: "Hybrid",
+                                  location: "On-site",
                                   type: "Full-time",
                                   requirements: [
                                     "5+ years managing software teams",

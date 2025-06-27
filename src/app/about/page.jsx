@@ -390,7 +390,7 @@ export default function AboutPage() {
           >
             <div className="inline-block">
               <motion.h1 
-                className="text-6xl md:text-8xl lg:text-9xl font-black bg-gradient-to-r from-gray-900 via-blue-600 to-purple-600 bg-clip-text text-transparent leading-tight"
+                className="text-6xl md:text-8xl lg:text-9xl font-black bg-gradient-to-r from-gray-900 via-[#010a14] to-purple-600 bg-clip-text text-transparent leading-tight"
                 animate={{ 
                   backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
                 }}

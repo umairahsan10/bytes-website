@@ -72,7 +72,7 @@ const AdvancedServicesPage: React.FC = () => {
       {/* Hero Section */}
       <section 
         ref={heroRef}
-        className="relative h-screen flex items-center justify-center overflow-hidden bg-gray-900"
+        className="relative h-screen flex items-center justify-center overflow-hidden bg-[#010a14]"
         aria-label="Hero section"
       >
         {/* Background Image */}
@@ -89,19 +89,19 @@ const AdvancedServicesPage: React.FC = () => {
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-indigo-600 via-purple-700 to-violet-800 bg-clip-text text-transparent mb-6 animate-[pulse_1.5s_ease-in-out_1] hover:scale-105 transition-all duration-700 ease-in-out">
             Advanced Services
           </h1>
-          <p className="text-xl md:text-2xl lg:text-3xl text-gray-700 font-light max-w-4xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl lg:text-3xl text-white font-light max-w-4xl mx-auto leading-relaxed">
             Transforming businesses through cutting-edge technology solutions and data-driven innovation
           </p>
         </div>
       </section>
 
       {/* Data & Analytics Section */}
-      <section className="relative py-20 bg-white animate-section overflow-hidden" aria-labelledby="data-analytics-heading">
+      <section className="relative min-h-screen pt-32 pb-32 bg-white animate-section overflow-hidden" aria-labelledby="data-analytics-heading">
         {/* Background Circle */}
         <div className="absolute top-10 right-10 w-96 h-96 bg-blue-100/30 rounded-full blur-3xl -z-10"></div>
         <div className="absolute bottom-20 left-20 w-64 h-64 bg-cyan-100/40 rounded-full blur-2xl -z-10"></div>
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           {/* First Subsection - Overview */}
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-20">
             <div className="animate-content" data-fade="left">
@@ -136,9 +136,9 @@ const AdvancedServicesPage: React.FC = () => {
           {/* Second Subsection - Sub-services Cards */}
           <div 
             ref={cardsRef}
-            className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-8 lg:p-12"
+            className="bg-[#09122C] text-white rounded-2xl p-8 lg:p-12"
           >
-            <h3 className="text-3xl font-bold text-gray-900 mb-12 text-center">
+            <h3 className="text-3xl font-bold mb-12 text-center">
               Our Data & Analytics Services
             </h3>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
@@ -150,10 +150,10 @@ const AdvancedServicesPage: React.FC = () => {
                   tabIndex={0}
                   aria-label={`${service.title} service details`}
                 >
-                  <h4 className="text-xl font-semibold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors">
+                  <h4 className="text-xl font-semibold text-gray-900 mb-4 group-hover:text-[#09122C] transition-colors">
                     {service.title}
                   </h4>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-gray-600 leading-relaxed dark:text-blue-100">
                     {service.description}
                   </p>
                 </div>
@@ -165,7 +165,7 @@ const AdvancedServicesPage: React.FC = () => {
 
       {/* Security Section */}
       <section 
-        className="relative py-20 bg-gradient-to-br from-blue-50 to-indigo-50 animate-section overflow-hidden"
+        className="relative min-h-screen py-20 bg-[#09122C] text-white animate-section overflow-hidden"
         aria-labelledby="security-heading"
       >
         {/* Background Circles */}
@@ -188,16 +188,16 @@ const AdvancedServicesPage: React.FC = () => {
             <div className="animate-content" data-fade="right">
               <h2 
                 id="security-heading"
-                className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight"
+                className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight"
               >
                 Cybersecurity Solutions
               </h2>
-              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+              <p className="text-lg text-gray-300 mb-6 leading-relaxed">
                 Protect your digital assets with comprehensive cybersecurity solutions designed 
                 for the modern threat landscape. Our multi-layered security approach ensures 
                 your business remains resilient against evolving cyber threats.
               </p>
-              <p className="text-lg text-gray-600 leading-relaxed">
+              <p className="text-lg text-gray-300 leading-relaxed">
                 From threat detection and incident response to compliance management and 
                 security awareness training, we provide end-to-end protection that scales 
                 with your business needs.
@@ -250,7 +250,7 @@ const AdvancedServicesPage: React.FC = () => {
       </section>
 
       {/* Call to Action Section */}
-      <section className="relative py-16 overflow-hidden">
+      <section className="relative py-16 pb-24 overflow-hidden bg-[#09122C] text-white">
         {/* Background Wallpaper */}
         <Image
           src="/assets/wallpaper.jpg"
@@ -260,22 +260,22 @@ const AdvancedServicesPage: React.FC = () => {
           className="object-cover object-center fixed inset-0 z-0"
         />
         {/* Overlay for readability */}
-        <div className="absolute inset-0 bg-white/70 z-0" />
+        <div className="absolute inset-0 bg-[#09122C]/70 z-0" />
         
         {/* Background Circles */}
-        <div className="absolute top-8 left-8 w-72 h-72 bg-blue-200/20 rounded-full blur-3xl z-0"></div>
+        <div className="absolute top-8 left-8 w-72 h-72 bg-[#09122C]/20 rounded-full blur-3xl z-0"></div>
         <div className="absolute bottom-8 right-8 w-64 h-64 bg-cyan-200/25 rounded-full blur-2xl z-0"></div>
 
         {/* Content */}
         <div className="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
+          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
             Ready to Transform Your Business?
           </h2>
-          <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+          <p className="text-xl text-gray-300 mb-8 leading-relaxed">
             Let's discuss how our advanced services can accelerate your digital transformation journey.
           </p>
           <button
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
+            className="bg-[#09122C] hover:bg-[#0C1A40] text-white font-semibold py-4 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#19274D]"
             aria-label="Get started with advanced services"
           >
             Get Started Today
