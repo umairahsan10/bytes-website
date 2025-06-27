@@ -14,6 +14,7 @@ import { ContactSection } from "@/sections/Contact";
 import CardsSection from "@/sections/CardsSection";
 import { LoadingPage } from "@/sections/LoadingPage";
 import { LineAnimationSection } from "@/sections/LineAnimationSection";
+import { BrandsSection } from "@/sections/brands";
 
 
 export default function Home() {
@@ -29,16 +30,17 @@ export default function Home() {
             <HeroSection key="hero" />,
             <ByteBotsSection key="bytebots" />,
             <ProjectsSection key="projects" />,
-            <TapeSection key="tape" />,
-            <TestimonialsSection key="testimonials" />,
+            // <TapeSection key="tape" />,
+            <BrandsSection key="brands" />,
             <LineAnimationSection key="line" />,
             <CardsSection key="cards" />,
             <BookSection key="book" />,
+            <TestimonialsSection key="testimonials" />,
             <ContactSection key="contact" />,
           ].map((Section, idx) => (
             <div
               key={idx}
-              className={`w-full ${idx % 2 === 0 ? 'bg-white text-black' : 'bg-blue-700 text-white'}`}
+              className={`w-full`}
             >
               {Section}
             </div>

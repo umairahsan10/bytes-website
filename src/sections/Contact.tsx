@@ -1,67 +1,111 @@
-'use client';
+"use client";
 
-import { motion, Variants } from 'framer-motion';
-import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg"
-import grainImage from "@/assets/images/grain.jpg"
-import { SectionHeader } from "@/components/SectionHeader";
-import Link from 'next/link';
+import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLocationDot, faEnvelope, faPhoneVolume } from '@fortawesome/free-solid-svg-icons';
+import { faFacebookF, faTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+import "./contact.css";
+import Image from 'next/image';
 
-const containerVariants: Variants = {
-  hidden: { opacity: 0, y: 80, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] },
-  },
-};
+function Contact() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
 
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 40, rotateX: -10, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    rotateX: 0,
-    scale: 1,
-    transition: { duration: 0.9, ease: [0.34, 1.56, 0.64, 1] },
-  },
-};
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({ ...prevState, [name]: value }));
+  };
 
-export const ContactSection = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log('Form submitted:', formData);
+    // Here you would typically send the form data to your backend
+  };
+
   return (
-    <motion.div
-      id="contact"
-      className="py-16 pt-12 lg:py-24 lg:pt-20"
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: false, amount: 0.3 }}
-    >
-      <div className="container mx-auto">
-        <motion.div
-          variants={cardVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false, amount: 0.4 }}
-          className="bg-gradient-to-r from-emerald-300 to-sky-400 text-gray-900 py-8 px-10 rounded-3xl text-center md:text-left relative z-0"
-        >
-          <div className="absolute inset-0 opacity-5 -z-10" style={{ backgroundImage: `url(${grainImage.src})` }}></div>
-          <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center">
-            <div>
-              <h2 className="font-serif text-2xl md:text-3xl">Let&apos;s create something amazing together</h2>
-              <p className=" text-sm md:text-base mt-2">Ready to bring your next project to life? Let&apos;s connect and discuss how I can help you achieve your goals</p>
+    <>
+     
+      {/* Contact Form Section */}
+      <div className='mt-20 bg-white'>
+        <div className="container1">
+          <span className="big-circle"></span>
+          <img src="img/shape.png" className="square" alt="" />
+          <div className="form">
+            <div className="contact-info">
+              <h3 className="title">Let's get in touch</h3>
+              <p className="text">
+              We'd love to hear from you! Whether you have a question, feedback, or just want to chat, feel free to reach out. Contact us through the form below or via our social media channels.  
+              </p>
+
+              <div className="info">
+                <div className="information">
+                  <FontAwesomeIcon icon={faLocationDot} className="icon" />
+                  <p>92 Cherry Drive Uniondale, NY 11553</p>
+                </div>
+                <div className="information">
+                  <FontAwesomeIcon icon={faEnvelope} className="icon" />
+                  <p>lorem@ipsum.com</p>
+                </div>
+                <div className="information">
+                  <FontAwesomeIcon icon={faPhoneVolume} className="icon" />
+                  <p>123-456-789</p>
+                </div>
+              </div>
+
+              <div className="social-media">
+                <p>Connect with us :</p>
+                <div className="social-icons">
+                  <a href="#">
+                    <FontAwesomeIcon icon={faFacebookF} />
+                  </a>
+                  <a href="#">
+                    <FontAwesomeIcon icon={faTwitter} />
+                  </a>
+                  <a href="#">
+                    <FontAwesomeIcon icon={faInstagram} />
+                  </a>
+                  <a href="#">
+                    <FontAwesomeIcon icon={faLinkedinIn} />
+                  </a>
+                </div>
+              </div>
             </div>
-            <div className="ml-auto">
-              <Link href="/contact" passHref>
-                <button className="text-white bg-gray-900 inline-flex items-center px-8 md:px-10 h-14 md:h-16 rounded-2xl gap-3 w-max border-2 border-gray-900 text-base md:text-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer">
-                  <span className="font-semibold">Contact me</span>
-                  <ArrowUpRightIcon className="size-5" />
-                </button>
-              </Link>
+
+            <div className="contact-form">
+              <span className="circle one"></span>
+              <span className="circle two"></span>
+
+              <form className="sub-form" action="index.html" autoComplete="off" onSubmit={handleSubmit}>
+                <h3 className="title">Contact us</h3>
+                <div className="input-container">
+                  <input type="text" name="name" className="input" onChange={handleChange} />
+                  <label htmlFor="">Username</label>
+                </div>
+                <div className="input-container">
+                  <input type="email" name="email" className="input" onChange={handleChange} />
+                  <label htmlFor="">Email</label>
+                </div>
+                <div className="input-container">
+                  <input type="tel" name="phone" className="input" onChange={handleChange} />
+                  <label htmlFor="">Phone</label>
+                </div>
+                <div className="input-container textarea">
+                  <textarea name="message" className="input" onChange={handleChange}></textarea>
+                  <label htmlFor="">Message</label>
+                </div>
+                <input type="submit" value="Send" className="btn" />
+              </form>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
-    </motion.div>
+    </>
   );
-};
+}
+
+export default Contact;
+export const ContactSection = Contact;

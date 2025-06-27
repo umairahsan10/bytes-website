@@ -35,4 +35,12 @@ declare module "*.glb" {
 declare module "*.mp3" {
   const src: string;
   export default src;
+}
+
+// Declaration for Spline React component when used in Next.js
+// This prevents TypeScript errors when importing from '@splinetool/react-spline/next'.
+declare module '@splinetool/react-spline/next' {
+  import { ComponentType } from 'react';
+  const Spline: ComponentType<{ scene: string; className?: string }>;
+  export default Spline;
 } 

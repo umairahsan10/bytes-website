@@ -123,7 +123,7 @@ export const AboutSection = () => {
     const opacity = scrollProgress; // From 0 to 1
 
     return (
-        <div ref={sectionRef} id="about" className="py-20 lg:py-28">
+        <div ref={sectionRef} id="about" className="py-20 lg:py-28 bg-[#010a14]">
             <div className="container">  
             <SectionHeader 
                 eyebrow="About Me" 

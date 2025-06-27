@@ -1,55 +1,62 @@
 'use client';
 
-import memojiImage from "@/assets/images/memoji-computer.png";
-import Image from "next/image";
-import ArrowDown from "@/assets/icons/arrow-down.svg";
-import StarIcon from "@/assets/icons/star.svg";
-import SparkleIcon from "@/assets/icons/sparkle.svg";
-import { HeroOrbit } from "@/components/HeroOrbit";
-// import { Scene3D } from "@/components/Scene3D";
+import { motion } from 'framer-motion';
+import Spline from '@splinetool/react-spline';
+import { useRef, useEffect } from 'react';
 
 export const HeroSection = () => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const splineAppRef = useRef<any | null>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          splineAppRef.current?.play();
+          observer.unobserve(entry.target);
+        }
+      });
+    });
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
-    <div id="home" className="relative overflow-hidden min-h-screen">
-      {/* Video and 3D Scene */}
-      {/* <div className="absolute inset-0 z-0">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          className="absolute top-0 left-0 w-full h-full object-cover opacity-50"
-          onError={(e) => console.error('Video error:', e)}
-        >
-          <source src="/hong-kong.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        <Scene3D />
-      </div> */}
+    <section className="bg-[#010a14] w-full h-screen flex flex-col md:flex-row items-center md:justify-between px-4 sm:px-6 md:px-12 lg:px-24 pt-24 pb-16 md:py-28 gap-y-12 md:gap-y-0">
+      {/* Left Section */}
+      <motion.div
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        className="w-full md:flex-1 text-center md:text-left"
+      >
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
+          Empowering Innovation
+        </h1>
+        <p className="mt-4 text-base sm:text-lg md:text-xl lg:text-2xl text-[#f0f0f0] max-w-lg mx-auto md:mx-0">
+          Transform your ideas into reality with our cutting-edge digital solutions.
+        </p>
+      </motion.div>
 
-      {/* Overlay gradient */}
-      <div className="absolute inset-0 z-10 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_70%,transparent)]" />
-
-      {/* Main Content */}
-      <div className="relative z-20 py-32 md:py-48 lg:py-60 container">
-        <div className="flex flex-col items-center">
-          {/* <Image src={memojiImage} className="size-[100px]" alt="Person peeking from behind laptop" /> */}
-          <div className="px-4 py-1.5 inline-flex gap-4 rounded-lg items-center">
-            {/* <div className="text-sm font-medium">Available for new Projects</div> */}
-          </div>
-        </div>
-
-        <div className="max-w-4xl md:max-w-5xl lg:max-w-6xl mx-auto">
-          <p className="text-center text-white/90 mt-4 text-3xl md:text-4xl lg:text-5xl font-extrabold leading-relaxed">
-            We deliver cutting-edge solutions across diverse industries, transforming businesses with innovative technology.
-          </p>
-        </div>
-
-        <div className="flex flex-col md:flex-row justify-center items-center mt-8 gap-4">
-          {/* Buttons here if needed */}
-        </div>
+      {/* Right Section */}
+      <div
+        ref={containerRef}
+        className="w-full md:flex-1 h-48 sm:h-60 md:h-[450px] lg:h-[550px] xl:h-[650px]"
+      >
+        <Spline
+          scene="https://prod.spline.design/ZbwLTUMOYxeHDpVi/scene.splinecode"
+          renderOnDemand
+          onLoad={(app) => {
+            splineAppRef.current = app;
+          }}
+        />
       </div>
-    </div>
+    </section>
   );
 };
