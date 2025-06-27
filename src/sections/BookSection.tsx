@@ -148,8 +148,8 @@ export const BookSection = () => {
   }, [page, scrollFlipDone, scrollReady, setPage]);
 
   return (
-    <div id="technologies" className="py-20 lg:py-28" ref={sectionRef}>
-      <div className="container">
+    <div id="technologies" className="py-20 lg:py-28 bg-[#010a14]" ref={sectionRef}>
+      <div className="container text-white">
         <SectionHeader
           eyebrow="Interactive Book"
           title="Explore Our Story"

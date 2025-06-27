@@ -149,3 +149,17 @@ a[aria-label="Built with Spline"] {
       height: 100%;
   }
 }
+
+/* Horizontal scrolling for brands */
+@keyframes brands-scroll {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.brands-scroll {
+  animation: brands-scroll 60s linear infinite;
+}
+
+.brands-scroll:hover {
+  animation-play-state: paused;
+}

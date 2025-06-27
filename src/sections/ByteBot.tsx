@@ -85,10 +85,10 @@ export const ByteBotsSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="bytebots-section relative text-black py-1 md:py-0 overflow-hidden"
+      className="bytebots-section relative text-black bg-white py-[50px] md:py-0 overflow-hidden"
     >
       {/* Centered purple flower background */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+      <div className="pointer-events-none absolute inset-x-0 X sm:inset-0 flex items-center justify-center">
         <Image
           src="/purple%20flower.jpg"
           alt="Purple flower background"
@@ -96,16 +96,16 @@ export const ByteBotsSection = () => {
           className="object-contain w-full h-full max-w-[600px] opacity-30"
         />
       </div>
-      <div className="container mx-auto flex flex-col md:flex-row items-center gap-10 px-4 md:px-6 lg:px-8">
+      <div className="container mx-auto flex flex-col md:flex-row items-center gap-y-12 md:gap-x-10 px-4 sm:px-6 lg:px-8">
         {/* Left – Text */}
-        <div className="flex-1 max-w-xl">
-          <h2 className="bytebots-heading text-4xl md:text-5xl font-extrabold mb-4 leading-tight">
+        <div className="flex-1 max-w-xl text-center md:text-left">
+          <h2 className="bytebots-heading text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 leading-tight">
             Meet <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-violet-500">Byte&nbsp;Bot</span>
           </h2>
-          <h3 className="bytebots-subheading text-2xl md:text-3xl font-semibold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
+          <h3 className="bytebots-subheading text-xl sm:text-2xl md:text-3xl font-semibold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
             Your personal AI powerhouse
           </h3>
-          <p className="bytebots-text text-lg leading-relaxed mb-6 text-gray-700 dark:text-gray-300">
+          <p className="bytebots-text text-base sm:text-lg leading-relaxed mb-6 text-gray-700 dark:text-gray-300">
             Byte&nbsp;Bot is our innovative AI solution ready to super-charge your
             business. From intelligent chat support to content generation and
             data insights, Byte&nbsp;Bot adapts to your needs and learns with
@@ -120,7 +120,7 @@ export const ByteBotsSection = () => {
         </div>
 
         {/* Right – 3-D Bot */}
-        <div className="flex-1 w-full max-w-2xl lg:max-w-3xl h-[550px] md:h-[750px]">
+        <div className="flex-1 w-full max-w-2xl lg:max-w-3xl h-64 sm:h-72 md:h-[550px] lg:h-[700px]">
           <canvas
             ref={canvasRef}
             id="bytebots-canvas"
