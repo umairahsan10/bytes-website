@@ -454,7 +454,7 @@ const WebDevelopmentLanding = () => {
       </section>
 
       {/* Call To Action Section */}
-      <section className="relative overflow-hidden py-24 bg-gradient-to-r from-blue-600 to-blue-800 text-white text-center">
+      <section className="relative overflow-hidden py-24 bg-gradient-to-r from-gray-600 to-gray-800 text-white text-center">
         {/* Background image */}
         <div
           className="absolute inset-0 bg-center bg-cover opacity-20 pointer-events-none"
