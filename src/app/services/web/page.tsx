@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from "next/image";
 import { Header } from "@/sections/Navbar";
-import { Footer } from "@/sections/Footer";
 import Link from "next/link";
 // @ts-ignore – lucide-react icons (ensure dependency installed in runtime)
 import { ChevronDown, Menu, X, Code, Zap, Users, Award, ArrowRight, Star, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Play, Smartphone, Monitor, Database, Cloud, Globe, Layers } from 'lucide-react';
@@ -454,8 +453,27 @@ const WebDevelopmentLanding = () => {
         </div>
       </section>
 
-      {/* Site Footer */}
-      <Footer />
+      {/* Call To Action Section */}
+      <section className="relative overflow-hidden py-24 bg-gradient-to-r from-blue-600 to-blue-800 text-white text-center">
+        {/* Background image */}
+        <div
+          className="absolute inset-0 bg-center bg-cover opacity-20 pointer-events-none"
+          // style={{ backgroundImage: "url('/assets/img-2.jpg')" }}
+        />
+
+        {/* Content */}
+        <div className="relative z-10 container mx-auto px-6">
+          <h2 className="text-4xl lg:text-5xl font-bold mb-8">
+            Ready to&nbsp;<span className="text-blue-200">build with us?</span>
+          </h2>
+          <Link
+            href="/contact"
+            className="inline-block px-10 py-4 bg-white text-blue-700 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+          >
+            Contact&nbsp;Us
+          </Link>
+        </div>
+      </section>
 
       {/* Modal Overlay */}
       {selectedService && (
