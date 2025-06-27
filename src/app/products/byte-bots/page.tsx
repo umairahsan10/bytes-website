@@ -315,7 +315,7 @@ const ByteBotLanding: React.FC = () => {
   };
 
   return (
-    <div className="font-inter overflow-x-hidden bg-black">
+    <div className="font-inter overflow-x-hidden bg-white">
       <Header />
       <style jsx>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
@@ -503,17 +503,14 @@ const ByteBotLanding: React.FC = () => {
         }
         
         @media (max-width: 768px) {
+          /* Keep horizontal scrolling on mobile */
           .horizontal-sections {
-            flex-direction: column;
-            width: 100vw;
-            height: auto;
+            flex-direction: row; /* override earlier rule */
+            width: 400vw;
           }
-          
           .content-section {
             width: 100vw;
-            min-height: auto;
-            flex-direction: column;
-            padding: 40px 20px;
+            min-height: 100vh;
           }
           
           .mobile-full-width {
@@ -528,6 +525,16 @@ const ByteBotLanding: React.FC = () => {
           .container {
             padding-left: 1rem;
             padding-right: 1rem;
+          }
+          .content-section h2 {
+            font-size: 2rem !important;
+            line-height: 1.2;
+          }
+          .content-section p {
+            font-size: 1rem !important;
+          }
+          .section-image {
+            height: 48vw !important;
           }
         }
         
@@ -617,8 +624,8 @@ const ByteBotLanding: React.FC = () => {
           {/* Section 1: Plug & Play Integrations */}
           <div className="content-section">
             <div className="container mx-auto px-6">
-              <div className="flex items-center justify-between">
-                <div className="w-1/2 pr-12 mobile-full-width">
+              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8">
+                <div className="w-full lg:w-1/2 pr-12 mobile-full-width">
                   <h2 className="text-5xl font-bold text-gray-900 mb-6">
                     <span className="bubble-text">Plug</span>{' '}
                     <span className="bubble-text">&</span>{' '}
@@ -667,7 +674,7 @@ const ByteBotLanding: React.FC = () => {
                   </ul>
                 </div>
                 
-                <div className="w-1/2 mobile-full-width">
+                <div className="w-full lg:w-1/2 mobile-full-width">
                   <img 
                     src="/bots/alex-knight-2EJCSULRwC8-unsplash.jpg" 
                     alt="Integration Dashboard" 
@@ -681,8 +688,8 @@ const ByteBotLanding: React.FC = () => {
           {/* Section 2: Conversion Engine */}
           <div className="content-section">
             <div className="container mx-auto px-6">
-              <div className="flex items-center justify-between">
-                <div className="w-1/2 pr-12 mobile-full-width">
+              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8">
+                <div className="w-full lg:w-1/2 pr-12 mobile-full-width">
                   <h2 className="text-5xl font-bold text-gray-900 mb-6">
                     <span className="bubble-text gradient-text">Conversion</span>{' '}
                     <span className="bubble-text">Engine</span>
@@ -730,7 +737,7 @@ const ByteBotLanding: React.FC = () => {
                   </ul>
                 </div>
                 
-                <div className="w-1/2 mobile-full-width">
+                <div className="w-full lg:w-1/2 mobile-full-width">
                   <img 
                     src="/bots/mohamed-nohassi-2iUrK025cec-unsplash.jpg" 
                     alt="Conversion Analytics" 
@@ -744,8 +751,8 @@ const ByteBotLanding: React.FC = () => {
           {/* Section 3: Data-Driven Intelligence */}
           <div className="content-section">
             <div className="container mx-auto px-6">
-              <div className="flex items-center justify-between">
-                <div className="w-1/2 pr-12 mobile-full-width">
+              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8">
+                <div className="w-full lg:w-1/2 pr-12 mobile-full-width">
                   <h2 className="text-5xl font-bold text-gray-900 mb-6">
                     <span className="bubble-text">Data-Driven</span>{' '}
                     <span className="bubble-text gradient-text">Intelligence</span>
@@ -792,7 +799,7 @@ const ByteBotLanding: React.FC = () => {
                   </ul>
                 </div>
                 
-                <div className="w-1/2 mobile-full-width">
+                <div className="w-full lg:w-1/2 mobile-full-width">
                   <img 
                     src="/bots/mohamed-nohassi-9Ge8ngH6JeQ-unsplash.jpg" 
                     alt="Data Intelligence Dashboard" 
@@ -806,8 +813,8 @@ const ByteBotLanding: React.FC = () => {
           {/* Section 4: Continuous Learning & Compliance */}
           <div className="content-section">
             <div className="container mx-auto px-6">
-              <div className="flex items-center justify-between">
-                <div className="w-1/2 pr-12 mobile-full-width">
+              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8">
+                <div className="w-full lg:w-1/2 pr-12 mobile-full-width">
                   <h2 className="text-5xl font-bold text-gray-900 mb-6">
                     <span className="bubble-text">Continuous</span>{' '}
                     <span className="bubble-text">Learning</span>{' '}
@@ -855,7 +862,7 @@ const ByteBotLanding: React.FC = () => {
                   </ul>
                 </div>
                 
-                <div className="w-1/2 mobile-full-width">
+                <div className="w-full lg:w-1/2 mobile-full-width">
                   <img 
                     src="/bots/yuyang-liu-dp9Jrww_BRs-unsplash.jpg" 
                     alt="AI Learning System" 
