@@ -6,6 +6,7 @@ import { motion, useInView, useAnimation, Variants } from 'framer-motion';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from 'next/image';
+import { Header } from '@/sections/Navbar';
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
@@ -282,6 +283,11 @@ const SEOPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white text-black overflow-hidden">
+      {/* Navbar */}
+      <div className="fixed top-0 left-0 w-full z-50">
+        <Header />
+      </div>
+
       {/* Hero Section */}
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center bg-white">
         {/* Background Elements */}
