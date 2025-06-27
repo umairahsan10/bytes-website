@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -16,6 +16,8 @@ const contactImg = "/assets/career-contact.jpg";
 
 function App() {
     const [selectedJob, setSelectedJob] = useState(null);
+    const [scrollPos, setScrollPos] = useState(0);
+    const contactRef = useRef(null);
 
     return (
         <div className="w-full min-h-screen overflow-x-hidden">
@@ -81,7 +83,7 @@ function App() {
                                   title: "Frontend Engineer",
                                   image: img1,
                                   location: "On-site",
-                                  type: "Full-time",
+                                  type: "Internship / Full-time",
                                   requirements: [
                                     "3+ years React / Next.js",
                                     "Strong CSS / Tailwind",
@@ -92,7 +94,7 @@ function App() {
                                   title: "Backend Engineer",
                                   image: img2,
                                   location: "On-site",
-                                  type: "Full-time",
+                                  type: "Internship / Full-time",
                                   requirements: [
                                     "3+ years Node.js / TypeScript",
                                     "Familiar with micro-services & REST",
@@ -103,7 +105,7 @@ function App() {
                                   title: "UI / UX Designer",
                                   image: img3,
                                   location: "On-site",
-                                  type: "Contract",
+                                  type: "Internship / Full-time",
                                   requirements: [
                                     "Proficient in Figma / Adobe XD",
                                     "Solid portfolio of web & mobile apps",
@@ -114,7 +116,7 @@ function App() {
                                   title: "Digital Marketer",
                                   image: img4,
                                   location: "On-site",
-                                  type: "Internship",
+                                  type: "Internship / Full-time",
                                   requirements: [
                                     "Knowledge of SEO & SEM",
                                     "Hands-on with social media ads",
@@ -125,7 +127,7 @@ function App() {
                                   title: "Cloud DevOps",
                                   image: img2,
                                   location: "On-site",
-                                  type: "Full-time",
+                                  type: "Internship / Full-time",
                                   requirements: [
                                     "IaC (Terraform/CDK)",
                                     "CI/CD pipelines (GitHub Actions)",
@@ -136,7 +138,7 @@ function App() {
                                   title: "Project Manager",
                                   image: img3,
                                   location: "On-site",
-                                  type: "Full-time",
+                                  type: "Internship / Full-time",
                                   requirements: [
                                     "5+ years managing software teams",
                                     "Agile / Scrum mastery",
@@ -181,25 +183,18 @@ function App() {
                                                 <p className="text-gray-600 text-xs sm:text-sm md:text-base group-hover:text-gray-700 transition-colors duration-300">{job.location}</p>
                                                 <span className="inline-block mt-2 px-2 sm:px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full border border-blue-200 group-hover:bg-blue-200 group-hover:border-blue-300 transition-all duration-300">{job.type}</span>
                                             </div>
-                                            <p className="mt-3 sm:mt-4 text-blue-600 text-xs sm:text-sm font-medium opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-500 ease-out">View details →</p>
+                                            <p className="mt-3 sm:mt-4 text-blue-600 text-xs sm:text-sm font-medium transition-all duration-300 ease-out">View details →</p>
                                         </div>
                                     </motion.div>
                                 );
                             })}
                         </motion.div>
-                        
-                        {/* Extra spacing and call to action */}
-                        <div className="text-center pt-8 sm:pt-12">
-                            <p className="text-gray-500 text-sm">
-                                Can't find the right role? <a href="mailto:careers@company.com" className="text-blue-600 hover:text-blue-700 underline">Contact us</a> to discuss other opportunities.
-                            </p>
-                        </div>
                     </div>
                 </div>
             </section>
 
             {/* Contact Section */}
-            <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-gray-50 to-blue-50 md:min-h-screen md:flex md:items-center">
+            <section ref={contactRef} className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-gray-50 to-blue-50 md:min-h-screen md:flex md:items-center">
                 <div className="container mx-auto px-4">
                     <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center max-w-7xl mx-auto">
                         {/* Left side - Contact Form */}
@@ -417,9 +412,16 @@ function App() {
                                 <div className="pt-4 border-t border-gray-200">
                                     <p className="text-gray-600 mb-4 text-sm sm:text-base">Ready to join our team?</p>
                                     <div className="flex flex-col sm:flex-row gap-3">
-                                        <a href={`mailto:careers@bytes.com?subject=${encodeURIComponent(selectedJob.title)}%20Application`} className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-transform duration-300 hover:scale-105 text-sm sm:text-base">
+                                        <button
+                                            onClick={() => {
+                                                setSelectedJob(null);
+                                                // smooth scroll to contact form
+                                                contactRef.current?.scrollIntoView({ behavior: 'smooth' });
+                                            }}
+                                            className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-transform duration-300 hover:scale-105 text-sm sm:text-base"
+                                        >
                                             Apply Now<span className="text-base sm:text-lg">→</span>
-                                        </a>
+                                        </button>
                                         <button 
                                             onClick={() => setSelectedJob(null)}
                                             className="inline-flex items-center justify-center gap-2 border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-300 text-sm sm:text-base"
