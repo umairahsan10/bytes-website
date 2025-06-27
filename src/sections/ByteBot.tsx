@@ -105,7 +105,7 @@ export const ByteBotsSection = () => {
           <h3 className="bytebots-subheading text-xl sm:text-2xl md:text-3xl font-semibold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
             Your personal AI powerhouse
           </h3>
-          <p className="bytebots-text text-base sm:text-lg leading-relaxed mb-6 text-gray-700 dark:text-gray-300">
+          <p className="bytebots-text text-base sm:text-lg leading-relaxed mb-6 text-gray-900 dark:text-gray-500">
             Byte&nbsp;Bot is our innovative AI solution ready to super-charge your
             business. From intelligent chat support to content generation and
             data insights, Byte&nbsp;Bot adapts to your needs and learns with
