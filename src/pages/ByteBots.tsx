@@ -476,7 +476,7 @@ const ByteBotLanding: React.FC = () => {
       </section>
 
       {/* Horizontal Scrolling Sections */}
-      <div className="section-container bg-white relative overflow-hidden">
+      <div className="section-container relative overflow-hidden">
         <div className="horizontal-sections" ref={horizontalSectionsRef}>
           
           {/* Section 1: Plug & Play Integrations */}
@@ -535,7 +535,7 @@ const ByteBotLanding: React.FC = () => {
           </div>
           
           {/* Section 2: Conversion Engine */}
-          <div className="content-section bg-gray-50">
+          <div className="content-section">
             <div className="container mx-auto px-6">
               <div className="flex items-center justify-between">
                 <div className="w-1/2 pr-12 mobile-full-width">
@@ -641,7 +641,7 @@ const ByteBotLanding: React.FC = () => {
           </div>
           
           {/* Section 4: Continuous Learning & Compliance */}
-          <div className="content-section bg-gray-50">
+          <div className="content-section">
             <div className="container mx-auto px-6">
               <div className="flex items-center justify-between">
                 <div className="w-1/2 pr-12 mobile-full-width">
@@ -698,7 +698,7 @@ const ByteBotLanding: React.FC = () => {
       </div>
 
       {/* Call to Action Section */}
-      <section ref={ctaRef} id="cta" className="bg-white py-20">
+      <section ref={ctaRef} id="cta" className="py-20">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-5xl font-bold text-gray-900 mb-4">
             <span className="bubble-text">Ready</span>{' '}

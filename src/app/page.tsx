@@ -14,14 +14,13 @@ import { ContactSection } from "@/sections/Contact";
 import CardsSection from "@/sections/CardsSection";
 import { LoadingPage } from "@/sections/LoadingPage";
 import { LineAnimationSection } from "@/sections/LineAnimationSection";
-import { CareersSection } from "@/sections/Careers";
 
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
   return (
-    <main>
+    <main className="text-black min-h-screen">
       {isLoading && <LoadingPage onLoadComplete={() => setIsLoading(false)} />}
       {!isLoading && (
         <>
@@ -35,7 +34,6 @@ export default function Home() {
           {/* <AboutSection /> */}
           <CardsSection />
           <BookSection />
-          <CareersSection />
           <ContactSection />
           <Footer />
         </>
