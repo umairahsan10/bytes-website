@@ -65,30 +65,30 @@ if (typeof document !== 'undefined' && !document.getElementById('tech-effects-st
     @keyframes NeonGlow {
       0%, 100% { 
         text-shadow: 
-          0 0 2px #00ffff,
-          0 0 4px #00ffff,
-          0 0 6px #00ffff;
+          0 0 2px #0080ff,
+          0 0 4px #0080ff,
+          0 0 6px #0080ff;
       }
       50% { 
         text-shadow: 
-          0 0 1px #00ffff,
-          0 0 3px #00ffff,
-          0 0 5px #00ffff;
+          0 0 1px #0080ff,
+          0 0 3px #0080ff,
+          0 0 5px #0080ff;
       }
     }
     
     @keyframes CyberGlow {
       0%, 100% { 
         text-shadow: 
-          0 0 2px #ff00ff,
-          0 0 4px #ff00ff,
-          0 0 6px #ff00ff;
+          0 0 2px #0080ff,
+          0 0 4px #0080ff,
+          0 0 6px #0080ff;
       }
       50% { 
         text-shadow: 
-          0 0 1px #ff00ff,
-          0 0 3px #ff00ff,
-          0 0 5px #ff00ff;
+          0 0 1px #0080ff,
+          0 0 3px #0080ff,
+          0 0 5px #0080ff;
       }
     }
     
@@ -264,7 +264,7 @@ function VideoScroll() {
         { label: 'Active Users', value: '2M+' },
         { label: 'App Store Rating', value: '4.8★' }
       ],
-      image: '/app-dev.gif',
+      image: '/assets/video/app-dev.png',
     },
     {
       start: 32,
@@ -282,7 +282,7 @@ function VideoScroll() {
         { label: 'Lighthouse Score', value: '95+' },
         { label: 'Conversion Rate', value: '+40%' }
       ],
-      image: '/web-dev.gif',
+      image: '/assets/video/web-dev.png',
     },
     {
       start: 44,
@@ -300,7 +300,7 @@ function VideoScroll() {
         { label: 'Organic Traffic Growth', value: '+180%' },
         { label: 'Keywords Ranked', value: '1000+' }
       ],
-      image: '/seo.gif',
+      image: '/assets/video/seo.png',
     },
     {
       start: 56,
@@ -318,7 +318,7 @@ function VideoScroll() {
         { label: 'Follower Growth', value: '+150%' },
         { label: 'ROAS', value: '4.2x' }
       ],
-      image: '/smm.gif',
+      image: '/assets/video/smm.png',
     },
     {
       start: 68,
@@ -331,7 +331,7 @@ function VideoScroll() {
         'Custom proposal',
         '24/7 support'
       ],
-      image: '/contact.gif',
+      image: '/assets/video/contact.png',
     },
   ];
 
@@ -463,7 +463,7 @@ function VideoScroll() {
                     left: `${Math.random() * 100}%`,
                     width: '1px',
                     height: '20px',
-                    background: 'linear-gradient(to bottom, transparent, #00ffff, transparent)',
+                    background: 'linear-gradient(to bottom, transparent, #0080ff, transparent)',
                     animation: `DataStream ${3 + Math.random() * 2}s linear infinite`,
                     animationDelay: `${Math.random() * 2}s`,
                     opacity: 0.6,
@@ -479,9 +479,9 @@ function VideoScroll() {
               left: 0,
               width: '100%',
               height: '2px',
-              background: 'linear-gradient(to right, transparent, #00ffff, transparent)',
+              background: 'linear-gradient(to right, transparent, #0080ff, transparent)',
               animation: 'ScanLine 4s linear infinite',
-              boxShadow: '0 0 10px #00ffff',
+              boxShadow: '0 0 10px #0080ff',
             }} />
 
             <motion.div
@@ -494,15 +494,15 @@ function VideoScroll() {
                 className="tech-text"
                 style={{
                   fontSize: isMobile ? 'clamp(28px, 8vw, 42px)' : 'clamp(42px, 10vw, 80px)',
-                  color: '#00ffff',
+                  color: '#0080ff',
                   letterSpacing: isMobile ? '0.03em' : '0.05em',
                   marginBottom: 8,
                   animation: 'NeonGlow 3s ease-in-out infinite',
-                  textShadow: '0 0 8px #00ffff, 0 0 16px #00ffff',
+                  textShadow: '0 0 8px #0080ff, 0 0 16px #0080ff',
                   position: 'relative',
                 }}
               >
-                BYTES<span style={{ color: '#ff00ff', animation: 'CyberGlow 3s ease-in-out infinite' }}>.</span>
+                BYTES<span style={{ color: '#0080ff', animation: 'CyberGlow 3s ease-in-out infinite' }}>.</span>
               </div>
               <div
                 className="cyber-text"
@@ -513,6 +513,7 @@ function VideoScroll() {
                   textShadow: '0 0 4px #ffffff',
                   opacity: 0.9,
                   marginBottom: 16,
+                  WebkitTextStroke: '0.5px #010a14',
                 }}
               >
                 PLATFORM
@@ -525,14 +526,15 @@ function VideoScroll() {
                 style={{
                   marginTop: isMobile ? 16 : 24,
                   fontSize: isMobile ? 'clamp(10px, 2vw, 12px)' : 'clamp(12px, 2vw, 16px)',
-                  color: '#00ffff',
+                  color: '#0080ff',
                   opacity: 0.8,
                   fontWeight: 300,
-                  textShadow: '0 0 4px #00ffff',
+                  textShadow: '0 0 4px #0080ff',
                   border: '1px solid rgba(0, 255, 255, 0.2)',
                   padding: '6px 12px',
                   borderRadius: '6px',
-                  background: 'rgba(0, 255, 255, 0.03)',
+                  background: 'rgba(0, 128, 255, 0.05)',
+                  WebkitTextStroke: '0.5px #010a14',
                 }}
               >
                 [ SCROLL TO INITIALIZE SYSTEM ] →
@@ -601,10 +603,10 @@ function VideoScroll() {
                   style={{
                     fontSize: isMobile ? 'clamp(24px, 6vw, 36px)' : 'clamp(36px, 6vw, 64px)',
                     fontWeight: 600,
-                    color: '#00ffff',
+                    color: '#0080ff',
                     marginBottom: isMobile ? 12 : 16,
                     lineHeight: 1.1,
-                    textShadow: '0 0 8px #00ffff, 0 0 16px #00ffff',
+                    textShadow: '0 0 8px#0080ff, 0 0 16px #0080ff',
                     textAlign: currentService.side === 'center' ? 'center' : 'left',
                     animation: 'NeonGlow 4s ease-in-out infinite',
                     letterSpacing: '0.05em',
@@ -630,9 +632,10 @@ function VideoScroll() {
                     fontWeight: 400,
                     textAlign: currentService.side === 'center' ? 'center' : 'left',
                     letterSpacing: '0.02em',
-                    borderLeft: '2px solid #00ffff',
+                    borderLeft: '2px solid #0080ff',
                     paddingLeft: '12px',
-                    background: 'linear-gradient(90deg, rgba(0, 255, 255, 0.05), transparent)',
+                    background: 'linear-gradient(90deg, rgba(0, 128, 255, 0.05), transparent)',
+                    WebkitTextStroke: '0.5px #010a14',
                   }}
                 >
                   {currentService.desc}
@@ -657,26 +660,27 @@ function VideoScroll() {
                         alignItems: 'center',
                         marginBottom: 12,
                         fontSize: isMobile ? 'clamp(10px, 1.8vw, 12px)' : 'clamp(12px, 1.8vw, 16px)',
-                        color: '#00ffff',
-                        textShadow: '0 0 4px #00ffff',
+                        color: '#0080ff',
+                        textShadow: '0 0 4px #0080ff',
                         opacity: 0.9,
                         fontWeight: 400,
                         letterSpacing: '0.01em',
                         padding: '6px 10px',
                         borderRadius: '4px',
-                        background: 'rgba(0, 255, 255, 0.03)',
+                        background: 'rgba(0, 128, 255, 0.05)',
                         border: '1px solid rgba(0, 255, 255, 0.15)',
                         transition: 'all 0.2s ease',
+                        WebkitTextStroke: '0.5px #010a14',
                       }}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.background = 'rgba(0, 255, 255, 0.08)';
                         e.currentTarget.style.borderColor = 'rgba(0, 255, 255, 0.3)';
-                        e.currentTarget.style.textShadow = '0 0 6px #00ffff';
+                        e.currentTarget.style.textShadow = '0 0 6px#0080ff';
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.background = 'rgba(0, 255, 255, 0.03)';
+                        e.currentTarget.style.background = 'rgba(0, 128, 255, 0.05)';
                         e.currentTarget.style.borderColor = 'rgba(0, 255, 255, 0.15)';
-                        e.currentTarget.style.textShadow = '0 0 4px #00ffff';
+                        e.currentTarget.style.textShadow = '0 0 4px #0080ff';
                       }}
                     >
                       <div
@@ -684,9 +688,9 @@ function VideoScroll() {
                           width: 6,
                           height: 6,
                           borderRadius: '50%',
-                          background: '#00ffff',
+                          background: '#0080ff',
                           marginRight: 12,
-                          boxShadow: '0 0 4px #00ffff',
+                          boxShadow: '0 0 4px #0080ff',
                           animation: 'NeonGlow 3s ease-in-out infinite',
                         }}
                       />
@@ -715,13 +719,14 @@ function VideoScroll() {
                           className="tech-text"
                           style={{
                             fontSize: isMobile ? 'clamp(18px, 4vw, 24px)' : 'clamp(24px, 4vw, 36px)',
-                            color: '#00ffff',
-                            textShadow: '0 0 6px #00ffff, 0 0 12px #00ffff',
+                            color: '#0080ff',
+                            textShadow: '0 0 6px #0080ff, 0 0 12px #0080ff',
                             animation: 'NeonGlow 3s ease-in-out infinite',
                             padding: '6px 12px',
                             borderRadius: '6px',
                             border: '1px solid rgba(0, 255, 255, 0.2)',
-                            background: 'rgba(0, 255, 255, 0.03)',
+                            background: 'rgba(0, 128, 255, 0.05)',
+                            WebkitTextStroke: '0.5px #010a14',
                           }}
                         >
                           {(() => {
@@ -750,6 +755,7 @@ function VideoScroll() {
                             textShadow: '0 0 4px #ffffff',
                             marginTop: '6px',
                             letterSpacing: '0.02em',
+                            WebkitTextStroke: '0.5px #010a14',
                           }}
                         >
                           {stat.label}
@@ -776,28 +782,28 @@ function VideoScroll() {
                       minHeight: isMobile ? 48 : undefined,
                       borderRadius: '6px',
                       fontSize: isMobile ? 14 : 12,
-                      background: 'linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(0, 255, 255, 0.05))',
-                      color: '#00ffff',
+                      background: 'linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(0, 128, 255, 0.05))',
+                      color: '#0080ff',
                       fontWeight: 600,
                       textDecoration: 'none',
-                      boxShadow: '0 0 10px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.05)',
+                      boxShadow: '0 0 10px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 128, 255, 0.05)',
                       transition: 'all 0.2s ease',
                       pointerEvents: 'auto',
                       margin: currentService.side === 'center' ? '0 auto' : '0',
-                      border: '1px solid #00ffff',
-                      textShadow: '0 0 4px #00ffff',
+                      border: '1px solid #0080ff',
+                      textShadow: '0 0 4px #0080ff',
                       textTransform: 'uppercase',
                       letterSpacing: '0.05em',
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.transform = 'scale(1.02)';
                       e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 255, 255, 0.3), inset 0 0 15px rgba(0, 255, 255, 0.1)';
-                      e.currentTarget.style.textShadow = '0 0 6px #00ffff';
+                      e.currentTarget.style.textShadow = '0 0 6px #0080ff';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.transform = 'scale(1)';
-                      e.currentTarget.style.boxShadow = '0 0 10px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.05)';
-                      e.currentTarget.style.textShadow = '0 0 4px #00ffff';
+                      e.currentTarget.style.boxShadow = '0 0 10px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 128, 255, 0.05)';
+                      e.currentTarget.style.textShadow = '0 0 4px #0080ff';
                     }}
                   >
                     [ INITIALIZE CONNECTION ] →
@@ -842,9 +848,9 @@ function VideoScroll() {
                           width: 16,
                           height: 16,
                           borderRadius: '50%',
-                          background: 'radial-gradient(circle at 30% 30%, #00ffff, #0080ff)',
+                          background: 'radial-gradient(circle at 30% 30%, #0080ff, #0080ff)',
                           mixBlendMode: 'screen',
-                          boxShadow: '0 0 10px #00ffff, 0 0 20px #00ffff',
+                          boxShadow: '0 0 10px #0080ff, 0 0 20px #0080ff',
                         }}
                       />
                     ))}
@@ -924,10 +930,10 @@ function VideoScroll() {
           style={{
             width: `${(desiredTimeRef.current / duration) * 100}%`,
             height: '100%',
-            background: 'linear-gradient(90deg, #00ffff, #0080ff)',
+            background: 'linear-gradient(90deg, #0080ff, #0080ff)',
             borderRadius: '2px',
             transition: 'width 0.1s ease',
-            boxShadow: '0 0 6px #00ffff',
+            boxShadow: '0 0 6px #0080ff',
             animation: 'NeonGlow 3s ease-in-out infinite',
           }}
         />
@@ -942,34 +948,33 @@ function VideoScroll() {
         className="tech-text"
         style={{
           position: 'fixed',
-          bottom: isMobile ? '24px' : '20px',
+          top: isMobile ? '24px' : '20px',
           right: isMobile ? '24px' : '20px',
-          padding: isMobile ? '10px 20px' : '8px 16px',
-          borderRadius: '6px',
-          background: 'linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(0, 255, 255, 0.05))',
-          color: '#00ffff',
+          padding: isMobile ? '16px 32px' : '14px 28px',
+          borderRadius: '8px',
+          background: 'linear-gradient(135deg, #0080ff, #0066cc)',
+          color: '#ffffff',
           fontWeight: 600,
-          fontSize: isMobile ? 12 : 10,
+          fontSize: isMobile ? 16 : 14,
           textDecoration: 'none',
-          boxShadow: '0 0 10px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.05)',
+          boxShadow: '0 0 20px rgba(0, 128, 255, 0.6), 0 0 40px rgba(0, 102, 204, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.1), 0 4px 8px rgba(0, 0, 0, 0.3)',
           zIndex: 10001,
           transition: 'all 0.2s ease',
-          border: '1px solid #00ffff',
-          textShadow: '0 0 4px #00ffff',
+          border: '2px solid #0080ff',
+          textShadow: '0 0 6px #ffffff, 0 0 12px #ffffff',
           textTransform: 'uppercase',
           letterSpacing: '0.05em',
+          backdropFilter: 'blur(10px)',
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.background = 'linear-gradient(135deg, rgba(0, 255, 255, 0.15), rgba(0, 255, 255, 0.1))';
-          e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 255, 255, 0.3), inset 0 0 15px rgba(0, 255, 255, 0.1)';
-          e.currentTarget.style.textShadow = '0 0 6px #00ffff';
-          e.currentTarget.style.transform = 'translateY(-1px) scale(1.02)';
+          e.currentTarget.style.background = 'linear-gradient(135deg, #0099ff, #0077dd)';
+          e.currentTarget.style.boxShadow = '0 0 25px rgba(0, 128, 255, 0.8), 0 0 50px rgba(0, 102, 204, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.2), 0 6px 12px rgba(0, 0, 0, 0.4)';
+          e.currentTarget.style.textShadow = '0 0 8px #ffffff, 0 0 16px #ffffff';
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.background = 'linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(0, 255, 255, 0.05))';
-          e.currentTarget.style.boxShadow = '0 0 10px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.05)';
-          e.currentTarget.style.textShadow = '0 0 4px #00ffff';
-          e.currentTarget.style.transform = 'translateY(0) scale(1)';
+          e.currentTarget.style.background = 'linear-gradient(135deg, #0080ff, #0066cc)';
+          e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 128, 255, 0.6), 0 0 40px rgba(0, 102, 204, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.1), 0 4px 8px rgba(0, 0, 0, 0.3)';
+          e.currentTarget.style.textShadow = '0 0 6px #ffffff, 0 0 12px #ffffff';
         }}
       >
         [ BOOK NOW ]
