@@ -42,7 +42,7 @@
   }
   
   .bytes-nav .logo {
-    width: 150px; /* larger logo on desktop */
+    width: 80px; /* increased header logo */
     height: auto;
     flex-shrink: 0;
     cursor: pointer;
@@ -191,7 +191,7 @@
   
   /* Menu logo styles */
   .menu-logo {
-    width: 60px; /* keep overlay logo unchanged */
+    width: 150px; /* larger overlay logo */
     margin-bottom: 1rem;
     cursor: pointer;
     transition: opacity 0.3s ease;
@@ -285,7 +285,7 @@
     }
     
     .bytes-nav .logo {
-      width: 120px; /* slightly larger on tablets/mobile */
+      width: 70px; /* mobile logo adjusted larger */
     }
     
     .bytes-nav .menu-toggle {
@@ -557,8 +557,7 @@
     }
 
     .menu-logo {
-      width: 60px;
-      margin-bottom: 1rem;
+      width: 120px;
     }
 
     /* Reduce image height further on smaller screens */
@@ -597,7 +596,7 @@
 
     /* Make nav bar logo smaller on very small phones */
     .bytes-nav .logo {
-      width: 90px;
+      width: 80px;
     }
   }
 

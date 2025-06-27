@@ -25,16 +25,24 @@ export default function Home() {
       {!isLoading && (
         <>
           <Header />
-          <HeroSection />
-          <ByteBotsSection />
-          <ProjectsSection />
-          <TapeSection />
-          <TestimonialsSection />
-          <LineAnimationSection />
-          {/* <AboutSection /> */}
-          <CardsSection />
-          <BookSection />
-          <ContactSection />
+          {[
+            <HeroSection key="hero" />,
+            <ByteBotsSection key="bytebots" />,
+            <ProjectsSection key="projects" />,
+            <TapeSection key="tape" />,
+            <TestimonialsSection key="testimonials" />,
+            <LineAnimationSection key="line" />,
+            <CardsSection key="cards" />,
+            <BookSection key="book" />,
+            <ContactSection key="contact" />,
+          ].map((Section, idx) => (
+            <div
+              key={idx}
+              className={`w-full ${idx % 2 === 0 ? 'bg-white text-black' : 'bg-blue-700 text-white'}`}
+            >
+              {Section}
+            </div>
+          ))}
           <Footer />
         </>
       )}
