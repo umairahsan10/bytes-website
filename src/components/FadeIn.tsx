@@ -1,9 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
-import type { HTMLAttributes, ReactNode } from "react";
+import { motion, HTMLMotionProps } from "framer-motion";
+import type { ReactNode } from "react";
 
-interface FadeInProps extends HTMLAttributes<HTMLDivElement> {
+interface FadeInProps extends Omit<HTMLMotionProps<"div">, "initial" | "whileInView" | "viewport" | "transition"> {
   children: ReactNode;
 }
 
