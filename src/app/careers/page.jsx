@@ -9,7 +9,7 @@ import ZoomParallax from "@/components/ZoomParallax";
 
 // Image paths adjusted to reference the public/assets directory
 const img1 = "/assets/img1.jpg";
-const img2 = "/assets/img-2.jpg";
+const img2 = "/assets/img-2.jpg";   
 const img3 = "/assets/img-3.jpg";
 const img4 = "/assets/img-4.jpg";
 const contactImg = "/assets/career-contact.jpg";
@@ -31,7 +31,7 @@ function App() {
             </motion.div>
 
             {/* Jobs Section - Regular scrollable content */}
-            <section className="py-12 sm:py-16 lg:py-20 bg-white">
+            <section className="py-8 sm:py-12 lg:py-16 bg-white -mt-12 sm:-mt-16 lg:-mt-20 relative z-10">
                 <div className="container mx-auto px-4">
                     <div className="w-full max-w-7xl mx-auto space-y-6 sm:space-y-8">
                         <motion.div 
@@ -144,12 +144,10 @@ function App() {
                                   ]
                                 }
                             ].map((job) => {
-                                if (selectedJob && selectedJob.title === job.title) return null;
                                 return (
                                     <motion.div 
-                                        layoutId={`card-${job.title}`} 
                                         key={job.title} 
-                                        className="group cursor-pointer bg-gradient-to-br from-blue-100 via-white to-purple-100 p-[1px] rounded-xl sm:rounded-2xl w-full hover:shadow-lg hover:shadow-blue-200/60 transition-all duration-500 ease-out border border-gray-200 transform hover:scale-105" 
+                                        className="group cursor-pointer bg-gradient-to-br from-blue-100 via-white to-purple-100 p-[1px] rounded-xl sm:rounded-2xl w-full hover:shadow-lg hover:shadow-blue-200/60 transition-all duration-500 ease-out border border-gray-200 transform hover:scale-105"
                                         onClick={() => setSelectedJob(job)}
                                         whileHover={{ y: -4, scale: 1.02 }}
                                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -168,7 +166,15 @@ function App() {
                                     >
                                         <div className="rounded-xl sm:rounded-2xl h-full w-full bg-white/90 backdrop-blur-sm p-4 sm:p-6 min-h-[140px] sm:min-h-[160px] flex flex-col justify-between group-hover:bg-white transition-all duration-500 ease-out">
                                             {job.image && (
-                                                <Image src={job.image} alt={job.title} width={400} height={200} className="w-full h-24 sm:h-32 rounded-lg sm:rounded-xl object-cover mb-3 sm:mb-4" />
+                                                <div className="relative w-full aspect-video rounded-lg sm:rounded-xl overflow-hidden mb-3 sm:mb-4">
+                                                    <Image
+                                                        src={job.image}
+                                                        alt={job.title}
+                                                        fill
+                                                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                                        className="object-cover"
+                                                    />
+                                                </div>
                                             )}
                                             <div>
                                                 <h3 className="text-gray-900 text-lg sm:text-xl md:text-2xl font-semibold mb-2 group-hover:text-blue-700 transition-colors duration-300">{job.title}</h3>
@@ -193,7 +199,7 @@ function App() {
             </section>
 
             {/* Contact Section */}
-            <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen flex items-center">
+            <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-gray-50 to-blue-50 md:min-h-screen md:flex md:items-center">
                 <div className="container mx-auto px-4">
                     <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center max-w-7xl mx-auto">
                         {/* Left side - Contact Form */}
@@ -298,7 +304,10 @@ function App() {
                             transition={{ duration: 0.8, delay: 0.2 }}
                             className="relative"
                         >
-                            <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl">
+                            <div
+                                className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl h-64 sm:h-[420px] lg:h-[600px]"
+                                style={{ aspectRatio: "4/5" }}
+                            >
                                 <Image src={contactImg} alt="Contact" fill className="object-cover" />
                                 <div className="absolute inset-0 bg-black/30" />
                                 
@@ -331,18 +340,35 @@ function App() {
             <AnimatePresence>
             {selectedJob && (
                 <motion.div 
-                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 w-full h-full overflow-y-auto" 
+                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-start sm:items-center justify-center p-4 w-full h-full overflow-y-auto" 
                     initial={{ opacity: 0 }} 
                     animate={{ opacity: 1 }} 
                     exit={{ opacity: 0 }}
                     onClick={() => setSelectedJob(null)}
                 >
                     <motion.div 
-                        layoutId={`card-${selectedJob.title}`} 
-                        className="relative bg-white border border-gray-200 rounded-2xl sm:rounded-3xl w-full max-w-4xl p-6 sm:p-8 shadow-2xl my-8 mx-auto" 
+                        className="relative bg-white border border-gray-200 rounded-2xl sm:rounded-3xl w-full max-w-4xl p-6 sm:p-8 shadow-2xl my-8 mx-auto max-h-[90vh] overflow-y-auto" 
                         onClick={(e) => e.stopPropagation()}
-                        initial={{ borderRadius: '0.75rem' }}
-                        animate={{ borderRadius: '1.5rem' }}
+                        initial={{ 
+                            opacity: 0,
+                            scale: 0.9,
+                            y: 50
+                        }}
+                        animate={{ 
+                            opacity: 1,
+                            scale: 1,
+                            y: 0
+                        }}
+                        exit={{ 
+                            opacity: 0,
+                            scale: 0.9,
+                            y: 50
+                        }}
+                        transition={{
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 30
+                        }}
                     >
                         <button 
                             className="absolute top-3 right-3 sm:top-4 sm:right-4 text-gray-400 hover:text-gray-600 hover:bg-gray-100 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 z-10" 
