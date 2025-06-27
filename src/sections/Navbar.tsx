@@ -418,7 +418,7 @@ const Header: React.FC<HeaderProps> = ({
 
         {/* Center text link */}
         <div className="flex-1 text-center">
-          <Link href="/contact" className="text-white font-semibold uppercase tracking-wide hover:underline font-['PPNeueMontreal']">
+          <Link href="/contact" className="text-white font-semibold uppercase tracking-wide hover:underline font-['PPNeueMontreal'] animate-pulse cursor-pointer">
             BOOK A FREE CONSULTATION
           </Link>
         </div>

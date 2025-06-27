@@ -12,8 +12,11 @@ const calistoga = Calistoga({
 });
 
 export const metadata: Metadata = {
-  title: "My Portfolio",
+  title: "Bytes Platform",
   description: "Testing the portfolio",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
