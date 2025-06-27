@@ -317,6 +317,7 @@
       flex: 1;
       overflow-y: auto;
       max-height: calc(100vh - 256px); /* Adjust for header height (56px) + menu-img height (140px) + margins */
+      margin-top: -20px;
     }
   
     .menu-links {
@@ -332,7 +333,7 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -60%) !important;
     }
   
     .menu-col.menu-img #img-2,
@@ -605,5 +606,24 @@
     .dropdown-menu {
       left: 170px;
       right: auto;
+    }
+  }
+
+  /* Legal links styles */
+  .legal-links p {
+    font-size: 12px !important;
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  /* Position legal links at bottom for desktop and tall phones */
+  @media (min-width: 901px) {
+    .legal-links {
+      margin-top: auto;
+    }
+  }
+  @media (max-width: 600px) and (min-height: 800px) {
+    .legal-links {
+      margin-top: auto;
     }
   }

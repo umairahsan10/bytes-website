@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -527,6 +529,14 @@ const Header: React.FC<HeaderProps> = ({
             <div className="menu-link">
               <p><a href="#" onClick={handleBrandFlowClick}>The Brand Building Flow</a></p>
             </div>
+          </div>
+          {/* Legal links at bottom */}
+          <div className="legal-links menu-link">
+            <p className="text-sm flex gap-6">
+              <a href="/privacy-policy" onClick={handleMenuLinkClick}>Privacy Policy</a>
+              <a href="/terms-conditions" onClick={handleMenuLinkClick}>Terms &amp; Conditions</a>
+              <a href="/refund-policy" onClick={handleMenuLinkClick}>Refund Policy</a>
+            </p>
           </div>
         </div>
       </div>

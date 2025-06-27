@@ -274,7 +274,7 @@ const IndustriesPage = () => {
   const HeroAnimatedText = ({ text }: { text: string }) => {
     return (
       <motion.div
-        className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl leading-none text-black font-bold tracking-wider uppercase"
+        className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl leading-none text-[#010a14] font-bold tracking-wider uppercase"
         style={{ fontFamily: 'Bebas Neue, sans-serif', fontWeight: 700 }}
         initial="hidden"
         animate={animationsTriggered.hero ? "visible" : "hidden"}
@@ -338,7 +338,7 @@ const IndustriesPage = () => {
             priority
           />
           {/* Overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/20"></div>
+          <div className="absolute inset-0 bg-[rgba(1,10,20,0.2)]"></div>
         </div>
         
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
@@ -360,7 +360,7 @@ const IndustriesPage = () => {
 
             <motion.p 
               variants={paragraphVariants as any} 
-              className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-black max-w-2xl md:max-w-3xl lg:max-w-4xl"
+              className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-[#010a14] max-w-2xl md:max-w-3xl lg:max-w-4xl"
             >
               We deliver cutting-edge solutions across diverse industries, transforming businesses with innovative technology.
             </motion.p>
@@ -370,10 +370,10 @@ const IndustriesPage = () => {
                 className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center"
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
               >
-                <span className="text-black font-bold text-xl">▶</span>
+                <span className="text-[#010a14] font-bold text-xl">▶</span>
               </motion.div>
               <motion.span 
-                className="text-sm text-black"
+                className="text-sm text-[#010a14]"
                 initial={{ opacity: 0, x: -20 }}
                 animate={animationsTriggered.hero ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
                 transition={{ delay: 1.5, duration: 0.5 }}
@@ -391,7 +391,7 @@ const IndustriesPage = () => {
           >
             {/* Placeholder for industries image */}
             <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-[500px] md:h-[500px] mx-auto bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center">
-              <div className="w-56 h-56 md:w-64 md:h-64 lg:w-80 lg:h-80 bg-black rounded-full flex items-center justify-center">
+              <div className="w-56 h-56 md:w-64 md:h-64 lg:w-80 lg:h-80 bg-[#010a14] rounded-full flex items-center justify-center">
                 <motion.div 
                   className="text-6xl text-yellow-400 font-bold flex items-center justify-center"
                   initial={{ scale: 0, rotate: -180 }}
@@ -404,7 +404,7 @@ const IndustriesPage = () => {
             </div>
 
             <motion.div
-              className="absolute top-8 right-8 bg-black/80 backdrop-blur-sm rounded-lg p-4"
+              className="absolute top-8 right-8 bg-[rgba(1,10,20,0.8)] backdrop-blur-sm rounded-lg p-4"
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 3, repeat: Infinity }}
             >
@@ -430,7 +430,7 @@ const IndustriesPage = () => {
       </section>
 
       {/* Fintech Section */}
-      <section ref={fintechRef} className="order-3 pt-16 md:pt-24 lg:pt-28 pb-12 bg-white text-black px-6 relative scroll-mt-28">
+      <section ref={fintechRef} className="order-3 pt-16 md:pt-24 lg:pt-28 pb-12 bg-white text-[#010a14] px-6 relative scroll-mt-28">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
             variants={slideInLeft as any}
@@ -484,7 +484,7 @@ const IndustriesPage = () => {
               variants={paragraphVariants as any} 
               initial="hidden"
               animate={animationsTriggered.fintech ? "visible" : "hidden"}
-              className="text-lg text-black max-w-md"
+              className="text-lg text-[#010a14] max-w-md"
             >
               We specialize in secure, scalable digital solutions for modern banking and financial institutions.
             </motion.p>
@@ -496,7 +496,7 @@ const IndustriesPage = () => {
                 "Enhancing customer engagement with seamless digital experiences",
                 "Ensuring compliance and risk mitigation through robust security architectures"
               ]}
-              className="text-black"
+              className="text-[#010a14]"
               inView={animationsTriggered.fintech}
             />
           </motion.div>
@@ -504,7 +504,7 @@ const IndustriesPage = () => {
       </section>
 
       {/* Healthcare Section */}
-      <section ref={healthcareRef} className="order-4 pt-24 md:pt-28 pb-12 bg-black text-white px-6 relative z-10 scroll-mt-28">
+      <section ref={healthcareRef} className="order-4 pt-24 md:pt-28 pb-12 bg-[#010a14] text-white px-6 relative z-10 scroll-mt-28">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
             variants={staggerContainer as any}
@@ -578,7 +578,7 @@ const IndustriesPage = () => {
       </section>
 
       {/* E-commerce Section */}
-      <section ref={ecommerceRef} className="order-2 pt-16 md:pt-24 lg:pt-28 pb-12 bg-black text-white px-6 relative scroll-mt-28">
+      <section ref={ecommerceRef} className="order-2 pt-16 md:pt-24 lg:pt-28 pb-12 bg-[#010a14] text-white px-6 relative scroll-mt-28">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
             variants={slideInLeft as any}
@@ -603,7 +603,7 @@ const IndustriesPage = () => {
                 </motion.div>
               </div>
               <motion.div
-                className="absolute -top-4 -right-4 bg-black text-white px-4 py-2 rounded-lg text-sm"
+                className="absolute -top-4 -right-4 bg-[#010a14] text-white px-4 py-2 rounded-lg text-sm"
                 animate={animationsTriggered.ecommerce ? { x: [0, 10, 0], transition: { duration: 2, repeat: Infinity, repeatType: "reverse" } } : { x: 0 }}
               >
                 <div className="text-yellow-400 font-bold">SHOP</div>
@@ -655,7 +655,7 @@ const IndustriesPage = () => {
             />
             
             <motion.button
-              className="bg-yellow-400 text-black px-8 py-3 rounded font-medium"
+              className="bg-yellow-400 text-[#010a14] px-8 py-3 rounded font-medium"
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
               animate={animationsTriggered.ecommerce ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.9 }}
               transition={{ delay: 1.2, duration: 0.5, type: "spring", stiffness: 200 }}
@@ -667,7 +667,7 @@ const IndustriesPage = () => {
       </section>
 
       {/* Education Section */}
-      <section ref={educationRef} className="order-1 -mt-12 md:-mt-14 lg:-mt-16 pt-2 pb-12 bg-white text-black px-6 relative z-10 scroll-mt-28">
+      <section ref={educationRef} className="order-1 -mt-12 md:-mt-14 lg:-mt-16 pt-2 pb-12 bg-white text-[#010a14] px-6 relative z-10 scroll-mt-28">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
             variants={staggerContainer as any}
@@ -696,7 +696,7 @@ const IndustriesPage = () => {
               variants={paragraphVariants as any} 
               initial="hidden"
               animate={animationsTriggered.education ? "visible" : "hidden"}
-              className="text-lg text-black max-w-2xl"
+              className="text-lg text-[#010a14] max-w-2xl"
             >
               We specialize in delivering innovative digital solutions tailored specifically for federal and state government contractors.
             </motion.p>
@@ -708,7 +708,7 @@ const IndustriesPage = () => {
                 "Improving efficiency with workflow automation and cloud infrastructure",
                 "Partnering with government contractors to meet mission-critical needs"
               ]}
-              className="text-black/80"
+              className="text-[#010a14]"
               inView={animationsTriggered.education}
             />
           </motion.div>

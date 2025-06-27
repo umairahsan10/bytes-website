@@ -130,7 +130,7 @@ const AdvancedServicesPage: React.FC = () => {
         <div className="absolute top-10 right-10 w-96 h-96 bg-blue-100/30 rounded-full blur-3xl -z-10"></div>
         <div className="absolute bottom-20 left-20 w-64 h-64 bg-cyan-100/40 rounded-full blur-2xl -z-10"></div>
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           {/* First Subsection - Overview */}
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-20">
             <div className="animate-content" data-fade="left">
@@ -257,7 +257,7 @@ const AdvancedServicesPage: React.FC = () => {
       </section>
 
       {/* Call to Action Section */}
-      <section className="relative py-16 overflow-hidden">
+      <section className="relative py-16 pb-24 overflow-hidden bg-[#09122C] text-white">
         {/* Background Wallpaper */}
         <Image
           src="/assets/wallpaper.jpg"
@@ -267,10 +267,10 @@ const AdvancedServicesPage: React.FC = () => {
           className="object-cover object-center fixed inset-0 z-0"
         />
         {/* Overlay for readability */}
-        <div className="absolute inset-0 bg-white/70 z-0" />
+        <div className="absolute inset-0 bg-[#09122C]/70 z-0" />
         
         {/* Background Circles */}
-        <div className="absolute top-8 left-8 w-72 h-72 bg-blue-200/20 rounded-full blur-3xl z-0"></div>
+        <div className="absolute top-8 left-8 w-72 h-72 bg-[#09122C]/20 rounded-full blur-3xl z-0"></div>
         <div className="absolute bottom-8 right-8 w-64 h-64 bg-cyan-200/25 rounded-full blur-2xl z-0"></div>
 
         {/* Content */}
@@ -278,7 +278,7 @@ const AdvancedServicesPage: React.FC = () => {
           <AnimatedWords text="Ready to Transform Your Business?" className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6" />
           <AnimatedWords text="Let's discuss how our advanced services can accelerate your digital transformation journey." className="text-xl text-gray-600 mb-8 leading-relaxed" />
           <button
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
+            className="bg-[#09122C] hover:bg-[#0C1A40] text-white font-semibold py-4 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#19274D]"
             aria-label="Get started with advanced services"
           >
             Get Started Today
