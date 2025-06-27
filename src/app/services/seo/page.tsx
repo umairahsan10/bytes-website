@@ -275,7 +275,7 @@ const SEOPage: React.FC = () => {
     "Tailored keyword plans that bring buying intent",
     "SEO-optimised content that ranks & converts",
     "Technical site audits and full optimisation",
-    "Monthly reporting with real growth metrics",
+    "Weekly reporting with real growth metrics",
     "Ongoing SEO management & content support",
   ];
 
