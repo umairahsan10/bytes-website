@@ -7,6 +7,7 @@ import { faFacebookF, faTwitter, faInstagram, faLinkedinIn } from '@fortawesome/
 import "./contact.css";
 import Image from 'next/image';
 import { Header } from "../../sections/Navbar";
+import { useRouter } from 'next/navigation';
 
 function Contact() {
   const [formData, setFormData] = useState({
@@ -15,16 +16,36 @@ function Contact() {
     phone: '',
     message: ''
   });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prevState => ({ ...prevState, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    
     console.log('Form submitted:', formData);
     // Here you would typically send the form data to your backend
+    
+    // Simulate a small delay for better UX
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    // Clear form data
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      message: ''
+    });
+    
+    // Redirect to thank you page
+    router.push('/thank-you');
   };
 
   return (
@@ -108,22 +129,27 @@ function Contact() {
               <form className="sub-form" action="index.html" autoComplete="off" onSubmit={handleSubmit}>
                 <h3 className="title">Contact us</h3>
                 <div className="input-container">
-                  <input type="text" name="name" className="input" onChange={handleChange} />
+                  <input type="text" name="name" className="input" value={formData.name} onChange={handleChange} />
                   <label htmlFor="">Username</label>
                 </div>
                 <div className="input-container">
-                  <input type="email" name="email" className="input" onChange={handleChange} />
+                  <input type="email" name="email" className="input" value={formData.email} onChange={handleChange} />
                   <label htmlFor="">Email</label>
                 </div>
                 <div className="input-container">
-                  <input type="tel" name="phone" className="input" onChange={handleChange} />
+                  <input type="tel" name="phone" className="input" value={formData.phone} onChange={handleChange} />
                   <label htmlFor="">Phone</label>
                 </div>
                 <div className="input-container textarea">
-                  <textarea name="message" className="input" onChange={handleChange}></textarea>
+                  <textarea name="message" className="input" value={formData.message} onChange={handleChange}></textarea>
                   <label htmlFor="">Message</label>
                 </div>
-                <input type="submit" value="Send" className="btn" />
+                <input 
+                  type="submit" 
+                  value={isSubmitting ? "Sending..." : "Send"} 
+                  className="btn" 
+                  disabled={isSubmitting}
+                />
               </form>
             </div>
           </div>
