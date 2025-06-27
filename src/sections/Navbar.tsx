@@ -527,6 +527,12 @@ const Header: React.FC<HeaderProps> = ({
             <div className="menu-link">
               <p><a href="#" onClick={handleBrandFlowClick}>The Brand Building Flow</a></p>
             </div>
+            <div className="menu-link legal-links">
+              <p className="text-sm flex gap-6">
+                <a href="/privacy-policy" onClick={handleMenuLinkClick}>Privacy Policy</a>
+                <a href="/terms-conditions" onClick={handleMenuLinkClick}>Terms &amp; Conditions</a>
+              </p>
+            </div>
           </div>
         </div>
       </div>
