@@ -72,7 +72,7 @@ const AdvancedServicesPage: React.FC = () => {
       {/* Hero Section */}
       <section 
         ref={heroRef}
-        className="relative h-screen flex items-center justify-center overflow-hidden bg-blue-700"
+        className="relative h-screen flex items-center justify-center overflow-hidden bg-[#010a14]"
         aria-label="Hero section"
       >
         {/* Background Image */}
@@ -136,7 +136,7 @@ const AdvancedServicesPage: React.FC = () => {
           {/* Second Subsection - Sub-services Cards */}
           <div 
             ref={cardsRef}
-            className="bg-blue-700 text-white rounded-2xl p-8 lg:p-12"
+            className="bg-[#09122C] text-white rounded-2xl p-8 lg:p-12"
           >
             <h3 className="text-3xl font-bold mb-12 text-center">
               Our Data & Analytics Services
@@ -150,7 +150,7 @@ const AdvancedServicesPage: React.FC = () => {
                   tabIndex={0}
                   aria-label={`${service.title} service details`}
                 >
-                  <h4 className="text-xl font-semibold text-gray-900 mb-4 group-hover:text-blue-300 transition-colors">
+                  <h4 className="text-xl font-semibold text-gray-900 mb-4 group-hover:text-[#09122C] transition-colors">
                     {service.title}
                   </h4>
                   <p className="text-gray-600 leading-relaxed dark:text-blue-100">
@@ -165,7 +165,7 @@ const AdvancedServicesPage: React.FC = () => {
 
       {/* Security Section */}
       <section 
-        className="relative min-h-screen py-20 bg-blue-700 text-white animate-section overflow-hidden"
+        className="relative min-h-screen py-20 bg-[#09122C] text-white animate-section overflow-hidden"
         aria-labelledby="security-heading"
       >
         {/* Background Circles */}
@@ -192,12 +192,12 @@ const AdvancedServicesPage: React.FC = () => {
               >
                 Cybersecurity Solutions
               </h2>
-              <p className="text-lg text-blue-100 mb-6 leading-relaxed">
+              <p className="text-lg text-gray-300 mb-6 leading-relaxed">
                 Protect your digital assets with comprehensive cybersecurity solutions designed 
                 for the modern threat landscape. Our multi-layered security approach ensures 
                 your business remains resilient against evolving cyber threats.
               </p>
-              <p className="text-lg text-blue-100 leading-relaxed">
+              <p className="text-lg text-gray-300 leading-relaxed">
                 From threat detection and incident response to compliance management and 
                 security awareness training, we provide end-to-end protection that scales 
                 with your business needs.
@@ -250,7 +250,7 @@ const AdvancedServicesPage: React.FC = () => {
       </section>
 
       {/* Call to Action Section */}
-      <section className="relative py-16 overflow-hidden bg-blue-700 text-white">
+      <section className="relative py-16 pb-24 overflow-hidden bg-[#09122C] text-white">
         {/* Background Wallpaper */}
         <Image
           src="/assets/wallpaper.jpg"
@@ -260,10 +260,10 @@ const AdvancedServicesPage: React.FC = () => {
           className="object-cover object-center fixed inset-0 z-0"
         />
         {/* Overlay for readability */}
-        <div className="absolute inset-0 bg-blue-700/70 z-0" />
+        <div className="absolute inset-0 bg-[#09122C]/70 z-0" />
         
         {/* Background Circles */}
-        <div className="absolute top-8 left-8 w-72 h-72 bg-blue-200/20 rounded-full blur-3xl z-0"></div>
+        <div className="absolute top-8 left-8 w-72 h-72 bg-[#09122C]/20 rounded-full blur-3xl z-0"></div>
         <div className="absolute bottom-8 right-8 w-64 h-64 bg-cyan-200/25 rounded-full blur-2xl z-0"></div>
 
         {/* Content */}
@@ -271,11 +271,11 @@ const AdvancedServicesPage: React.FC = () => {
           <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
             Ready to Transform Your Business?
           </h2>
-          <p className="text-xl text-blue-100 mb-8 leading-relaxed">
+          <p className="text-xl text-gray-300 mb-8 leading-relaxed">
             Let's discuss how our advanced services can accelerate your digital transformation journey.
           </p>
           <button
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
+            className="bg-[#09122C] hover:bg-[#0C1A40] text-white font-semibold py-4 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#19274D]"
             aria-label="Get started with advanced services"
           >
             Get Started Today
