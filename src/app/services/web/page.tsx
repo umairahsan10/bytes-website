@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from "next/image";
 import { Header } from "@/sections/Navbar";
-import { Footer } from "@/sections/Footer";
 import Link from "next/link";
 // @ts-ignore – lucide-react icons (ensure dependency installed in runtime)
 import { ChevronDown, Menu, X, Code, Zap, Users, Award, ArrowRight, Star, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Play, Smartphone, Monitor, Database, Cloud, Globe, Layers } from 'lucide-react';
@@ -446,16 +445,35 @@ const WebDevelopmentLanding = () => {
                 </div>
               </div>
 
-              <Link href="/contact" className="px-8 py-4 bg-blue-600 text-white rounded-full font-semibold hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 text-center inline-block">
+              {/* <Link href="/contact" className="px-8 py-4 bg-blue-600 text-white rounded-full font-semibold hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 text-center inline-block">
                 Start Your Web Project
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Site Footer */}
-      <Footer />
+      {/* Call To Action Section */}
+      <section className="relative overflow-hidden py-24 bg-gradient-to-r from-gray-600 to-gray-800 text-white text-center">
+        {/* Background image */}
+        <div
+          className="absolute inset-0 bg-center bg-cover opacity-20 pointer-events-none"
+          style={{ backgroundImage: "url('/assets/WebDev/connect.jpg')" }}
+        />
+
+        {/* Content */}
+        <div className="relative z-10 container mx-auto px-6">
+          <h2 className="text-4xl lg:text-5xl font-bold mb-8">
+            Ready to&nbsp;<span className="text-white">build with us?</span>
+          </h2>
+          <Link
+            href="/contact"
+            className="inline-block px-10 py-4 bg-white text-blue-700 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+          >
+            Build&nbsp;With&nbsp;Us
+          </Link>
+        </div>
+      </section>
 
       {/* Modal Overlay */}
       {selectedService && (
