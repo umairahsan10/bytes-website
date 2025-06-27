@@ -334,9 +334,9 @@ const SEOPage: React.FC = () => {
       </section>
 
       {/* Stacked Cards Section (duplicate copy with scroll lock) */}
-      <section ref={stackAreaRef} className="stack-area flex relative w-full bg-blue-700 text-white">
+      <section ref={stackAreaRef} className="stack-area flex flex-col lg:flex-row relative w-full bg-blue-700 text-white">
         {/* Left copy */}
-        <div className="left flex flex-col items-center justify-center sticky top-0 h-screen basis-1/2 p-6">
+        <div className="left flex flex-col items-center justify-center lg:sticky top-0 lg:h-screen w-full lg:basis-1/2 p-6">
           <h2 className="title text-5xl font-bold leading-tight text-center md:text-left">
             <AnimatedWords text="We Help You" className="block" />
             <br />
@@ -350,7 +350,7 @@ const SEOPage: React.FC = () => {
         </div>
 
         {/* Right stacked cards */}
-        <div className="right basis-1/2 h-screen sticky top-0">
+        <div className="right w-full lg:basis-1/2 lg:h-screen lg:sticky top-0">
           {services.slice(0, 4).map((service, idx) => (
             <div
               key={idx}
@@ -360,10 +360,10 @@ const SEOPage: React.FC = () => {
                 border: '2px solid #1D4ED8',
               }}
             >
-              <div className="sub text-lg font-semibold mb-2">
+              <div className="sub text-base sm:text-lg font-semibold mb-1">
                 {service.title}
               </div>
-              <div className="content text-3xl font-bold leading-snug">
+              <div className="content text-xl sm:text-2xl md:text-3xl font-bold leading-snug">
                 {service.description}
               </div>
             </div>
@@ -398,6 +398,15 @@ const SEOPage: React.FC = () => {
           }
           .stack-area .away {
             transform-origin: bottom left;
+          }
+          @media (max-width: 1023px) {
+            .stack-area .card {
+              width: 80vw;
+              height: 80vw;
+              // top: calc(50% - 40vw);
+              top: calc(55% - 1vw);
+              left: calc(50% - 40vw);
+            }
           }
         `}</style>
       </section>
@@ -445,11 +454,11 @@ const SEOPage: React.FC = () => {
             className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
           >
             <motion.div variants={itemVariants} className="space-y-6">
-              <h2 className="text-4xl md:text-5xl font-bold text-white">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white break-words text-center md:text-left px-2">
                 Your Competition&nbsp;Is <span className="text-blue-200">Stealing&nbsp;Your&nbsp;Customers</span>
               </h2>
-              <AnimatedWords text="Your competitors are showing up first — not because they're better, but because they're optimised. If your site isn't ranking for custom, high-converting keywords, you're sending leads straight to them." className="text-xl leading-relaxed" />
-              <AnimatedWords text="Stop being invisible. Start dominating search." className="text-lg leading-relaxed" />
+              <AnimatedWords text="Your competitors are showing up first — not because they're better, but because they're optimised. If your site isn't ranking for custom, high-converting keywords, you're sending leads straight to them." className="text-lg sm:text-xl leading-relaxed px-2" />
+              <AnimatedWords text="Stop being invisible. Start dominating search." className="text-base sm:text-lg leading-relaxed px-2" />
               <motion.button
                 className="bg-black text-white border-2 border-blue-700 hover:bg-blue-100 px-10 py-4 font-semibold tracking-wide transition-all duration-300"
                 whileHover={{ scale: 1.05 }}
@@ -497,10 +506,10 @@ const SEOPage: React.FC = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-blue-700">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-6 text-blue-700 px-4 text-center leading-tight break-words">
               Let&nbsp;Google&nbsp;Bring&nbsp;You&nbsp;Business&nbsp;— On&nbsp;Autopilot.
             </h2>
-            <p className="text-xl text-gray-800 mb-8 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-gray-800 mb-8 max-w-2xl mx-auto px-4">
               Talk to Our SEO Expert
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
