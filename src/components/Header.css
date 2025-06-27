@@ -42,7 +42,7 @@
   }
   
   .bytes-nav .logo {
-    width: 120px;
+    width: 80px; /* increased header logo */
     height: auto;
     flex-shrink: 0;
     cursor: pointer;
@@ -191,8 +191,8 @@
   
   /* Menu logo styles */
   .menu-logo {
-    width: 100px;
-    margin-bottom: 1.5rem;
+    width: 150px; /* larger overlay logo */
+    margin-bottom: 1rem;
     cursor: pointer;
     transition: opacity 0.3s ease;
   }
@@ -285,7 +285,7 @@
     }
     
     .bytes-nav .logo {
-      width: 100px;
+      width: 70px; /* mobile logo adjusted larger */
     }
     
     .bytes-nav .menu-toggle {
@@ -403,10 +403,9 @@
     left: auto;
     right: 0;
     top: 0;
-    background: rgba(20, 20, 20, 0.95);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
+    background: #101010;
+    border: none;
+    border-radius: 0;
     padding: 1rem;
     min-width: 200px;
     max-width: 250px;
@@ -416,7 +415,7 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1000;
     pointer-events: none;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: none;
   }
 
   .dropdown-menu.open {
@@ -475,6 +474,8 @@
       transform: translateX(20px) scale(0.95);
       min-width: 180px;
       max-width: 200px;
+      border-radius: 0;
+      box-shadow: none;
     }
 
     .dropdown-menu.open {
@@ -488,20 +489,20 @@
       position: absolute;
       left: auto;
       right: 0;
-      top: 100%;
-      background: rgba(30, 30, 30, 0.95);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
+      top: calc(100% - 6rem);
+      margin-top: 0;
+      background: #101010;
+      border: none;
+      border-radius: 0;
       padding: 0.8rem;
-      margin-top: 0.5rem;
-      margin-left: 0;
-      min-width: 180px;
-      max-width: 220px;
-      max-height: 0;
-      overflow: hidden;
       margin-bottom: 0;
       transform: translateY(-10px) scale(0.95);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      box-shadow: none;
+    }
+
+    /* Products dropdown should sit lower than Services */
+    .products-dropdown .dropdown-menu {
+      top: calc(100% - 2rem); /* move 4rem down compared to Services */
     }
 
     .dropdown-menu.open {
@@ -536,6 +537,7 @@
       max-width: 180px;
       padding: 0.6rem;
       right: 0;
+      border-radius: 0;
     }
 
     .dropdown-item a {
@@ -555,8 +557,7 @@
     }
 
     .menu-logo {
-      width: 60px;
-      margin-bottom: 1rem;
+      width: 120px;
     }
 
     /* Reduce image height further on smaller screens */
@@ -569,5 +570,40 @@
       .menu-items {
         max-height: calc(100vh - 236px); /* Adjust for header (56px) + image (120px) + margins */
       }
+    }
+
+    /* Extra-tall portrait mobile devices */
+    @media (max-width: 600px) and (min-height: 800px) {
+      .menu-col.menu-img {
+        height: 200px; /* enlarge hero image */
+        margin: 3rem 0 1.5rem 0; /* give it more breathing room */
+      }
+
+      .menu-links {
+        margin-top: 2rem; /* push links further down */
+      }
+
+      .menu-items {
+        max-height: calc(100vh - 316px); /* accommodate larger image & spacing */
+      }
+
+      /* Shift dropdown panels slightly left for tall phones */
+      .dropdown-menu {
+        left: 140px  ;
+        right: auto;
+      }
+    }
+
+    /* Make nav bar logo smaller on very small phones */
+    .bytes-nav .logo {
+      width: 80px;
+    }
+  }
+
+  /* Desktop (wide) screens */
+  @media (min-width: 1201px) {
+    .dropdown-menu {
+      left: 170px;
+      right: auto;
     }
   }

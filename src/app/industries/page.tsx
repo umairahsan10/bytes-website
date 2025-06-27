@@ -274,7 +274,7 @@ const IndustriesPage = () => {
   const HeroAnimatedText = ({ text }: { text: string }) => {
     return (
       <motion.div
-        className="text-6xl lg:text-8xl leading-none text-black font-bold tracking-wider uppercase"
+        className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl leading-none text-black font-bold tracking-wider uppercase"
         style={{ fontFamily: 'Bebas Neue, sans-serif', fontWeight: 700 }}
         initial="hidden"
         animate={animationsTriggered.hero ? "visible" : "hidden"}
@@ -360,7 +360,7 @@ const IndustriesPage = () => {
 
             <motion.p 
               variants={paragraphVariants as any} 
-              className="text-xl md:text-2xl lg:text-3xl font-semibold text-black max-w-2xl md:max-w-3xl lg:max-w-4xl"
+              className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-black max-w-2xl md:max-w-3xl lg:max-w-4xl"
             >
               We deliver cutting-edge solutions across diverse industries, transforming businesses with innovative technology.
             </motion.p>
@@ -390,8 +390,8 @@ const IndustriesPage = () => {
             className="relative"
           >
             {/* Placeholder for industries image */}
-            <div className="relative w-96 h-96 mx-auto bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center">
-              <div className="w-80 h-80 bg-black rounded-full flex items-center justify-center">
+            <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-[500px] md:h-[500px] mx-auto bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center">
+              <div className="w-56 h-56 md:w-64 md:h-64 lg:w-80 lg:h-80 bg-black rounded-full flex items-center justify-center">
                 <motion.div 
                   className="text-6xl text-yellow-400 font-bold flex items-center justify-center"
                   initial={{ scale: 0, rotate: -180 }}
@@ -430,7 +430,7 @@ const IndustriesPage = () => {
       </section>
 
       {/* Fintech Section */}
-      <section ref={fintechRef} className="order-3 pt-28 pb-12 bg-white text-black px-6 relative scroll-mt-28">
+      <section ref={fintechRef} className="order-3 pt-16 md:pt-24 lg:pt-28 pb-12 bg-white text-black px-6 relative scroll-mt-28">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
             variants={slideInLeft as any}
@@ -439,8 +439,8 @@ const IndustriesPage = () => {
             className="relative order-2 lg:order-1"
           >
             {/* Banking image */}
-            <div className="relative w-[500px] h-[500px] mx-auto">
-              <div className="absolute inset-0 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+            <div className="relative w-80 h-80 sm:w-96 sm:h-96 md:w-[500px] md:h-[500px] mx-auto">
+              <div className="absolute inset-0 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={animationsTriggered.fintech ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
@@ -450,7 +450,7 @@ const IndustriesPage = () => {
                   <img
                     src="/assets/money.jpg"
                     alt="Banking and Financial Services"
-                    className="w-full h-full object-cover object-[60%_center] rounded-full"
+                    className="w-full h-full object-cover object-[60%_center] rounded-lg"
                   />
                 </motion.div>
               </div>
@@ -536,28 +536,17 @@ const IndustriesPage = () => {
               We specialize in digital health solutions that enhance patient care and streamline medical operations.
             </motion.p>
             
-            <motion.div variants={staggerContainer as any} className="space-y-4">
-              <motion.div 
-                className="bg-yellow-400 text-black px-8 py-6 inline-block"
-                initial={{ opacity: 0, scale: 0.8, rotateY: -90, y: 0 }}
-                animate={animationsTriggered.healthcare ? { opacity: 1, scale: 1, rotateY: 0, y: [0, -10, 0] } : { opacity: 0, scale: 0.8, rotateY: -90, y: 0 }}
-                transition={{ duration: 1, ease: "easeInOut" }}
-              >
-                <h3 className="text-4xl font-bold">HEALTH</h3>
-              </motion.div>
-              
-              <motion.div className="ml-4">
-                <AnimatedBulletPoints
-                  points={[
-                    "Supporting patient-centric care through digital transformation",
-                    "Developing HIPAA-compliant solutions for clinics, hospitals, and health systems",
-                    "Improving health outcomes with data interoperability and AI-driven insights",
-                    "Enhancing patient engagement via mobile apps and portals"
-                  ]}
-                  className="text-white/80"
-                  inView={animationsTriggered.healthcare}
-                />
-              </motion.div>
+            <motion.div variants={staggerContainer as any}>
+              <AnimatedBulletPoints
+                points={[
+                  "Supporting patient-centric care through digital transformation",
+                  "Developing HIPAA-compliant solutions for clinics, hospitals, and health systems",
+                  "Improving health outcomes with data interoperability and AI-driven insights",
+                  "Enhancing patient engagement via mobile apps and portals"
+                ]}
+                className="text-white/80"
+                inView={animationsTriggered.healthcare}
+              />
             </motion.div>
           </motion.div>
           
@@ -565,10 +554,10 @@ const IndustriesPage = () => {
             variants={slideInRight as any}
             initial="hidden"
             animate={animationsTriggered.healthcare ? 'visible' : 'hidden'}
-            className="relative"
+            className="relative order-2 lg:order-1"
           >
             {/* Placeholder for healthcare image */}
-            <div className="relative w-[500px] h-[500px] mx-auto">
+            <div className="relative w-80 h-80 sm:w-96 sm:h-96 md:w-[500px] md:h-[500px] mx-auto">
               <div className="absolute inset-0 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.5 }}
@@ -589,7 +578,7 @@ const IndustriesPage = () => {
       </section>
 
       {/* E-commerce Section */}
-      <section ref={ecommerceRef} className="order-2 pt-28 pb-12 bg-black text-white px-6 relative scroll-mt-28">
+      <section ref={ecommerceRef} className="order-2 pt-16 md:pt-24 lg:pt-28 pb-12 bg-black text-white px-6 relative scroll-mt-28">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
             variants={slideInLeft as any}
@@ -598,7 +587,7 @@ const IndustriesPage = () => {
             className="relative order-2 lg:order-2"
           >
             {/* Placeholder for e-commerce mockup */}
-            <div className="relative w-[500px] h-[500px] mx-auto">
+            <div className="relative w-80 h-80 sm:w-96 sm:h-96 md:w-[500px] md:h-[500px] mx-auto">
               <div className="absolute inset-0 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.5 }}
@@ -678,13 +667,13 @@ const IndustriesPage = () => {
       </section>
 
       {/* Education Section */}
-      <section ref={educationRef} className="order-1 pt-16 pb-12 bg-white text-black px-6 relative z-10 scroll-mt-28">
+      <section ref={educationRef} className="order-1 -mt-12 md:-mt-14 lg:-mt-16 pt-2 pb-12 bg-white text-black px-6 relative z-10 scroll-mt-28">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
             variants={staggerContainer as any}
             initial="hidden"
             animate={animationsTriggered.education ? 'visible' : 'hidden'}
-            className="space-y-8 order-2 lg:order-2"
+            className="space-y-8 order-1 lg:order-2"
           >
             <motion.div variants={staggerContainer as any} className="space-y-6">
               <AnimatedHeader
@@ -728,10 +717,10 @@ const IndustriesPage = () => {
             variants={slideInRight as any}
             initial="hidden"
             animate={animationsTriggered.education ? 'visible' : 'hidden'}
-            className="relative order-1 lg:order-1"
+            className="relative order-2 lg:order-1"
           >
             {/* Placeholder for federal government image */}
-            <div className="relative w-[500px] h-[500px] mx-auto">
+            <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-[500px] md:h-[500px] mx-auto">
               <div className="absolute inset-0 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.5 }}

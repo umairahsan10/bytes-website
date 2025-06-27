@@ -23,6 +23,7 @@ const Header: React.FC<HeaderProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [buttonText, setButtonText] = useState('Menu');
+  const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
   const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
   const router = useRouter();
@@ -38,6 +39,9 @@ const Header: React.FC<HeaderProps> = ({
     x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0,
     y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0,
   });
+
+  // Track previous scroll position for hide/show header
+  const lastScrollY = useRef(0);
 
   // Animation settings
   const defaultEase = "power4.inOut";
@@ -133,16 +137,34 @@ const Header: React.FC<HeaderProps> = ({
       }
     };
 
+    // Scroll listener to hide/show header
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      const diff = currentY - lastScrollY.current;
+      if (!isOpen) {
+        if (diff > 10 && currentY > 50) {
+          // scrolling down
+          setIsHeaderHidden(true);
+        } else if (diff < -10) {
+          // scrolling up
+          setIsHeaderHidden(false);
+        }
+      }
+      lastScrollY.current = currentY;
+    };
+
     // Add event listeners
     document.body.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('resize', handleResize);
     document.addEventListener('click', handleClickOutside);
+    window.addEventListener('scroll', handleScroll);
 
     // Cleanup event listeners
     return () => {
       document.body.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
       document.removeEventListener('click', handleClickOutside);
+      window.removeEventListener('scroll', handleScroll);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -382,10 +404,10 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <div className={`bytes-menu-container ${className} ${isOpen ? 'menu-open' : ''}`}>
       {/* Navigation bar */}
-      <nav className={`bytes-nav h-14 flex items-center py-0 px-4 z-[200] ${
+      <nav className={`bytes-nav h-14 flex items-center py-0 px-4 z-[200] transition-transform duration-300 ${ isHeaderHidden ? '-translate-y-full' : 'translate-y-0' } ${
         transparentNav 
           ? 'bg-transparent' 
-          : 'bg-slate-900/80 backdrop-blur-md'
+          : 'bg-[#101010]'
       }`}>
         <div className="logo" onClick={handleLogoClick}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -460,9 +482,6 @@ const Header: React.FC<HeaderProps> = ({
                 </a>
               </p>
               <div className={`dropdown-menu ${isServicesDropdownOpen ? 'open' : ''}`}>
-                <div className="dropdown-item">
-                  <a href="/services" onClick={handleServicesDropdownClick}>All Services</a>
-                </div>
                 <div className="dropdown-item">
                   <a href="/services/app" onClick={handleServicesDropdownClick}>App Development</a>
                 </div>

@@ -1,35 +1,631 @@
 "use client";
 
+import React, { useState, useEffect, useRef } from 'react';
+import Image from "next/image";
 import { Header } from "@/sections/Navbar";
-import { Footer } from "@/sections/Footer";
+import Link from "next/link";
+// @ts-ignore – lucide-react icons (ensure dependency installed in runtime)
+import { ChevronDown, Menu, X, Code, Zap, Users, Award, ArrowRight, Star, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Play, Smartphone, Monitor, Database, Cloud, Globe, Layers } from 'lucide-react';
 
-export default function WebDevelopmentPage() {
+const WebDevelopmentLanding = () => {
+  const [scrollY, setScrollY] = useState(0);
+  const [counters, setCounters] = useState({
+    projects: 0,
+    clients: 0,
+    lines: 0,
+    years: 0
+  });
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const statsRef = useRef<HTMLDivElement | null>(null);
+  const [selectedService, setSelectedService] = useState<(typeof webDevServices)[number] | null>(null);
+  const [serviceClosing, setServiceClosing] = useState(false);
+  const [selectedProcess, setSelectedProcess] = useState<(typeof developmentProcess)[number] | null>(null);
+  const [processClosing, setProcessClosing] = useState(false);
+
+  // Tech stack animation
+  const stackRef = useRef<HTMLDivElement | null>(null);
+  const [stackVisible, setStackVisible] = useState(false);
+
+  // Visibility for 'Why Choose Us' section
+  const chooseRef = useRef<HTMLDivElement | null>(null);
+  const [chooseVisible, setChooseVisible] = useState(false);
+
+  // Visibility for Web Development Services section
+  const servicesRef = useRef<HTMLDivElement | null>(null);
+  const [servicesVisible, setServicesVisible] = useState(false);
+
+  // Visibility for Development Process section
+  const processRef = useRef<HTMLDivElement | null>(null);
+  const [processVisible, setProcessVisible] = useState(false);
+
+  // Ensure page starts at top when refreshed
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Disable automatic scroll restoration so the page always starts at the top
+      if ('scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'manual';
+      }
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated) {
+          setHasAnimated(true);
+          animateCounters();
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (statsRef.current) {
+      observer.observe(statsRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasAnimated]);
+
+  useEffect(() => {
+    if (!stackRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setStackVisible(entry.isIntersecting);
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(stackRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!chooseRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setChooseVisible(entry.isIntersecting);
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(chooseRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Observer for Services section
+  useEffect(() => {
+    if (!servicesRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setServicesVisible(entry.isIntersecting);
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(servicesRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Observer for Development Process section
+  useEffect(() => {
+    if (!processRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setProcessVisible(entry.isIntersecting);
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(processRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const animateCounters = () => {
+    const duration = 2000;
+    const targets = { projects: 300, clients: 100, lines: 1000000, years: 10 } as const;
+    type TargetKey = keyof typeof targets;
+    
+    (Object.keys(targets) as TargetKey[]).forEach((key) => {
+      let start = 0;
+      const end = targets[key];
+      const increment = end / (duration / 16);
+      
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= end) {
+          start = end;
+          clearInterval(timer);
+        }
+        setCounters(prev => ({ ...prev, [key]: Math.floor(start) }));
+      }, 16);
+    });
+  };
+
+  const webDevServices = [
+    { 
+      icon: Globe, 
+      title: "Frontend Development", 
+      desc: "Modern, responsive websites using React, Vue.js, and Angular with cutting-edge design principles",
+      technologies: ["React", "Vue.js", "Angular", "TypeScript"]
+    },
+    { 
+      icon: Database, 
+      title: "Backend Development", 
+      desc: "Scalable server-side solutions with robust APIs, databases, and cloud integration",
+      technologies: ["Node.js", "Python", "PHP", "MongoDB"]
+    },
+    { 
+      icon: Smartphone, 
+      title: "Mobile-First Design", 
+      desc: "Responsive web applications that work flawlessly across all devices and screen sizes",
+      technologies: ["PWA", "Responsive", "Mobile UI", "Cross-platform"]
+    },
+    { 
+      icon: Cloud, 
+      title: "Full-Stack Solutions", 
+      desc: "End-to-end web development from concept to deployment with modern DevOps practices",
+      technologies: ["MEAN", "MERN", "JAMstack", "Serverless"]
+    }
+  ] as const;
+
+  const techStack = [
+    { name: "React", category: "Frontend", level: 95 },
+    { name: "Node.js", category: "Backend", level: 90 },
+    { name: "TypeScript", category: "Language", level: 88 },
+    { name: "MongoDB", category: "Database", level: 85 },
+    { name: "AWS", category: "Cloud", level: 82 },
+    { name: "Docker", category: "DevOps", level: 80 }
+  ];
+
+  const developmentProcess = [
+    { step: "01", title: "Discovery & Planning", desc: "We analyze your requirements and create a detailed project roadmap", details:["Stakeholder interviews & workshops","Competitive analysis","Technical feasibility study"] },
+    { step: "02", title: "Design & Prototyping", desc: "Creating wireframes and interactive prototypes for user validation", details:["User-flow mapping","High-fidelity UI mock-ups","Interactive prototypes"] },
+    { step: "03", title: "Development", desc: "Building your application with clean, maintainable, and scalable code", details:["Agile sprints","Code reviews","Continuous integration"] },
+    { step: "04", title: "Testing & Quality Assurance", desc: "Comprehensive testing to ensure bug-free, performant applications", details:["Unit & integration tests","Performance benchmarking","Security audits"] },
+    { step: "05", title: "Deployment & Launch", desc: "Seamless deployment with monitoring and performance optimization", details:["Automated CI/CD pipelines","Cloud environment setup","Zero-downtime rollouts"] },
+    { step: "06", title: "Maintenance & Support", desc: "Ongoing support, updates, and feature enhancements", details:["24/7 monitoring","Regular updates","Feature iterations based on user feedback"] }
+  ];
+
+  // Handlers for modal close with animation
+  const closeServiceModal = () => {
+    setServiceClosing(true);
+    setTimeout(() => {
+      setSelectedService(null);
+      setServiceClosing(false);
+    }, 300); // duration must match zoomOut animation
+  };
+
+  const closeProcessModal = () => {
+    setProcessClosing(true);
+    setTimeout(() => {
+      setSelectedProcess(null);
+      setProcessClosing(false);
+    }, 300);
+  };
+
   return (
-    <>
+    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
       <Header />
-      <main className="min-h-screen bg-slate-900 text-white">
-        <div className="container mx-auto px-4 py-16">
-          <h1 className="text-4xl font-bold mb-8">Web Development</h1>
-          <p className="text-lg text-gray-300 mb-6">
-            We build modern, scalable, and high-performance websites and web applications that deliver exceptional user experiences.
-          </p>
-          <div className="grid md:grid-cols-2 gap-8 mt-12">
-            <div className="bg-slate-800 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-4">Frontend Development</h3>
-              <p className="text-gray-300">
-                React, Next.js, and modern JavaScript frameworks for responsive and interactive user interfaces.
-              </p>
+
+      {/* Hero Section */}
+      <section id="home" className="min-h-screen flex items-center relative overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 opacity-70" />
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-20 w-64 h-64 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse" />
+          <div className="absolute top-40 right-20 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-2000" />
+          <div className="absolute bottom-20 left-1/2 w-80 h-80 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-4000" />
+        </div>
+
+        <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10">
+          {/* Left Side - Video/Image (will be shown below text on mobile) */}
+          <div className="relative order-2 lg:order-none">
+            <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-700">
+              <video
+                src="/assets/WebDev/intro-vid.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-blue-900/40 to-transparent pointer-events-none" />
             </div>
-            <div className="bg-slate-800 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-4">Backend Development</h3>
-              <p className="text-gray-300">
-                Node.js, Python, and cloud-native architectures for robust and scalable backend systems.
-              </p>
+          </div>
+
+          {/* Right Side - Text */}
+          <div className="space-y-8 animate-fade-in-up text-center lg:text-left order-1 lg:order-none">
+            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold leading-tight break-words">
+              <span className="text-gray-900">Web Development</span>
+              <br />
+              <span className="bg-gradient-to-r from-blue-700 to-blue-900 bg-clip-text text-transparent">Excellence.</span>
+            </h1>
+            
+            <p className="text-xl text-gray-600 leading-relaxed max-w-lg">
+              Custom web applications built with modern technologies. From responsive websites to complex web platforms, we deliver scalable solutions that drive your business forward.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link href="/contact" className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold hover:from-blue-700 hover:to-blue-800 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-center">
+                Start Your Project
+              </Link>
             </div>
           </div>
         </div>
-      </main>
-      <Footer />
-    </>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <ChevronDown className="w-8 h-8 text-blue-600" />
+        </div>
+      </section>
+
+      {/* Web Development Services Section */}
+      <section id="services" className="py-20 bg-gradient-to-r from-blue-50 to-white" ref={servicesRef}>
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
+              Web Development <span className="text-blue-600">Services</span>
+              </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Comprehensive web development solutions using cutting-edge technologies and industry best practices. We build fast, secure, and scalable web applications tailored to your business needs.
+            </p>
+          </div>
+          
+          <div className="grid lg:grid-cols-2 gap-8 mb-16">
+            {webDevServices.map((service, index) => {
+              const Icon = service.icon;
+              return (
+                <div
+                  key={index}
+                  className={`p-8 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-700 transform hover:-translate-y-2 cursor-pointer ${servicesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+                  style={{ transitionDelay: `${index * 100}ms` }}
+                  onClick={() => setSelectedService(service)}
+                >
+                  <div className="flex items-start space-x-6">
+                    <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center">
+                      <Icon className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-bold mb-2">{service.title}</h3>
+                      <p className="text-gray-600 line-clamp-2">{service.desc}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section ref={statsRef} className="py-20 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+            <div className="space-y-2">
+              <div className="text-4xl lg:text-5xl font-bold">{counters.projects}+</div>
+              <div className="text-blue-200">Web Projects</div>
+            </div>
+            <div className="space-y-2">
+              <div className="text-4xl lg:text-5xl font-bold">{counters.clients}+</div>
+              <div className="text-blue-200">Happy Clients</div>
+            </div>
+            <div className="space-y-2">
+              <div className="text-4xl lg:text-5xl font-bold">{(counters.lines / 1000000).toFixed(1)}M+</div>
+              <div className="text-blue-200">Lines of Code</div>
+            </div>
+            <div className="space-y-2">
+              <div className="text-4xl lg:text-5xl font-bold">{counters.years}+</div>
+              <div className="text-blue-200">Years Experience</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Technology Stack Section */}
+      <section className="py-20" ref={stackRef}>
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
+              Our <span className="text-blue-600">Technology Stack</span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              We leverage the latest technologies and frameworks to build robust, scalable web applications that meet modern standards.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {techStack.map((tech, index) => (
+              <div key={index} className="p-6 bg-gradient-to-br from-blue-50 to-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-xl font-bold">{tech.name}</h3>
+                  <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm font-medium">
+                    {tech.category}
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
+                  <div 
+                    className="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-1000 ease-out"
+                    style={{ width: stackVisible ? `${tech.level}%` : '0%' }}
+                  ></div>
+              </div>
+                <div className="text-right text-sm text-gray-600">{tech.level}%</div>
+                  </div>
+                ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Development Process Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-50 to-white" ref={processRef}>
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
+              <span className="text-gray-900">Our</span> <span className="text-blue-600">Development&nbsp;Process</span>
+              </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              We follow a proven development methodology that ensures quality, transparency, and timely delivery of your web project.
+            </p>
+            </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {developmentProcess.map((process, index) => (
+              <div
+                key={index}
+                className={`relative p-8 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-700 transform hover:-translate-y-2 cursor-pointer ${processVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+                style={{ transitionDelay: `${index * 100}ms` }}
+                onClick={() => setSelectedProcess(process)}
+              >
+                <div className="absolute -top-4 -left-4 w-14 h-14 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center">
+                  <span className="font-bold text-blue-600 text-lg">{process.step}</span>
+                </div>
+                <h3 className="text-2xl font-bold mb-3">{process.title}</h3>
+                <p className="text-gray-600 line-clamp-1">{process.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us Section */}
+      <section className="py-20" ref={chooseRef}>
+        <div className="container mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left Side - Image */}
+            <div className={`relative aspect-square rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 ${chooseVisible ? 'animate-slide-in-right' : 'opacity-0 translate-x-10'}`}>
+              <Image
+                src="/assets/WebDev/last-section.jpg"
+                alt="Why choose our web development services"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                priority
+              />
+            </div>
+
+            {/* Right Side - Text */}
+            <div className={`space-y-8 transition-all duration-700 ${chooseVisible ? 'animate-slide-in-left' : 'opacity-0 -translate-x-10'}`}>
+              <h2 className="text-4xl lg:text-5xl font-bold">
+                Why Choose Our <span className="text-blue-600">Web Development</span>
+              </h2>
+              <p className="text-xl text-gray-600 leading-relaxed">
+                We combine technical expertise with creative problem-solving to deliver web solutions that not only meet your requirements but exceed your expectations.
+              </p>
+              
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <div className="w-6 h-6 bg-blue-600 rounded-full flex-shrink-0 mt-1"></div>
+                  <div>
+                    <h4 className="font-semibold text-lg mb-2">Modern Architecture</h4>
+                    <p className="text-gray-600">Built with scalable, maintainable code using industry best practices and modern frameworks.</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <div className="w-6 h-6 bg-blue-600 rounded-full flex-shrink-0 mt-1"></div>
+                  <div>
+                    <h4 className="font-semibold text-lg mb-2">Performance Optimized</h4>
+                    <p className="text-gray-600">Lightning-fast loading times and optimized performance across all devices and browsers.</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <div className="w-6 h-6 bg-blue-600 rounded-full flex-shrink-0 mt-1"></div>
+                  <div>
+                    <h4 className="font-semibold text-lg mb-2">Security First</h4>
+                    <p className="text-gray-600">Robust security measures and best practices to protect your application and user data.</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <div className="w-6 h-6 bg-blue-600 rounded-full flex-shrink-0 mt-1"></div>
+                  <div>
+                    <h4 className="font-semibold text-lg mb-2">Ongoing Support</h4>
+                    <p className="text-gray-600">Comprehensive maintenance, updates, and technical support to keep your application running smoothly.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* <Link href="/contact" className="px-8 py-4 bg-blue-600 text-white rounded-full font-semibold hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 text-center inline-block">
+                Start Your Web Project
+              </Link> */}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Call To Action Section */}
+      <section className="relative overflow-hidden py-24 bg-gradient-to-r from-gray-600 to-gray-800 text-white text-center">
+        {/* Background image */}
+        <div
+          className="absolute inset-0 bg-center bg-cover opacity-20 pointer-events-none"
+          style={{ backgroundImage: "url('/assets/WebDev/connect.jpg')" }}
+        />
+
+        {/* Content */}
+        <div className="relative z-10 container mx-auto px-6">
+          <h2 className="text-4xl lg:text-5xl font-bold mb-8">
+            Ready to&nbsp;<span className="text-white">build with us?</span>
+          </h2>
+          <Link
+            href="/contact"
+            className="inline-block px-10 py-4 bg-white text-blue-700 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+          >
+            Build&nbsp;With&nbsp;Us
+          </Link>
+        </div>
+      </section>
+
+      {/* Modal Overlay */}
+      {selectedService && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={closeServiceModal}>
+          <div
+            className={`w-[70vw] max-w-[70vw] bg-white rounded-3xl shadow-2xl p-10 relative overflow-y-auto max-h-[80vh] transform transition-all duration-300 ${serviceClosing ? 'animate-zoom-out' : 'animate-zoom-in'}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+              onClick={closeServiceModal}
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <div className="flex items-start space-x-6 mb-6">
+              <div className="flex-shrink-0 w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center">
+                <selectedService.icon className="w-10 h-10 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="text-3xl font-bold mb-2">{selectedService.title}</h3>
+                <p className="text-gray-600 text-lg leading-relaxed">{selectedService.desc}</p>
+              </div>
+              </div>
+            <h4 className="font-semibold text-lg mb-3">Key Technologies</h4>
+            <div className="flex flex-wrap gap-3 mb-6">
+              {selectedService.technologies.map((tech, idx) => (
+                <span key={idx} className="px-4 py-1 bg-blue-100 text-blue-600 rounded-full font-medium text-sm">
+                  {tech}
+                </span>
+              ))}
+            </div>
+            <p className="text-gray-600">Get in touch to learn how our {selectedService.title.toLowerCase()} expertise can accelerate your project.</p>
+          </div>
+        </div>
+      )}
+
+      {/* Process Modal */}
+      {selectedProcess && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={closeProcessModal}>
+          <div className={`w-[60vw] max-w-[60vw] bg-white rounded-3xl shadow-2xl p-10 relative transform transition-all duration-300 ${processClosing ? 'animate-zoom-out' : 'animate-zoom-in'}`} onClick={e=>e.stopPropagation()}>
+            <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-600" onClick={closeProcessModal}>
+              <X className="w-6 h-6" />
+            </button>
+            <div className="flex items-center space-x-6 mb-6">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center font-bold text-blue-600 text-xl">
+                {selectedProcess.step}
+              </div>
+              <h3 className="text-3xl font-bold">{selectedProcess.title}</h3>
+            </div>
+            <p className="text-gray-600 text-lg leading-relaxed mb-4">{selectedProcess.desc}</p>
+            <ul className="list-disc ml-6 space-y-2 text-gray-600">
+              {selectedProcess.details.map((d,idx)=>(
+                <li key={idx}>{d}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+
+      <style jsx>{`
+        .animate-fade-in-up {
+          animation: fadeInUp 1s ease-out;
+        }
+        
+        .animate-slide-in-left {
+          animation: slideInLeft 0.8s ease-out;
+        }
+        
+        .animate-slide-in-right {
+          animation: slideInRight 0.8s ease-out;
+        }
+        
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+        
+        .animation-delay-4000 {
+          animation-delay: 4s;
+        }
+        
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes slideInLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-50px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes slideInRight {
+          from {
+            opacity: 0;
+            transform: translateX(50px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes zoomIn {
+          from {
+            opacity: 0;
+            transform: scale(0.8);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        
+        @keyframes zoomOut {
+          from {
+            opacity: 1;
+            transform: scale(1);
+          }
+          to {
+            opacity: 0;
+            transform: scale(0.8);
+          }
+        }
+        
+        .animate-zoom-in {
+          animation: zoomIn 0.3s ease-out forwards;
+        }
+        
+        .animate-zoom-out {
+          animation: zoomOut 0.3s ease-in forwards;
+        }
+        
+        @media (max-width: 768px) {
+          .animate-slide-in-left,
+          .animate-slide-in-right {
+            animation: fadeInUp 0.8s ease-out;
+          }
+        }
+      `}</style>
+    </div>
   );
-} 
+};
+
+export default WebDevelopmentLanding;
