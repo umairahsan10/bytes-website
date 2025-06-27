@@ -91,13 +91,15 @@ export default function ZoomParallax() {
   });
 
   return (
-    <div ref={container} className="relative h-[250vh] bg-white">
+    <div
+      ref={container}
+      className="relative bg-white h-[200vh]"
+    >
       {/* sticky viewport with white background */}
       <div className="sticky top-0 h-screen overflow-hidden bg-white">
         {pictures.map(({ src, scaleEnd, style }, index) => {
           const scale = useTransform(scrollYProgress, [0, 1], [1, scaleEnd]);
-          const opacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0]);
-          const rotate = useTransform(scrollYProgress, [0, 1], [0, index % 2 === 0 ? 360 : -360]);
+          const opacity = useTransform(scrollYProgress, [0, 0.25, 0.9, 1], [1, 1, 1, 0]);
           
           return (
             <motion.div
@@ -162,4 +164,4 @@ export default function ZoomParallax() {
       </div>
     </div>
   );
-} 
+}
