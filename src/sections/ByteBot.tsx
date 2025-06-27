@@ -85,7 +85,7 @@ export const ByteBotsSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="bytebots-section relative bg-white text-gray-900 py-1 md:py-0 overflow-hidden"
+      className="bytebots-section relative text-black py-1 md:py-0 overflow-hidden"
     >
       {/* Centered purple flower background */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
