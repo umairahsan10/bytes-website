@@ -202,8 +202,8 @@ export default function Home() {
         {cardData.map((card, index) => (
           <Card
             key={index}
-            id={`card-${index + 1}`}
-            frontSrc="/card-front.jpg"
+            id={`card-${index + 1}`} 
+            frontSrc="/assets/card-front.png"
             frontAlt={`${card.category} service card`}
             category={card.category}
             title={card.title}
