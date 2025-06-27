@@ -160,35 +160,94 @@ const AppDevelopmentPage = () => {
       <motion.section 
         ref={heroRef}
         style={{ y, opacity }}
-        className="relative h-screen flex items-center justify-start bg-[#E1E1E1] px-4 md:px-8 lg:px-16"
+        className="relative h-screen flex items-center justify-between bg-[#2a3270] px-4 md:px-8 lg:px-16"
       >
-        <Image
-          src="/assets/app-hero.png"
-          alt="Team brainstorming on mobile-app UI"
-          fill
-          className="object-cover opacity-100 absolute inset-0"
-        />
-
-        <div className="relative z-10 text-left w-full md:w-3/5 lg:w-1/2">
+        {/* Left side - Text content */}
+        <div className="relative z-10 text-left w-full md:w-3/10 lg:w-3/10">
           <motion.h1 
             ref={titleRef}
-            className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight mb-6 md:mb-8"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight mb-6 md:mb-8"
             initial={{ opacity: 0, y: 100 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false }}
             transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] as const }}
           >
             <span className="bg-gradient-to-r from-[#E1E3E2] to-purple-700 bg-clip-text text-transparent">
-              MOBILE
-            </span>
-            <br />
-            <span className="bg-gradient-to-r from-[#E1E3E2] to-purple-700 bg-clip-text text-transparent">
-              APPS
+              MOBILE APPS
             </span>
           </motion.h1>
           
           <AnimatedParagraph
-            text="When innovation meets functionality, Bytes Platform delivers cutting-edge mobile applications that transform ideas into powerful digital experiences, building on years of development expertise."
+            text="Transform your ideas into powerful mobile experiences with cutting-edge development expertise."
             className="text-base sm:text-lg md:text-xl lg:text-2xl text-white leading-relaxed max-w-2xl"
+          />
+        </div>
+
+        {/* Right side - Hero image */}
+        <div className="relative w-full md:w-7/10 lg:w-7/10 h-full flex items-center justify-center overflow-hidden">
+          <motion.div
+            className="relative w-full h-full max-w-2xl"
+            whileInView={{
+              y: [0, -20, 0],
+              rotate: [0, 2, 0]
+            }}
+            transition={{
+              duration: 8,
+              ease: "easeInOut"
+            }}
+            viewport={{ once: false }}
+          >
+            <Image
+              src="/assets/app-hero-img.png"
+              alt="Team brainstorming on mobile-app UI"
+              fill
+              className="object-contain opacity-100 scale-150 -translate-x-20"
+            />
+          </motion.div>
+
+          {/* Floating elements around the hero image */}
+          <motion.div
+            className="absolute top-20 right-20 w-16 h-16 bg-purple-500/20 rounded-full backdrop-blur-sm border border-purple-400/30"
+            whileInView={{
+              y: [0, -30, 0],
+              rotate: [0, 180, 360],
+              scale: [1, 1.2, 1]
+            }}
+            transition={{
+              duration: 6,
+              ease: "easeInOut"
+            }}
+            viewport={{ once: false }}
+          />
+          
+          <motion.div
+            className="absolute bottom-32 left-16 w-12 h-12 bg-blue-500/20 rounded-full backdrop-blur-sm border border-blue-400/30"
+            whileInView={{
+              y: [0, 25, 0],
+              rotate: [0, -90, 0],
+              scale: [1, 1.1, 1]
+            }}
+            transition={{
+              duration: 5,
+              ease: "easeInOut",
+              delay: 1
+            }}
+            viewport={{ once: false }}
+          />
+
+          <motion.div
+            className="absolute top-1/2 right-1/4 w-8 h-8 bg-green-500/20 rounded-full backdrop-blur-sm border border-green-400/30"
+            whileInView={{
+              y: [0, -15, 0],
+              x: [0, 10, 0],
+              scale: [1, 1.3, 1]
+            }}
+            transition={{
+              duration: 4,
+              ease: "easeInOut",
+              delay: 2
+            }}
+            viewport={{ once: false }}
           />
         </div>
       </motion.section>
@@ -196,13 +255,22 @@ const AppDevelopmentPage = () => {
       {/* Scrolling Phone Mockup Section */}
       <div ref={phoneContainerRef} className="relative min-h-[400vh] bg-white py-16 md:py-20 lg:py-24">
         <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
-          <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+          <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 grid grid-cols-3 gap-8 items-center">
             
-            {/* Left - Mobile Phone */}
-            <div className="flex-1 flex items-center justify-center order-2 lg:order-1 mb-8 lg:mb-0">
-              <div className="relative">
-                {/* Phone frame */}
-                <div className="relative w-[240px] sm:w-[280px] md:w-[300px] h-[488px] sm:h-[569px] md:h-[610px] mx-auto">
+            {/* Left side - Phone mockup */}
+            <div className="col-span-1 flex items-center justify-center">
+              <motion.div 
+                className="relative"
+                style={{
+                  y: useTransform(
+                    phoneScrollProgress,
+                    [0, 0.1, 0.9, 1], // Move down to stick by 10%, stay fixed until 90%, then move up
+                    [100, 0, 0, -300]
+                  )
+                }}
+              >
+                {/* Static phone frame */}
+                <div className="relative w-[200px] sm:w-[240px] md:w-[260px] h-[406px] sm:h-[488px] md:h-[530px] mx-auto">
                   {/* iPhone 14 frame */}
                   <div className="absolute inset-0 z-20">
                     <Image
@@ -214,175 +282,224 @@ const AppDevelopmentPage = () => {
                     />
                   </div>
 
-                  {/* Screen content with fade transitions */}
-                  <div className="absolute top-[26px] sm:top-[30px] md:top-[32px] left-[26px] sm:left-[30px] md:left-[33px] w-[188px] sm:w-[218px] md:w-[234px] h-[406px] sm:h-[472px] md:h-[507px] rounded-[36px] sm:rounded-[40px] md:rounded-[45px] overflow-hidden bg-gray-50">
-                    {/* Current screen image with fade transition */}
+                  {/* Screen content with step-by-step sliding */}
+                  <div className="absolute top-[22px] sm:top-[26px] md:top-[28px] left-[22px] sm:left-[26px] md:left-[28px] w-[156px] sm:w-[188px] md:w-[204px] h-[338px] sm:h-[406px] md:h-[442px] rounded-[30px] sm:rounded-[34px] md:rounded-[38px] overflow-hidden bg-gray-50">
                     <motion.div
-                      key={currentScreen}
-                      className="absolute inset-0 w-full h-full"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.8, ease: "easeInOut" }}
+                      className="relative w-full h-full"
+                      style={{
+                        y: useTransform(
+                          phoneScrollProgress,
+                          [0.1, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], // Start after section is stuck, step-by-step movement
+                          [0, 0, -442, -442, -884, -884, -1326, -1326, -1768]
+                        )
+                      }}
                     >
-                      <Image
-                        src={appScreens[currentScreen]?.image || ''}
-                        alt={appScreens[currentScreen]?.title || ''}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 640px) 188px, (max-width: 768px) 218px, 234px"
-                      />
+                      {appScreens.map((screen, index) => (
+                        <div
+                          key={screen.id}
+                          className="absolute top-0 left-0 w-full h-full"
+                          style={{ top: `${index * 442}px` }}
+                        >
+                          <Image
+                            src={screen.image}
+                            alt={screen.title}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 640px) 156px, (max-width: 768px) 188px, 204px"
+                          />
+                          
+                          {/* Screen overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent">
+                            <div className="absolute bottom-3 left-3 right-3">
+                              <div className="bg-white/90 backdrop-blur-sm rounded-lg p-2">
+                                <h3 className="text-xs font-semibold text-gray-800 mb-1">
+                                  {screen.title}
+                                </h3>
+                                <div className="flex space-x-1">
+                                  {[1, 2, 3, 4].map((i) => (
+                                    <div
+                                      key={i}
+                                      className={`h-1 rounded-full ${
+                                        i <= index + 1 ? 'bg-purple-500' : 'bg-gray-300'
+                                      }`}
+                                      style={{ width: `${12 + Math.random() * 18}px` }}
+                                    />
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </motion.div>
                   </div>
+
+                  {/* Floating elements around phone */}
+                  <motion.div
+                    className="absolute -right-4 top-12 w-10 h-10 bg-purple-500/20 rounded-full backdrop-blur-sm border border-purple-400/30"
+                    whileInView={{
+                      y: [0, -12, 0],
+                      rotate: [0, 180, 360]
+                    }}
+                    transition={{
+                      duration: 6,
+                      ease: "easeInOut"
+                    }}
+                    viewport={{ once: false }}
+                  />
+                  
+                  <motion.div
+                    className="absolute -left-3 bottom-20 w-8 h-8 bg-purple-500/20 rounded-full backdrop-blur-sm border border-purple-400/30"
+                    whileInView={{
+                      y: [0, 10, 0],
+                      scale: [1, 1.2, 1]
+                    }}
+                    transition={{
+                      duration: 4,
+                      ease: "easeInOut",
+                      delay: 1
+                    }}
+                    viewport={{ once: false }}
+                  />
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Center - Timeline with circles */}
+            <div className="col-span-1 flex items-center justify-center">
+              <div className="relative flex flex-col items-center">
+                {/* Vertical timeline line with circles on it */}
+                <div className="relative w-px h-[60vh] bg-gray-300">
+                  {/* Progress line */}
+                  <motion.div
+                    className="absolute top-0 left-0 w-full bg-gradient-to-b from-purple-600 to-purple-800 origin-top"
+                    style={{
+                      scaleY: useTransform(
+                        phoneScrollProgress,
+                        [0.1, 0.8], // Timeline fills during the step-by-step phase
+                        [0, 1]
+                      ),
+                      transformOrigin: 'top'
+                    }}
+                  />
+                  
+                  {/* Circles positioned on the line - step-by-step */}
+                  <motion.div
+                    className="absolute inset-0"
+                    style={{
+                      y: useTransform(
+                        phoneScrollProgress,
+                        [0.1, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], // Start after section is stuck, step-by-step movement
+                        [0, 0, -60, -60, -120, -120, -240, -240, -360]
+                      )
+                    }}
+                  >
+                    {appScreens.map((screen, index) => (
+                      <motion.div
+                        key={screen.id}
+                        className="absolute top-0 left-1/2 transform -translate-x-1/2 w-12 h-12"
+                        style={{ top: `${index * 120}px` }}
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ 
+                          scale: index === currentScreen ? 1 : 0,
+                          opacity: index === currentScreen ? 1 : 0
+                        }}
+                        transition={{ 
+                          duration: 0.5, 
+                          delay: index * 0.1,
+                          ease: "easeOut"
+                        }}
+                      >
+                        {/* Circle */}
+                        <div className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                          index === currentScreen
+                            ? 'border-purple-600 bg-purple-600 text-white shadow-lg scale-125'
+                            : index < currentScreen
+                              ? 'border-purple-600 bg-purple-600 text-white'
+                              : 'border-gray-300 bg-white text-gray-400'
+                        }`}>
+                          <span className="text-lg font-semibold">{String(index + 1).padStart(2, '0')}</span>
+                        </div>
+                        
+                        {/* Active circle glow effect */}
+                        {index === currentScreen && (
+                          <motion.div
+                            className="absolute inset-0 w-12 h-12 rounded-full bg-purple-600/30"
+                            whileInView={{
+                              scale: [1, 1.5, 1],
+                              opacity: [0.5, 0, 0.5]
+                            }}
+                            transition={{
+                              duration: 2,
+                              ease: "easeInOut"
+                            }}
+                            viewport={{ once: false }}
+                          />
+                        )}
+                      </motion.div>
+                    ))}
+                  </motion.div>
                 </div>
               </div>
             </div>
 
-            {/* Center - Vertical Timeline with Moving Number Icons */}
-            <div className="hidden lg:flex relative flex-col items-center justify-center px-8 xl:px-12 order-2">
-              {/* Vertical timeline line */}
-              <div className="relative w-px h-[60vh] bg-gray-200">
+            {/* Right side - Text content */}
+            <div className="col-span-1 text-gray-900 space-y-8">
+              {/* Vertical sliding text container */}
+              <div className="relative h-[60vh] overflow-hidden">
                 <motion.div
-                  className="w-full bg-purple-600 origin-top"
+                  className="relative w-full h-full"
                   style={{
-                    scaleY: phoneScrollProgress,
-                    transformOrigin: 'top'
+                    y: useTransform(
+                      phoneScrollProgress,
+                      [0.1, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], // Start after section is stuck, step-by-step movement
+                      [0, 0, -400, -400, -800, -800, -1200, -1200, -1600]
+                    )
                   }}
-                />
-              </div>
-              
-              {/* Moving number icons */}
-              <div className="absolute inset-0 flex flex-col justify-around items-center py-12 lg:py-16">
-                {appScreens.map((screen, index) => (
-                  <motion.div
-                    key={screen.id}
-                    className="relative"
-                    initial={{ scale: 0, y: 50 }}
-                    animate={{ 
-                      scale: index <= currentScreen ? 1 : 0,
-                      y: index <= currentScreen ? 0 : 50
-                    }}
-                    transition={{ 
-                      duration: 0.5, 
-                      delay: index * 0.2,
-                      ease: "easeOut"
-                    }}
-                  >
-                    {/* Number circle */}
-                    <div className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                      index === currentScreen
-                        ? 'border-purple-600 bg-purple-600 text-white shadow-lg scale-125'
-                        : index < currentScreen
-                          ? 'border-purple-600 bg-purple-600 text-white'
-                          : 'border-gray-300 bg-white text-gray-400'
-                    }`}>
-                      <span className="text-lg font-semibold">{String(index + 1).padStart(2, '0')}</span>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-              
-              {/* Connecting line to content */}
-              <div className="absolute right-0 top-1/2 w-8 lg:w-12 h-px bg-gray-300"></div>
-            </div>
-
-            {/* Right side - Text Sections that Slide Upward */}
-            <div className="flex-1 lg:pl-4 xl:pl-8 order-1 lg:order-3 mb-8 lg:mb-0">
-              <div className="space-y-16">
-                {appScreens.map((screen, index) => (
-                  <motion.div
-                    key={screen.id}
-                    className={`text-section ${index === currentScreen ? 'active' : ''}`}
-                    initial={{ opacity: 0, y: 100 }}
-                    animate={{ 
-                      opacity: index <= currentScreen ? 1 : 0.3,
-                      y: index <= currentScreen ? 0 : 50
-                    }}
-                    transition={{ 
-                      duration: 0.8, 
-                      delay: index * 0.3,
-                      ease: "easeOut"
-                    }}
-                  >
-                    {/* Section Number */}
-                    <div className="mb-6">
-                      <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all duration-300 ${
-                        index === currentScreen
-                          ? 'border-purple-600 bg-purple-600 text-white shadow-lg'
-                          : index < currentScreen
-                            ? 'border-purple-600 bg-purple-600 text-white'
-                            : 'border-gray-300 bg-white text-gray-400'
-                      }`}>
-                        <span className="text-lg font-semibold">{String(index + 1).padStart(2, '0')}</span>
+                >
+                  {appScreens.map((screen, index) => (
+                    <motion.div
+                      key={screen.id}
+                      className="absolute top-0 left-0 w-full h-full flex flex-col justify-center"
+                      style={{ top: `${index * 400}px` }}
+                      initial={{ opacity: 0 }}
+                      animate={{
+                        opacity: index === currentScreen ? 1 : 0.3,
+                      }}
+                      transition={{ duration: 0.6, ease: "easeOut" }}
+                    >
+                      <h2 className="text-3xl lg:text-4xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
+                        {screen.title}
+                      </h2>
+                      <p className="text-base lg:text-lg text-gray-600 mb-8 leading-relaxed">
+                        {screen.description}
+                      </p>
+                      
+                      {/* Features list */}
+                      <div className="space-y-4">
+                        {screen.features.map((feature, featureIndex) => (
+                          <motion.div
+                            key={feature}
+                            className="flex items-center space-x-3"
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ 
+                              opacity: index === currentScreen ? 1 : 0.5, 
+                              x: index === currentScreen ? 0 : -20 
+                            }}
+                            transition={{ 
+                              duration: 0.5, 
+                              delay: featureIndex * 0.1,
+                              ease: "easeOut"
+                            }}
+                          >
+                            <div className="w-2 h-2 bg-purple-600 rounded-full"></div>
+                            <span className="text-gray-700">{feature}</span>
+                          </motion.div>
+                        ))}
                       </div>
-                    </div>
-
-                    {/* Section Title */}
-                    <motion.h2 
-                      className={`text-2xl sm:text-3xl md:text-4xl font-bold leading-tight mb-4 transition-all duration-300 ${
-                        index === currentScreen ? 'text-purple-600' : 'text-gray-400'
-                      }`}
-                    >
-                      {screen.title}
-                    </motion.h2>
-                    
-                    {/* Section Description */}
-                    <motion.p 
-                      className={`text-base sm:text-lg text-gray-600 leading-relaxed mb-6 transition-all duration-300 ${
-                        index === currentScreen ? 'text-gray-700' : 'text-gray-400'
-                      }`}
-                    >
-                      {screen.description}
-                    </motion.p>
-                    
-                    {/* Features list */}
-                    <motion.div 
-                      className={`space-y-3 transition-all duration-300 ${
-                        index === currentScreen ? 'opacity-100' : 'opacity-50'
-                      }`}
-                    >
-                      {screen.features.map((feature, featureIndex) => (
-                        <motion.div
-                          key={feature}
-                          className="flex items-center space-x-3"
-                          initial={{ opacity: 0, x: 20 }}
-                          animate={{ 
-                            opacity: index === currentScreen ? 1 : 0.5,
-                            x: index === currentScreen ? 0 : 20
-                          }}
-                          transition={{ 
-                            duration: 0.4, 
-                            delay: index === currentScreen ? 0.5 + featureIndex * 0.1 : 0
-                          }}
-                        >
-                          {/* Bullet point */}
-                          <div className={`w-2 h-2 rounded-full flex-shrink-0 transition-all duration-300 ${
-                            index === currentScreen ? 'bg-purple-600' : 'bg-gray-400'
-                          }`}></div>
-                          <span className={`text-sm sm:text-base font-medium transition-all duration-300 ${
-                            index === currentScreen ? 'text-gray-700' : 'text-gray-400'
-                          }`}>
-                            {feature}
-                          </span>
-                        </motion.div>
-                      ))}
                     </motion.div>
-
-                    {/* Action Button - only show for current section */}
-                    {index === currentScreen && (
-                      <motion.button
-                        className="mt-6 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.8 }}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        Learn More
-                      </motion.button>
-                    )}
-                  </motion.div>
-                ))}
+                  ))}
+                </motion.div>
               </div>
             </div>
           </div>
@@ -390,15 +507,17 @@ const AppDevelopmentPage = () => {
           {/* Scroll indicator */}
           <motion.div
             className="absolute bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 text-center"
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            whileInView={{ y: [0, 8, 0] }}
+            transition={{ duration: 2, ease: "easeInOut" }}
+            viewport={{ once: false }}
           >
             <div className="text-xs sm:text-sm text-gray-500 mb-2 font-medium">Scroll to explore</div>
             <div className="w-1 h-6 sm:h-8 bg-gray-300 rounded-full mx-auto relative">
               <motion.div
                 className="w-1 h-2 sm:h-3 bg-gray-800 rounded-full absolute top-0"
-                animate={{ y: [0, 16, 0] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                whileInView={{ y: [0, 16, 0] }}
+                transition={{ duration: 2, ease: "easeInOut" }}
+                viewport={{ once: false }}
               />
             </div>
           </motion.div>
@@ -529,29 +648,29 @@ const AppDevelopmentPage = () => {
                 
                 {/* Floating Elements */}
                 <motion.div
-                  animate={{ 
+                  whileInView={{ 
                     y: [0, -20, 0],
                     rotate: [0, 5, 0]
                   }}
                   transition={{ 
                     duration: 6,
-                    repeat: Infinity,
                     ease: [0.42, 0, 0.58, 1] as const
                   }}
+                  viewport={{ once: false }}
                     className="absolute -top-4 -right-4 w-12 h-12 sm:w-16 sm:h-16 bg-purple-300/30 rounded-full border border-purple-300/40"
                 />
                 
                 <motion.div
-                  animate={{ 
+                  whileInView={{ 
                     y: [0, 15, 0],
                     rotate: [0, -3, 0]
                   }}
                   transition={{ 
                     duration: 4,
-                    repeat: Infinity,
                     ease: [0.42, 0, 0.58, 1] as const,
                     delay: 1
                   }}
+                  viewport={{ once: false }}
                     className="absolute -bottom-6 -left-6 w-8 h-8 sm:w-12 sm:h-12 bg-purple-200/40 rounded-full border border-purple-300/40"
                 />
               </motion.div>
@@ -572,7 +691,17 @@ const AppDevelopmentPage = () => {
             Development Services
           </motion.h2>
 
-          <div className="features-grid grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="features-grid grid md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
+            {/* Background overlay for selected card */}
+            {selectedFeature !== null && (
+              <motion.div
+                className="absolute inset-0 bg-black/20 backdrop-blur-sm z-40"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+            )}
+            
             {[
               {
                 title: "Native iOS Development",
@@ -619,39 +748,56 @@ const AppDevelopmentPage = () => {
             ].map((feature, index) => (
               <motion.div
                 key={index}
-                className={`feature-card group relative bg-white rounded-2xl p-8 border transition-all duration-500 shadow-sm cursor-pointer ${
+                className={`feature-card group relative bg-white rounded-2xl border transition-all duration-300 shadow-sm cursor-pointer ${
                   selectedFeature === index 
-                    ? 'border-purple-400 shadow-xl scale-105' 
-                    : 'border-purple-100 hover:border-purple-300'
+                    ? 'border-purple-400 shadow-2xl z-50' 
+                    : selectedFeature !== null
+                      ? 'border-purple-100 opacity-30'
+                      : 'border-purple-100 hover:border-purple-300'
                 }`}
-                whileHover={{ 
-                  scale: selectedFeature === index ? 1.05 : 1.02,
-                  rotateY: selectedFeature === index ? 0 : 3,
-                  z: 50
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false }}
+                transition={{ 
+                  delay: index * 0.1, 
+                  duration: 0.6,
+                  ease: [0.25, 0.1, 0.25, 1] as const
                 }}
-                style={{ transformStyle: 'preserve-3d' }}
+                whileHover={{ 
+                  scale: selectedFeature === index ? 1.02 : (selectedFeature !== null ? 1 : 1.02),
+                  z: selectedFeature === index ? 50 : (selectedFeature !== null ? 1 : 10)
+                }}
+                style={{ 
+                  transformOrigin: 'center center'
+                }}
                 onClick={() => setSelectedFeature(selectedFeature === index ? null : index)}
               >
-                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} rounded-2xl transition-opacity duration-500 ${
-                  selectedFeature === index ? 'opacity-15' : 'opacity-0 group-hover:opacity-10'
+                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} rounded-2xl transition-opacity duration-300 ${
+                  selectedFeature === index ? 'opacity-20' : 'opacity-0 group-hover:opacity-10'
                 }`} />
                 
-                <motion.div
-                  className="relative z-10"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: false }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <div className={`w-16 h-16 bg-gradient-to-br ${feature.gradient} rounded-xl mb-6 flex items-center justify-center`}>
-                    <div className="w-8 h-8 bg-white/20 rounded-lg" />
+                <div className="relative z-10 p-8">
+                  <div 
+                    className={`bg-gradient-to-br ${feature.gradient} rounded-xl mb-6 flex items-center justify-center ${
+                      selectedFeature === index ? 'w-20 h-20' : 'w-16 h-16'
+                    } transition-all duration-300`}
+                  >
+                    <div 
+                      className={`bg-white/20 rounded-lg ${
+                        selectedFeature === index ? 'w-10 h-10' : 'w-8 h-8'
+                      } transition-all duration-300`}
+                    />
                   </div>
                   
-                  <h3 className={`text-2xl font-bold mb-4 transition-all duration-300 ${
-                    selectedFeature === index 
-                      ? 'text-transparent bg-gradient-to-r bg-clip-text from-purple-600 to-purple-800'
-                      : 'text-gray-900 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text group-hover:from-purple-600 group-hover:to-purple-800'
-                  }`}>
+                  <h3 
+                    className={`font-bold mb-4 transition-all duration-300 ${
+                      selectedFeature === index 
+                        ? 'text-3xl text-transparent bg-gradient-to-r bg-clip-text from-purple-600 to-purple-800'
+                        : selectedFeature !== null
+                          ? 'text-2xl text-gray-600'
+                          : 'text-2xl text-gray-900 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text group-hover:from-purple-600 group-hover:to-purple-800'
+                    }`}
+                  >
                     {feature.title}
                   </h3>
                   
@@ -659,11 +805,18 @@ const AppDevelopmentPage = () => {
                   <div className={selectedFeature === index ? 'hidden' : 'block'}>
                     <AnimatedParagraph
                       text={feature.description}
-                      className="text-gray-600 leading-relaxed"
+                      className={`leading-relaxed ${
+                        selectedFeature !== null ? 'text-gray-500' : 'text-gray-600'
+                      }`}
                     />
-                    <div className="mt-4 flex items-center text-purple-600 text-sm font-medium">
+                    <div className="flex items-center text-purple-600 text-sm font-medium mt-4">
                       <span>Click to learn more</span>
-                      <svg className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg 
+                        className="w-4 h-4 ml-2"
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
                     </div>
@@ -671,36 +824,40 @@ const AppDevelopmentPage = () => {
 
                   {/* Detailed description when expanded */}
                   <div className={selectedFeature === index ? 'block' : 'hidden'}>
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <p className="text-gray-700 leading-relaxed mb-6">
-                        {feature.detailedDescription}
-                      </p>
-                      
-                      <div className="space-y-3">
-                        <h4 className="text-lg font-semibold text-gray-900">Key Features:</h4>
-                        <div className="grid grid-cols-2 gap-2">
-                          {feature.features.map((feat, featIndex) => (
-                            <div key={featIndex} className="flex items-center text-sm text-gray-600">
-                              <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${feature.gradient} mr-2 flex-shrink-0`} />
-                              {feat}
-                            </div>
-                          ))}
-                        </div>
+                    <p className="text-gray-700 leading-relaxed mb-6 text-lg">
+                      {feature.detailedDescription}
+                    </p>
+                    
+                    <div className="space-y-3">
+                      <h4 className="text-xl font-semibold text-gray-900">Key Features:</h4>
+                      <div className="grid grid-cols-2 gap-3">
+                        {feature.features.map((feat, featIndex) => (
+                          <div 
+                            key={featIndex} 
+                            className="flex items-center text-sm text-gray-600"
+                          >
+                            <div 
+                              className={`w-2 h-2 rounded-full bg-gradient-to-r ${feature.gradient} mr-2 flex-shrink-0`}
+                            />
+                            {feat}
+                          </div>
+                        ))}
                       </div>
-                      
-                      <div className="mt-6 flex items-center text-purple-600 text-sm font-medium">
-                        <span>Click to collapse</span>
-                        <svg className="w-4 h-4 ml-2 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                    </motion.div>
+                    </div>
+                    
+                    <div className="mt-6 flex items-center text-purple-600 text-sm font-medium">
+                      <span>Click to collapse</span>
+                      <svg 
+                        className="w-4 h-4 ml-2 transform rotate-180" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
                   </div>
-                </motion.div>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -708,7 +865,7 @@ const AppDevelopmentPage = () => {
       </section>
 
       {/* Technology Stack Section */}
-        <section className="py-32 px-6 bg-[#D6C3DF]">
+        <section className="py-32 px-6 bg-[#D6C3DF] overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <motion.div
             className="text-center mb-20 animate-section"
@@ -717,13 +874,25 @@ const AppDevelopmentPage = () => {
               viewport={{ once: false }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-5xl md:text-6xl font-bold mb-8">
+            <motion.h2 
+              className="text-5xl md:text-6xl font-bold mb-8"
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: false }}
+              transition={{ duration: 1, ease: "easeOut" }}
+            >
               Technology
               <br />
-                <span className="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
+                <motion.span 
+                  className="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent"
+                  initial={{ opacity: 0, x: -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: false }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                >
                 STACK
-              </span>
-            </h2>
+              </motion.span>
+            </motion.h2>
               <AnimatedParagraph
                 text="We leverage the latest technologies and frameworks to build robust, scalable, and high-performance mobile applications."
                 className="text-xl text-gray-600 max-w-3xl mx-auto"
@@ -732,25 +901,86 @@ const AppDevelopmentPage = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-                { name: "React Native", category: "Cross-Platform", icon: "/assets/react-native-icon.png" },
-                { name: "Flutter", category: "Cross-Platform", icon: "/assets/flutter-icon.png" },
-                { name: "Swift/SwiftUI", category: "iOS Native", icon: "/assets/swift-icon.png" },
-                { name: "Kotlin/Java", category: "Android Native", icon: "/assets/kotlin-icon.png" },
-                { name: "Node.js", category: "Backend", icon: "/assets/nodejs-icon.png" },
-                { name: "Firebase", category: "Backend", icon: "/assets/firebase-icon.png" },
-                { name: "MongoDB", category: "Database", icon: "/assets/mongodb-icon.png" },
-                { name: "AWS/Azure", category: "Cloud", icon: "/assets/aws-icon.png" }
+                { name: "React Native", category: "Cross-Platform", icon: "/assets/react-native-icon.png", color: "from-blue-500 to-cyan-500" },
+                { name: "Flutter", category: "Cross-Platform", icon: "/assets/flutter-icon.png", color: "from-blue-600 to-blue-800" },
+                { name: "Swift/SwiftUI", category: "iOS Native", icon: "/assets/swift-icon.png", color: "from-orange-500 to-red-500" },
+                { name: "Kotlin/Java", category: "Android Native", icon: "/assets/kotlin-icon.png", color: "from-purple-600 to-purple-800" },
+                { name: "Node.js", category: "Backend", icon: "/assets/nodejs-icon.png", color: "from-green-500 to-green-700" },
+                { name: "Firebase", category: "Backend", icon: "/assets/firebase-icon.png", color: "from-orange-400 to-yellow-500" },
+                { name: "MongoDB", category: "Database", icon: "/assets/mongodb-icon.png", color: "from-green-600 to-green-800" },
+                { name: "AWS/Azure", category: "Cloud", icon: "/assets/aws-icon.png", color: "from-orange-600 to-red-600" }
             ].map((tech, index) => (
               <motion.div
                 key={index}
-                  className="bg-purple-50 rounded-xl p-6 border border-purple-100 hover:border-purple-300 transition-all duration-300 group"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: false }}
-                transition={{ delay: index * 0.1, duration: 0.6 }}
-                whileHover={{ scale: 1.05, y: -5 }}
+                className="relative bg-purple-50 rounded-xl p-6 border border-purple-100 hover:border-purple-300 transition-all duration-500 group overflow-hidden"
+                initial={{ opacity: 0, y: 50, scale: 0.8 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: false }}
+                transition={{ 
+                  delay: index * 0.1, 
+                  duration: 0.8,
+                  ease: [0.25, 0.1, 0.25, 1] as const
+                }}
+                whileHover={{ 
+                  scale: 1.08, 
+                  y: -10,
+                  rotateY: 5,
+                  z: 50
+                }}
+                style={{ transformStyle: 'preserve-3d' }}
               >
-                  <div className="w-12 h-12 rounded-lg mb-4 mx-auto overflow-hidden flex items-center justify-center bg-white shadow">
+                {/* Animated background gradient */}
+                <motion.div
+                  className={`absolute inset-0 bg-gradient-to-br ${tech.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
+                  initial={{ scale: 0 }}
+                  whileHover={{ scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                />
+                
+                {/* Floating glow effect */}
+                <motion.div
+                  className={`absolute inset-0 bg-gradient-to-br ${tech.color} rounded-xl opacity-0 group-hover:opacity-20 blur-xl`}
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0, 0.1, 0]
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    delay: index * 0.2
+                  }}
+                />
+
+                {/* Icon container with rotation */}
+                <motion.div 
+                  className="w-16 h-16 rounded-xl mb-6 mx-auto overflow-hidden flex items-center justify-center bg-white shadow-lg relative"
+                  whileHover={{ 
+                    scale: 1.1,
+                    rotate: 360
+                  }}
+                  transition={{ 
+                    duration: 0.6,
+                    ease: "easeInOut"
+                  }}
+                >
+                  {/* Icon background glow */}
+                  <motion.div
+                    className={`absolute inset-0 bg-gradient-to-br ${tech.color} opacity-0 group-hover:opacity-20 rounded-xl`}
+                    animate={{
+                      scale: [1, 1.1, 1]
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                  
+                  <motion.div
+                    className="relative z-10"
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.3 }}
+                  >
                     <Image
                       src={tech.icon}
                       alt={`${tech.name} icon`}
@@ -758,9 +988,84 @@ const AppDevelopmentPage = () => {
                       height={48}
                       className="object-contain"
                     />
-                </div>
-                <h3 className="text-lg font-semibold text-center mb-2">{tech.name}</h3>
-                <p className="text-sm text-gray-400 text-center">{tech.category}</p>
+                  </motion.div>
+                </motion.div>
+
+                {/* Technology name with gradient text */}
+                <motion.h3 
+                  className="text-lg font-semibold text-center mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text transition-all duration-300"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {tech.name}
+                </motion.h3>
+
+                {/* Category with animated underline */}
+                <motion.div className="relative">
+                  <p className="text-sm text-gray-400 text-center group-hover:text-gray-600 transition-colors duration-300">
+                    {tech.category}
+                  </p>
+                  <motion.div
+                    className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 bg-gradient-to-r ${tech.color} rounded-full`}
+                    initial={{ width: 0 }}
+                    whileHover={{ width: "80%" }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </motion.div>
+
+                {/* Floating particles */}
+                <motion.div
+                  className="absolute top-2 right-2 w-2 h-2 bg-purple-400 rounded-full opacity-0 group-hover:opacity-60"
+                  animate={{
+                    y: [0, -10, 0],
+                    scale: [1, 1.5, 1]
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    delay: index * 0.1
+                  }}
+                />
+                
+                <motion.div
+                  className="absolute bottom-2 left-2 w-1.5 h-1.5 bg-blue-400 rounded-full opacity-0 group-hover:opacity-60"
+                  animate={{
+                    y: [0, 8, 0],
+                    scale: [1, 1.3, 1]
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    delay: index * 0.2
+                  }}
+                />
+
+                {/* Additional floating elements */}
+                <motion.div
+                  className="absolute top-4 left-4 w-1 h-1 bg-green-400 rounded-full opacity-0 group-hover:opacity-40"
+                  animate={{
+                    y: [0, -5, 0],
+                    x: [0, 3, 0]
+                  }}
+                  transition={{
+                    duration: 1.8,
+                    repeat: Infinity,
+                    delay: index * 0.3
+                  }}
+                />
+
+                <motion.div
+                  className="absolute bottom-4 right-4 w-1.5 h-1.5 bg-orange-400 rounded-full opacity-0 group-hover:opacity-40"
+                  animate={{
+                    y: [0, 6, 0],
+                    x: [0, -2, 0]
+                  }}
+                  transition={{
+                    duration: 2.2,
+                    repeat: Infinity,
+                    delay: index * 0.4
+                  }}
+                />
               </motion.div>
             ))}
           </div>

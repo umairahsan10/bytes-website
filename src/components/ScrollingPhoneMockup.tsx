@@ -73,113 +73,161 @@ const ScrollingPhoneMockup: React.FC = () => {
     return () => unsubscribe();
   }, [screenIndex]);
 
-  // Phone tilt animation
-  const phoneRotateY = useTransform(scrollYProgress, [0, 1], [0, 360]);
-  const phoneScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.8]);
+  // Calculate timeline circle positions
+  const timelineProgress = useTransform(scrollYProgress, [0, 1], [0, 100]);
 
   return (
     <div ref={containerRef} className="relative min-h-[400vh] bg-gradient-to-b from-gray-900 via-gray-800 to-black">
-      {/* Sticky phone container */}
+      {/* Sticky container */}
       <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
-        <div className="relative w-full max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
+        <div className="relative w-full max-w-7xl mx-auto px-4 grid grid-cols-3 gap-8 items-center">
           
-          {/* Left side - Content */}
-          <motion.div 
-            className="text-white space-y-8 lg:pr-12"
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            <motion.div
-              key={currentScreen}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <h2 className="text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                {appScreens[currentScreen]?.title}
-              </h2>
-              <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-                {appScreens[currentScreen]?.description}
-              </p>
+          {/* Left side - Text content */}
+          <div className="col-span-1 text-white space-y-8">
+            {/* Vertical sliding text container */}
+            <div className="relative h-[60vh] overflow-hidden">
+              {appScreens.map((screen, index) => (
+                <motion.div
+                  key={screen.id}
+                  className="absolute inset-0 flex flex-col justify-center"
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{
+                    opacity: index === currentScreen ? 1 : 0,
+                    y: index === currentScreen ? 0 : 50,
+                  }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                >
+                  <h2 className="text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                    {screen.title}
+                  </h2>
+                  <p className="text-lg text-gray-300 mb-8 leading-relaxed">
+                    {screen.description}
+                  </p>
+                  
+                  {/* Features list */}
+                  <div className="space-y-4">
+                    {screen.features.map((feature, featureIndex) => (
+                      <motion.div
+                        key={feature}
+                        className="flex items-center space-x-3"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ 
+                          opacity: index === currentScreen ? 1 : 0, 
+                          x: index === currentScreen ? 0 : -20 
+                        }}
+                        transition={{ 
+                          duration: 0.5, 
+                          delay: featureIndex * 0.1,
+                          ease: "easeOut"
+                        }}
+                      >
+                        <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                        <span className="text-gray-300">{feature}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Center - Timeline with circles */}
+          <div className="col-span-1 flex items-center justify-center">
+            <div className="relative flex flex-col items-center">
+              {/* Vertical timeline line */}
+              <div className="relative w-px h-[60vh] bg-gray-600">
+                <motion.div
+                  className="absolute top-0 left-0 w-full bg-gradient-to-b from-blue-400 to-purple-400 origin-top"
+                  style={{
+                    scaleY: timelineProgress,
+                    transformOrigin: 'top'
+                  }}
+                />
+              </div>
               
-              {/* Features list */}
-              <div className="space-y-4">
-                {appScreens[currentScreen]?.features.map((feature, index) => (
+              {/* Timeline circles */}
+              <div className="absolute inset-0 flex flex-col justify-around items-center py-8">
+                {appScreens.map((screen, index) => (
                   <motion.div
-                    key={feature}
-                    className="flex items-center space-x-3"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    key={screen.id}
+                    className="relative"
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ 
+                      scale: index <= currentScreen ? 1 : 0,
+                      opacity: index <= currentScreen ? 1 : 0
+                    }}
+                    transition={{ 
+                      duration: 0.5, 
+                      delay: index * 0.2,
+                      ease: "easeOut"
+                    }}
                   >
-                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                    <span className="text-gray-300">{feature}</span>
+                    {/* Circle */}
+                    <div className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                      index === currentScreen
+                        ? 'border-blue-400 bg-blue-400 text-white shadow-lg scale-125'
+                        : index < currentScreen
+                          ? 'border-purple-400 bg-purple-400 text-white'
+                          : 'border-gray-600 bg-gray-800 text-gray-400'
+                    }`}>
+                      <span className="text-lg font-semibold">{String(index + 1).padStart(2, '0')}</span>
+                    </div>
+                    
+                    {/* Active circle glow effect */}
+                    {index === currentScreen && (
+                      <motion.div
+                        className="absolute inset-0 w-12 h-12 rounded-full bg-blue-400/30"
+                        animate={{
+                          scale: [1, 1.5, 1],
+                          opacity: [0.5, 0, 0.5]
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      />
+                    )}
                   </motion.div>
                 ))}
               </div>
-            </motion.div>
-
-            {/* Progress indicators */}
-            <div className="flex space-x-2">
-              {appScreens.map((_, index) => (
-                <div
-                  key={index}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    index === currentScreen 
-                      ? 'w-8 bg-blue-400' 
-                      : 'w-2 bg-gray-600'
-                  }`}
-                />
-              ))}
             </div>
-          </motion.div>
+          </div>
 
           {/* Right side - Phone mockup */}
-          <div className="relative flex items-center justify-center">
-            <motion.div
-              ref={phoneRef}
-              className="relative"
-              style={{
-                rotateY: phoneRotateY,
-                scale: phoneScale,
-                transformStyle: 'preserve-3d'
-              }}
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, delay: 0.5 }}
-            >
-              {/* Phone frame using the provided SVG */}
-              <div className="relative w-[300px] h-[600px] mx-auto">
-                {/* iPhone SVG container */}
+          <div className="col-span-1 flex items-center justify-center">
+            <div className="relative">
+              {/* Static phone frame */}
+              <div className="relative w-[280px] h-[560px] mx-auto">
+                {/* iPhone frame */}
                 <div className="absolute inset-0 z-20">
                   <svg
-                    width="300"
-                    height="600"
-                    viewBox="0 0 300 600"
+                    width="280"
+                    height="560"
+                    viewBox="0 0 280 560"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                     className="w-full h-full"
                   >
                     <path
-                      d="M50 30C50 13.4315 63.4315 0 80 0H220C236.569 0 250 13.4315 250 30V570C250 586.569 236.569 600 220 600H80C63.4315 600 50 586.569 50 570V30Z"
+                      d="M45 25C45 11.1929 56.1929 0 70 0H210C223.807 0 235 11.1929 235 25V535C235 548.807 223.807 560 210 560H70C56.1929 560 45 548.807 45 535V25Z"
                       fill="#1a1a1a"
                       stroke="#333"
                       strokeWidth="2"
                     />
                     {/* Screen area */}
                     <rect
-                      x="65"
-                      y="50"
-                      width="170"
-                      height="360"
-                      rx="25"
+                      x="60"
+                      y="40"
+                      width="160"
+                      height="320"
+                      rx="20"
                       fill="#000"
                     />
                     {/* Home indicator */}
                     <rect
-                      x="135"
-                      y="520"
+                      x="125"
+                      y="480"
                       width="30"
                       height="4"
                       rx="2"
@@ -187,62 +235,73 @@ const ScrollingPhoneMockup: React.FC = () => {
                     />
                     {/* Camera notch */}
                     <rect
-                      x="125"
-                      y="25"
+                      x="115"
+                      y="20"
                       width="50"
-                      height="12"
-                      rx="6"
+                      height="10"
+                      rx="5"
                       fill="#333"
                     />
                   </svg>
                 </div>
 
-                {/* Screen content */}
-                <div className="absolute top-[50px] left-[65px] w-[170px] h-[360px] rounded-[25px] overflow-hidden bg-white">
+                {/* Screen content with vertical sliding */}
+                <div className="absolute top-[40px] left-[60px] w-[160px] h-[320px] rounded-[20px] overflow-hidden bg-white">
                   <motion.div
-                    key={currentScreen}
-                    initial={{ opacity: 0, scale: 1.1 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.6 }}
-                    className="w-full h-full"
+                    className="relative w-full h-full"
+                    style={{
+                      y: useTransform(
+                        scrollYProgress,
+                        [0, 1],
+                        [0, -(appScreens.length - 1) * 320]
+                      )
+                    }}
                   >
-                    <Image
-                      src={appScreens[currentScreen]?.image || ''}
-                      alt={appScreens[currentScreen]?.title || ''}
-                      fill
-                      className="object-cover"
-                      sizes="170px"
-                    />
-                    
-                    {/* Screen overlay with app UI elements */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent">
-                      <div className="absolute bottom-4 left-4 right-4">
-                        <div className="bg-white/90 backdrop-blur-sm rounded-lg p-3">
-                          <h3 className="text-sm font-semibold text-gray-800 mb-1">
-                            {appScreens[currentScreen]?.title}
-                          </h3>
-                          <div className="flex space-x-1">
-                            {[1, 2, 3, 4].map((i) => (
-                              <div
-                                key={i}
-                                className={`h-1 rounded-full ${
-                                  i <= currentScreen + 1 ? 'bg-blue-500' : 'bg-gray-300'
-                                }`}
-                                style={{ width: `${20 + Math.random() * 30}px` }}
-                              />
-                            ))}
+                    {appScreens.map((screen, index) => (
+                      <div
+                        key={screen.id}
+                        className="absolute top-0 left-0 w-full h-full"
+                        style={{ top: `${index * 320}px` }}
+                      >
+                        <Image
+                          src={screen.image}
+                          alt={screen.title}
+                          fill
+                          className="object-cover"
+                          sizes="160px"
+                        />
+                        
+                        {/* Screen overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent">
+                          <div className="absolute bottom-3 left-3 right-3">
+                            <div className="bg-white/90 backdrop-blur-sm rounded-lg p-2">
+                              <h3 className="text-xs font-semibold text-gray-800 mb-1">
+                                {screen.title}
+                              </h3>
+                              <div className="flex space-x-1">
+                                {[1, 2, 3, 4].map((i) => (
+                                  <div
+                                    key={i}
+                                    className={`h-1 rounded-full ${
+                                      i <= index + 1 ? 'bg-blue-500' : 'bg-gray-300'
+                                    }`}
+                                    style={{ width: `${15 + Math.random() * 20}px` }}
+                                  />
+                                ))}
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    ))}
                   </motion.div>
                 </div>
 
                 {/* Floating elements around phone */}
                 <motion.div
-                  className="absolute -right-8 top-20 w-16 h-16 bg-blue-500/20 rounded-full backdrop-blur-sm border border-blue-400/30"
+                  className="absolute -right-6 top-16 w-12 h-12 bg-blue-500/20 rounded-full backdrop-blur-sm border border-blue-400/30"
                   animate={{
-                    y: [0, -20, 0],
+                    y: [0, -15, 0],
                     rotate: [0, 180, 360]
                   }}
                   transition={{
@@ -253,9 +312,9 @@ const ScrollingPhoneMockup: React.FC = () => {
                 />
                 
                 <motion.div
-                  className="absolute -left-6 bottom-32 w-12 h-12 bg-purple-500/20 rounded-full backdrop-blur-sm border border-purple-400/30"
+                  className="absolute -left-4 bottom-24 w-10 h-10 bg-purple-500/20 rounded-full backdrop-blur-sm border border-purple-400/30"
                   animate={{
-                    y: [0, 15, 0],
+                    y: [0, 12, 0],
                     scale: [1, 1.2, 1]
                   }}
                   transition={{
@@ -266,7 +325,7 @@ const ScrollingPhoneMockup: React.FC = () => {
                   }}
                 />
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
 
