@@ -1,9 +1,10 @@
 "use client";
 
 import { Header } from "@/sections/Navbar";
-import ZoomParallax from "@/components/ZoomParallax";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Lenis from "lenis";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ContactSection } from "@/sections/Contact";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useMotionValue, animate, useInView } from "framer-motion";
@@ -58,6 +59,11 @@ export default function AboutPage() {
   const { scrollYProgress } = useScroll();
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [1, 0.8, 0.8, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+  
+  // GSAP refs and state
+  const heroRef = useRef(null);
+  const overlayRef = useRef(null);
+  const [canInteract, setCanInteract] = useState(false);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -72,6 +78,114 @@ export default function AboutPage() {
     requestAnimationFrame(raf);
 
     return () => lenis.destroy();
+  }, []);
+
+  // GSAP ScrollTrigger effect
+  useLayoutEffect(() => {
+    if (typeof window === "undefined") return;
+    
+    // Clear any existing ScrollTriggers to prevent conflicts
+    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    gsap.registerPlugin(ScrollTrigger);
+
+    const scaleFactor = 2.7;
+
+    const ctx = gsap.context(() => {
+      // Ensure elements exist before animating
+      const heroElement = heroRef.current;
+      const overlayElement = overlayRef.current;
+      const imgContainer = heroElement?.querySelector(".img-container");
+      const heroTitle = heroElement?.querySelector(".hero-title");
+
+      if (!heroElement || !overlayElement || !imgContainer || !heroTitle) {
+        return;
+      }
+
+      // Set initial states to prevent flashing - ensure bidirectional reset
+      gsap.set(overlayElement, {
+        opacity: 0,
+        scale: 0.85,
+        y: 50,
+        clearProps: "transform", // Clear any lingering transforms
+      });
+
+      // Ensure hero elements start in proper state
+      gsap.set([imgContainer, heroTitle], {
+        scale: 1,
+        opacity: 1,
+        clearProps: "transform",
+      });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          id: "about-hero-pin",
+          trigger: heroElement,
+          start: "top top",
+          end: "bottom+=150% top", // Increased end point for more scroll space
+          scrub: 1.5, // Enables bidirectional scrubbing
+          pin: true,
+          anticipatePin: 1,
+          refreshPriority: -1,
+          invalidateOnRefresh: true, // Ensures proper refresh behavior
+          onUpdate: self => {
+            // Smoother interaction threshold - bidirectional
+            setCanInteract(self.progress > 0.45 && self.direction === 1); // Only interact on forward scroll
+          },
+          onToggle: self => {
+            // Reset interaction state when leaving trigger area
+            if (!self.isActive) {
+              setCanInteract(false);
+            }
+          }
+        },
+      });
+
+      // Smoother, more coordinated animation sequence - optimized for bidirectional
+      tl.to([imgContainer, heroTitle], {
+        scale: scaleFactor,
+        ease: "none", // Use "none" for better scrub reversibility
+        duration: 1.2,
+      })
+      
+      // Gradual fade out of heading with better timing
+      .to(heroTitle, {
+        opacity: 0,
+        ease: "none", // Use "none" for smooth reverse
+        duration: 0.5,
+      }, 0.2)
+      
+      // Smoother overlay reveal with coordinated scaling and fading
+      .to(overlayElement, {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        ease: "none", // Use "none" for smooth reverse
+        duration: 0.8,
+      }, 0.4)
+      
+      // More gradual background fade with overlap
+      .to(imgContainer, {
+        opacity: 0,
+        ease: "none", // Use "none" for smooth reverse
+        duration: 0.6,
+      }, 0.6);
+
+      // Add a refresh method to ensure proper state on resize
+      ScrollTrigger.addEventListener("refresh", () => {
+        if (tl.scrollTrigger && tl.scrollTrigger.progress === 0) {
+          // Reset to initial state when at the beginning
+          gsap.set([imgContainer, heroTitle], { scale: 1, opacity: 1 });
+          gsap.set(overlayElement, { opacity: 0, scale: 0.85, y: 50 });
+        }
+      });
+
+    }, heroRef);
+
+    return () => {
+      // Proper cleanup
+      ScrollTrigger.getById("about-hero-pin")?.kill();
+      ctx.revert();
+    };
   }, []);
 
   // Custom animation variants
@@ -164,10 +278,43 @@ export default function AboutPage() {
     <main className="relative min-h-screen bg-white text-gray-900 overflow-hidden">
       <Header />
       
-      {/* Parallax image gallery */}
-      <motion.div style={{ scale, opacity }}>
-        <ZoomParallax />
-      </motion.div>
+      {/* Hero Section with Beach/Logo Entry */}
+      <section ref={heroRef} className="relative h-screen w-full overflow-hidden pt-20">
+        <div className="bg bg-[#141414] absolute inset-0"></div>
+        <div className="img-container relative flex flex-col gap-8 items-center justify-center h-full w-full will-change-transform transform-gpu">
+          <Image className="image" src="/assets/bg.jpg" alt="Background" fill priority />
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+            <h1 className="hero-title text-[12vw] sm:text-[10vw] md:text-[8vw] lg:text-8xl xl:text-9xl leading-none whitespace-nowrap will-change-transform transform-gpu">
+               <span className="bg-gradient-to-r from-purple-500 via-white to-purple-400 bg-clip-text text-transparent">About</span> <span className="bg-gradient-to-r from-purple-500 via-white to-purple-400 bg-clip-text text-transparent">Us</span>
+            </h1>
+            <p className="max-w-xl mt-4 text-base sm:text-lg md:text-xl lg:text-2xl text-[#bbbbbb]">
+              Innovating the Future Together
+            </p>
+          </div>
+        </div>
+
+        {/* Info overlay - Shows about content after animation */}
+        <div ref={overlayRef} className="info-overlay pointer-events-auto absolute inset-0 will-change-transform transform-gpu bg-white/90 backdrop-blur-xl">
+          <div className="h-full flex flex-col items-center justify-center text-center px-4 py-8 sm:py-12">
+            <div className="w-full max-w-7xl mx-auto space-y-6 sm:space-y-8">
+              <div className="pt-4 sm:pt-8">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">
+                  Who We Are
+                </h2>
+                <p className="max-w-2xl mx-auto text-center text-gray-600 text-sm sm:text-base md:text-lg lg:text-xl">
+                  We're a passionate team of innovators, designers, and developers dedicated to crafting exceptional digital experiences that drive meaningful change.
+                </p>
+              </div>
+
+              {/* Scroll indicator */}
+              <div className="mt-8">
+                <p className="text-purple-600 font-semibold animate-bounce">↓ Scroll down to learn more about us ↓</p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* About Content Section */}
       <section id="about-us" className="relative">

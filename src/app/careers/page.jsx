@@ -1,15 +1,13 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Header } from '@/sections/Navbar';
+import ZoomParallax from "@/components/ZoomParallax";
 
 // Image paths adjusted to reference the public/assets directory
-const bg = "/assets/bg.jpg";
 const img1 = "/assets/img1.jpg";
 const img2 = "/assets/img-2.jpg";
 const img3 = "/assets/img-3.jpg";
@@ -17,151 +15,67 @@ const img4 = "/assets/img-4.jpg";
 const contactImg = "/assets/career-contact.jpg";
 
 function App() {
-    const heroRef = useRef(null);
-    const overlayRef = useRef(null);
     const [selectedJob, setSelectedJob] = useState(null);
-    const [canInteract, setCanInteract] = useState(false);
-
-    useLayoutEffect(() => {
-        if (typeof window === "undefined") return;
-        
-        // Clear any existing ScrollTriggers to prevent conflicts
-        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-        gsap.registerPlugin(ScrollTrigger);
-
-        const scaleFactor = 2.7;
-
-        const ctx = gsap.context(() => {
-            // Ensure elements exist before animating
-            const heroElement = heroRef.current;
-            const overlayElement = overlayRef.current;
-            const imgContainer = heroElement?.querySelector(".img-container");
-            const heroTitle = heroElement?.querySelector(".hero-title");
-
-            if (!heroElement || !overlayElement || !imgContainer || !heroTitle) {
-                return;
-            }
-
-            // Set initial states to prevent flashing
-            gsap.set(overlayElement, {
-                opacity: 0,
-                scale: 0.85,
-                y: 50,
-            });
-
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    id: "hero-pin",
-                    trigger: heroElement,
-                    start: "top top",
-                    end: "bottom+=150% top", // Increased end point for more scroll space
-                    scrub: 1.5,
-                    pin: true,
-                    anticipatePin: 1,
-                    refreshPriority: -1,
-                    onUpdate: self => {
-                        // Smoother interaction threshold
-                        setCanInteract(self.progress > 0.45); // Reduced threshold
-                    },
-                },
-            });
-
-            // Smoother, more coordinated animation sequence
-            tl.to([imgContainer, heroTitle], {
-                scale: scaleFactor,
-                ease: "power2.inOut",
-                duration: 1.2,
-            })
-            
-            // Gradual fade out of heading with better timing
-            .to(heroTitle, {
-                opacity: 0,
-                ease: "power3.out",
-                duration: 0.5,
-            }, 0.2)
-            
-            // Smoother overlay reveal with coordinated scaling and fading
-            .to(overlayElement, {
-                opacity: 1,
-                scale: 1,
-                y: 0,
-                ease: "power3.out",
-                duration: 0.8,
-            }, 0.4)
-            
-            // More gradual background fade with overlap
-            .to(imgContainer, {
-                opacity: 0,
-                ease: "power3.out",
-                duration: 0.6,
-            }, 0.6);
-
-        }, heroRef);
-
-        return () => {
-            // Proper cleanup
-            ScrollTrigger.getById("hero-pin")?.kill();
-            ctx.revert();
-        };
-    }, []);
 
     return (
         <div className="w-full min-h-screen overflow-x-hidden">
             <Header />
 
-            {/* Hero Section */}
-            <section ref={heroRef} className="relative h-screen w-full overflow-hidden pt-20">
-                <div className="bg bg-[#141414] absolute inset-0"></div>
-                <div className="img-container relative flex flex-col gap-8 items-center justify-center h-full w-full will-change-transform transform-gpu">
-                    <Image className="image" src={bg} alt="Background" fill priority />
-                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-                        <h1 className="hero-title text-[12vw] sm:text-[10vw] md:text-[8vw] lg:text-8xl xl:text-9xl leading-none whitespace-nowrap will-change-transform transform-gpu">
-                             <span className="bg-gradient-to-r from-purple-500 via-white to-purple-400 bg-clip-text text-transparent">Bytes</span> <span className="bg-gradient-to-r from-purple-500 via-white to-purple-400 bg-clip-text text-transparent">Careers</span>
-                        </h1>
-                        <p className="max-w-xl mt-4 text-base sm:text-lg md:text-xl lg:text-2xl text-[#bbbbbb]">
-                            Build the Future With Us
-                        </p>
-                    </div>
-                </div>
-
-               {/* Info overlay - Shows jobs section after animation */}
-               <div ref={overlayRef} className="info-overlay pointer-events-auto absolute inset-0 will-change-transform transform-gpu bg-white/90 backdrop-blur-xl">
-                    <div className="h-full flex flex-col items-center justify-center text-center px-4 py-8 sm:py-12">
-                        <div className="w-full max-w-7xl mx-auto space-y-6 sm:space-y-8">
-                            <div className="pt-4 sm:pt-8">
-                                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">
-                                    Grow Your Career With Us
-                                </h2>
-                                <p className="max-w-2xl mx-auto text-center text-gray-600 text-sm sm:text-base md:text-lg lg:text-xl">
-                                    We're on the lookout for passionate individuals ready to push boundaries and shape the future of digital innovation.
-                                </p>
-                            </div>
-
-                            {/* Scroll indicator */}
-                            <div className="mt-8">
-                                <p className="text-blue-600 font-semibold animate-bounce">↓ Scroll down to view available positions ↓</p>
-                            </div>
-                            
-                        </div>
-                    </div>
-                </div>
-            </section>
+            {/* Parallax Image Gallery */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1, ease: "easeOut" }}
+            >
+                <ZoomParallax />
+            </motion.div>
 
             {/* Jobs Section - Regular scrollable content */}
             <section className="py-12 sm:py-16 lg:py-20 bg-white">
                 <div className="container mx-auto px-4">
                     <div className="w-full max-w-7xl mx-auto space-y-6 sm:space-y-8">
-                        <div className="text-center">
-                            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+                        <motion.div 
+                            className="text-center"
+                            initial={{ opacity: 0, y: 50 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-100px" }}
+                            transition={{ duration: 0.8, ease: "easeOut" }}
+                        >
+                            <motion.h2 
+                                className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6"
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.6, delay: 0.2 }}
+                            >
                                 Available Positions
-                            </h2>
-                            <p className="max-w-2xl mx-auto text-center text-gray-600 text-sm sm:text-base md:text-lg lg:text-xl">
+                            </motion.h2>
+                            <motion.p 
+                                className="max-w-2xl mx-auto text-center text-gray-600 text-sm sm:text-base md:text-lg lg:text-xl"
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.6, delay: 0.4 }}
+                            >
                                 Join our team and help shape the future of digital innovation.
-                            </p>
-                        </div>
+                            </motion.p>
+                        </motion.div>
 
                         {/* Job cards */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 w-full">
+                        <motion.div 
+                            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 w-full"
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, margin: "-50px" }}
+                            variants={{
+                                hidden: {},
+                                visible: {
+                                    transition: {
+                                        staggerChildren: 0.1
+                                    }
+                                }
+                            }}
+                        >
                             {[
                                 {
                                   title: "Frontend Engineer",
@@ -237,8 +151,20 @@ function App() {
                                         key={job.title} 
                                         className="group cursor-pointer bg-gradient-to-br from-blue-100 via-white to-purple-100 p-[1px] rounded-xl sm:rounded-2xl w-full hover:shadow-lg hover:shadow-blue-200/60 transition-all duration-500 ease-out border border-gray-200 transform hover:scale-105" 
                                         onClick={() => setSelectedJob(job)}
-                                        whileHover={{ y: -4 }}
+                                        whileHover={{ y: -4, scale: 1.02 }}
                                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                        variants={{
+                                            hidden: { opacity: 0, y: 50, scale: 0.9 },
+                                            visible: { 
+                                                opacity: 1, 
+                                                y: 0, 
+                                                scale: 1,
+                                                transition: { 
+                                                    duration: 0.6, 
+                                                    ease: [0.25, 0.46, 0.45, 0.94] 
+                                                }
+                                            }
+                                        }}
                                     >
                                         <div className="rounded-xl sm:rounded-2xl h-full w-full bg-white/90 backdrop-blur-sm p-4 sm:p-6 min-h-[140px] sm:min-h-[160px] flex flex-col justify-between group-hover:bg-white transition-all duration-500 ease-out">
                                             {job.image && (
@@ -254,7 +180,7 @@ function App() {
                                     </motion.div>
                                 );
                             })}
-                        </div>
+                        </motion.div>
                         
                         {/* Extra spacing and call to action */}
                         <div className="text-center pt-8 sm:pt-12">
