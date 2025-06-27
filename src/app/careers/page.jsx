@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -9,13 +9,15 @@ import ZoomParallax from "@/components/ZoomParallax";
 
 // Image paths adjusted to reference the public/assets directory
 const img1 = "/assets/img1.jpg";
-const img2 = "/assets/img-2.jpg";
+const img2 = "/assets/img-2.jpg";   
 const img3 = "/assets/img-3.jpg";
 const img4 = "/assets/img-4.jpg";
 const contactImg = "/assets/career-contact.jpg";
 
 function App() {
     const [selectedJob, setSelectedJob] = useState(null);
+    const [scrollPos, setScrollPos] = useState(0);
+    const contactRef = useRef(null);
 
     return (
         <div className="w-full min-h-screen overflow-x-hidden">
@@ -31,7 +33,7 @@ function App() {
             </motion.div>
 
             {/* Jobs Section - Regular scrollable content */}
-            <section className="py-12 sm:py-16 lg:py-20 bg-white">
+            <section className="py-8 sm:py-12 lg:py-16 bg-white -mt-12 sm:-mt-16 lg:-mt-20 relative z-10">
                 <div className="container mx-auto px-4">
                     <div className="w-full max-w-7xl mx-auto space-y-6 sm:space-y-8">
                         <motion.div 
@@ -80,8 +82,8 @@ function App() {
                                 {
                                   title: "Frontend Engineer",
                                   image: img1,
-                                  location: "Remote / Pakistan",
-                                  type: "Full-time",
+                                  location: "On-site",
+                                  type: "Internship / Full-time",
                                   requirements: [
                                     "3+ years React / Next.js",
                                     "Strong CSS / Tailwind",
@@ -91,8 +93,8 @@ function App() {
                                 {
                                   title: "Backend Engineer",
                                   image: img2,
-                                  location: "Remote / Pakistan",
-                                  type: "Full-time",
+                                  location: "On-site",
+                                  type: "Internship / Full-time",
                                   requirements: [
                                     "3+ years Node.js / TypeScript",
                                     "Familiar with micro-services & REST",
@@ -102,8 +104,8 @@ function App() {
                                 {
                                   title: "UI / UX Designer",
                                   image: img3,
-                                  location: "Remote",
-                                  type: "Contract",
+                                  location: "On-site",
+                                  type: "Internship / Full-time",
                                   requirements: [
                                     "Proficient in Figma / Adobe XD",
                                     "Solid portfolio of web & mobile apps",
@@ -113,8 +115,8 @@ function App() {
                                 {
                                   title: "Digital Marketer",
                                   image: img4,
-                                  location: "Lahore",
-                                  type: "Internship",
+                                  location: "On-site",
+                                  type: "Internship / Full-time",
                                   requirements: [
                                     "Knowledge of SEO & SEM",
                                     "Hands-on with social media ads",
@@ -124,8 +126,8 @@ function App() {
                                 {
                                   title: "Cloud DevOps",
                                   image: img2,
-                                  location: "Remote",
-                                  type: "Full-time",
+                                  location: "On-site",
+                                  type: "Internship / Full-time",
                                   requirements: [
                                     "IaC (Terraform/CDK)",
                                     "CI/CD pipelines (GitHub Actions)",
@@ -135,8 +137,8 @@ function App() {
                                 {
                                   title: "Project Manager",
                                   image: img3,
-                                  location: "Hybrid",
-                                  type: "Full-time",
+                                  location: "On-site",
+                                  type: "Internship / Full-time",
                                   requirements: [
                                     "5+ years managing software teams",
                                     "Agile / Scrum mastery",
@@ -144,12 +146,10 @@ function App() {
                                   ]
                                 }
                             ].map((job) => {
-                                if (selectedJob && selectedJob.title === job.title) return null;
                                 return (
                                     <motion.div 
-                                        layoutId={`card-${job.title}`} 
                                         key={job.title} 
-                                        className="group cursor-pointer bg-gradient-to-br from-blue-100 via-white to-purple-100 p-[1px] rounded-xl sm:rounded-2xl w-full hover:shadow-lg hover:shadow-blue-200/60 transition-all duration-500 ease-out border border-gray-200 transform hover:scale-105" 
+                                        className="group cursor-pointer bg-gradient-to-br from-blue-100 via-white to-purple-100 p-[1px] rounded-xl sm:rounded-2xl w-full hover:shadow-lg hover:shadow-blue-200/60 transition-all duration-500 ease-out border border-gray-200 transform hover:scale-105"
                                         onClick={() => setSelectedJob(job)}
                                         whileHover={{ y: -4, scale: 1.02 }}
                                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -168,32 +168,33 @@ function App() {
                                     >
                                         <div className="rounded-xl sm:rounded-2xl h-full w-full bg-white/90 backdrop-blur-sm p-4 sm:p-6 min-h-[140px] sm:min-h-[160px] flex flex-col justify-between group-hover:bg-white transition-all duration-500 ease-out">
                                             {job.image && (
-                                                <Image src={job.image} alt={job.title} width={400} height={200} className="w-full h-24 sm:h-32 rounded-lg sm:rounded-xl object-cover mb-3 sm:mb-4" />
+                                                <div className="relative w-full aspect-video rounded-lg sm:rounded-xl overflow-hidden mb-3 sm:mb-4">
+                                                    <Image
+                                                        src={job.image}
+                                                        alt={job.title}
+                                                        fill
+                                                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                                        className="object-cover"
+                                                    />
+                                                </div>
                                             )}
                                             <div>
                                                 <h3 className="text-gray-900 text-lg sm:text-xl md:text-2xl font-semibold mb-2 group-hover:text-blue-700 transition-colors duration-300">{job.title}</h3>
                                                 <p className="text-gray-600 text-xs sm:text-sm md:text-base group-hover:text-gray-700 transition-colors duration-300">{job.location}</p>
                                                 <span className="inline-block mt-2 px-2 sm:px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full border border-blue-200 group-hover:bg-blue-200 group-hover:border-blue-300 transition-all duration-300">{job.type}</span>
                                             </div>
-                                            <p className="mt-3 sm:mt-4 text-blue-600 text-xs sm:text-sm font-medium opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-500 ease-out">View details →</p>
+                                            <p className="mt-3 sm:mt-4 text-blue-600 text-xs sm:text-sm font-medium transition-all duration-300 ease-out">View details →</p>
                                         </div>
                                     </motion.div>
                                 );
                             })}
                         </motion.div>
-                        
-                        {/* Extra spacing and call to action */}
-                        <div className="text-center pt-8 sm:pt-12">
-                            <p className="text-gray-500 text-sm">
-                                Can't find the right role? <a href="mailto:careers@company.com" className="text-blue-600 hover:text-blue-700 underline">Contact us</a> to discuss other opportunities.
-                            </p>
-                        </div>
                     </div>
                 </div>
             </section>
 
             {/* Contact Section */}
-            <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen flex items-center">
+            <section ref={contactRef} className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-gray-50 to-blue-50 md:min-h-screen md:flex md:items-center">
                 <div className="container mx-auto px-4">
                     <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center max-w-7xl mx-auto">
                         {/* Left side - Contact Form */}
@@ -298,7 +299,10 @@ function App() {
                             transition={{ duration: 0.8, delay: 0.2 }}
                             className="relative"
                         >
-                            <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl">
+                            <div
+                                className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl h-64 sm:h-[420px] lg:h-[600px]"
+                                style={{ aspectRatio: "4/5" }}
+                            >
                                 <Image src={contactImg} alt="Contact" fill className="object-cover" />
                                 <div className="absolute inset-0 bg-black/30" />
                                 
@@ -331,18 +335,35 @@ function App() {
             <AnimatePresence>
             {selectedJob && (
                 <motion.div 
-                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 w-full h-full overflow-y-auto" 
+                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-start sm:items-center justify-center p-4 w-full h-full overflow-y-auto" 
                     initial={{ opacity: 0 }} 
                     animate={{ opacity: 1 }} 
                     exit={{ opacity: 0 }}
                     onClick={() => setSelectedJob(null)}
                 >
                     <motion.div 
-                        layoutId={`card-${selectedJob.title}`} 
-                        className="relative bg-white border border-gray-200 rounded-2xl sm:rounded-3xl w-full max-w-4xl p-6 sm:p-8 shadow-2xl my-8 mx-auto" 
+                        className="relative bg-white border border-gray-200 rounded-2xl sm:rounded-3xl w-full max-w-4xl p-6 sm:p-8 shadow-2xl my-8 mx-auto max-h-[90vh] overflow-y-auto" 
                         onClick={(e) => e.stopPropagation()}
-                        initial={{ borderRadius: '0.75rem' }}
-                        animate={{ borderRadius: '1.5rem' }}
+                        initial={{ 
+                            opacity: 0,
+                            scale: 0.9,
+                            y: 50
+                        }}
+                        animate={{ 
+                            opacity: 1,
+                            scale: 1,
+                            y: 0
+                        }}
+                        exit={{ 
+                            opacity: 0,
+                            scale: 0.9,
+                            y: 50
+                        }}
+                        transition={{
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 30
+                        }}
                     >
                         <button 
                             className="absolute top-3 right-3 sm:top-4 sm:right-4 text-gray-400 hover:text-gray-600 hover:bg-gray-100 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 z-10" 
@@ -391,9 +412,16 @@ function App() {
                                 <div className="pt-4 border-t border-gray-200">
                                     <p className="text-gray-600 mb-4 text-sm sm:text-base">Ready to join our team?</p>
                                     <div className="flex flex-col sm:flex-row gap-3">
-                                        <a href={`mailto:careers@bytes.com?subject=${encodeURIComponent(selectedJob.title)}%20Application`} className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-transform duration-300 hover:scale-105 text-sm sm:text-base">
+                                        <button
+                                            onClick={() => {
+                                                setSelectedJob(null);
+                                                // smooth scroll to contact form
+                                                contactRef.current?.scrollIntoView({ behavior: 'smooth' });
+                                            }}
+                                            className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-transform duration-300 hover:scale-105 text-sm sm:text-base"
+                                        >
                                             Apply Now<span className="text-base sm:text-lg">→</span>
-                                        </a>
+                                        </button>
                                         <button 
                                             onClick={() => setSelectedJob(null)}
                                             className="inline-flex items-center justify-center gap-2 border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-300 text-sm sm:text-base"
