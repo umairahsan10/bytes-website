@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Header } from '../../../sections/Navbar';
+import { motion } from 'framer-motion';
 
 // Types for external libraries
 declare global {
@@ -64,20 +65,52 @@ const AdvancedServicesPage: React.FC = () => {
     }
   ];
 
+  // Animation variants
+  const wordContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.05 }
+    }
+  };
+
+  const wordVariant = {
+    hidden: { opacity: 0, y: `0.5em` },
+    visible: { opacity: 1, y: 0 }
+  };
+
+  const AnimatedWords: React.FC<{ text: string; className?: string }> = ({ text, className = "" }) => {
+    return (
+      <motion.span
+        className={className + " inline-block"}
+        variants={wordContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.3 }}
+      >
+        {text.split(" ").map((word, i) => (
+          <motion.span key={i} variants={wordVariant} className="inline-block mr-1">
+            {word}
+          </motion.span>
+        ))}
+      </motion.span>
+    );
+  };
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white text-black">
       {/* Navigation Bar */}
       <Header  />
 
       {/* Hero Section */}
       <section 
         ref={heroRef}
-        className="relative h-screen flex items-center justify-center overflow-hidden bg-gray-900"
+        className="relative h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-white to-[#010a14]"
         aria-label="Hero section"
       >
         {/* Background Image */}
         <Image
-          src="/assets/servicebg.jpg"
+          src="/assets/servicebg.png"
           alt="Advanced Services Background"
           fill
           priority
@@ -86,17 +119,13 @@ const AdvancedServicesPage: React.FC = () => {
         
         {/* Hero Content */}
         <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-indigo-600 via-purple-700 to-violet-800 bg-clip-text text-transparent mb-6 animate-[pulse_1.5s_ease-in-out_1] hover:scale-105 transition-all duration-700 ease-in-out">
-            Advanced Services
-          </h1>
-          <p className="text-xl md:text-2xl lg:text-3xl text-gray-700 font-light max-w-4xl mx-auto leading-relaxed">
-            Transforming businesses through cutting-edge technology solutions and data-driven innovation
-          </p>
+          <AnimatedWords text="Advanced Services" className="block text-5xl md:text-6xl lg:text-7xl font-bold text-[#010a14] mb-6" />
+          <AnimatedWords text="Transforming businesses through cutting-edge technology solutions and data-driven innovation" className="text-xl md:text-2xl lg:text-3xl text-black font-light max-w-4xl mx-auto leading-relaxed" />
         </div>
       </section>
 
       {/* Data & Analytics Section */}
-      <section className="relative py-20 bg-white animate-section overflow-hidden" aria-labelledby="data-analytics-heading">
+      <section className="relative py-20 bg-[#010a14] text-white animate-section overflow-hidden" aria-labelledby="data-analytics-heading">
         {/* Background Circle */}
         <div className="absolute top-10 right-10 w-96 h-96 bg-blue-100/30 rounded-full blur-3xl -z-10"></div>
         <div className="absolute bottom-20 left-20 w-64 h-64 bg-cyan-100/40 rounded-full blur-2xl -z-10"></div>
@@ -105,24 +134,20 @@ const AdvancedServicesPage: React.FC = () => {
           {/* First Subsection - Overview */}
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-20">
             <div className="animate-content" data-fade="left">
-              <h2 
-                id="data-analytics-heading"
-                className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight"
-              >
-                Data & Analytics
-              </h2>
-              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                Unlock the full potential of your data with comprehensive analytics solutions. 
-                We help organizations transform raw data into strategic insights that drive 
-                informed decision-making and competitive advantage.
-              </p>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Our data-driven approach combines advanced statistical methods, machine learning 
-                algorithms, and visualization techniques to reveal hidden patterns and predict 
-                future outcomes with unprecedented accuracy.
-              </p>
+              <AnimatedWords 
+                text="Data & Analytics" 
+                className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight" 
+              />
+              <AnimatedWords text="Unlock the full potential of your data with comprehensive analytics solutions. We help organizations transform raw data into strategic insights that drive informed decision-making and competitive advantage." className="text-lg text-gray-200 mb-6 leading-relaxed" />
+              <AnimatedWords text="Our data-driven approach combines advanced statistical methods, machine learning algorithms, and visualization techniques to reveal hidden patterns and predict future outcomes with unprecedented accuracy." className="text-lg text-gray-200 leading-relaxed" />
             </div>
-            <div className="animate-content" data-fade="right">
+            <motion.div 
+              initial={{ opacity: 0, y: 60, scale: 0.85, rotate: -6 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
+              transition={{ type: 'spring', stiffness: 70, damping: 15, duration: 0.9 }}
+              viewport={{ once: false }}
+              whileHover={{ scale: 1.04 }}
+            >
               <Image
                 src="/assets/data&analytics.jpg"
                 alt="Data analytics dashboard visualization"
@@ -130,17 +155,15 @@ const AdvancedServicesPage: React.FC = () => {
                 height={400}
                 className="rounded-lg shadow-xl w-full h-auto"
               />
-            </div>
+            </motion.div>
           </div>
 
           {/* Second Subsection - Sub-services Cards */}
           <div 
             ref={cardsRef}
-            className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-8 lg:p-12"
+            className="bg-gradient-to-br from-white to-white rounded-2xl p-8 lg:p-12 shadow-inner"
           >
-            <h3 className="text-3xl font-bold text-gray-900 mb-12 text-center">
-              Our Data & Analytics Services
-            </h3>
+            <AnimatedWords text="Our Data & Analytics Services" className="text-3xl font-bold text-[#010a14] mb-12 text-center" />
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
               {subServices.map((service, index) => (
                 <div
@@ -150,12 +173,8 @@ const AdvancedServicesPage: React.FC = () => {
                   tabIndex={0}
                   aria-label={`${service.title} service details`}
                 >
-                  <h4 className="text-xl font-semibold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors">
-                    {service.title}
-                  </h4>
-                  <p className="text-gray-600 leading-relaxed">
-                    {service.description}
-                  </p>
+                  <AnimatedWords text={service.title} className="text-xl font-semibold text-[#010a14] mb-4 group-hover:text-[#0d3b60] transition-colors" />
+                  <AnimatedWords text={service.description} className="text-gray-600 leading-relaxed" />
                 </div>
               ))}
             </div>
@@ -165,7 +184,7 @@ const AdvancedServicesPage: React.FC = () => {
 
       {/* Security Section */}
       <section 
-        className="relative py-20 bg-gradient-to-br from-blue-50 to-indigo-50 animate-section overflow-hidden"
+        className="relative py-20 bg-white text-black animate-section overflow-hidden"
         aria-labelledby="security-heading"
       >
         {/* Background Circles */}
@@ -176,32 +195,27 @@ const AdvancedServicesPage: React.FC = () => {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Image on the left */}
             <div className="animate-content" data-fade="left">
-              <Image
-                src="/assets/Cybersecurity.jpg"
-                alt="Cybersecurity shield and lock protection"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-xl w-full h-auto"
-              />
+              <motion.div 
+                initial={{ opacity: 0, y: 60, scale: 0.85, rotate: -6 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
+                transition={{ type: 'spring', stiffness: 70, damping: 15, duration: 0.9 }}
+                viewport={{ once: false }}
+                whileHover={{ scale: 1.04 }}
+              >
+                <Image
+                  src="/assets/Cybersecurity.jpg"
+                  alt="Cybersecurity shield and lock protection"
+                  width={600}
+                  height={400}
+                  className="rounded-lg shadow-xl w-full h-auto"
+                />
+              </motion.div>
             </div>
             {/* Text on the right */}
             <div className="animate-content" data-fade="right">
-              <h2 
-                id="security-heading"
-                className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight"
-              >
-                Cybersecurity Solutions
-              </h2>
-              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                Protect your digital assets with comprehensive cybersecurity solutions designed 
-                for the modern threat landscape. Our multi-layered security approach ensures 
-                your business remains resilient against evolving cyber threats.
-              </p>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                From threat detection and incident response to compliance management and 
-                security awareness training, we provide end-to-end protection that scales 
-                with your business needs.
-              </p>
+              <AnimatedWords text="Cybersecurity Solutions" className="text-4xl lg:text-5xl font-bold text-[#010a14] mb-6 leading-tight" />
+              <AnimatedWords text="Protect your digital assets with comprehensive cybersecurity solutions designed for the modern threat landscape. Our multi-layered security approach ensures your business remains resilient against evolving cyber threats." className="text-lg text-gray-700 mb-6 leading-relaxed" />
+              <AnimatedWords text="From threat detection and incident response to compliance management and security awareness training, we provide end-to-end protection that scales with your business needs." className="text-lg text-gray-700 leading-relaxed" />
             </div>
           </div>
         </div>
@@ -209,7 +223,7 @@ const AdvancedServicesPage: React.FC = () => {
 
       {/* Emerging Technologies Section */}
       <section 
-        className="relative py-20 bg-gradient-to-br from-gray-50 to-slate-100 animate-section overflow-hidden"
+        className="relative py-20 bg-[#010a14] text-white animate-section overflow-hidden"
         aria-labelledby="emerging-tech-heading"
       >
         {/* Background Circles */}
@@ -219,24 +233,17 @@ const AdvancedServicesPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div className="animate-content" data-fade="left">
-              <h2 
-                id="emerging-tech-heading"
-                className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight"
-              >
-                Emerging Technologies
-              </h2>
-              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                Stay ahead of the curve with cutting-edge technologies that reshape industries. 
-                We specialize in implementing AI, IoT, blockchain, and other transformative 
-                technologies that create new opportunities for growth and innovation.
-              </p>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Our expert team helps you navigate the complex landscape of emerging technologies, 
-                ensuring strategic adoption that delivers measurable business value and 
-                competitive differentiation.
-              </p>
+              <AnimatedWords text="Emerging Technologies" className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight" />
+              <AnimatedWords text="Stay ahead of the curve with cutting-edge technologies that reshape industries. We specialize in implementing AI, IoT, blockchain, and other transformative technologies that create new opportunities for growth and innovation." className="text-lg text-gray-200 mb-6 leading-relaxed" />
+              <AnimatedWords text="Our expert team helps you navigate the complex landscape of emerging technologies, ensuring strategic adoption that delivers measurable business value and competitive differentiation." className="text-lg text-gray-200 leading-relaxed" />
             </div>
-            <div className="animate-content" data-fade="right">
+            <motion.div 
+              initial={{ opacity: 0, y: 60, scale: 0.85, rotate: -6 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
+              transition={{ type: 'spring', stiffness: 70, damping: 15, duration: 0.9 }}
+              viewport={{ once: false }}
+              whileHover={{ scale: 1.04 }}
+            >
               <Image
                 src="/assets/Emerging_tech.png"
                 alt="Futuristic technology and AI visualization"
@@ -244,7 +251,7 @@ const AdvancedServicesPage: React.FC = () => {
                 height={400}
                 className="rounded-lg shadow-xl w-full h-auto"
               />
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -268,12 +275,8 @@ const AdvancedServicesPage: React.FC = () => {
 
         {/* Content */}
         <div className="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
-            Ready to Transform Your Business?
-          </h2>
-          <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-            Let's discuss how our advanced services can accelerate your digital transformation journey.
-          </p>
+          <AnimatedWords text="Ready to Transform Your Business?" className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6" />
+          <AnimatedWords text="Let's discuss how our advanced services can accelerate your digital transformation journey." className="text-xl text-gray-600 mb-8 leading-relaxed" />
           <button
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
             aria-label="Get started with advanced services"
