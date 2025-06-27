@@ -135,7 +135,7 @@ export default function Home() {
     cards.forEach((card, index) => {
       gsap.to(card, {
         left: `${position[index]}%`,
-        rotation: `${rotation[index]}`,
+        rotation: rotation[index],
         ease: "none",
         scrollTrigger: {
           trigger: container.current.querySelector(".cards"),
@@ -203,7 +203,7 @@ export default function Home() {
           <Card
             key={index}
             id={`card-${index + 1}`}
-            frontSrc="/card-front.jpg"
+            frontSrc="/assets/card-front.png"
             frontAlt={`${card.category} service card`}
             category={card.category}
             title={card.title}
@@ -217,4 +217,4 @@ export default function Home() {
       </section>
     </div>
   );
-} 
+}

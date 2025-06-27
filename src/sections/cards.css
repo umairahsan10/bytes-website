@@ -11,7 +11,6 @@
     height: 500vh; /* same scroll span as original implementation */
     position: relative;
     font-family: "Inter", sans-serif;
-    background-color: white;
 }
 
 /* Local utility for the cards stage */
@@ -313,7 +312,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0);
     z-index: 1;
 }
 
@@ -323,7 +322,7 @@
     justify-content: space-between;
     align-items: flex-start;
     padding: clamp(12px, 3vw, 24px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
     position: relative;
     z-index: 2;
 }
@@ -331,17 +330,19 @@
 .card-category {
     font-size: clamp(14px, 2vw, 18px);
     font-weight: 600;
-    color: #1a1a1a;
+    color: #ffffff;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin: 0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .card-icon {
     font-size: clamp(18px, 2.5vw, 24px);
     font-weight: 900;
-    color: #1a1a1a;
+    color: #ffffff;
     line-height: 1;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 /* Card Content */
@@ -357,9 +358,10 @@
 .card-title {
     font-size: clamp(12px, 1.5vw, 14px);
     font-weight: 500;
-    color: #666;
+    color: #ffffff;
     margin-bottom: clamp(12px, 2vw, 16px);
     text-transform: capitalize;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .services-list {
@@ -372,10 +374,11 @@
 .service-item {
     font-size: clamp(12px, 1.5vw, 15px);
     font-weight: 400;
-    color: #333;
+    color: #ffffff;
     line-height: 1.4;
     padding: clamp(4px, 1vw, 8px) 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .service-item:last-child {
@@ -384,55 +387,55 @@
 
 /* Card specific colors and backgrounds */
 #card-1 .flip-card-back {
-    background-image: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=600&fit=crop&crop=center');
+    background-image: url('/assets/card-1.png');
 }
 
 #card-1 .card-header {
-    background: linear-gradient(135deg, rgba(248, 250, 252, 0.95) 0%, rgba(226, 232, 240, 0.95) 100%);
+    /* Removed background gradient for transparency */
 }
 
 #card-1 .card-category,
 #card-1 .card-icon {
-    color: #1e293b;
+    color: #ffffff;
 }
 
 #card-2 .flip-card-back {
-    background-image: url('https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=400&h=600&fit=crop&crop=center');
+    background-image: url('/assets/card-2.png');
 }
 
 #card-2 .card-header {
-    background: linear-gradient(135deg, rgba(240, 253, 244, 0.95) 0%, rgba(220, 252, 231, 0.95) 100%);
+    /* Removed background gradient for transparency */
 }
 
 #card-2 .card-category,
 #card-2 .card-icon {
-    color: #166534;
+    color: #ffffff;
 }
 
 #card-3 .flip-card-back {
-    background-image: url('https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?w=400&h=600&fit=crop&crop=center');
+    background-image: url('/assets/card-3.png');
 }
 
 #card-3 .card-header {
-    background: linear-gradient(135deg, rgba(239, 246, 255, 0.95) 0%, rgba(219, 234, 254, 0.95) 100%);
+    /* Removed background gradient for transparency */
 }
 
 #card-3 .card-category,
 #card-3 .card-icon {
-    color: #1e40af;
+    color: #ffffff;
 }
 
 #card-4 .flip-card-back {
-    background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&h=600&fit=crop&crop=center');
+    background-image: url('/assets/card-4.png');
 }
 
 #card-4 .card-header {
-    background: linear-gradient(135deg, rgba(236, 254, 255, 0.95) 0%, rgba(207, 250, 254, 0.95) 100%);
+    /* Removed background gradient for transparency */
 }
 
 #card-4 .card-category,
 #card-4 .card-icon {
-    color: #0e7490;
+    color: #ffffff;
 }
 
 @keyframes floating {
@@ -445,4 +448,4 @@
     100% {
         transform: translate(-50%, -50%);
     }
-} 
+}

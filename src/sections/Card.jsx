@@ -39,4 +39,4 @@ const Card = forwardRef(({id, frontSrc, frontAlt, category, title, services, ico
 
 Card.displayName = 'Card';
 
-export default Card; 
+export default Card;
