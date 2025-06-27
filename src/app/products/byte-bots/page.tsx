@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Header } from '@/sections/Navbar';
+import Link from 'next/link';
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
@@ -579,32 +580,43 @@ const ByteBotLanding: React.FC = () => {
         <div ref={particlesRef} className="particles-container absolute inset-0 z-1"></div>
         <div className="tech-grid"></div>
         
-        <div className="hero-content container mx-auto px-6 text-center relative z-10">
-          <div className="max-w-6xl mx-auto">
-            <h1 className="text-6xl md:text-8xl font-black text-white mb-6 leading-tight">
+        <div className="hero-content container mx-auto px-6 relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8 h-full">
+          {/* Text column */}
+          <div className="w-full lg:w-1/2 text-center lg:text-left">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 leading-tight">
               <span className="bubble-text gradient-text">Byte</span>{' '}
               <span className="bubble-text">Bot</span>
             </h1>
             
-            <p className="text-2xl md:text-4xl text-gray-300 mb-8 font-light">
+            <p className="text-2xl md:text-4xl text-gray-300 mb-4 font-light">
               <span className="bubble-text">The</span>{' '}
               <span className="bubble-text">Future</span>{' '}
               <span className="bubble-text">of</span>{' '}
               <span className="bubble-text">Conversation</span>
             </p>
             
-            <p className="text-xl md:text-2xl text-cyan-400 mb-12 font-medium">
+            <p className="text-lg md:text-2xl text-cyan-400 mb-6 font-medium">
               <span className="bubble-text">Powered</span>{' '}
               <span className="bubble-text">by</span>{' '}
               <span className="bubble-text">Real</span>{' '}
               <span className="bubble-text">Business</span>{' '}
               <span className="bubble-text">Intelligence</span>
             </p>
-            
-            <div className="bot-container mb-12">
+
+            {/* Demo button */}
+            <Link href="/contact" passHref legacyBehavior>
+              <a className="inline-block bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-full shadow-lg transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-cyan-300">
+                Book a free&nbsp;Byte-Bot&nbsp;demo
+              </a>
+            </Link>
+          </div>
+
+          {/* Bot column */}
+          <div className="w-full lg:w-1/2 flex justify-center lg:justify-end">
+            <div className="bot-container">
               <canvas
                 ref={heroCanvasRef}
-                className="glowing-bot w-96 h-96 mx-auto"
+                className="glowing-bot w-72 h-72 md:w-96 md:h-96"
               />
             </div>
           </div>
