@@ -12,9 +12,9 @@ const quickLinks = [
 ];
 
 const servicesLinks = [
-  { title: 'App Development', href: '/services/app' },
   { title: 'Web Development', href: '/services/web' },
   { title: 'SEO', href: '/services/seo' },
+  { title: 'App Development', href: '/services/app' },
   { title: 'Marketing', href: '/services/marketing' },
   { title: 'Advanced Services', href: '/services/advanced-services' },
 ];

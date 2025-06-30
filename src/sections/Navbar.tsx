@@ -493,13 +493,13 @@ const Header: React.FC<HeaderProps> = ({
               </p>
               <div className={`dropdown-menu ${isServicesDropdownOpen ? 'open' : ''}`}>
                 <div className="dropdown-item">
-                  <a href="/services/app" onClick={handleServicesDropdownClick}>App Development</a>
-                </div>
-                <div className="dropdown-item">
                   <a href="/services/web" onClick={handleServicesDropdownClick}>Web Development</a>
                 </div>
                 <div className="dropdown-item">
                   <a href="/services/seo" onClick={handleServicesDropdownClick}>SEO</a>
+                </div>
+                <div className="dropdown-item">
+                  <a href="/services/app" onClick={handleServicesDropdownClick}>App Development</a>
                 </div>
                 <div className="dropdown-item">
                   <a href="/services/marketing" onClick={handleServicesDropdownClick}>Marketing</a>
