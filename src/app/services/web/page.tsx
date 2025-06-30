@@ -125,7 +125,7 @@ const WebDevelopmentLanding = () => {
 
   const animateCounters = () => {
     const duration = 2000;
-    const targets = { projects: 300, clients: 100, lines: 1000000, years: 10 } as const;
+    const targets = { projects: 10, clients: 10, lines: 10000, years: 1 } as const;
     type TargetKey = keyof typeof targets;
     
     (Object.keys(targets) as TargetKey[]).forEach((key) => {
@@ -211,7 +211,7 @@ const WebDevelopmentLanding = () => {
       <Header />
 
       {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center relative overflow-hidden">
+      <section id="home" className="min-h-screen flex items-center relative overflow-hidden pt-16 lg:pt-24">
         {/* Animated Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 opacity-70" />
         <div className="absolute inset-0">
@@ -220,12 +220,12 @@ const WebDevelopmentLanding = () => {
           <div className="absolute bottom-20 left-1/2 w-80 h-80 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-4000" />
         </div>
 
-        <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10">
-          {/* Left Side - Video/Image (will be shown below text on mobile) */}
-          <div className="relative order-2 lg:order-none">
+        <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-start relative z-10">
+          {/* Right Side - Video/Image (will be shown below text on mobile) */}
+          <div className="relative order-2 lg:order-2">
             <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-700">
               <video
-                src="/assets/WebDev/intro-vid.mp4"
+                src="/assets/WebDev/intro-video.mp4"
                 autoPlay
                 loop
                 muted
@@ -236,8 +236,8 @@ const WebDevelopmentLanding = () => {
             </div>
           </div>
 
-          {/* Right Side - Text */}
-          <div className="space-y-8 animate-fade-in-up text-center lg:text-left order-1 lg:order-none">
+          {/* Left Side - Text */}
+          <div className="space-y-8 animate-fade-in-up text-center lg:text-left order-1 lg:order-1">
             <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold leading-tight break-words">
               <span className="text-gray-900">Web Development</span>
               <br />
@@ -313,7 +313,7 @@ const WebDevelopmentLanding = () => {
               <div className="text-blue-200">Happy Clients</div>
             </div>
             <div className="space-y-2">
-              <div className="text-4xl lg:text-5xl font-bold">{(counters.lines / 1000000).toFixed(1)}M+</div>
+              <div className="text-4xl lg:text-5xl font-bold">{(counters.lines / 1000).toFixed(0)}K+</div>
               <div className="text-blue-200">Lines of Code</div>
             </div>
             <div className="space-y-2">
