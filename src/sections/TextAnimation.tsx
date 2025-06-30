@@ -5,7 +5,7 @@ import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import { gsap } from 'gsap/dist/gsap';
 import styled from '@emotion/styled';
 
-const phrase = "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.";
+const phrase = "At Bytes Platform we partner with businesses to build powerful online experiences that drive growth and engagement. Our team of developers, designers and digital strategists combines custom website design, responsive development and performance optimization with targeted SEO, SEM and social media campaigns. We focus on clear communication, transparent reporting and measurable results so you always know how your investment is paying off. From securing your site with SSL to crafting a user-friendly interface that converts visitors into customers, Bytes Platform delivers the end-to-end expertise you need to stand out in a crowded digital landscape.";
 
 const LoadingContainer = styled.div`
   * {

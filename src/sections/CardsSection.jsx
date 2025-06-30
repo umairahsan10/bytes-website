@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useRef, useState } from "react";
-
 import Card from "./Card.jsx";
 import Lenis from "lenis";
 import gsap from "gsap";

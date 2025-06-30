@@ -173,8 +173,8 @@ function TextLine() {
   // path or radius changes, and never inside the animation loop.
   const fullGeometries = useMemo(() => {
     return letterCurves.map(curve => {
-      // Reduced segment counts for better performance, shape is maintained.
-      const geo = new THREE.TubeGeometry(curve, 300, tubeRadius, 16, false)
+      // Increase segment count for smoother progressive reveal
+      const geo = new THREE.TubeGeometry(curve, 1000, tubeRadius, 16, false)
       geo.setDrawRange(0, 0) // Start with nothing visible
       return geo
     })
@@ -205,8 +205,9 @@ function TextLine() {
 
       let progress = 0
 
-      const startOffset = window.innerHeight * 0.6
-      const effectiveHeight = (sectionHeight - window.innerHeight) * 0.5
+      // For sticky sections with height equal to viewport, ensure a non-zero scroll range
+      const startOffset = window.innerHeight * 0.4
+      const effectiveHeight = window.innerHeight * 1.2 // 120% of viewport height scroll range
 
       const startScroll = sectionTop - startOffset
       const endScroll = startScroll + effectiveHeight
@@ -227,16 +228,31 @@ function TextLine() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // State flag to start animation after delay
+  const [animationStarted, setAnimationStarted] = useState(false)
+
+  // Start animation after a short delay (e.g., 1.5s)
+  useEffect(() => {
+    const timer = setTimeout(() => setAnimationStarted(true), 2500)
+    return () => clearTimeout(timer)
+  }, [])
+
   // "DON'T DRAW IT AGAIN AND AGAIN": Inside the animation loop (useFrame),
   // we are NOT re-creating the geometry. We are just telling the GPU
   // "how much" of the pre-built, cached geometry to render using `setDrawRange`.
   // This is extremely fast and efficient.
   useFrame(() => {
-    // Smooth the scroll progress without causing re-renders
-    scrollProgressRef.current += (targetProgressRef.current - scrollProgressRef.current) * 0.2
+    if (!animationStarted) return // wait for delay before drawing
+
+    // Smaller lerp factor for smoother scrolling animation
+    scrollProgressRef.current += (targetProgressRef.current - scrollProgressRef.current) * 0.08
 
     const totalLetters = letterCurves.length
-    const revealMultiplier = 1.5
+    // Lower multiplier means letters reveal more slowly
+    const revealMultiplier = 0.8
+
+    // Apply 20% scroll delay: ignore first 20% of progress
+    const effectiveScroll = Math.max(0, scrollProgressRef.current - 0.15) / 0.8 // 0 ->1 after 20%
 
     letterCurves.forEach((curve, letterIndex) => {
       const tubeRef = tubeRefs.current[letterIndex]
@@ -246,7 +262,7 @@ function TextLine() {
       if (!tubeRef || !sphereRef || !geom) return
 
       const letterProgress = Math.max(0, Math.min(1,
-        (scrollProgressRef.current * totalLetters * (revealMultiplier + 0.1)) - letterIndex
+        (effectiveScroll * totalLetters * (revealMultiplier + 0.1)) - letterIndex
       ))
 
       if (letterProgress > 0) {
@@ -280,7 +296,7 @@ function TextLine() {
           <mesh
             ref={(ref) => { tubeRefs.current[index] = ref }}
             geometry={fullGeometries[index]}
-            material={new THREE.MeshBasicMaterial({ color: '#00b7ca' })}
+            material={new THREE.MeshBasicMaterial({ color: '#5ee5ff', transparent: true, opacity: 0.5 })}
             visible={false}
           />
           <mesh
@@ -289,7 +305,7 @@ function TextLine() {
             visible={false}
           >
             <sphereGeometry args={[tubeRadius * 1.5, 16, 16]} />
-            <meshBasicMaterial color="#00b7ca" />
+            <meshBasicMaterial color="#5ee5ff" transparent opacity={0.5} />
           </mesh>
         </React.Fragment>
       ))}
