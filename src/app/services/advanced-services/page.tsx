@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Header } from '../../../sections/Navbar';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 // Types for external libraries
 declare global {
@@ -14,6 +15,7 @@ declare global {
 }
 
 const AdvancedServicesPage: React.FC = () => {
+  const router = useRouter();
   const heroRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
 
@@ -275,11 +277,12 @@ const AdvancedServicesPage: React.FC = () => {
 
         {/* Content */}
         <div className="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <AnimatedWords text="Ready to Transform Your Business?" className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6" />
-          <AnimatedWords text="Let's discuss how our advanced services can accelerate your digital transformation journey." className="text-xl text-gray-600 mb-8 leading-relaxed" />
+          <AnimatedWords text="Ready to Transform Your Business?" className="text-3xl lg:text-4xl font-bold text-white mb-6" />
+          <AnimatedWords text="Let's discuss how our advanced services can accelerate your digital transformation journey." className="text-xl text-white mb-8 leading-relaxed" />
           <button
             className="bg-[#09122C] hover:bg-[#0C1A40] text-white font-semibold py-4 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#19274D]"
             aria-label="Get started with advanced services"
+            onClick={() => router.push('/contact')}
           >
             Get Started Today
           </button>
