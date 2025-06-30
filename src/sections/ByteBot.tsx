@@ -1,13 +1,10 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import Image from "next/image";
-// Spline runtime is dynamically imported to avoid SSR issues and to keep bundle size low
-
-const SPLINE_URL = "https://prod.spline.design/9PHyBBLVfpx0pW9E/scene.splinecode";
+// Replaced interactive Spline model with a pre-rendered animated GIF to lighten the bundle
 
 export const ByteBotsSection = () => {
   const sectionRef = useRef<HTMLDivElement | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     // --- GSAP intro animation ---
@@ -18,68 +15,10 @@ export const ByteBotsSection = () => {
       tl.from(".bytebots-subheading", { y: 60, opacity: 0, duration: 0.8 }, "-=0.8");
       tl.from(".bytebots-text", { y: 60, opacity: 0, duration: 0.8 }, "-=0.8");
       tl.from(".bytebots-button", { y: 60, opacity: 0, duration: 0.8 }, "-=0.8");
-      tl.from(canvasRef.current, { scale: 0.5, opacity: 0, duration: 1 }, "-=1");
+      tl.from(".bytebots-video", { scale: 0.5, opacity: 0, duration: 1 }, "-=1");
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
-
-  useEffect(() => {
-    // Dynamically import Spline runtime to run only in the browser
-    if (typeof window === "undefined") return;
-
-    let splineApp: any; // store reference to dispose on unmount
-    let isComponentMounted = true;
-
-    (async () => {
-      try {
-      const { Application } = await import("@splinetool/runtime");
-        
-        if (!isComponentMounted || !canvasRef.current) return;
-        
-        splineApp = new Application(canvasRef.current);
-        
-        // Override console.error temporarily to catch Spline runtime errors
-        const originalError = console.error;
-        console.error = (...args) => {
-          const message = args.join(' ');
-          if (message.includes('Missing property') || message.includes('buildTimeline')) {
-            // Suppress Spline runtime errors that don't affect functionality
-            return;
-          }
-          originalError(...args);
-        };
-        
-          await splineApp.load(SPLINE_URL);
-        
-        // Restore original console.error
-        console.error = originalError;
-        
-          // Hide Spline watermark if present
-        setTimeout(() => {
-          const badge = document.querySelector('a[aria-label="Built with Spline"]') as HTMLElement | null;
-          if (badge) badge.style.display = 'none';
-        }, 100);
-        
-        } catch (err) {
-        // Only log actual loading errors, not animation property warnings
-        if (err instanceof Error && !err.message.includes('Missing property')) {
-          console.warn("Spline load error:", err);
-        }
-      }
-    })();
-
-    // Clean up when component unmounts to prevent duplicate apps / errors
-    return () => {
-      isComponentMounted = false;
-      if (splineApp) {
-        try {
-          splineApp.dispose?.();
-        } catch {
-          // Ignore disposal errors
-        }
-      }
-    };
   }, []);
 
   return (
@@ -121,10 +60,13 @@ export const ByteBotsSection = () => {
 
         {/* Right – 3-D Bot */}
         <div className="flex-1 w-full max-w-2xl lg:max-w-3xl h-64 sm:h-72 md:h-[550px] lg:h-[700px]">
-          <canvas
-            ref={canvasRef}
-            id="bytebots-canvas"
-            className="w-full h-full rounded-lg"
+          <video
+            src="/assets/bytes-bot/bytes-vid.webm"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="bytebots-video w-[85%] h-[85%] mx-auto sm:w-full sm:h-full rounded-lg object-contain"
           />
         </div>
       </div>

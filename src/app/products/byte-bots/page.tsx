@@ -12,12 +12,13 @@ if (typeof window !== 'undefined') {
 }
 
 const ByteBotLanding: React.FC = () => {
-  const SPLINE_URL = "https://prod.spline.design/9PHyBBLVfpx0pW9E/scene.splinecode";
+  // Hero video replacing former Spline 3-D model
+  const HERO_VIDEO_SRC = "/assets/bytes-bot/bytes-vid.webm";
   const heroRef = useRef<HTMLElement>(null);
   const particlesRef = useRef<HTMLDivElement>(null);
   const horizontalSectionsRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLElement>(null);
-  const heroCanvasRef = useRef<HTMLCanvasElement>(null);
+  const heroCanvasRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     // Initialize particles effect
@@ -207,7 +208,7 @@ const ByteBotLanding: React.FC = () => {
         });
       });
 
-      // Add parallax effect to hero canvas
+      // Add parallax effect to hero video (same ref)
       if (heroCanvasRef.current) {
         ScrollTrigger.create({
           trigger: heroRef.current,
@@ -216,12 +217,7 @@ const ByteBotLanding: React.FC = () => {
           scrub: 1,
           onUpdate: (self) => {
             const progress = self.progress;
-            gsap.to(heroCanvasRef.current, {
-              y: progress * 100,
-              rotation: progress * 5,
-              duration: 0.3,
-              ease: "none"
-            });
+            // No need to update video properties directly, as video plays automatically
           }
         });
       }
@@ -230,56 +226,9 @@ const ByteBotLanding: React.FC = () => {
     const particlesCleanup = initParticles();
     initAnimations();
 
-    // Load Spline bot in hero
-    let splineApp: any = null;
-    let isComponentMounted = true;
-    
-    (async () => {
-      if (!heroCanvasRef.current || !isComponentMounted) return;
-      try {
-        const { Application } = await import('@splinetool/runtime');
-        
-        // Override console.error temporarily to suppress Spline runtime errors
-        const originalError = console.error;
-        console.error = (...args) => {
-          const message = args.join(' ');
-          if (message.includes('Missing property') || message.includes('buildTimeline')) {
-            // Suppress Spline runtime errors that don't affect functionality
-            return;
-          }
-          originalError(...args);
-        };
-        
-        splineApp = new Application(heroCanvasRef.current);
-        await splineApp.load(SPLINE_URL);
-        
-        // Restore original console.error
-        console.error = originalError;
-        
-        // Hide Spline watermark
-        setTimeout(() => {
-          const badge = document.querySelector('a[aria-label="Built with Spline"]') as HTMLElement | null;
-          if (badge) badge.style.display = 'none';
-        }, 100);
-      } catch (err) {
-        // Only log actual loading errors, not animation property warnings
-        if (err instanceof Error && !err.message.includes('Missing property')) {
-          console.warn('Spline load error', err);
-        }
-      }
-    })();
-
     // Cleanup function
     return () => {
-      isComponentMounted = false;
       if (particlesCleanup) particlesCleanup();
-      if (splineApp) {
-        try {
-          splineApp.dispose?.();
-        } catch {
-          // Ignore disposal errors
-        }
-      }
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
@@ -580,7 +529,7 @@ const ByteBotLanding: React.FC = () => {
         <div ref={particlesRef} className="particles-container absolute inset-0 z-1"></div>
         <div className="tech-grid"></div>
         
-        <div className="hero-content container mx-auto px-6 relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8 h-full">
+        <div className="hero-content container mx-auto px-6 relative z-10 flex flex-col lg:flex-row items-center justify-between lg:gap-6 gap-8 h-full">
           {/* Text column */}
           <div className="w-full lg:w-1/2 text-center lg:text-left">
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 leading-tight">
@@ -612,11 +561,16 @@ const ByteBotLanding: React.FC = () => {
           </div>
 
           {/* Bot column */}
-          <div className="w-full lg:w-1/2 flex justify-center lg:justify-end">
+          <div className="w-full lg:w-1/2 flex justify-center lg:justify-end lg:-ml-6 xl:-ml-10">
             <div className="bot-container">
-              <canvas
+              <video
                 ref={heroCanvasRef}
-                className="glowing-bot w-72 h-72 md:w-96 md:h-96"
+                src={HERO_VIDEO_SRC}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="glowing-bot w-80 h-80 md:w-[28rem] md:h-[28rem] object-contain"
               />
             </div>
           </div>
