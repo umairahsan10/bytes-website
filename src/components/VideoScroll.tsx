@@ -8,9 +8,7 @@ import {
   AnimatePresence,
   animate,
 } from 'framer-motion';
-
-// Path to the optimized video placed in /public for static serving by Vite.
-const VIDEO_SRC = '/landingVideo_1080.mp4';
+import AdvancedFpvAnimation from './AdvancedFpvAnimation';
 
 // Fallback gradient background when video is not available
 const FALLBACK_BACKGROUND = 'linear-gradient(135deg, #000000 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #000000 100%)';
@@ -151,11 +149,10 @@ if (typeof document !== 'undefined' && !document.getElementById('gold-shine-styl
 
 function VideoScroll() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
-  // State for video duration and readiness
-  const [duration, setDuration] = useState<number>(0);
-  const [isReady, setIsReady] = useState<boolean>(false);
+  // State for animation duration and readiness
+  const [duration, setDuration] = useState<number>(100); // Animation duration in seconds
+  const [isReady, setIsReady] = useState<boolean>(true);
 
   // State for mobile menu
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -205,46 +202,11 @@ function VideoScroll() {
     setShowIntro(t < 7);
   }, []);
 
-  // Update video time and service selection
+  // Update animation time and service selection
   useMotionValueEvent(videoTime, 'change', (t) => {
     desiredTimeRef.current = Math.max(0, Math.min(t, duration));
     selectService(t);
   });
-
-  // Sync video time with scroll
-  useEffect(() => {
-    if (!isReady) return;
-    let animationId: number;
-    const THRESHOLD = 1 / 30;
-
-    const tick = () => {
-      const video = videoRef.current;
-      if (video) {
-        const wanted = desiredTimeRef.current;
-        if (Math.abs(wanted - video.currentTime) > THRESHOLD) {
-          video.currentTime = wanted;
-        }
-      }
-      animationId = requestAnimationFrame(tick);
-    };
-    animationId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(animationId);
-  }, [isReady, duration]);
-
-  // Handle video metadata loading
-  const handleLoadedMetadata = () => {
-    if (!videoRef.current) return;
-    setDuration(videoRef.current.duration);
-    videoRef.current.pause();
-    setIsReady(true);
-  };
-
-  // Initialize video settings
-  useEffect(() => {
-    if (!videoRef.current) return;
-    videoRef.current.pause();
-    videoRef.current.muted = true;
-  }, []);
 
   // Service data
   const services: ServiceCard[] = [
@@ -350,9 +312,6 @@ function VideoScroll() {
     const targetY = containerTop + progress * scrollRange;
 
     desiredTimeRef.current = time;
-    if (videoRef.current) {
-      videoRef.current.currentTime = time;
-    }
     selectService(time);
     setIsMenuOpen(false);
 
@@ -386,28 +345,7 @@ function VideoScroll() {
         }}
       />
       
-      <video
-        ref={videoRef}
-        src={VIDEO_SRC}
-        playsInline
-        preload="auto"
-        muted
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          objectFit: 'cover',
-          pointerEvents: 'none',
-          zIndex: 2,
-        }}
-        onLoadedMetadata={handleLoadedMetadata}
-        onError={(e) => {
-          // Hide video on error and show fallback background
-          e.currentTarget.style.display = 'none';
-        }}
-      />
+      <AdvancedFpvAnimation scroll={scrollYProgress} />
 
       {/* Dark overlay for better text readability */}
       <div
@@ -926,16 +864,17 @@ function VideoScroll() {
           boxShadow: '0 0 5px rgba(0, 255, 255, 0.2)',
         }}
       >
-        <div
+        <motion.div
           style={{
-            width: `${(desiredTimeRef.current / duration) * 100}%`,
             height: '100%',
             background: 'linear-gradient(90deg, #0080ff, #0080ff)',
             borderRadius: '2px',
-            transition: 'width 0.1s ease',
             boxShadow: '0 0 6px #0080ff',
             animation: 'NeonGlow 3s ease-in-out infinite',
           }}
+          initial={{ width: '0%' }}
+          animate={{ width: `${scrollYProgress.get() * 100}%` }}
+          transition={{ duration: 0.1 }}
         />
       </div>
 
