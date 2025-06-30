@@ -5,6 +5,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Header } from '@/sections/Navbar';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
@@ -12,6 +13,7 @@ if (typeof window !== 'undefined') {
 }
 
 const ByteBotLanding: React.FC = () => {
+  const router = useRouter();
   const SPLINE_URL = "https://prod.spline.design/9PHyBBLVfpx0pW9E/scene.splinecode";
   const heroRef = useRef<HTMLElement>(null);
   const particlesRef = useRef<HTMLDivElement>(null);
@@ -915,7 +917,7 @@ const ByteBotLanding: React.FC = () => {
                 </div>
                 <button
                   className="cta-button w-full max-w-[200px] mx-auto h-12 text-sm md:text-lg font-semibold text-white rounded-full flex items-center justify-center"
-                  onClick={handleRippleEffect}
+                  onClick={(e) => { handleRippleEffect(e); router.push('/contact'); }}
                 >
                   Book a Demo
                 </button>
@@ -937,7 +939,7 @@ const ByteBotLanding: React.FC = () => {
                 </div>
                 <button
                   className="cta-button w-full max-w-[200px] mx-auto h-12 text-sm md:text-lg font-semibold text-white rounded-full flex items-center justify-center"
-                  onClick={handleRippleEffect}
+                  onClick={(e) => { handleRippleEffect(e); router.push('/contact'); }}
                 >
                   Request Proposal
                 </button>
@@ -959,7 +961,7 @@ const ByteBotLanding: React.FC = () => {
                 </div>
                 <button
                   className="cta-button w-full max-w-[200px] mx-auto h-12 text-sm md:text-lg font-semibold text-white rounded-full flex items-center justify-center"
-                  onClick={handleRippleEffect}
+                  onClick={(e) => { handleRippleEffect(e); router.push('/contact'); }}
                 >
                   Start Free Trial
                 </button>

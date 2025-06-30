@@ -4,6 +4,7 @@ import Image from "next/image";   // put this at the top with the other imports
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import { Header } from '@/sections/Navbar';
+import { useRouter } from 'next/navigation';
 
 // Helper component for word-by-word reveal
 const AnimatedParagraph = ({ text, className = "" }: { text: string; className?: string }) => {
@@ -50,6 +51,7 @@ const AppDevelopmentPage = () => {
   const topHeroRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const router = useRouter();
 
   // Scroll-based transforms for the first (top) hero
   const { scrollYProgress: topHeroScroll } = useScroll({ target: topHeroRef, offset: ["start start", "end start"] });
@@ -755,6 +757,50 @@ const AppDevelopmentPage = () => {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* Call-to-Action Section */}
+      <section className="relative py-32 px-6 bg-[#E1E1E1] overflow-hidden">
+        {/* Decorative background image */}
+        <Image
+          src="/assets/app-img-3.png"
+          alt="Mobile app showcase"
+          fill
+          className="object-cover absolute inset-0"
+          priority
+        />
+        {/* Semi-transparent overlay to improve text readability */}
+        <div className="absolute inset-0 bg-white/40" />
+
+        <motion.div
+          className="relative z-10 max-w-4xl mx-auto text-center animate-section"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false }}
+          transition={{ duration: 0.8 }}
+        >
+          <h2 className="text-5xl md:text-6xl font-bold mb-8">
+            Ready to Build Your
+            <br />
+            <span className="bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
+              Next App?
+            </span>
+          </h2>
+
+          <AnimatedParagraph
+            text="Transform your ideas into powerful mobile experiences. Let's discuss your project and bring your vision to life."
+            className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto"
+          />
+
+          <motion.button
+            className="bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 px-12 py-4 rounded-full text-xl font-semibold text-white transition-all duration-300 transform hover:scale-105"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => router.push('/contact')}
+          >
+            Start Your Project
+          </motion.button>
+        </motion.div>
       </section>
 
       {/* Closing container div */}

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import Image from "next/image";
+import Link from "next/link";
 // Spline runtime is dynamically imported to avoid SSR issues and to keep bundle size low
 
 const SPLINE_URL = "https://prod.spline.design/9PHyBBLVfpx0pW9E/scene.splinecode";
@@ -111,12 +112,12 @@ export const ByteBotsSection = () => {
             data insights, Byte&nbsp;Bot adapts to your needs and learns with
             every interaction.
           </p>
-          <a
-            href="#contact"
+          <Link
+            href="/products/byte-bots"
             className="bytebots-button inline-block bg-gradient-to-r from-purple-500 via-blue-500 to-indigo-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white font-medium py-3 px-6 rounded-lg shadow-lg transition-all duration-300"
           >
             Discover More
-          </a>
+          </Link>
         </div>
 
         {/* Right – 3-D Bot */}

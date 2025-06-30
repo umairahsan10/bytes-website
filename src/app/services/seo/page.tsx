@@ -7,6 +7,7 @@ import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 import { Header } from '@/sections/Navbar';
+import { useRouter } from 'next/navigation';
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
@@ -14,6 +15,7 @@ if (typeof window !== 'undefined') {
 }
 
 const SEOPage: React.FC = () => {
+  const router = useRouter();
   const heroRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
@@ -344,8 +346,6 @@ const SEOPage: React.FC = () => {
           </h2>
           <div className="sub-title text-base mt-6 max-w-sm text-center md:text-left">
             <AnimatedWords text="Forget vanity metrics. We target the exact search terms your ideal customers are googling — and put your business front and center." className="inline" />
-            <br />
-            <button className="mt-5 px-6 py-3 bg-black text-white border-2 border-blue-700 hover:bg-blue-100 font-semibold tracking-wide transition-all duration-300 rounded-full">See More Details</button>
           </div>
         </div>
 
@@ -463,6 +463,7 @@ const SEOPage: React.FC = () => {
                 className="bg-black text-white border-2 border-blue-700 hover:bg-blue-100 px-10 py-4 font-semibold tracking-wide transition-all duration-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => router.push('/contact')}
               >
                 Book a Free SEO Audit
               </motion.button>
@@ -512,20 +513,14 @@ const SEOPage: React.FC = () => {
             <p className="text-base sm:text-lg text-gray-800 mb-8 max-w-2xl mx-auto px-4">
               Talk to Our SEO Expert
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex justify-center">
               <motion.button
                 className="bg-blue-700 hover:bg-blue-800 text-white px-10 py-4 text-lg font-semibold tracking-wide transition-all duration-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => router.push('/contact')}
               >
                 START YOUR PROJECT
-              </motion.button>
-              <motion.button
-                className="bg-transparent border-2 border-blue-700 text-blue-700 hover:bg-blue-700 hover:text-white px-10 py-4 text-lg font-semibold tracking-wide transition-all duration-300"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                VIEW PORTFOLIO
               </motion.button>
             </div>
           </motion.div>

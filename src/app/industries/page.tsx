@@ -5,8 +5,10 @@ import { motion, useInView, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { Header } from '@/sections/Navbar';
 import { Footer } from '@/sections/Footer';
+import { useRouter } from 'next/navigation';
 
 const IndustriesPage = () => {
+  const router = useRouter();
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   // Animated sections refs
@@ -659,6 +661,7 @@ const IndustriesPage = () => {
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
               animate={animationsTriggered.ecommerce ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.9 }}
               transition={{ delay: 1.2, duration: 0.5, type: "spring", stiffness: 200 }}
+              onClick={() => router.push('/contact')}
             >
               Start project
             </motion.button>
