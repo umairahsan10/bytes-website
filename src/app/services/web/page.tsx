@@ -479,14 +479,14 @@ const WebDevelopmentLanding = () => {
                   </ul>
                 </div>
               </div>
-              <div className={`relative h-72 sm:h-96 lg:h-[420px] rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 ${shopifyVisible ? 'animate-slide-in-right' : 'opacity-0 translate-x-10'}`}>
+              <div className={`relative h-48 sm:h-72 lg:h-[360px] rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 ${shopifyVisible ? 'animate-slide-in-right' : 'opacity-0 translate-x-10'}`}>
                 <Image
                   src="/assets/WebDev/shopify.jpeg"
                   alt="Shopify store preview"
                   fill
                   quality={90}
                   priority
-                  className="object-cover object-center"
+                  className="object-contain sm:object-cover object-center"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </div>
@@ -494,14 +494,14 @@ const WebDevelopmentLanding = () => {
 
             {/* WordPress Section */}
             <div className="grid lg:grid-cols-2 gap-12 items-center" ref={wpRef}>
-              <div className={`relative h-72 sm:h-96 lg:h-[420px] rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 order-2 lg:order-1 ${wpVisible ? 'animate-slide-in-left' : 'opacity-0 -translate-x-10'}`} style={{ transitionDelay: '300ms' }}>
+              <div className={`relative h-48 sm:h-72 lg:h-[360px] rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 order-2 lg:order-1 ${wpVisible ? 'animate-slide-in-left' : 'opacity-0 -translate-x-10'}`} style={{ transitionDelay: '300ms' }}>
                 <Image
                   src="/assets/WebDev/wordpress.jpg"
                   alt="WordPress site preview"
                   fill
                   quality={90}
                   priority
-                  className="object-cover object-center"
+                  className="object-contain sm:object-cover object-center"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </div>
