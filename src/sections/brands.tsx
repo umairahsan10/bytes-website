@@ -60,6 +60,11 @@ export const BrandsSection = () => {
             ))}
           </div>
         </div>
+
+        <p className="mt-4 text-sm text-center text-gray-500 italic">
+          These logos represent brands we've worked with — our past clients — not
+          our partners.
+        </p>
       </div>
     </section>
   );

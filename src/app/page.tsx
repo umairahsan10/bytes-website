@@ -34,7 +34,7 @@ export default function Home() {
             <LineAnimationSection key="line" />,
             <CardsSection key="cards" />,
             <BookSection key="book" />,
-            <TestimonialsSection key="testimonials" />,
+            // <TestimonialsSection key="testimonials" />,
             <ContactSection key="contact" />,
           ].map((Section, idx) => (
             <div
