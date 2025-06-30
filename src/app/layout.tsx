@@ -3,6 +3,7 @@ import { Inter, Calistoga } from "next/font/google";
 import "./globals.css";
 import { twMerge } from "tailwind-merge";
 import "../sections/cards.css";
+import GTM, { GTMNoScript } from "@/components/GTM";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const calistoga = Calistoga({
@@ -33,6 +34,9 @@ export default function RootLayout({
           "text-black antialiased font-sans min-h-screen"
         )}
       >
+        {/* Google Tag Manager */}
+        <GTM />
+        <GTMNoScript />
         {children}
       </body>
     </html>
