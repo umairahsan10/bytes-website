@@ -22,7 +22,7 @@ const servicesLinks = [
 export const Footer = () => {
   return (
     <footer className="bg-[#010a14] text-gray-200 pt-16 pb-8 px-6 md:px-12 lg:px-24">
-      <div className="max-w-7xl items-center mx-auto grid grid-cols-1 sm:grid-cols-2 gap-y-12 sm:gap-12 lg:flex lg:gap-12">
+      <div className="max-w-7xl items-start mx-auto grid grid-cols-1 sm:grid-cols-2 gap-y-12 sm:gap-12 lg:flex lg:gap-12">
         {/* Logo / About */}
         <div className="lg:w-2/5 sm:col-span-2 mb-6 lg:mb-0 text-center sm:text-left">
           <Image src="/assets/bytes-logo.png" alt="Bytes Logo" width={140} height={40} className="mb-4 mx-auto sm:mx-0" />
@@ -90,7 +90,7 @@ export const Footer = () => {
 
       <hr className="border-white/20 my-8" />
 
-      <p className="text-center text-sm">Developed by interns of Bytes Platform Inc.</p>
+      <p className="text-center text-sm">Developed by the interns of Bytes Platform Inc.</p>
     </footer>
   );
 };
