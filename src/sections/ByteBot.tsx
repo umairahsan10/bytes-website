@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import Image from "next/image";
+import Link from "next/link";
 // Replaced interactive Spline model with a pre-rendered animated GIF to lighten the bundle
 
 export const ByteBotsSection = () => {
