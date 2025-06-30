@@ -15,6 +15,7 @@ if (typeof window !== 'undefined') {
 const ByteBotLanding: React.FC = () => {
   // Hero video replacing former Spline 3-D model
   const HERO_VIDEO_SRC = "/assets/bytes-bot/bytes-vid.webm";
+  const router = useRouter();
   const heroRef = useRef<HTMLElement>(null);
   const particlesRef = useRef<HTMLDivElement>(null);
   const horizontalSectionsRef = useRef<HTMLDivElement>(null);
