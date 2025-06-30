@@ -54,7 +54,24 @@ function Contact() {
       return;
     }
     console.log('Form submitted:', formData);
+
+    // Push event to Google Tag Manager
+    if (typeof window !== "undefined") {
+      (window as any).dataLayer = (window as any).dataLayer || [];
+      (window as any).dataLayer.push({
+        event: "contact_form_submit",
+        form_name: "Contact Us",
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+      });
+    }
+
     // Here you would typically send the form data to your backend
+
+    // Reset form after successful submission
+    setFormData({ name: "", email: "", phone: "", message: "" });
+    setErrors({});
   };
 
   return (
@@ -107,7 +124,7 @@ function Contact() {
               <span className="circle one"></span>
               <span className="circle two"></span>
 
-              <form className="sub-form" action="index.html" autoComplete="off" onSubmit={handleSubmit}>
+              <form className="sub-form" autoComplete="off" onSubmit={handleSubmit}>
                 <h3 className="title">Contact us</h3>
                 <div className="input-container">
                   <input type="text" name="name" className="input" placeholder="Username" onChange={handleChange} />

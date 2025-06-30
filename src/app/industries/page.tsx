@@ -18,12 +18,12 @@ const IndustriesPage = () => {
   const ecommerceRef = useRef<HTMLDivElement | null>(null);
   const educationRef = useRef<HTMLDivElement | null>(null);
 
-  // Animation controls - removing once: true to allow re-triggering on reverse scroll
-  const heroInView = useInView(heroRef, { amount: 0.3 });
-  const fintechInView = useInView(fintechRef, { amount: 0.3 });
-  const healthcareInView = useInView(healthcareRef, { amount: 0.3 });
-  const ecommerceInView = useInView(ecommerceRef, { amount: 0.3 });
-  const educationInView = useInView(educationRef, { amount: 0.3 });
+  // Trigger when roughly half of the section is visible.
+  const heroInView = useInView(heroRef, { amount: 0.55 });
+  const fintechInView = useInView(fintechRef, { amount: 0.55 });
+  const healthcareInView = useInView(healthcareRef, { amount: 0.55 });
+  const ecommerceInView = useInView(ecommerceRef, { amount: 0.55 });
+  const educationInView = useInView(educationRef, { amount: 0.55 });
 
   // State to track if animations have been triggered
   const [animationsTriggered, setAnimationsTriggered] = useState({
@@ -64,29 +64,19 @@ const IndustriesPage = () => {
   // Update animation states when sections come into view
   useEffect(() => {
     if (heroInView) {
-      setAnimationsTriggered(prev => ({ ...prev, hero: true }));
-    } else {
-      setAnimationsTriggered(prev => ({ ...prev, hero: false }));
+      setAnimationsTriggered(prev => (prev.hero ? prev : { ...prev, hero: true }));
     }
     if (fintechInView) {
-      setAnimationsTriggered(prev => ({ ...prev, fintech: true }));
-    } else {
-      setAnimationsTriggered(prev => ({ ...prev, fintech: false }));
+      setAnimationsTriggered(prev => (prev.fintech ? prev : { ...prev, fintech: true }));
     }
     if (healthcareInView) {
-      setAnimationsTriggered(prev => ({ ...prev, healthcare: true }));
-    } else {
-      setAnimationsTriggered(prev => ({ ...prev, healthcare: false }));
+      setAnimationsTriggered(prev => (prev.healthcare ? prev : { ...prev, healthcare: true }));
     }
     if (ecommerceInView) {
-      setAnimationsTriggered(prev => ({ ...prev, ecommerce: true }));
-    } else {
-      setAnimationsTriggered(prev => ({ ...prev, ecommerce: false }));
+      setAnimationsTriggered(prev => (prev.ecommerce ? prev : { ...prev, ecommerce: true }));
     }
     if (educationInView) {
-      setAnimationsTriggered(prev => ({ ...prev, education: true }));
-    } else {
-      setAnimationsTriggered(prev => ({ ...prev, education: false }));
+      setAnimationsTriggered(prev => (prev.education ? prev : { ...prev, education: true }));
     }
   }, [heroInView, fintechInView, healthcareInView, ecommerceInView, educationInView]);
 
