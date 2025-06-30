@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { Header } from '@/sections/Navbar';
-import { Footer } from '@/sections/Footer';
 import { useRouter } from 'next/navigation';
 
 const IndustriesPage = () => {
@@ -743,8 +742,7 @@ const IndustriesPage = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
+      {/* Footer is provided globally via RootLayout */}
     </div>
   );
 };

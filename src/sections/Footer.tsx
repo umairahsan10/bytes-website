@@ -7,6 +7,7 @@ const quickLinks = [
   { title: 'About', href: '/about' },
   { title: 'Industries', href: '/industries' },
   { title: 'Careers', href: '/careers' },
+  { title: 'Privacy & Policy', href: '/privacy-policy' },
   { title: 'Contact Us', href: '/contact' },
 ];
 

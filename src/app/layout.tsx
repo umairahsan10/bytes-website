@@ -3,6 +3,7 @@ import { Inter, Calistoga } from "next/font/google";
 import "./globals.css";
 import { twMerge } from "tailwind-merge";
 import "../sections/cards.css";
+import { Footer } from "@/sections/Footer";
 import GTM, { GTMNoScript } from "@/components/GTM";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -31,13 +32,15 @@ export default function RootLayout({
         className={twMerge(
           inter.variable,
           calistoga.variable,
-          "text-black antialiased font-sans min-h-screen"
+          "text-black antialiased font-sans min-h-screen flex flex-col"
         )}
-      >
+      ><main className="flex-1">
         {/* Google Tag Manager */}
         <GTM />
         <GTMNoScript />
-        {children}
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   );
