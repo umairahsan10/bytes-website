@@ -163,10 +163,10 @@ const AppDevelopmentPage = () => {
       <motion.section 
         ref={topHeroRef}
         style={{ y: topY, opacity: topOpacity }}
-        className="relative h-screen flex items-center justify-between bg-[#2a3270] px-4 md:px-8 lg:px-16"
+        className="relative flex flex-col md:flex-row items-center md:justify-between bg-[#2a3270] px-4 md:px-8 lg:px-16 py-20 md:py-0 md:h-screen"
       >
         {/* Left side - Text content */}
-        <div className="relative z-10 text-left w-full md:w-3/10 lg:w-3/10">
+        <div className="relative z-10 text-left w-full md:w-3/10 lg:w-3/10 order-2 md:order-1 mt-8 md:mt-0">
           <motion.h1 
             ref={titleRef}
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight mb-6 md:mb-8"
@@ -187,7 +187,7 @@ const AppDevelopmentPage = () => {
         </div>
 
         {/* Right side - Hero image */}
-        <div className="relative w-full md:w-7/10 lg:w-7/10 h-full flex items-center justify-center overflow-hidden">
+        <div className="relative w-full md:w-7/10 lg:w-7/10 h-64 sm:h-80 md:h-full flex items-center justify-center overflow-hidden order-1 md:order-2">
           <motion.div
             className="relative w-full h-full max-w-2xl"
             whileInView={{
@@ -257,11 +257,11 @@ const AppDevelopmentPage = () => {
 
       {/* Scrolling Phone Mockup Section */}
       <div ref={phoneContainerRef} className="relative min-h-[400vh] bg-white py-16 md:py-20 lg:py-24">
-        <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
-          <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 grid grid-cols-3 gap-8 items-center">
+        <div className="sticky top-0 h-screen flex items-start md:items-center justify-center overflow-hidden pt-16 md:pt-0">
+          <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 items-start md:items-center">
             
             {/* Left side - Phone mockup */}
-            <div className="col-span-1 flex items-center justify-center">
+            <div className="col-span-1 row-start-1 flex items-center justify-center">
               <motion.div 
                 className="relative"
                 style={{
@@ -369,10 +369,10 @@ const AppDevelopmentPage = () => {
             </div>
 
             {/* Center - Timeline with circles */}
-            <div className="col-span-1 flex items-center justify-center">
+            <div className="col-span-1 row-start-1 flex items-center justify-center">
               <div className="relative flex flex-col items-center">
                 {/* Vertical timeline line with circles on it */}
-                <div className="relative w-px h-[60vh] bg-gray-300">
+                <div className="relative w-px h-64 md:h-[60vh] bg-gray-300">
                   {/* Progress line */}
                   <motion.div
                     className="absolute top-0 left-0 w-full bg-gradient-to-b from-purple-600 to-purple-800 origin-top"
@@ -405,7 +405,7 @@ const AppDevelopmentPage = () => {
                         initial={{ scale: 0, opacity: 0 }}
                         animate={{ 
                           scale: index === currentScreen ? 1 : 0,
-                          opacity: index === currentScreen ? 1 : 0
+                          opacity: 1,
                         }}
                         transition={{ 
                           duration: 0.5, 
@@ -447,9 +447,9 @@ const AppDevelopmentPage = () => {
             </div>
 
             {/* Right side - Text content */}
-            <div className="col-span-1 text-gray-900 space-y-8">
+            <div className="col-span-2 md:col-span-1 row-start-2 md:row-start-1 text-gray-900 space-y-8 mt-2 md:mt-0">
               {/* Vertical sliding text container */}
-              <div className="relative h-[60vh] overflow-hidden">
+              <div className="relative h-[40vh] md:h-[60vh] overflow-hidden">
                 <motion.div
                   className="relative w-full h-full"
                   style={{
@@ -467,7 +467,7 @@ const AppDevelopmentPage = () => {
                       style={{ top: `${index * 400}px` }}
                       initial={{ opacity: 0 }}
                       animate={{
-                        opacity: index === currentScreen ? 1 : 0.3,
+                        opacity: 1,
                       }}
                       transition={{ duration: 0.6, ease: "easeOut" }}
                     >
@@ -486,7 +486,7 @@ const AppDevelopmentPage = () => {
                             className="flex items-center space-x-3"
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ 
-                              opacity: index === currentScreen ? 1 : 0.5, 
+                              opacity: 1,
                               x: index === currentScreen ? 0 : -20 
                             }}
                             transition={{ 
@@ -529,111 +529,6 @@ const AppDevelopmentPage = () => {
 
       {/* Original content wrapped in container */}
       <div ref={containerRef} className="bg-white text-gray-900">
-        {/* App Development Science Section */}
-        <section className="py-32 px-6 bg-[#D6C3DF] overflow-hidden">
-          <div className="max-w-7xl mx-auto">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: false, amount: 0.3 }}
-              variants={containerVariants}
-              className="text-center mb-20"
-            >
-              <motion.h2 
-                variants={itemVariants}
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 animate-section"
-              >
-                MOBILE APP
-                <br />
-                  <span className="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
-                  DEVELOPMENT
-                </span>
-              </motion.h2>
-            </motion.div>
-
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left Content */}
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-                viewport={{ once: false, amount: 0.3 }}
-                className="space-y-8"
-              >
-                <motion.div variants={itemVariants} className="animate-section">
-                    <h3 className="text-2xl sm:text-3xl font-bold mb-6 text-purple-600">How do we build mobile apps?</h3>
-                    <AnimatedParagraph
-                      text="Bytes Platform crafts native and cross-platform mobile applications using cutting-edge technologies like React Native, Flutter, and Swift/Kotlin. From concept to deployment, we create apps that deliver exceptional user experiences across iOS and Android platforms, ensuring seamless performance and intuitive design."
-                      className="text-gray-600 text-base sm:text-lg leading-relaxed"
-                    />
-                </motion.div>
-
-              {/* App Development Process Image */}
-              <motion.div 
-                variants={itemVariants}
-                  className="relative rounded-2xl w-full aspect-[3/2] overflow-hidden shadow-lg"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
-              >
-                  <Image
-                    src="/assets/app-img-1.png"
-                    alt="Mobile app development workflow"
-                    fill
-                    className="object-cover absolute inset-0"
-                  />
-                </motion.div>
-            </motion.div>
-
-            {/* Right Content - App Launch Visual */}
-            <motion.div
-              initial={{ opacity: 0, x: 100 }}
-              whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] as const }}
-                className="relative"
-              >
-                  <div className="bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl p-0 w-64 sm:w-80 md:w-96 aspect-[2/3] flex items-center justify-center border border-purple-300/30 overflow-hidden">
-                    <Image
-                      src="/assets/app-img-2.png"
-                      alt="Mobile app launch illustration"
-                      width={1024}
-                      height={1536}
-                      className="object-contain w-full h-full"
-                    />
-                </div>
-                
-                {/* Floating Elements */}
-                <motion.div
-                  whileInView={{ 
-                    y: [0, -20, 0],
-                    rotate: [0, 5, 0]
-                  }}
-                  transition={{ 
-                    duration: 6,
-                    ease: [0.42, 0, 0.58, 1] as const
-                  }}
-                  viewport={{ once: false }}
-                    className="absolute -top-4 -right-4 w-12 h-12 sm:w-16 sm:h-16 bg-purple-300/30 rounded-full border border-purple-300/40"
-                />
-                
-                <motion.div
-                  whileInView={{ 
-                    y: [0, 15, 0],
-                    rotate: [0, -3, 0]
-                  }}
-                  transition={{ 
-                    duration: 4,
-                    ease: [0.42, 0, 0.58, 1] as const,
-                    delay: 1
-                  }}
-                  viewport={{ once: false }}
-                    className="absolute -bottom-6 -left-6 w-8 h-8 sm:w-12 sm:h-12 bg-purple-200/40 rounded-full border border-purple-300/40"
-                />
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
         {/* Features Grid Section */}
           <section className="py-32 px-6 bg-[#E1E1E1] overflow-hidden">
           <div className="max-w-7xl mx-auto">
@@ -759,24 +654,122 @@ const AppDevelopmentPage = () => {
         </div>
       </section>
 
+      {/* Technology Stack Section (restored) */}
+      <section className="py-32 px-6 bg-[#D6C3DF] overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            className="text-center mb-20 animate-section"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false }}
+            transition={{ duration: 0.8 }}
+          >
+            <motion.h2 
+              className="text-5xl md:text-6xl font-bold mb-8"
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: false }}
+              transition={{ duration: 1, ease: "easeOut" }}
+            >
+              Technology <motion.span 
+                className="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent"
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: false }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+              >
+                STACK
+              </motion.span>
+            </motion.h2>
+            <AnimatedParagraph
+              text="We leverage the latest technologies and frameworks to build robust, scalable, and high-performance mobile applications."
+              className="text-xl text-gray-600 max-w-3xl mx-auto"
+            />
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { name: "React Native", category: "Cross-Platform", icon: "/assets/react-native-icon.png", color: "from-blue-500 to-cyan-500" },
+              { name: "Flutter", category: "Cross-Platform", icon: "/assets/flutter-icon.png", color: "from-blue-600 to-blue-800" },
+              { name: "Swift/SwiftUI", category: "iOS Native", icon: "/assets/swift-icon.png", color: "from-orange-500 to-red-500" },
+              { name: "Kotlin/Java", category: "Android Native", icon: "/assets/kotlin-icon.png", color: "from-purple-600 to-purple-800" },
+              { name: "Node.js", category: "Backend", icon: "/assets/nodejs-icon.png", color: "from-green-500 to-green-700" },
+              { name: "Firebase", category: "Backend", icon: "/assets/firebase-icon.png", color: "from-orange-400 to-yellow-500" },
+              { name: "MongoDB", category: "Database", icon: "/assets/mongodb-icon.png", color: "from-green-600 to-green-800" },
+              { name: "AWS/Azure", category: "Cloud", icon: "/assets/aws-icon.png", color: "from-orange-600 to-red-600" }
+            ].map((tech, index) => (
+              <motion.div
+                key={index}
+                className="relative bg-purple-50 rounded-xl p-6 border border-purple-100 hover:border-purple-300 transition-all duration-500 group overflow-hidden"
+                initial={{ opacity: 0, y: 50, scale: 0.8 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: false }}
+                transition={{ 
+                  delay: index * 0.1, 
+                  duration: 0.8,
+                  ease: [0.25, 0.1, 0.25, 1] as const
+                }}
+                whileHover={{ 
+                  scale: 1.08, 
+                  y: -10,
+                  rotateY: 5,
+                  z: 50
+                }}
+                style={{ transformStyle: 'preserve-3d' }}
+              >
+                {/* Animated background gradient */}
+                <motion.div
+                  className={`absolute inset-0 bg-gradient-to-br ${tech.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
+                  initial={{ scale: 0 }}
+                  whileHover={{ scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                />
+                {/* Icon container */}
+                <motion.div 
+                  className="w-16 h-16 rounded-xl mb-6 mx-auto overflow-hidden flex items-center justify-center bg-white shadow-lg relative"
+                  whileHover={{ 
+                    scale: 1.1,
+                    rotate: 360
+                  }}
+                  transition={{ duration: 0.6, ease: "easeInOut" }}
+                >
+                  <motion.div
+                    className={`absolute inset-0 bg-gradient-to-br ${tech.color} opacity-0 group-hover:opacity-20 rounded-xl`}
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                  <motion.div className="relative z-10" whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
+                    <Image src={tech.icon} alt={`${tech.name} icon`} width={48} height={48} className="object-contain" />
+                  </motion.div>
+                </motion.div>
+                <motion.h3 className="text-lg font-semibold text-center mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text transition-all duration-300" whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
+                  {tech.name}
+                </motion.h3>
+                <p className="text-sm text-gray-400 text-center group-hover:text-gray-600 transition-colors duration-300">{tech.category}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Call-to-Action Section */}
-      <section className="relative py-32 px-6 bg-[#E1E1E1] overflow-hidden">
+        <section className="relative py-32 px-6 bg-[#E1E1E1] overflow-hidden">
         {/* Decorative background image */}
-        <Image
-          src="/assets/app-img-3.png"
-          alt="Mobile app showcase"
-          fill
-          className="object-cover absolute inset-0"
-          priority
-        />
+          <Image
+            src="/assets/app-img-3.png"
+            alt="Mobile app showcase"
+            fill
+            className="object-cover absolute inset-0"
+            priority
+          />
         {/* Semi-transparent overlay to improve text readability */}
-        <div className="absolute inset-0 bg-white/40" />
+          <div className="absolute inset-0 bg-white/40" />
 
         <motion.div
-          className="relative z-10 max-w-4xl mx-auto text-center animate-section"
+            className="relative z-10 max-w-4xl mx-auto text-center animate-section"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false }}
+            viewport={{ once: false }}
           transition={{ duration: 0.8 }}
         >
           <h2 className="text-5xl md:text-6xl font-bold mb-8">
@@ -787,13 +780,13 @@ const AppDevelopmentPage = () => {
             </span>
           </h2>
 
-          <AnimatedParagraph
-            text="Transform your ideas into powerful mobile experiences. Let's discuss your project and bring your vision to life."
-            className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto"
-          />
+            <AnimatedParagraph
+              text="Transform your ideas into powerful mobile experiences. Let's discuss your project and bring your vision to life."
+              className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto"
+            />
 
           <motion.button
-            className="bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 px-12 py-4 rounded-full text-xl font-semibold text-white transition-all duration-300 transform hover:scale-105"
+              className="bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 px-12 py-4 rounded-full text-xl font-semibold text-white transition-all duration-300 transform hover:scale-105"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => router.push('/contact')}
@@ -804,8 +797,8 @@ const AppDevelopmentPage = () => {
       </section>
 
       {/* Closing container div */}
-      </div>
-    </>
+    </div>
+  </>
   );
 };
 
