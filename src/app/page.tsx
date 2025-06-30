@@ -9,7 +9,6 @@ import { TapeSection } from "@/sections/Tape";
 import { TestimonialsSection } from "@/sections/Testimonials";
 import { AboutSection } from "@/sections/About";
 import { BookSection } from "@/sections/BookSection";
-import { Footer } from "@/sections/Footer";
 import { ContactSection } from "@/sections/Contact";
 import CardsSection from "@/sections/CardsSection";
 import { LoadingPage } from "@/sections/LoadingPage";
@@ -45,7 +44,7 @@ export default function Home() {
               {Section}
             </div>
           ))}
-          <Footer />
+          {/* Footer is now included globally in the RootLayout */}
         </>
       )}
     </main>

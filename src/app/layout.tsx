@@ -3,6 +3,7 @@ import { Inter, Calistoga } from "next/font/google";
 import "./globals.css";
 import { twMerge } from "tailwind-merge";
 import "../sections/cards.css";
+import { Footer } from "@/sections/Footer";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const calistoga = Calistoga({
@@ -30,10 +31,13 @@ export default function RootLayout({
         className={twMerge(
           inter.variable,
           calistoga.variable,
-          "text-black antialiased font-sans min-h-screen"
+          "text-black antialiased font-sans min-h-screen flex flex-col"
         )}
       >
-        {children}
+        <main className="flex-1">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   );

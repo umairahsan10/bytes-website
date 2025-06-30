@@ -193,7 +193,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="cards-container" ref={container}>
+    <div className="cards-container bg-white" ref={container}>
       <section id="services" className="cards">
         <div 
           className={`overlay ${focusedCard !== null ? 'active' : ''}`} 

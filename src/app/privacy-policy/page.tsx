@@ -75,6 +75,26 @@ export default function PrivacyPolicyPage() {
             manage cookie preferences through your browser settings. Please review our Cookie Policy for more details.
           </p>
 
+          <p>
+            This website uses Google Tag Manager and Google Analytics to understand user interactions and improve
+            performance.
+          </p>
+
+          <p>
+            We do not collect personally identifiable information unless explicitly provided by you (for example,
+            when you voluntarily submit information through a form).
+          </p>
+
+          <p>
+            Any third-party services used (such as Google Analytics) may employ cookies to gather anonymous usage
+            statistics.
+          </p>
+
+          <p>
+            You can choose to disable cookies via your browser settings at any time, though this may affect certain
+            functionalities of the Website.
+          </p>
+
           <h2>Google Maps Usage</h2>
           <p>
             We may use Google Maps APIs for enhanced services. Your use of Maps features is governed by Google's
