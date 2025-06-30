@@ -132,16 +132,16 @@ const AppDevelopmentPage = () => {
     const unsubscribe = phoneScrollProgress.onChange((progress) => {
       // Smooth transition between screens based on scroll progress
       let newScreen;
-      if (progress <= 0.2) {
-        newScreen = 0;        // First 20% = Screen 1 (Seamless Onboarding)
-      } else if (progress <= 0.4) {
-        newScreen = 1;        // 20-40% = Screen 2 (Powerful Dashboard)
-      } else if (progress <= 0.6) {
-        newScreen = 2;        // 40-60% = Screen 3 (Smart Messaging)
-      } else if (progress <= 0.8) {
-        newScreen = 3;        // 60-80% = Screen 4 (User Profiles)
+      if (progress < 0.3) {
+        newScreen = 0;        // First segment
+      } else if (progress < 0.5) {
+        newScreen = 1;        // Second segment
+      } else if (progress < 0.7) {
+        newScreen = 2;        // Third segment
+      } else if (progress < 0.9) {
+        newScreen = 3;        // Fourth segment
       } else {
-        newScreen = 3;        // 80-100% = Stay on Screen 4
+        newScreen = 3;        // End stays on 4th screen
       }
       
       if (newScreen !== currentScreen) {
@@ -191,12 +191,17 @@ const AppDevelopmentPage = () => {
           <motion.div
             className="relative w-full h-full max-w-2xl"
             whileInView={{
-              y: [0, -20, 0],
+              y: [-10, 10, -10],
               rotate: [0, 2, 0]
             }}
             transition={{
-              duration: 8,
-              ease: "easeInOut"
+              y: {
+                duration: 8,
+                repeat: Infinity,
+                ease: "easeInOut"
+              },
+              opacity: { duration: 0.8 },
+              scale: { duration: 0.8 }
             }}
             viewport={{ once: false }}
           >
@@ -529,6 +534,90 @@ const AppDevelopmentPage = () => {
 
       {/* Original content wrapped in container */}
       <div ref={containerRef} className="bg-white text-gray-900">
+        {/* Value Proposition & Offerings Section */}
+        {/* NOTE: Replace placeholder numbers / credentials with your company-specific facts where applicable. */}
+        <section className="py-32 px-6 bg-white overflow-hidden">
+          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+            {/* Copy Block */}
+            <motion.div
+              className="space-y-8 order-2 lg:order-1"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.3 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
+                The Future <span className="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">Is&nbsp;Mobile</span>
+              </h2>
+              <AnimatedParagraph
+                text="Mobile apps aren't a luxury anymore — they're the frontline of customer experience. From start-ups to enterprises, every brand is racing to become an icon on the home screen."
+                className="text-lg text-gray-700 leading-relaxed"
+              />
+            <AnimatedParagraph
+                text="At Bytes Platform, we don't just code apps — we engineer mobile products that engage, retain, and scale."
+                className="text-lg text-gray-700 leading-relaxed"
+              />
+
+              <ul className="space-y-4">
+                {[
+                  "Apple App Store Listed Developer", // <-- replace / verify real credentials
+                  "Google Play Certified Publisher",   // <-- replace / verify real credentials
+                  "Pixel-perfect UI/UX prototypes in Figma",
+                  "End-to-end ownership — frontend, backend & cloud",
+                  "Post-launch support & version management"
+                ].map((item, idx) => (
+                  <motion.li 
+                    key={idx} 
+                    className="flex items-start" 
+                    initial={{ opacity: 0, x: -30 }} 
+                    whileInView={{ opacity: 1, x: 0 }} 
+              viewport={{ once: false, amount: 0.3 }}
+                    transition={{ duration: 0.6, delay: idx * 0.1 }}
+                  >
+                    <div className="w-2 h-2 mt-2 mr-4 rounded-full bg-purple-600"></div>
+                    <span className="text-gray-800">{item}</span>
+                  </motion.li>
+                ))}
+              </ul>
+
+              <motion.button
+                className="bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 px-8 py-4 rounded-full text-white font-semibold mt-6"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => router.push('/contact')}
+              >
+                Book a Free App Consultation
+              </motion.button>
+            </motion.div>
+
+            {/* Illustrative Image */}
+            <motion.div
+              className="order-1 lg:order-2 relative aspect-[3/2] w-full rounded-2xl overflow-hidden shadow-2xl"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              animate={{ y: [-10, 10, -10] }}
+              viewport={{ once: false, amount: 0.3 }}
+              transition={{
+                y: {
+                  duration: 8,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                },
+                opacity: { duration: 0.8 },
+                scale: { duration: 0.8 }
+              }}
+            >
+              <Image
+                src="/assets/app-img-1.png"
+                alt="Mobile app hero mockup"
+                fill
+                className="object-cover"
+                priority
+              />
+            </motion.div>
+          </div>
+        </section>
+
         {/* Features Grid Section */}
           <section className="py-32 px-6 bg-[#E1E1E1] overflow-hidden">
           <div className="max-w-7xl mx-auto">
@@ -654,14 +743,14 @@ const AppDevelopmentPage = () => {
         </div>
       </section>
 
-      {/* Technology Stack Section (restored) */}
-      <section className="py-32 px-6 bg-[#D6C3DF] overflow-hidden">
+        {/* Technology Stack Section (restored) */}
+        <section className="py-32 px-6 bg-[#D6C3DF] overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <motion.div
             className="text-center mb-20 animate-section"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false }}
+              viewport={{ once: false }}
             transition={{ duration: 0.8 }}
           >
             <motion.h2 
@@ -671,32 +760,32 @@ const AppDevelopmentPage = () => {
               viewport={{ once: false }}
               transition={{ duration: 1, ease: "easeOut" }}
             >
-              Technology <motion.span 
-                className="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent"
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: false }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-              >
+                Technology <motion.span 
+                  className="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent"
+                  initial={{ opacity: 0, x: -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: false }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                >
                 STACK
               </motion.span>
             </motion.h2>
-            <AnimatedParagraph
-              text="We leverage the latest technologies and frameworks to build robust, scalable, and high-performance mobile applications."
-              className="text-xl text-gray-600 max-w-3xl mx-auto"
-            />
+              <AnimatedParagraph
+                text="We leverage the latest technologies and frameworks to build robust, scalable, and high-performance mobile applications."
+                className="text-xl text-gray-600 max-w-3xl mx-auto"
+              />
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { name: "React Native", category: "Cross-Platform", icon: "/assets/react-native-icon.png", color: "from-blue-500 to-cyan-500" },
-              { name: "Flutter", category: "Cross-Platform", icon: "/assets/flutter-icon.png", color: "from-blue-600 to-blue-800" },
-              { name: "Swift/SwiftUI", category: "iOS Native", icon: "/assets/swift-icon.png", color: "from-orange-500 to-red-500" },
-              { name: "Kotlin/Java", category: "Android Native", icon: "/assets/kotlin-icon.png", color: "from-purple-600 to-purple-800" },
-              { name: "Node.js", category: "Backend", icon: "/assets/nodejs-icon.png", color: "from-green-500 to-green-700" },
-              { name: "Firebase", category: "Backend", icon: "/assets/firebase-icon.png", color: "from-orange-400 to-yellow-500" },
-              { name: "MongoDB", category: "Database", icon: "/assets/mongodb-icon.png", color: "from-green-600 to-green-800" },
-              { name: "AWS/Azure", category: "Cloud", icon: "/assets/aws-icon.png", color: "from-orange-600 to-red-600" }
+                { name: "React Native", category: "Cross-Platform", icon: "/assets/react-native-icon.png", color: "from-blue-500 to-cyan-500" },
+                { name: "Flutter", category: "Cross-Platform", icon: "/assets/flutter-icon.png", color: "from-blue-600 to-blue-800" },
+                { name: "Swift/SwiftUI", category: "iOS Native", icon: "/assets/swift-icon.png", color: "from-orange-500 to-red-500" },
+                { name: "Kotlin/Java", category: "Android Native", icon: "/assets/kotlin-icon.png", color: "from-purple-600 to-purple-800" },
+                { name: "Node.js", category: "Backend", icon: "/assets/nodejs-icon.png", color: "from-green-500 to-green-700" },
+                { name: "Firebase", category: "Backend", icon: "/assets/firebase-icon.png", color: "from-orange-400 to-yellow-500" },
+                { name: "MongoDB", category: "Database", icon: "/assets/mongodb-icon.png", color: "from-green-600 to-green-800" },
+                { name: "AWS/Azure", category: "Cloud", icon: "/assets/aws-icon.png", color: "from-orange-600 to-red-600" }
             ].map((tech, index) => (
               <motion.div
                 key={index}
@@ -724,37 +813,37 @@ const AppDevelopmentPage = () => {
                   whileHover={{ scale: 1 }}
                   transition={{ duration: 0.5 }}
                 />
-                {/* Icon container */}
+                  {/* Icon container */}
                 <motion.div 
                   className="w-16 h-16 rounded-xl mb-6 mx-auto overflow-hidden flex items-center justify-center bg-white shadow-lg relative"
                   whileHover={{ 
                     scale: 1.1,
                     rotate: 360
                   }}
-                  transition={{ duration: 0.6, ease: "easeInOut" }}
+                    transition={{ duration: 0.6, ease: "easeInOut" }}
                 >
                   <motion.div
                     className={`absolute inset-0 bg-gradient-to-br ${tech.color} opacity-0 group-hover:opacity-20 rounded-xl`}
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                  />
-                  <motion.div className="relative z-10" whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
-                    <Image src={tech.icon} alt={`${tech.name} icon`} width={48} height={48} className="object-contain" />
+                      animate={{ scale: [1, 1.1, 1] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                    <motion.div className="relative z-10" whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
+                      <Image src={tech.icon} alt={`${tech.name} icon`} width={48} height={48} className="object-contain" />
                   </motion.div>
                 </motion.div>
-                <motion.h3 className="text-lg font-semibold text-center mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text transition-all duration-300" whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
+                  <motion.h3 className="text-lg font-semibold text-center mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-purple-800 group-hover:bg-clip-text transition-all duration-300" whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
                   {tech.name}
                 </motion.h3>
-                <p className="text-sm text-gray-400 text-center group-hover:text-gray-600 transition-colors duration-300">{tech.category}</p>
+                  <p className="text-sm text-gray-400 text-center group-hover:text-gray-600 transition-colors duration-300">{tech.category}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Call-to-Action Section */}
+        {/* Call-to-Action Section */}
         <section className="relative py-32 px-6 bg-[#E1E1E1] overflow-hidden">
-        {/* Decorative background image */}
+          {/* Decorative background image */}
           <Image
             src="/assets/app-img-3.png"
             alt="Mobile app showcase"
@@ -762,7 +851,7 @@ const AppDevelopmentPage = () => {
             className="object-cover absolute inset-0"
             priority
           />
-        {/* Semi-transparent overlay to improve text readability */}
+          {/* Semi-transparent overlay to improve text readability */}
           <div className="absolute inset-0 bg-white/40" />
 
         <motion.div
@@ -789,14 +878,12 @@ const AppDevelopmentPage = () => {
               className="bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 px-12 py-4 rounded-full text-xl font-semibold text-white transition-all duration-300 transform hover:scale-105"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => router.push('/contact')}
+              onClick={() => router.push('/contact')}
           >
             Start Your Project
           </motion.button>
         </motion.div>
       </section>
-
-      {/* Closing container div */}
     </div>
   </>
   );
