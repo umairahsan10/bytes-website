@@ -47,13 +47,14 @@ const AnimatedParagraph = ({ text, className = "" }: { text: string; className?:
 
 const AppDevelopmentPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const heroRef = useRef<HTMLDivElement>(null);
+  const topHeroRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
-  const { scrollYProgress } = useScroll();
-  
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
+
+  // Scroll-based transforms for the first (top) hero
+  const { scrollYProgress: topHeroScroll } = useScroll({ target: topHeroRef, offset: ["start start", "end start"] });
+  const topY = useTransform(topHeroScroll, [0, 1], ['0%', '50%']);
+  const topOpacity = useTransform(topHeroScroll, [0, 0.3], [1, 0]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -158,8 +159,8 @@ const AppDevelopmentPage = () => {
       
       {/* Simple Hero Section */}
       <motion.section 
-        ref={heroRef}
-        style={{ y, opacity }}
+        ref={topHeroRef}
+        style={{ y: topY, opacity: topOpacity }}
         className="relative h-screen flex items-center justify-between bg-[#2a3270] px-4 md:px-8 lg:px-16"
       >
         {/* Left side - Text content */}
@@ -526,55 +527,8 @@ const AppDevelopmentPage = () => {
 
       {/* Original content wrapped in container */}
       <div ref={containerRef} className="bg-white text-gray-900">
-              <div>
-      {/* Hero Section */}
-      <motion.section 
-        ref={heroRef}
-        style={{ y, opacity }}
-          className="relative h-screen flex items-center justify-start bg-[#E1E1E1] pl-3 md:pl-15"
-      >
-          {/* Decorative overlay removed for flat color */}
-        
-        {/* Background Image Placeholder */}
-          {/* <div className="absolute inset-0 opacity-30">
-            <div className="w-full h-full bg-gradient-to-br from-purple-100/50 to-purple-200/50 flex items-center justify-center">
-            <span className="text-gray-500 text-xl">Hero Background Image</span>
-          </div>
-          </div> */}
-
-          <Image
-            src="/assets/app-hero.png"
-            alt="Team brainstorming on mobile-app UI"
-            fill
-            className="object-cover opacity-100 absolute inset-0"
-          />
-
-          <div className="relative z-10 text-left px-0 w-full md:w-2/5">
-          <motion.h1 
-            ref={titleRef}
-            className="text-8xl md:text-9xl font-bold tracking-tight mb-8"
-            initial={{ opacity: 0, y: 100 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] as const }}
-          >
-              <span className="bg-gradient-to-r from-[#E1E3E2] to-purple-700 bg-clip-text text-transparent">
-            MOBILE
-              </span>
-            <br />
-              <span className="bg-gradient-to-r from-[#E1E3E2] to-purple-700 bg-clip-text text-transparent">
-              APPS
-            </span>
-          </motion.h1>
-          
-            <AnimatedParagraph
-              text="When innovation meets functionality, Bytes Platform delivers cutting-edge mobile applications that transform ideas into powerful digital experiences, building on years of development expertise."
-              className="text-xl md:text-2xl text-white max-w-4xl mx-auto leading-relaxed"
-            />
-        </div>
-      </motion.section>
-
         {/* App Development Science Section */}
-          <section className="py-32 px-6 bg-[#D6C3DF] overflow-hidden">
+        <section className="py-32 px-6 bg-[#D6C3DF] overflow-hidden">
           <div className="max-w-7xl mx-auto">
             <motion.div
               initial="hidden"
@@ -790,73 +744,12 @@ const AppDevelopmentPage = () => {
                   </div>
                   
                   <h3 
-                    className={`font-bold mb-4 transition-all duration-300 ${
-                      selectedFeature === index 
-                        ? 'text-3xl text-transparent bg-gradient-to-r bg-clip-text from-purple-600 to-purple-800'
-                        : selectedFeature !== null
-                          ? 'text-2xl text-gray-600'
-                          : 'text-2xl text-gray-900 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text group-hover:from-purple-600 group-hover:to-purple-800'
-                    }`}
+                    className={`font-semibold`}
                   >
                     {feature.title}
                   </h3>
-                  
-                  {/* Basic description */}
-                  <div className={selectedFeature === index ? 'hidden' : 'block'}>
-                    <AnimatedParagraph
-                      text={feature.description}
-                      className={`leading-relaxed ${
-                        selectedFeature !== null ? 'text-gray-500' : 'text-gray-600'
-                      }`}
-                    />
-                    <div className="flex items-center text-purple-600 text-sm font-medium mt-4">
-                      <span>Click to learn more</span>
-                      <svg 
-                        className="w-4 h-4 ml-2"
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
-                  </div>
-
-                  {/* Detailed description when expanded */}
-                  <div className={selectedFeature === index ? 'block' : 'hidden'}>
-                    <p className="text-gray-700 leading-relaxed mb-6 text-lg">
-                      {feature.detailedDescription}
-                    </p>
-                    
-                    <div className="space-y-3">
-                      <h4 className="text-xl font-semibold text-gray-900">Key Features:</h4>
-                      <div className="grid grid-cols-2 gap-3">
-                        {feature.features.map((feat, featIndex) => (
-                          <div 
-                            key={featIndex} 
-                            className="flex items-center text-sm text-gray-600"
-                          >
-                            <div 
-                              className={`w-2 h-2 rounded-full bg-gradient-to-r ${feature.gradient} mr-2 flex-shrink-0`}
-                            />
-                            {feat}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    
-                    <div className="mt-6 flex items-center text-purple-600 text-sm font-medium">
-                      <span>Click to collapse</span>
-                      <svg 
-                        className="w-4 h-4 ml-2 transform rotate-180" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
-                  </div>
+                  {/* Feature description placeholder */}
+                  <p className="text-sm text-gray-500">{feature.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -864,257 +757,9 @@ const AppDevelopmentPage = () => {
         </div>
       </section>
 
-      {/* Technology Stack Section */}
-        <section className="py-32 px-6 bg-[#D6C3DF] overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            className="text-center mb-20 animate-section"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false }}
-            transition={{ duration: 0.8 }}
-          >
-            <motion.h2 
-              className="text-5xl md:text-6xl font-bold mb-8"
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: false }}
-              transition={{ duration: 1, ease: "easeOut" }}
-            >
-              Technology
-              <br />
-                <motion.span 
-                  className="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent"
-                  initial={{ opacity: 0, x: -50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: false }}
-                  transition={{ duration: 0.8, delay: 0.3 }}
-                >
-                STACK
-              </motion.span>
-            </motion.h2>
-              <AnimatedParagraph
-                text="We leverage the latest technologies and frameworks to build robust, scalable, and high-performance mobile applications."
-                className="text-xl text-gray-600 max-w-3xl mx-auto"
-              />
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-                { name: "React Native", category: "Cross-Platform", icon: "/assets/react-native-icon.png", color: "from-blue-500 to-cyan-500" },
-                { name: "Flutter", category: "Cross-Platform", icon: "/assets/flutter-icon.png", color: "from-blue-600 to-blue-800" },
-                { name: "Swift/SwiftUI", category: "iOS Native", icon: "/assets/swift-icon.png", color: "from-orange-500 to-red-500" },
-                { name: "Kotlin/Java", category: "Android Native", icon: "/assets/kotlin-icon.png", color: "from-purple-600 to-purple-800" },
-                { name: "Node.js", category: "Backend", icon: "/assets/nodejs-icon.png", color: "from-green-500 to-green-700" },
-                { name: "Firebase", category: "Backend", icon: "/assets/firebase-icon.png", color: "from-orange-400 to-yellow-500" },
-                { name: "MongoDB", category: "Database", icon: "/assets/mongodb-icon.png", color: "from-green-600 to-green-800" },
-                { name: "AWS/Azure", category: "Cloud", icon: "/assets/aws-icon.png", color: "from-orange-600 to-red-600" }
-            ].map((tech, index) => (
-              <motion.div
-                key={index}
-                className="relative bg-purple-50 rounded-xl p-6 border border-purple-100 hover:border-purple-300 transition-all duration-500 group overflow-hidden"
-                initial={{ opacity: 0, y: 50, scale: 0.8 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: false }}
-                transition={{ 
-                  delay: index * 0.1, 
-                  duration: 0.8,
-                  ease: [0.25, 0.1, 0.25, 1] as const
-                }}
-                whileHover={{ 
-                  scale: 1.08, 
-                  y: -10,
-                  rotateY: 5,
-                  z: 50
-                }}
-                style={{ transformStyle: 'preserve-3d' }}
-              >
-                {/* Animated background gradient */}
-                <motion.div
-                  className={`absolute inset-0 bg-gradient-to-br ${tech.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
-                  initial={{ scale: 0 }}
-                  whileHover={{ scale: 1 }}
-                  transition={{ duration: 0.5 }}
-                />
-                
-                {/* Floating glow effect */}
-                <motion.div
-                  className={`absolute inset-0 bg-gradient-to-br ${tech.color} rounded-xl opacity-0 group-hover:opacity-20 blur-xl`}
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [0, 0.1, 0]
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    delay: index * 0.2
-                  }}
-                />
-
-                {/* Icon container with rotation */}
-                <motion.div 
-                  className="w-16 h-16 rounded-xl mb-6 mx-auto overflow-hidden flex items-center justify-center bg-white shadow-lg relative"
-                  whileHover={{ 
-                    scale: 1.1,
-                    rotate: 360
-                  }}
-                  transition={{ 
-                    duration: 0.6,
-                    ease: "easeInOut"
-                  }}
-                >
-                  {/* Icon background glow */}
-                  <motion.div
-                    className={`absolute inset-0 bg-gradient-to-br ${tech.color} opacity-0 group-hover:opacity-20 rounded-xl`}
-                    animate={{
-                      scale: [1, 1.1, 1]
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  />
-                  
-                  <motion.div
-                    className="relative z-10"
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <Image
-                      src={tech.icon}
-                      alt={`${tech.name} icon`}
-                      width={48}
-                      height={48}
-                      className="object-contain"
-                    />
-                  </motion.div>
-                </motion.div>
-
-                {/* Technology name with gradient text */}
-                <motion.h3 
-                  className="text-lg font-semibold text-center mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text transition-all duration-300"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {tech.name}
-                </motion.h3>
-
-                {/* Category with animated underline */}
-                <motion.div className="relative">
-                  <p className="text-sm text-gray-400 text-center group-hover:text-gray-600 transition-colors duration-300">
-                    {tech.category}
-                  </p>
-                  <motion.div
-                    className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 bg-gradient-to-r ${tech.color} rounded-full`}
-                    initial={{ width: 0 }}
-                    whileHover={{ width: "80%" }}
-                    transition={{ duration: 0.3 }}
-                  />
-                </motion.div>
-
-                {/* Floating particles */}
-                <motion.div
-                  className="absolute top-2 right-2 w-2 h-2 bg-purple-400 rounded-full opacity-0 group-hover:opacity-60"
-                  animate={{
-                    y: [0, -10, 0],
-                    scale: [1, 1.5, 1]
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    delay: index * 0.1
-                  }}
-                />
-                
-                <motion.div
-                  className="absolute bottom-2 left-2 w-1.5 h-1.5 bg-blue-400 rounded-full opacity-0 group-hover:opacity-60"
-                  animate={{
-                    y: [0, 8, 0],
-                    scale: [1, 1.3, 1]
-                  }}
-                  transition={{
-                    duration: 1.5,
-                    repeat: Infinity,
-                    delay: index * 0.2
-                  }}
-                />
-
-                {/* Additional floating elements */}
-                <motion.div
-                  className="absolute top-4 left-4 w-1 h-1 bg-green-400 rounded-full opacity-0 group-hover:opacity-40"
-                  animate={{
-                    y: [0, -5, 0],
-                    x: [0, 3, 0]
-                  }}
-                  transition={{
-                    duration: 1.8,
-                    repeat: Infinity,
-                    delay: index * 0.3
-                  }}
-                />
-
-                <motion.div
-                  className="absolute bottom-4 right-4 w-1.5 h-1.5 bg-orange-400 rounded-full opacity-0 group-hover:opacity-40"
-                  animate={{
-                    y: [0, 6, 0],
-                    x: [0, -2, 0]
-                  }}
-                  transition={{
-                    duration: 2.2,
-                    repeat: Infinity,
-                    delay: index * 0.4
-                  }}
-                />
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-        <section className="relative py-32 px-6 bg-[#E1E1E1] overflow-hidden">
-          {/* Background image */}
-          <Image
-            src="/assets/app-img-3.png"
-            alt="Mobile app showcase"
-            fill
-            className="object-cover absolute inset-0"
-            priority
-          />
-          {/* Optional white overlay for readability */}
-          <div className="absolute inset-0 bg-white/40" />
-
-        <motion.div
-            className="relative z-10 max-w-4xl mx-auto text-center animate-section"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false }}
-          transition={{ duration: 0.8 }}
-        >
-          <h2 className="text-5xl md:text-6xl font-bold mb-8">
-            Ready to Build Your
-            <br />
-            <span className="bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
-              Next App?
-            </span>
-          </h2>
-            <AnimatedParagraph
-              text="Transform your ideas into powerful mobile experiences. Let's discuss your project and bring your vision to life."
-              className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto"
-            />
-          <motion.button
-              className="bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 px-12 py-4 rounded-full text-xl font-semibold text-white transition-all duration-300 transform hover:scale-105"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Start Your Project
-          </motion.button>
-        </motion.div>
-      </section>
-    </div>
-    </div>
-  </>
+      {/* Closing container div */}
+      </div>
+    </>
   );
 };
 
