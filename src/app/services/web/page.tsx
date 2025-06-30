@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Header } from "@/sections/Navbar";
 import Link from "next/link";
 // @ts-ignore – lucide-react icons (ensure dependency installed in runtime)
-import { ChevronDown, Menu, X, Code, Zap, Users, Award, ArrowRight, Star, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Play, Smartphone, Monitor, Database, Cloud, Globe, Layers } from 'lucide-react';
+import { ChevronDown, Menu, X, Code, Zap, Users, Award, ArrowRight, Star, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Play, Smartphone, Monitor, Database, Cloud, Globe, Layers, BarChart, TrendingUp, LayoutDashboard, CreditCard, Plug, ShoppingCart } from 'lucide-react';
 
 const WebDevelopmentLanding = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -37,6 +37,16 @@ const WebDevelopmentLanding = () => {
   // Visibility for Development Process section
   const processRef = useRef<HTMLDivElement | null>(null);
   const [processVisible, setProcessVisible] = useState(false);
+
+  // Visibility for Add-ons section
+  const addOnsRef = useRef<HTMLDivElement | null>(null);
+  const [addOnsVisible, setAddOnsVisible] = useState(false);
+
+  // Visibility for individual CMS subsections
+  const shopifyRef = useRef<HTMLDivElement | null>(null);
+  const wpRef = useRef<HTMLDivElement | null>(null);
+  const [shopifyVisible, setShopifyVisible] = useState(false);
+  const [wpVisible, setWpVisible] = useState(false);
 
   // Ensure page starts at top when refreshed
   useEffect(() => {
@@ -123,9 +133,48 @@ const WebDevelopmentLanding = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Observer for Add-ons section
+  useEffect(() => {
+    if (!addOnsRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setAddOnsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(addOnsRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Observer for Shopify subsection
+  useEffect(() => {
+    if (!shopifyRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShopifyVisible(entry.isIntersecting);
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(shopifyRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Observer for WordPress subsection
+  useEffect(() => {
+    if (!wpRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setWpVisible(entry.isIntersecting);
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(wpRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   const animateCounters = () => {
     const duration = 2000;
-    const targets = { projects: 300, clients: 100, lines: 1000000, years: 10 } as const;
+    const targets = { projects: 10, clients: 10, lines: 10000, years: 1 } as const;
     type TargetKey = keyof typeof targets;
     
     (Object.keys(targets) as TargetKey[]).forEach((key) => {
@@ -172,12 +221,27 @@ const WebDevelopmentLanding = () => {
   ] as const;
 
   const techStack = [
-    { name: "React", category: "Frontend", level: 95 },
-    { name: "Node.js", category: "Backend", level: 90 },
-    { name: "TypeScript", category: "Language", level: 88 },
-    { name: "MongoDB", category: "Database", level: 85 },
-    { name: "AWS", category: "Cloud", level: 82 },
-    { name: "Docker", category: "DevOps", level: 80 }
+    { name: "React", category: "Frontend", level: 92 },
+    { name: "JavaScript", category: "Language", level: 93 },
+    { name: "Next.js", category: "Framework", level: 90 },
+    { name: "WordPress", category: "CMS", level: 88 },
+    { name: "Webflow", category: "No-Code", level: 85 },
+    { name: "Shopify", category: "E-commerce", level: 85 },
+    { name: "Laravel", category: "Backend", level: 83 },
+    { name: "TailwindCSS", category: "Style", level: 92 },
+    { name: "Node.js", category: "Backend", level: 90 }
+  ];
+
+  const addOns = [
+    { icon: Users, title: "CRM Integration" },
+    { icon: Zap, title: "Chatbots", link: "/products/byte-bots" },
+    { icon: BarChart, title: "Sales Analytics" },
+    { icon: TrendingUp, title: "Sales Tracking" },
+    { icon: LayoutDashboard, title: "Admin Panel" },
+    { icon: CreditCard, title: "Payment Gateways" },
+    { icon: Mail, title: "Newsletter Systems" },
+    { icon: Plug, title: "API Integration" },
+    { icon: Plug, title: "Third-party Software Integration" }
   ];
 
   const developmentProcess = [
@@ -188,6 +252,31 @@ const WebDevelopmentLanding = () => {
     { step: "05", title: "Deployment & Launch", desc: "Seamless deployment with monitoring and performance optimization", details:["Automated CI/CD pipelines","Cloud environment setup","Zero-downtime rollouts"] },
     { step: "06", title: "Maintenance & Support", desc: "Ongoing support, updates, and feature enhancements", details:["24/7 monitoring","Regular updates","Feature iterations based on user feedback"] }
   ];
+
+  const cmsSolutions = [
+    {
+      icon: Globe,
+      title: "We build WordPress sites",
+      desc: "Custom themes, plugins, and scalable WordPress solutions optimised for performance and SEO.",
+      points: [
+        "Pixel-perfect custom themes",
+        "WooCommerce storefronts",
+        "Headless WordPress integrations",
+        "On-page SEO & performance tuning"
+      ]
+    },
+    {
+      icon: ShoppingCart,
+      title: "We build Shopify stores",
+      desc: "High-conversion Shopify storefronts with custom apps, payment gateways and ERP integrations.",
+      points: [
+        "Custom Liquid templates & sections",
+        "App & payment-gateway integrations",
+        "Optimised checkout flows",
+        "Analytics & sales automation"
+      ]
+    }
+  ] as const;
 
   // Handlers for modal close with animation
   const closeServiceModal = () => {
@@ -211,7 +300,7 @@ const WebDevelopmentLanding = () => {
       <Header />
 
       {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center relative overflow-hidden">
+      <section id="home" className="min-h-screen flex items-center relative overflow-hidden pt-16 lg:pt-24">
         {/* Animated Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 opacity-70" />
         <div className="absolute inset-0">
@@ -220,12 +309,12 @@ const WebDevelopmentLanding = () => {
           <div className="absolute bottom-20 left-1/2 w-80 h-80 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-4000" />
         </div>
 
-        <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10">
-          {/* Left Side - Video/Image (will be shown below text on mobile) */}
-          <div className="relative order-2 lg:order-none">
+        <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-start relative z-10">
+          {/* Right Side - Video/Image (will be shown below text on mobile) */}
+          <div className="relative order-2 lg:order-2">
             <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-700">
               <video
-                src="/assets/WebDev/intro-vid.mp4"
+                src="/assets/WebDev/intro-video.mp4"
                 autoPlay
                 loop
                 muted
@@ -236,8 +325,8 @@ const WebDevelopmentLanding = () => {
             </div>
           </div>
 
-          {/* Right Side - Text */}
-          <div className="space-y-8 animate-fade-in-up text-center lg:text-left order-1 lg:order-none">
+          {/* Left Side - Text */}
+          <div className="space-y-8 animate-fade-in-up text-center lg:text-left order-1 lg:order-1">
             <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold leading-tight break-words">
               <span className="text-gray-900">Web Development</span>
               <br />
@@ -313,7 +402,7 @@ const WebDevelopmentLanding = () => {
               <div className="text-blue-200">Happy Clients</div>
             </div>
             <div className="space-y-2">
-              <div className="text-4xl lg:text-5xl font-bold">{(counters.lines / 1000000).toFixed(1)}M+</div>
+              <div className="text-4xl lg:text-5xl font-bold">{(counters.lines / 1000).toFixed(0)}K+</div>
               <div className="text-blue-200">Lines of Code</div>
             </div>
             <div className="space-y-2">
@@ -354,6 +443,125 @@ const WebDevelopmentLanding = () => {
                 <div className="text-right text-sm text-gray-600">{tech.level}%</div>
                   </div>
                 ))}
+          </div>
+        </div>
+      </section>
+
+{/* CMS Solutions Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-50 to-white" ref={shopifyRef}>
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
+              CMS & E-commerce <span className="text-blue-600">Solutions</span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              From content-driven websites to thriving online stores, we craft WordPress and Shopify experiences that grow with your business.
+            </p>
+          </div>
+
+          <div className="space-y-20">
+            {/* Shopify Section */}
+            <div className="grid lg:grid-cols-2 gap-12 items-center" ref={shopifyRef}>
+              <div className={`transition-all duration-700 ${shopifyVisible ? 'animate-slide-in-left' : 'opacity-0 -translate-x-10'}`}>
+                <div className="p-8 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="flex items-start space-x-6 mb-4">
+                    <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center flex-shrink-0">
+                      <ShoppingCart className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <h3 className="text-2xl font-bold leading-snug">We build Shopify stores</h3>
+                  </div>
+                  <p className="text-gray-600 mb-4">High-conversion Shopify storefronts with custom apps, payment gateways and ERP integrations.</p>
+                  <ul className="list-disc ml-6 space-y-2 text-gray-600">
+                    <li>Custom Liquid templates & sections</li>
+                    <li>App & payment-gateway integrations</li>
+                    <li>Optimised checkout flows</li>
+                    <li>Analytics & sales automation</li>
+                  </ul>
+                </div>
+              </div>
+              <div className={`relative h-72 sm:h-96 lg:h-[420px] rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 ${shopifyVisible ? 'animate-slide-in-right' : 'opacity-0 translate-x-10'}`}>
+                <Image
+                  src="/assets/WebDev/shopify.jpeg"
+                  alt="Shopify store preview"
+                  fill
+                  quality={90}
+                  priority
+                  className="object-cover object-center"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
+            </div>
+
+            {/* WordPress Section */}
+            <div className="grid lg:grid-cols-2 gap-12 items-center" ref={wpRef}>
+              <div className={`relative h-72 sm:h-96 lg:h-[420px] rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 order-2 lg:order-1 ${wpVisible ? 'animate-slide-in-left' : 'opacity-0 -translate-x-10'}`} style={{ transitionDelay: '300ms' }}>
+                <Image
+                  src="/assets/WebDev/wordpress.jpg"
+                  alt="WordPress site preview"
+                  fill
+                  quality={90}
+                  priority
+                  className="object-cover object-center"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
+              <div className={`transition-all duration-700 order-1 lg:order-2 ${wpVisible ? 'animate-slide-in-right' : 'opacity-0 translate-x-10'}`} style={{ transitionDelay: '300ms' }}>
+                <div className="p-8 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="flex items-start space-x-6 mb-4">
+                    <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center flex-shrink-0">
+                      <Globe className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <h3 className="text-2xl font-bold leading-snug">We build WordPress sites</h3>
+                  </div>
+                  <p className="text-gray-600 mb-4">Custom themes, plugins, and scalable WordPress solutions optimised for performance and SEO.</p>
+                  <ul className="list-disc ml-6 space-y-2 text-gray-600">
+                    <li>Pixel-perfect custom themes</li>
+                    <li>WooCommerce storefronts</li>
+                    <li>Headless WordPress integrations</li>
+                    <li>On-page SEO & performance tuning</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Add-ons Section */}
+      <section className="py-20" ref={addOnsRef}>
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
+              Website <span className="text-blue-600">Add-ons</span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Enhance your site with powerful integrations and features tailored to your workflow.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {addOns.map((add, index) => {
+              const Icon = add.icon;
+              const content = (
+                <div
+                  className={`p-6 bg-gradient-to-br from-blue-50 to-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 ${addOnsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+                  style={{ transitionDelay: `${index * 100}ms` }}
+                >
+                  <div className="flex items-center space-x-4 mb-4">
+                    <Icon className="w-8 h-8 text-blue-600 flex-shrink-0" />
+                    <h3 className="text-xl font-bold">{add.title}</h3>
+                  </div>
+                </div>
+              );
+
+              return add.link ? (
+                <Link key={index} href={add.link} className="block">
+                  {content}
+                </Link>
+              ) : (
+                <div key={index}>{content}</div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -532,6 +740,7 @@ const WebDevelopmentLanding = () => {
           </div>
         </div>
       )}
+
 
       <style jsx>{`
         .animate-fade-in-up {
