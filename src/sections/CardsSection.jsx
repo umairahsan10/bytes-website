@@ -42,13 +42,32 @@ const useLenis = () => {
   }, []);
 };
 
+// Helper function to detect mobile
+const isMobile = () => {
+  if (typeof window === 'undefined') return false;
+  return window.innerWidth <= 768;
+};
+
 export default function Home() {
   const container = useRef(null);
   const cardRefs = useRef([]);
   const [focusedCard, setFocusedCard] = useState(null);
+  const [isMobileDevice, setIsMobileDevice] = useState(false);
 
   // Initialize Lenis
   useLenis();
+
+  // Check if mobile on mount and resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobileDevice(isMobile());
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const cardData = [
     {
@@ -117,73 +136,161 @@ export default function Home() {
     if (typeof window === "undefined") return;
 
     const cards = cardRefs.current;
-    const totalScrollHeight = window.innerHeight * 3;
-    const position = [14, 38, 62, 86];
-    const rotation = [-15, -7.5, 7.5, 15];
+    
+    // Clear existing ScrollTriggers
+    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
 
-    // Pin cards section
-    ScrollTrigger.create({
-      trigger: container.current.querySelector(".cards"),
-      start: "top top",
-      end: () => `+=${totalScrollHeight}`,
-      pin: true,
-      pinSpacing: true,
-    });
-
-    // Spread Cards section
-    cards.forEach((card, index) => {
-      gsap.to(card, {
-        left: `${position[index]}%`,
-        rotation: rotation[index],
-        ease: "none",
-        scrollTrigger: {
-          trigger: container.current.querySelector(".cards"),
-          start: "top top",
-          end: () => `+=${window.innerHeight}`,
-          scrub: 0.5,
-          id: `spread-${index}`,
-        },
+    if (isMobileDevice) {
+      // Mobile Animation: Simple sequential reveal without pinning
+      const section = container.current.querySelector(".cards");
+      
+      // Set initial states for mobile cards
+      cards.forEach((card, index) => {
+        gsap.set(card, {
+          opacity: 0,
+          y: 60,
+          scale: 0.9,
+          rotation: 0,
+          position: "relative",
+          left: "auto",
+          top: "auto",
+          transform: "none",
+          zIndex: 1
+        });
       });
-    });
 
-    // Flip cards and reset rotation with stagger
-    cards.forEach((card, index) => {
-      const frontEl = card.querySelector(".flip-card-front");
-      const backEl = card.querySelector(".flip-card-back");
+      // Create simple reveal animations for each card
+      cards.forEach((card, index) => {
+        gsap.to(card, {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse",
+            markers: false
+          }
+        });
 
-      const staggerOffset = index * 0.05;
-      const startOffset = 1 / 3 + staggerOffset;
-      const endOffset = 2 / 3 + staggerOffset;
+        // Simple flip animation when card comes into view
+        const frontEl = card.querySelector(".flip-card-front");
+        const backEl = card.querySelector(".flip-card-back");
+        
+        gsap.to(frontEl, {
+          rotateY: -180,
+          duration: 1,
+          ease: "power2.inOut",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 70%",
+            end: "bottom 30%",
+            toggleActions: "play none none reverse",
+            markers: false
+          }
+        });
 
+        gsap.to(backEl, {
+          rotateY: 0,
+          duration: 1,
+          ease: "power2.inOut",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 70%",
+            end: "bottom 30%",
+            toggleActions: "play none none reverse",
+            markers: false
+          }
+        });
+      });
+
+    } else {
+      // Desktop Animation: Original spread animation
+      const position = [14, 38, 62, 86];
+      const rotation = [-15, -7.5, 7.5, 15];
+      const totalScrollHeight = window.innerHeight * 3;
+
+      // Pin cards section
       ScrollTrigger.create({
         trigger: container.current.querySelector(".cards"),
         start: "top top",
         end: () => `+=${totalScrollHeight}`,
-        scrub: 1,
-        id: `rotate-flip-${index}`,
-        onUpdate: (self) => {
-          const progress = self.progress;
-
-          if (progress >= startOffset && progress <= endOffset) {
-            const animationProgress = (progress - startOffset) / (1 / 3);
-            const frontRotation = -180 * animationProgress;
-            const backRotation = 180 - 180 * animationProgress;
-            const cardRotation = rotation[index] * (1 - animationProgress);
-
-            gsap.to(frontEl, { rotateY: frontRotation, ease: "power1.out" });
-            gsap.to(backEl, { rotateY: backRotation, ease: "power1.out" });
-
-            gsap.to(card, {
-              xPercent: -50,
-              yPercent: -50,
-              rotate: cardRotation,
-              ease: "power1.out",
-            });
-          }
-        },
+        pin: true,
+        pinSpacing: true,
       });
-    });
-  }, { scope: container });
+
+      // Initially set all cards visible and properly positioned
+      cards.forEach((card, index) => {
+        gsap.set(card, {
+          opacity: 1,
+          scale: 1,
+          x: 0,
+          y: 0,
+          rotation: 0,
+          left: "50%",
+          top: "50%",
+          zIndex: 4 - index
+        });
+      });
+
+      // Spread Cards section
+      cards.forEach((card, index) => {
+        gsap.to(card, {
+          left: `${position[index]}%`,
+          rotation: rotation[index],
+          ease: "none",
+          scrollTrigger: {
+            trigger: container.current.querySelector(".cards"),
+            start: "top top",
+            end: () => `+=${window.innerHeight}`,
+            scrub: 0.5,
+            id: `spread-${index}`,
+          },
+        });
+      });
+
+      // Flip cards and reset rotation with stagger
+      cards.forEach((card, index) => {
+        const frontEl = card.querySelector(".flip-card-front");
+        const backEl = card.querySelector(".flip-card-back");
+
+        const staggerOffset = index * 0.05;
+        const startOffset = 1 / 3 + staggerOffset;
+        const endOffset = 2 / 3 + staggerOffset;
+
+        ScrollTrigger.create({
+          trigger: container.current.querySelector(".cards"),
+          start: "top top",
+          end: () => `+=${totalScrollHeight}`,
+          scrub: 1,
+          id: `rotate-flip-${index}`,
+          onUpdate: (self) => {
+            const progress = self.progress;
+
+            if (progress >= startOffset && progress <= endOffset) {
+              const animationProgress = (progress - startOffset) / (1 / 3);
+              const frontRotation = -180 * animationProgress;
+              const backRotation = 180 - 180 * animationProgress;
+              const cardRotation = rotation[index] * (1 - animationProgress);
+
+              gsap.to(frontEl, { rotateY: frontRotation, ease: "power1.out" });
+              gsap.to(backEl, { rotateY: backRotation, ease: "power1.out" });
+
+              gsap.to(card, {
+                xPercent: -50,
+                yPercent: -50,
+                rotate: cardRotation,
+                ease: "power1.out",
+              });
+            }
+          },
+        });
+      });
+    }
+  }, { scope: container, dependencies: [isMobileDevice] });
 
   useEffect(() => {
     return () => {
@@ -192,7 +299,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="cards-container bg-white" ref={container}>
+    <div className={`cards-container bg-white ${isMobileDevice ? 'mobile' : 'desktop'}`} ref={container}>
       <section id="services" className="cards">
         <div 
           className={`overlay ${focusedCard !== null ? 'active' : ''}`} 
