@@ -275,7 +275,7 @@ const IndustriesPage = () => {
   const HeroAnimatedText = ({ text }: { text: string }) => {
     return (
       <motion.div
-        className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl leading-none text-[#010a14] font-bold tracking-wider uppercase"
+        className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl leading-none text-white font-bold tracking-wider uppercase"
         style={{ fontFamily: 'Bebas Neue, sans-serif', fontWeight: 700 }}
         initial="hidden"
         animate={animationsTriggered.hero ? "visible" : "hidden"}
@@ -323,16 +323,16 @@ const IndustriesPage = () => {
   };
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-white overflow-hidden relative flex flex-col">
+    <div ref={containerRef} className="min-h-screen bg-white overflow-x-hidden relative flex flex-col">
       {/* Site-wide Navigation Bar */}
       <Header />
 
       {/* Hero Section */}
-      <section ref={heroRef} className="order-0 min-h-screen flex items-center px-6 pt-20 relative z-10">
+      <section ref={heroRef} className="order-0 min-h-screen -mt-20 pt-20 flex items-center px-6 relative z-10">
         {/* Background Image */}
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 h-full">
           <Image
-            src="/assets/industry-bg.png"
+            src="/assets/industry-bg2.png"
             alt="Industry Background"
             fill
             className="object-cover"
@@ -350,9 +350,9 @@ const IndustriesPage = () => {
             className="space-y-8"
           >
             <motion.div variants={staggerContainer as any} className="space-y-6">
-              <HeroAnimatedText text="Industries We Serve" />
+              <HeroAnimatedText text="Industries We Serve"/>
               <motion.div 
-                className="h-1 bg-yellow-400"
+                className="h-1 bg-white"
                 initial={{ width: 0 }}
                 animate={animationsTriggered.hero ? { width: "100%" } : { width: 0 }}
                 transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
@@ -361,20 +361,20 @@ const IndustriesPage = () => {
 
             <motion.p 
               variants={paragraphVariants as any} 
-              className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-[#010a14] max-w-2xl md:max-w-3xl lg:max-w-4xl"
+              className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-white max-w-2xl md:max-w-3xl lg:max-w-4xl"
             >
               We deliver cutting-edge solutions across diverse industries, transforming businesses with innovative technology.
             </motion.p>
 
             <motion.div variants={paragraphVariants as any} className="flex items-center gap-4">
               <motion.div 
-                className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center"
+                className="w-12 h-12 bg-white rounded-full flex items-center justify-center"
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
               >
                 <span className="text-[#010a14] font-bold text-xl">▶</span>
               </motion.div>
               <motion.span 
-                className="text-sm text-[#010a14]"
+                className="text-sm text-white"
                 initial={{ opacity: 0, x: -20 }}
                 animate={animationsTriggered.hero ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
                 transition={{ delay: 1.5, duration: 0.5 }}
@@ -391,10 +391,10 @@ const IndustriesPage = () => {
             className="relative"
           >
             {/* Placeholder for industries image */}
-            <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-[500px] md:h-[500px] mx-auto bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center">
+            <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-[500px] md:h-[500px] mx-auto bg-gradient-to-br from-[#1a2430] to-[#2c3e50] rounded-full flex items-center justify-center">
               <div className="w-56 h-56 md:w-64 md:h-64 lg:w-80 lg:h-80 bg-[#010a14] rounded-full flex items-center justify-center">
                 <motion.div 
-                  className="text-6xl text-yellow-400 font-bold flex items-center justify-center"
+                  className="text-6xl text-white font-bold flex items-center justify-center"
                   initial={{ scale: 0, rotate: -180 }}
                   animate={animationsTriggered.hero ? { scale: 1, rotate: 0 } : { scale: 0, rotate: -180 }}
                   transition={{ delay: 0.5, duration: 1, type: "spring", stiffness: 100 }}
@@ -410,7 +410,7 @@ const IndustriesPage = () => {
               transition={{ duration: 3, repeat: Infinity }}
             >
               <motion.div 
-                className="text-yellow-400 text-2xl font-bold"
+                className="text-white text-2xl font-bold"
                 initial={{ opacity: 0, scale: 0 }}
                 animate={animationsTriggered.hero ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
                 transition={{ delay: 1.2, duration: 0.5 }}

@@ -193,6 +193,9 @@ export default function Home() {
 
   return (
     <div className="cards-container bg-white" ref={container}>
+      <h2 className="text-5xl sm:text-6xl md:text-7xl font-extrabold text-center text-[#010A14] pt-20 mb-12">
+        Our Services
+      </h2>
       <section id="services" className="cards">
         <div 
           className={`overlay ${focusedCard !== null ? 'active' : ''}`} 

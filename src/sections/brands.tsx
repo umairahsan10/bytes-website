@@ -26,8 +26,8 @@ const brands = [
 
 export const BrandsSection = () => {
   return (
-    <section className="py-16 bg-white">
-      <div className="container text-[#010a14]">
+    <section className="py-16 bg-white text-center">
+      <div className="container mx-auto text-[#010a14]">
         <SectionHeader
           eyebrow="Trusted Partnerships"
           title="Our Past Clients"
@@ -35,7 +35,7 @@ export const BrandsSection = () => {
         />
 
         {/* Horizontal scrolling logos */}
-        <div className="mt-12 lg:mt-20 flex overflow-x-clip [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] py-4 -my-4">
+        <div className="mt-12 lg:mt-20 flex justify-center overflow-x-clip [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] py-4 -my-4">
           <div className="flex gap-8 pr-8 flex-none brands-scroll">
             {[...new Array(2)].fill(0).map((_, idx) => (
               <Fragment key={idx}>

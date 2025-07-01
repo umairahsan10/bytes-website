@@ -5,6 +5,8 @@ import { twMerge } from "tailwind-merge";
 import "../sections/cards.css";
 import { Footer } from "@/sections/Footer";
 import GTM, { GTMNoScript } from "@/components/GTM";
+import LoaderProvider from "@/components/LoaderProvider";
+import SlowScrollProvider from "@/components/SlowScrollProvider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const calistoga = Calistoga({
@@ -34,13 +36,17 @@ export default function RootLayout({
           calistoga.variable,
           "text-black antialiased font-sans min-h-screen flex flex-col"
         )}
-      ><main className="flex-1">
+      ><LoaderProvider>
         {/* Google Tag Manager */}
         <GTM />
         <GTMNoScript />
+        {/* Reduce scroll sensitivity site-wide */}
+        <SlowScrollProvider factor={0.5} />
+          <main className="flex-1">
           {children}
         </main>
         <Footer />
+      </LoaderProvider>
       </body>
     </html>
   );
