@@ -45,7 +45,9 @@ const WebDevelopmentLanding = () => {
   // Visibility for individual CMS subsections
   const shopifyRef = useRef<HTMLDivElement | null>(null);
   const wpRef = useRef<HTMLDivElement | null>(null);
+  const mernRef = useRef<HTMLDivElement | null>(null);
   const [shopifyVisible, setShopifyVisible] = useState(false);
+  const [mernVisible, setMernVisible] = useState(false);
   const [wpVisible, setWpVisible] = useState(false);
 
   // Ensure page starts at top when refreshed
@@ -169,6 +171,22 @@ const WebDevelopmentLanding = () => {
       { threshold: 0.3 }
     );
     observer.observe(wpRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Observer for MERN subsection (trigger once)
+  useEffect(() => {
+    if (!mernRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setMernVisible(true);       // show animation once
+          observer.unobserve(entry.target); // stop observing so it won't reset
+        }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(mernRef.current);
     return () => observer.disconnect();
   }, []);
 
@@ -481,7 +499,7 @@ const WebDevelopmentLanding = () => {
               </div>
               <div className={`relative h-48 sm:h-72 lg:h-[360px] rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 ${shopifyVisible ? 'animate-slide-in-right' : 'opacity-0 translate-x-10'}`}>
                 <Image
-                  src="/assets/WebDev/shopify.jpeg"
+                  src="/assets/WebDev/shopify.webp"
                   alt="Shopify store preview"
                   fill
                   quality={90}
@@ -521,6 +539,38 @@ const WebDevelopmentLanding = () => {
                     <li>On-page SEO & performance tuning</li>
                   </ul>
                 </div>
+              </div>
+            </div>
+
+            {/* MERN Section */}
+            <div className="grid lg:grid-cols-2 gap-12 items-center" ref={mernRef}>
+              <div className={`transition-all duration-700 ${mernVisible ? 'animate-slide-in-left' : 'opacity-0 -translate-x-10'}`} style={{ transitionDelay: '150ms' }}>
+                <div className="p-8 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="flex items-start space-x-6 mb-4">
+                    <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center flex-shrink-0">
+                      <Code className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <h3 className="text-2xl font-bold leading-snug">We build MERN Stack sites</h3>
+                  </div>
+                  <p className="text-gray-600 mb-4">Robust full-stack JavaScript applications built with MongoDB, Express, React and Node.js.</p>
+                  <ul className="list-disc ml-6 space-y-2 text-gray-600">
+                    <li>REST & GraphQL API development</li>
+                    <li>Scalable microservices architecture</li>
+                    <li>Real-time features with WebSockets</li>
+                    <li>Cloud deployment & CI/CD pipelines</li>
+                  </ul>
+                </div>
+              </div>
+              <div className={`relative h-48 sm:h-72 lg:h-[360px] rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 ${mernVisible ? 'animate-slide-in-right' : 'opacity-0 translate-x-10'}`} style={{ transitionDelay: '150ms' }}>
+                <Image
+                  src="/assets/WebDev/MERN.webp"
+                  alt="MERN stack preview"
+                  fill
+                  quality={90}
+                  priority
+                  className="object-contain sm:object-cover object-center"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
               </div>
             </div>
           </div>
@@ -662,11 +712,11 @@ const WebDevelopmentLanding = () => {
       </section>
 
       {/* Call To Action Section */}
-      <section className="relative overflow-hidden py-24 bg-gradient-to-r from-gray-600 to-gray-800 text-white text-center">
+      <section className="relative overflow-hidden py-24 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-center">
         {/* Background image */}
         <div
           className="absolute inset-0 bg-center bg-cover opacity-20 pointer-events-none"
-          style={{ backgroundImage: "url('/assets/WebDev/connect.jpg')" }}
+          style={{ backgroundImage: "url('/assets/WebDev/buildwithus.png')" }}
         />
 
         {/* Content */}
