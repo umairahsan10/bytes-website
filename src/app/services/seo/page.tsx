@@ -573,321 +573,325 @@ const SEOPage: React.FC = () => {
           />
         </div>
         
-        {/* Stunning Animated Bar Graph Background */}
-        <div className="absolute inset-0 flex items-end justify-center">
-          <div className="flex items-end space-x-1 sm:space-x-2 md:space-x-3 lg:space-x-4 xl:space-x-6 w-full max-w-6xl px-2 sm:px-4 md:px-6 lg:px-8">
-            {/* Bar 1 - Shortest */}
-            <motion.div
-              className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
-              initial={{ height: 0 }}
-              animate={{ height: "15vh" }}
-              transition={{ duration: 1.5, delay: 0.2, ease: "easeOut" }}
+        {/* 4:3 Landscape Bar Graph Container */}
+        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-6xl">
+          <div className="relative w-full" style={{ aspectRatio: '4/3' }}>
+            {/* Bars Container */}
+            <div className="absolute bottom-0 left-0 right-0 flex items-end justify-center h-full">
+              <div className="flex items-end space-x-0.5 sm:space-x-1 md:space-x-1.5 lg:space-x-2 xl:space-x-3 w-full h-full px-1 sm:px-2 md:px-3 lg:px-4">
+                {/* Bar 1 - Shortest */}
+                <motion.div
+                  className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
+                  initial={{ height: 0 }}
+                  animate={{ height: "20%" }}
+                  transition={{ duration: 1.5, delay: 0.2, ease: "easeOut" }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/20 via-[#010a14]/15 to-[#010a14]/5" />
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-t from-[#010a14]/30 to-transparent"
+                    animate={{ 
+                      y: [0, -20, 0],
+                      opacity: [0.3, 0.6, 0.3]
+                    }}
+                    transition={{ 
+                      duration: 3, 
+                      repeat: Infinity, 
+                      ease: "easeInOut",
+                      delay: 0.2
+                    }}
+                  />
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                </motion.div>
+                
+                {/* Bar 2 */}
+                <motion.div
+                  className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
+                  initial={{ height: 0 }}
+                  animate={{ height: "28%" }}
+                  transition={{ duration: 1.5, delay: 0.4, ease: "easeOut" }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/25 via-[#010a14]/20 to-[#010a14]/10" />
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-t from-[#010a14]/35 to-transparent"
+                    animate={{ 
+                      y: [0, -25, 0],
+                      opacity: [0.4, 0.7, 0.4]
+                    }}
+                    transition={{ 
+                      duration: 3.2, 
+                      repeat: Infinity, 
+                      ease: "easeInOut",
+                      delay: 0.4
+                    }}
+                  />
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+                </motion.div>
+                
+                {/* Bar 3 */}
+                <motion.div
+                  className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
+                  initial={{ height: 0 }}
+                  animate={{ height: "34%" }}
+                  transition={{ duration: 1.5, delay: 0.6, ease: "easeOut" }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/30 via-[#010a14]/25 to-[#010a14]/15" />
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-t from-[#010a14]/40 to-transparent"
+                    animate={{ 
+                      y: [0, -30, 0],
+                      opacity: [0.5, 0.8, 0.5]
+                    }}
+                    transition={{ 
+                      duration: 3.4, 
+                      repeat: Infinity, 
+                      ease: "easeInOut",
+                      delay: 0.6
+                    }}
+                  />
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                </motion.div>
+                
+                {/* Bar 4 */}
+                <motion.div
+                  className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
+                  initial={{ height: 0 }}
+                  animate={{ height: "32%" }}
+                  transition={{ duration: 1.5, delay: 0.8, ease: "easeOut" }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/35 via-[#010a14]/30 to-[#010a14]/20" />
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-t from-[#010a14]/45 to-transparent"
+                    animate={{ 
+                      y: [0, -35, 0],
+                      opacity: [0.6, 0.9, 0.6]
+                    }}
+                    transition={{ 
+                      duration: 3.6, 
+                      repeat: Infinity, 
+                      ease: "easeInOut",
+                      delay: 0.8
+                    }}
+                  />
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/35 to-transparent" />
+                </motion.div>
+                
+                {/* Bar 5 */}
+                <motion.div
+                  className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
+                  initial={{ height: 0 }}
+                  animate={{ height: "30%" }}
+                  transition={{ duration: 1.5, delay: 1, ease: "easeOut" }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/40 via-[#010a14]/35 to-[#010a14]/25" />
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-t from-[#010a14]/50 to-transparent"
+                    animate={{ 
+                      y: [0, -40, 0],
+                      opacity: [0.7, 1, 0.7]
+                    }}
+                    transition={{ 
+                      duration: 3.8, 
+                      repeat: Infinity, 
+                      ease: "easeInOut",
+                      delay: 1
+                    }}
+                  />
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+                </motion.div>
+                
+                {/* Bar 6 */}
+                <motion.div
+                  className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
+                  initial={{ height: 0 }}
+                  animate={{ height: "33%" }}
+                  transition={{ duration: 1.5, delay: 1.2, ease: "easeOut" }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/45 via-[#010a14]/40 to-[#010a14]/30" />
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-t from-[#010a14]/55 to-transparent"
+                    animate={{ 
+                      y: [0, -35, 0],
+                      opacity: [0.8, 1, 0.8]
+                    }}
+                    transition={{ 
+                      duration: 4, 
+                      repeat: Infinity, 
+                      ease: "easeInOut",
+                      delay: 1.2
+                    }}
+                  />
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/45 to-transparent" />
+                </motion.div>
+                
+                {/* Bar 7 */}
+                <motion.div
+                  className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
+                  initial={{ height: 0 }}
+                  animate={{ height: "38%" }}
+                  transition={{ duration: 1.5, delay: 1.4, ease: "easeOut" }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/50 via-[#010a14]/45 to-[#010a14]/35" />
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-t from-[#010a14]/60 to-transparent"
+                    animate={{ 
+                      y: [0, -45, 0],
+                      opacity: [0.9, 1, 0.9]
+                    }}
+                    transition={{ 
+                      duration: 4.2, 
+                      repeat: Infinity, 
+                      ease: "easeInOut",
+                      delay: 1.4
+                    }}
+                  />
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+                </motion.div>
+                
+                {/* Bar 8 */}
+                <motion.div
+                  className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
+                  initial={{ height: 0 }}
+                  animate={{ height: "45%" }}
+                  transition={{ duration: 1.5, delay: 1.6, ease: "easeOut" }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/55 via-[#010a14]/50 to-[#010a14]/40" />
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-t from-[#010a14]/65 to-transparent"
+                    animate={{ 
+                      y: [0, -40, 0],
+                      opacity: [1, 1, 1]
+                    }}
+                    transition={{ 
+                      duration: 4.4, 
+                      repeat: Infinity, 
+                      ease: "easeInOut",
+                      delay: 1.6
+                    }}
+                  />
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/55 to-transparent" />
+                </motion.div>
+                
+                {/* Bar 9 */}
+                <motion.div
+                  className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
+                  initial={{ height: 0 }}
+                  animate={{ height: "52%" }}
+                  transition={{ duration: 1.5, delay: 1.8, ease: "easeOut" }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/60 via-[#010a14]/55 to-[#010a14]/45" />
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-t from-[#010a14]/70 to-transparent"
+                    animate={{ 
+                      y: [0, -50, 0],
+                      opacity: [1, 1, 1]
+                    }}
+                    transition={{ 
+                      duration: 4.6, 
+                      repeat: Infinity, 
+                      ease: "easeInOut",
+                      delay: 1.8
+                    }}
+                  />
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/60 to-transparent" />
+                </motion.div>
+                
+                {/* Bar 10 - Tallest */}
+                <motion.div
+                  className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
+                  initial={{ height: 0 }}
+                  animate={{ height: "55%" }}
+                  transition={{ duration: 1.5, delay: 2, ease: "easeOut" }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/65 via-[#010a14]/60 to-[#010a14]/50" />
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-t from-[#010a14]/75 to-transparent"
+                    animate={{ 
+                      y: [0, -55, 0],
+                      opacity: [1, 1, 1]
+                    }}
+                    transition={{ 
+                      duration: 5, 
+                      repeat: Infinity, 
+                      ease: "easeInOut",
+                      delay: 2
+                    }}
+                  />
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/65 to-transparent" />
+                              </motion.div>
+            </div>
+
+            {/* Animated Line and Moving Arrowhead Overlay */}
+            <svg
+              width="100%"
+              height="100%"
+              viewBox="0 0 900 400"
+              className="w-full h-full absolute inset-0 pointer-events-none"
+              preserveAspectRatio="xMidYMid meet"
             >
-              <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/20 via-[#010a14]/15 to-[#010a14]/5" />
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-t from-[#010a14]/30 to-transparent"
-                animate={{ 
-                  y: [0, -20, 0],
-                  opacity: [0.3, 0.6, 0.3]
-                }}
-                transition={{ 
-                  duration: 3, 
-                  repeat: Infinity, 
-                  ease: "easeInOut",
-                  delay: 0.2
-                }}
+              {/* Path for the animated line (flows above bars) */}
+              <motion.path
+                id="hero-curve"
+                d="M 50 380 Q 150 260 300 300 Q 450 340 600 240 Q 750 140 850 140"
+                stroke="#010a14"
+                strokeWidth="7"
+                strokeOpacity={0.3}
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 1.5, delay: 2.2, ease: 'easeInOut' }}
               />
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-            </motion.div>
-            
-            {/* Bar 2 */}
-            <motion.div
-              className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
-              initial={{ height: 0 }}
-              animate={{ height: "35vh" }}
-              transition={{ duration: 1.5, delay: 0.4, ease: "easeOut" }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/25 via-[#010a14]/20 to-[#010a14]/10" />
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-t from-[#010a14]/35 to-transparent"
-                animate={{ 
-                  y: [0, -25, 0],
-                  opacity: [0.4, 0.7, 0.4]
-                }}
-                transition={{ 
-                  duration: 3.2, 
-                  repeat: Infinity, 
-                  ease: "easeInOut",
-                  delay: 0.4
-                }}
-              />
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-            </motion.div>
-            
-            {/* Bar 3 */}
-            <motion.div
-              className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
-              initial={{ height: 0 }}
-              animate={{ height: "42vh" }}
-              transition={{ duration: 1.5, delay: 0.6, ease: "easeOut" }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/30 via-[#010a14]/25 to-[#010a14]/15" />
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-t from-[#010a14]/40 to-transparent"
-                animate={{ 
-                  y: [0, -30, 0],
-                  opacity: [0.5, 0.8, 0.5]
-                }}
-                transition={{ 
-                  duration: 3.4, 
-                  repeat: Infinity, 
-                  ease: "easeInOut",
-                  delay: 0.6
-                }}
-              />
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-            </motion.div>
-            
-            {/* Bar 4 */}
-            <motion.div
-              className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
-              initial={{ height: 0 }}
-              animate={{ height: "35vh" }}
-              transition={{ duration: 1.5, delay: 0.8, ease: "easeOut" }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/35 via-[#010a14]/30 to-[#010a14]/20" />
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-t from-[#010a14]/45 to-transparent"
-                animate={{ 
-                  y: [0, -35, 0],
-                  opacity: [0.6, 0.9, 0.6]
-                }}
-                transition={{ 
-                  duration: 3.6, 
-                  repeat: Infinity, 
-                  ease: "easeInOut",
-                  delay: 0.8
-                }}
-              />
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/35 to-transparent" />
-            </motion.div>
-            
-            {/* Bar 5 */}
-            <motion.div
-              className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
-              initial={{ height: 0 }}
-              animate={{ height: "40vh" }}
-              transition={{ duration: 1.5, delay: 1, ease: "easeOut" }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/40 via-[#010a14]/35 to-[#010a14]/25" />
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-t from-[#010a14]/50 to-transparent"
-                animate={{ 
-                  y: [0, -40, 0],
-                  opacity: [0.7, 1, 0.7]
-                }}
-                transition={{ 
-                  duration: 3.8, 
-                  repeat: Infinity, 
-                  ease: "easeInOut",
-                  delay: 1
-                }}
-              />
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-            </motion.div>
-            
-            {/* Bar 6 */}
-            <motion.div
-              className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
-              initial={{ height: 0 }}
-              animate={{ height: "50vh" }}
-              transition={{ duration: 1.5, delay: 1.2, ease: "easeOut" }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/45 via-[#010a14]/40 to-[#010a14]/30" />
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-t from-[#010a14]/55 to-transparent"
-                animate={{ 
-                  y: [0, -35, 0],
-                  opacity: [0.8, 1, 0.8]
-                }}
-                transition={{ 
-                  duration: 4, 
-                  repeat: Infinity, 
-                  ease: "easeInOut",
-                  delay: 1.2
-                }}
-              />
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/45 to-transparent" />
-            </motion.div>
-            
-            {/* Bar 7 */}
-            <motion.div
-              className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
-              initial={{ height: 0 }}
-              animate={{ height: "62vh" }}
-              transition={{ duration: 1.5, delay: 1.4, ease: "easeOut" }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/50 via-[#010a14]/45 to-[#010a14]/35" />
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-t from-[#010a14]/60 to-transparent"
-                animate={{ 
-                  y: [0, -45, 0],
-                  opacity: [0.9, 1, 0.9]
-                }}
-                transition={{ 
-                  duration: 4.2, 
-                  repeat: Infinity, 
-                  ease: "easeInOut",
-                  delay: 1.4
-                }}
-              />
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent" />
-            </motion.div>
-            
-            {/* Bar 8 */}
-            <motion.div
-              className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
-              initial={{ height: 0 }}
-              animate={{ height: "70vh" }}
-              transition={{ duration: 1.5, delay: 1.6, ease: "easeOut" }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/55 via-[#010a14]/50 to-[#010a14]/40" />
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-t from-[#010a14]/65 to-transparent"
-                animate={{ 
-                  y: [0, -40, 0],
-                  opacity: [1, 1, 1]
-                }}
-                transition={{ 
-                  duration: 4.4, 
-                  repeat: Infinity, 
-                  ease: "easeInOut",
-                  delay: 1.6
-                }}
-              />
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/55 to-transparent" />
-            </motion.div>
-            
-            {/* Bar 9 */}
-            <motion.div
-              className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
-              initial={{ height: 0 }}
-              animate={{ height: "75vh" }}
-              transition={{ duration: 1.5, delay: 1.8, ease: "easeOut" }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/60 via-[#010a14]/55 to-[#010a14]/45" />
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-t from-[#010a14]/70 to-transparent"
-                animate={{ 
-                  y: [0, -50, 0],
-                  opacity: [1, 1, 1]
-                }}
-                transition={{ 
-                  duration: 4.6, 
-                  repeat: Infinity, 
-                  ease: "easeInOut",
-                  delay: 1.8
-                }}
-              />
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/60 to-transparent" />
-            </motion.div>
-            
-            {/* Bar 10 - Tallest */}
-            <motion.div
-              className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
-              initial={{ height: 0 }}
-              animate={{ height: "78vh" }}
-              transition={{ duration: 1.5, delay: 2, ease: "easeOut" }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/65 via-[#010a14]/60 to-[#010a14]/50" />
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-t from-[#010a14]/75 to-transparent"
-                animate={{ 
-                  y: [0, -55, 0],
-                  opacity: [1, 1, 1]
-                }}
-                transition={{ 
-                  duration: 5, 
-                  repeat: Infinity, 
-                  ease: "easeInOut",
-                  delay: 2
-                }}
-              />
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/65 to-transparent" />
-            </motion.div>
+              {/* Animated arrowhead at the start, moving along the path */}
+              <motion.circle
+                r="16"
+                fill="#010a14"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 2.2 }}
+                style={{ originX: '50%', originY: '50%' }}
+              >
+                <animateMotion
+                  dur="1.5s"
+                  begin="2.2s"
+                  fill="freeze"
+                  keyPoints="0;1"
+                  keyTimes="0;1"
+                  calcMode="linear"
+                  repeatCount="1"
+                  path="M 50 380 Q 150 260 300 300 Q 450 340 600 240 Q 750 140 850 140"
+                />
+              </motion.circle>
+              {/* Glowing points at bar tops */}
+              {[
+                {x:50, y:380},    // Start
+                {x:140, y:310},  // Q1
+                {x:230, y:291},   // Q2
+                {x:318, y:304},  // Q3
+                {x:404, y:312},  // Q4
+                {x:495, y:292},   // Q5
+                {x:581, y:252},   // Q6
+                {x:670, y:197},   // Q7
+                {x:760, y:157},   // Q8
+                {x:850, y:140}     // End
+              ].map((pt, i) => (
+                <motion.circle
+                  key={i}
+                  cx={pt.x} 
+                  cy={pt.y}
+                  r="8"
+                  fill="#010a14"
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1.1 }}
+                  transition={{ delay: 2.2 + i * 0.18 }}
+                />
+              ))}
+            </svg>
           </div>
         </div>
-
-        {/* Animated Line and Moving Arrowhead Overlay (over bars, behind text) */}
-        <div className="absolute inset-0 pointer-events-none z-10">
-          <svg
-            width="100%"
-            height="100%"
-            viewBox="0 0 900 400"
-            className="w-full h-full"
-            style={{ position: 'absolute', left: 0, top: 0 }}
-          >
-            {/* Path for the animated line (flows above bars) */}
-            <motion.path
-              id="hero-curve"
-              d="M 114 320 Q 180 180 290 220 Q 400 260 490 160 Q 620 80 785 60"
-              stroke="#010a14"
-              strokeWidth="7"
-              strokeOpacity={0.3}
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 1.5, delay: 2.2, ease: 'easeInOut' }}
-            />
-            {/* Animated arrowhead at the start, moving along the path */}
-            <motion.circle
-              r="16"
-              fill="#010a14"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 2.2 }}
-              style={{ originX: '50%', originY: '50%' }}
-            >
-              <animateMotion
-                dur="1.5s"
-                begin="2.2s"
-                fill="freeze"
-                keyPoints="0;1"
-                keyTimes="0;1"
-                calcMode="linear"
-                repeatCount="1"
-                path="M 70 320 Q 180 180 290 220 Q 414 260 560 116 Q 620 80 785 60"
-              />
-            </motion.circle>
-            {/* Glowing points at bar tops (optional, can be removed if not needed) */}
-            {[
-              {x:114, y:320},    // Start
-              {x:188, y:228},  // Q1
-              {x:265, y:214},   // Q2
-              {x:338, y:232},  // Q3
-              {x:414, y:218},  // Q4
-              {x:490, y:160},   // Q5
-              {x:560, y:122},   // Q6
-              {x:635, y:92},   // Q7
-              {x:710, y:72},   // Q8
-              {x:785, y:60}     // End
-            ].map((pt, i) => (
-              <motion.circle
-                key={i}
-                cx={pt.x} 
-                cy={pt.y}
-                r="8"
-                fill="#010a14"
-                // fillOpacity={1}
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1.1 }}
-                transition={{ delay: 2.2 + i * 0.18 }}
-              />
-            ))}
-          </svg>
         </div>
+
+
 
         {/* Floating Data Points */}
         <div className="absolute inset-0 pointer-events-none">
