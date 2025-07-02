@@ -17,96 +17,13 @@ const ByteBotLanding: React.FC = () => {
   const HERO_VIDEO_SRC = "/assets/bytes-bot/bytes-vid.webm";
   const router = useRouter();
   const heroRef = useRef<HTMLElement>(null);
-  const particlesRef = useRef<HTMLDivElement>(null);
+  const bgVideoRef = useRef<HTMLVideoElement>(null);
   const horizontalSectionsRef = useRef<HTMLDivElement>(null);
-  const ctaRef = useRef<HTMLElement>(null);
   const heroCanvasRef = useRef<HTMLVideoElement>(null);
+  // Root wrapper reference for background-colour animation
+  const pageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Initialize particles effect
-    const initParticles = () => {
-      if (!particlesRef.current) return;
-      
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-      
-      particlesRef.current.appendChild(canvas);
-      
-      const resizeCanvas = () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      };
-      
-      resizeCanvas();
-      window.addEventListener('resize', resizeCanvas);
-      
-      const particles: Array<{
-        x: number;
-        y: number;
-        vx: number;
-        vy: number;
-        size: number;
-        opacity: number;
-      }> = [];
-      
-      // Create particles
-      for (let i = 0; i < 80; i++) {
-        particles.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 2,
-          vy: (Math.random() - 0.5) * 2,
-          size: Math.random() * 3 + 1,
-          opacity: Math.random() * 0.5 + 0.2
-        });
-      }
-      
-      const animate = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // Update and draw particles
-        particles.forEach(particle => {
-          particle.x += particle.vx;
-          particle.y += particle.vy;
-          
-          if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-          if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
-          
-          ctx.beginPath();
-          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(0, 212, 255, ${particle.opacity})`;
-          ctx.fill();
-        });
-        
-        // Draw connections
-        particles.forEach((p1, i) => {
-          particles.slice(i + 1).forEach(p2 => {
-            const distance = Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
-            if (distance < 150) {
-              ctx.beginPath();
-              ctx.moveTo(p1.x, p1.y);
-              ctx.lineTo(p2.x, p2.y);
-              ctx.strokeStyle = `rgba(0, 212, 255, ${0.4 * (1 - distance / 150)})`;
-              ctx.lineWidth = 1;
-              ctx.stroke();
-            }
-          });
-        });
-        
-        requestAnimationFrame(animate);
-      };
-      
-      animate();
-      
-      return () => {
-        window.removeEventListener('resize', resizeCanvas);
-        if (particlesRef.current?.contains(canvas)) {
-          particlesRef.current.removeChild(canvas);
-        }
-      };
-    };
-
     // Initialize animations
     const initAnimations = () => {
       // Hero text animations (only within hero section)
@@ -121,91 +38,57 @@ const ByteBotLanding: React.FC = () => {
         delay: 0.5
       });
 
-      // Horizontal scrolling sections
+      // ---------------------------
+      // Section reveal & background-colour change
+      // ---------------------------
       const sections = gsap.utils.toArray(".content-section") as HTMLElement[];
-      const horizontalContainer = horizontalSectionsRef.current;
-      
-      if (sections.length > 0 && horizontalContainer) {
-        gsap.to(sections, {
-          xPercent: -100 * (sections.length - 1),
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".section-container",
-            pin: true,
-            scrub: 1,
-            snap: 1 / (sections.length - 1),
-            end: () => "+=" + (horizontalContainer.offsetWidth - window.innerWidth)
-          }
-        });
+      const colors = ['#ffffff', '#010A14', '#ffffff', '#010A14'];
 
-        // Section content animations
-        sections.forEach((section) => {
-          const bubbleTexts = section.querySelectorAll('.bubble-text');
-          const sectionImage = section.querySelector('.section-image');
-          
-          gsap.set(bubbleTexts, { opacity: 0, y: 30 });
-          if (sectionImage) gsap.set(sectionImage, { opacity: 0, x: 100, scale: 0.9 });
-          
-          ScrollTrigger.create({
-            trigger: section,
-            start: "left center",
-            end: "right center",
-            onEnter: () => {
-              gsap.to(bubbleTexts, {
-                opacity: 1,
-                y: 0,
-                duration: 0.6,
-                stagger: 0.05,
-                ease: "back.out(1.7)"
-              });
-              
-              if (sectionImage) {
-                gsap.to(sectionImage, {
-                  opacity: 1,
-                  x: 0,
-                  scale: 1,
-                  duration: 0.8,
-                  ease: "power2.out"
-                });
-              }
-            }
-          });
-        });
-      }
+      sections.forEach((section, index) => {
+        const bubbleTexts = section.querySelectorAll('.bubble-text');
+        const sectionImage = section.querySelector('.section-image');
 
-      // Add scroll anchors for CTA section images
-      const ctaImages = gsap.utils.toArray(".action-card img") as HTMLElement[];
-      
-      ctaImages.forEach((img, index) => {
-        gsap.set(img, { opacity: 0, y: 50, scale: 0.95 });
-        
+        gsap.set(bubbleTexts, { opacity: 0, y: 30 });
+        if (sectionImage) gsap.set(sectionImage, { opacity: 0, y: 20 });
+
         ScrollTrigger.create({
-          trigger: img.closest('.action-card'),
-          start: "top 80%",
-          end: "bottom 20%",
+          trigger: section,
+          start: "top 50%",
+          end: "bottom 50%",
           onEnter: () => {
-            gsap.to(img, {
+            gsap.to(bubbleTexts, {
               opacity: 1,
               y: 0,
-              scale: 1,
-              duration: 0.8,
-              delay: index * 0.1,
-              ease: "power2.out"
+              duration: 0.6,
+              stagger: 0.05,
+              ease: "back.out(1.7)"
             });
-          },
-          onLeave: () => {
-            gsap.to(img, {
-              opacity: 0.8,
-              scale: 0.98,
-              duration: 0.3
-            });
+
+            if (sectionImage) {
+              gsap.to(sectionImage, {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power2.out"
+              });
+            }
+
+            if (pageRef.current) {
+              gsap.to(pageRef.current, {
+                backgroundColor: colors[index],
+                duration: 0.5,
+                overwrite: 'auto'
+              });
+            }
           },
           onEnterBack: () => {
-            gsap.to(img, {
-              opacity: 1,
-              scale: 1,
-              duration: 0.3
-            });
+            if (pageRef.current) {
+              gsap.to(pageRef.current, {
+                backgroundColor: colors[index],
+                duration: 0.5,
+                overwrite: 'auto'
+              });
+            }
           }
         });
       });
@@ -225,13 +108,24 @@ const ByteBotLanding: React.FC = () => {
       }
     };
 
-    const particlesCleanup = initParticles();
     initAnimations();
+
+    // smooth looping for 5s video to prevent flash
+    const vid = bgVideoRef.current;
+    let onTime: any;
+    if (vid) {
+      onTime = () => {
+        if (vid.duration && vid.currentTime >= vid.duration - 0.05) {
+          vid.currentTime = 0.05; // jump a few frames in to avoid flash
+        }
+      };
+      vid.addEventListener('timeupdate', onTime);
+    }
 
     // Cleanup function
     return () => {
-      if (particlesCleanup) particlesCleanup();
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      if (vid && onTime) vid.removeEventListener('timeupdate', onTime);
     };
   }, []);
 
@@ -267,54 +161,13 @@ const ByteBotLanding: React.FC = () => {
   };
 
   return (
-    <div className="font-inter overflow-x-hidden bg-white">
+    <div ref={pageRef} className="font-inter overflow-x-hidden bg-white">
       <Header />
       <style jsx>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         
         .font-inter {
           font-family: 'Inter', sans-serif;
-        }
-        
-        .particles-container {
-          background: linear-gradient(135deg, #000000 0%, #1a1a2e 50%, #16213e 100%);
-        }
-        
-        .glowing-bot {
-          filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.3));
-          transition: all 0.3s ease;
-        }
-        
-        .glowing-bot:hover {
-          filter: drop-shadow(0 0 50px rgba(0, 255, 255, 0.5));
-          transform: scale(1.05);
-        }
-        
-        .cta-button {
-          background: linear-gradient(45deg, #00d4ff, #5b73ff);
-          transition: all 0.3s ease;
-          position: relative;
-          overflow: hidden;
-        }
-        
-        .cta-button:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 20px 40px rgba(0, 212, 255, 0.3);
-        }
-        
-        .cta-button::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-          transition: left 0.5s;
-        }
-        
-        .cta-button:hover::before {
-          left: 100%;
         }
         
         .section-container {
@@ -325,7 +178,8 @@ const ByteBotLanding: React.FC = () => {
         
         .horizontal-sections {
           display: flex;
-          width: 400vw;
+          flex-direction: column;
+          width: 100%;
         }
         
         .content-section {
@@ -457,8 +311,8 @@ const ByteBotLanding: React.FC = () => {
         @media (max-width: 768px) {
           /* Keep horizontal scrolling on mobile */
           .horizontal-sections {
-            flex-direction: row; /* override earlier rule */
-            width: 400vw;
+            flex-direction: column; /* now vertical */
+            width: 100%;
           }
           .content-section {
             width: 100vw;
@@ -518,70 +372,31 @@ const ByteBotLanding: React.FC = () => {
             font-size: 0.875rem !important;
           }
           
-          .cta-button {
-            font-size: 0.875rem !important;
-            height: 2.75rem !important;
-            max-width: 180px !important;
-          }
         }
+        
       `}</style>
 
-      {/* Hero Section */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center pt-20">
-        <div ref={particlesRef} className="particles-container absolute inset-0 z-1"></div>
-        <div className="tech-grid"></div>
-        
-        <div className="hero-content container mx-auto px-6 relative z-10 flex flex-col lg:flex-row items-center justify-between lg:gap-6 gap-8 h-full">
-          {/* Text column */}
-          <div className="w-full lg:w-1/2 text-center lg:text-left">
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 leading-tight">
-              <span className="bubble-text gradient-text">Byte</span>{' '}
-              <span className="bubble-text">Bot</span>
-            </h1>
-            
-            <p className="text-2xl md:text-4xl text-gray-300 mb-4 font-light">
-              <span className="bubble-text">The</span>{' '}
-              <span className="bubble-text">Future</span>{' '}
-              <span className="bubble-text">of</span>{' '}
-              <span className="bubble-text">Conversation</span>
-            </p>
-            
-            <p className="text-lg md:text-2xl text-cyan-400 mb-6 font-medium">
-              <span className="bubble-text">Powered</span>{' '}
-              <span className="bubble-text">by</span>{' '}
-              <span className="bubble-text">Real</span>{' '}
-              <span className="bubble-text">Business</span>{' '}
-              <span className="bubble-text">Intelligence</span>
-            </p>
+      {/* ---------------- Hero Section ---------------- */}
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center text-center pt-20">
+        {/* background video */}
+        <video ref={bgVideoRef} autoPlay loop muted playsInline src="/bots/botvid.mp4" className="absolute inset-0 w-full h-full object-cover"></video>
+        {/* overlay for readability */}
+        <div className="absolute inset-0 bg-black/50"></div>
 
-            {/* Demo button */}
-            <Link href="/contact" passHref legacyBehavior>
-              <a className="inline-block bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-full shadow-lg transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-cyan-300">
-                Book a free&nbsp;Byte-Bot&nbsp;demo
-              </a>
-            </Link>
-          </div>
+        {/* centered content */}
+        <div className="relative z-10 px-6 max-w-4xl">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 leading-tight">
+            <span className="bubble-text gradient-text">Byte Bot</span>
+          </h1>
+          <p className="text-2xl md:text-4xl text-white/90 mb-4 font-light bubble-text">The Future of Conversation</p>
+          <p className="text-lg md:text-2xl text-cyan-300 mb-8 font-medium bubble-text">Powered by Real Business Intelligence</p>
 
-          {/* Bot column */}
-          <div className="w-full lg:w-1/2 flex justify-center lg:justify-end lg:-ml-6 xl:-ml-10">
-            <div className="bot-container">
-              <video
-                ref={heroCanvasRef}
-                src={HERO_VIDEO_SRC}
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="glowing-bot w-80 h-80 md:w-[28rem] md:h-[28rem] object-contain"
-              />
-            </div>
-          </div>
-        </div>
-        
-        <div className="floating-shapes">
-          <div className="shape w-20 h-20 bg-cyan-400 rounded-full"></div>
-          <div className="shape w-16 h-16 bg-blue-500 rounded-lg"></div>
-          <div className="shape w-12 h-12 bg-purple-500" style={{clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)'}}></div>
+          <Link
+            href="/contact"
+            className="inline-block bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-full shadow-lg transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-cyan-300"
+          >
+            Book a free&nbsp;Byte-Bot&nbsp;demo
+          </Link>
         </div>
       </section>
 
@@ -642,11 +457,11 @@ const ByteBotLanding: React.FC = () => {
                   </ul>
                 </div>
                 
-                <div className="w-full lg:w-1/2 mobile-full-width">
+                <div className="w-full lg:w-1/2 mobile-full-width flex justify-center items-center">
                   <img 
-                    src="/bots/alex-knight-2EJCSULRwC8-unsplash.jpg" 
+                    src="/bots/bot1.png" 
                     alt="Integration Dashboard" 
-                    className="section-image w-full h-96 object-cover rounded-2xl shadow-2xl"
+                    className="section-image object-cover h-[400px]"
                   />
                 </div>
               </div>
@@ -660,14 +475,14 @@ const ByteBotLanding: React.FC = () => {
                 <div className="w-full lg:w-1/2 pr-12 mobile-full-width">
                   <h2 className="text-5xl font-bold text-gray-900 mb-6">
                     <span className="bubble-text gradient-text">Conversion</span>{' '}
-                    <span className="bubble-text">Engine</span>
+                    <span className="bubble-text text-white">Engine</span>
                   </h2>
                   
-                  <p className="text-xl text-gray-600 mb-8 bubble-text">
+                  <p className="text-xl text-white mb-8 bubble-text">
                     Every interaction drives outcomes.
                   </p>
                   
-                  <ul className="space-y-4 text-lg text-gray-700">
+                  <ul className="space-y-4 text-lg text-white">
                     <li className="flex items-center bubble-text">
                       <div className="w-6 h-6 bg-green-500 rounded-full mr-4 flex items-center justify-center">
                         <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -784,17 +599,15 @@ const ByteBotLanding: React.FC = () => {
               <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8">
                 <div className="w-full lg:w-1/2 pr-12 mobile-full-width">
                   <h2 className="text-5xl font-bold text-gray-900 mb-6">
-                    <span className="bubble-text">Continuous</span>{' '}
-                    <span className="bubble-text">Learning</span>{' '}
-                    <span className="bubble-text">&</span>{' '}
+                    <span className="bubble-text text-white">Continuous Learning & </span>{' '}
                     <span className="bubble-text gradient-text">Compliance</span>
                   </h2>
                   
-                  <p className="text-xl text-gray-600 mb-8 bubble-text">
+                  <p className="text-xl text-white mb-8 bubble-text">
                     Smarter over time—secure by design.
                   </p>
                   
-                  <ul className="space-y-4 text-lg text-gray-700">
+                  <ul className="space-y-4 text-lg text-white">
                     <li className="flex items-center bubble-text">
                       <div className="w-6 h-6 bg-pink-500 rounded-full mr-4 flex items-center justify-center">
                         <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -843,85 +656,19 @@ const ByteBotLanding: React.FC = () => {
         </div>
       </div>
 
-      {/* Call to Action Section */}
-      <section ref={ctaRef} id="cta" className="py-20">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-5xl font-bold text-gray-900 mb-4">
-            <span className="bubble-text">Ready</span>{' '}
-            <span className="bubble-text">to</span>{' '}
-            <span className="bubble-text">transform</span>{' '}
-            <span className="bubble-text">your</span>{' '}
-            <span className="bubble-text gradient-text">business</span>{' '}
-            <span className="bubble-text gradient-text">conversations?</span>
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-6xl mx-auto">
-            <div className="action-card rounded-2xl overflow-hidden flex flex-col h-full min-h-[400px]">
-              <div className="h-1/2 relative">
-                <img 
-                  src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=200&fit=crop&crop=center" 
-                  alt="Book a Demo" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="h-1/2 p-6 md:p-8 flex flex-col justify-between">
-                <div className="flex-grow text-center">
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">Book a Demo</h3>
-                  <p className="text-sm md:text-base text-gray-600 mb-6">See Byte Bot in action with a personalized demonstration</p>
-                </div>
-                <button
-                  className="cta-button w-full max-w-[200px] mx-auto h-12 text-sm md:text-lg font-semibold text-white rounded-full flex items-center justify-center"
-                  onClick={(e) => { handleRippleEffect(e); router.push('/contact'); }}
-                >
-                  Book a Demo
-                </button>
-              </div>
-            </div>
-
-            <div className="action-card rounded-2xl overflow-hidden flex flex-col h-full min-h-[400px]">
-              <div className="h-1/2 relative">
-                <img 
-                  src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=200&fit=crop&crop=center" 
-                  alt="Request Proposal" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="h-1/2 p-6 md:p-8 flex flex-col justify-between">
-                <div className="flex-grow text-center">
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">Request a Proposal</h3>
-                  <p className="text-sm md:text-base text-gray-600 mb-6">Get a tailored plan and pricing for your organisation</p>
-                </div>
-                <button
-                  className="cta-button w-full max-w-[200px] mx-auto h-12 text-sm md:text-lg font-semibold text-white rounded-full flex items-center justify-center"
-                  onClick={(e) => { handleRippleEffect(e); router.push('/contact'); }}
-                >
-                  Request Proposal
-                </button>
-              </div>
-            </div>
-
-            <div className="action-card rounded-2xl overflow-hidden flex flex-col h-full min-h-[400px]">
-              <div className="h-1/2 relative">
-                <img 
-                  src="https://images.unsplash.com/photo-1680868543815-b8666dba60f7?w=400&h=200&fit=crop&crop=center" 
-                  alt="Start Free Trial" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="h-1/2 p-6 md:p-8 flex flex-col justify-between">
-                <div className="flex-grow text-center">
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">Start Your Free Trial</h3>
-                  <p className="text-sm md:text-base text-gray-600 mb-6">Experience Byte Bot with full features for 14 days</p>
-                </div>
-                <button
-                  className="cta-button w-full max-w-[200px] mx-auto h-12 text-sm md:text-lg font-semibold text-white rounded-full flex items-center justify-center"
-                  onClick={(e) => { handleRippleEffect(e); router.push('/contact'); }}
-                >
-                  Start Free Trial
-                </button>
-              </div>
-            </div>
-          </div>
+      {/* Simple Call-to-Action Section */}
+      <section id="cta" className="relative h-[50vh] bg-white/40 flex items-center justify-center text-center" style={{ backgroundImage: 'url("/bots/cta_bot.png")', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        {/* overlay */}
+        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="relative z-10 max-w-2xl px-6">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Ready to transform your conversations?</h2>
+          <p className="text-lg md:text-xl text-gray-200 mb-8">Book a free Byte-Bot demo and see how AI can power your business.</p>
+          <Link
+            href="/contact"
+            className="inline-block bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-full shadow-lg transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-cyan-300"
+          >
+            Book a Demo
+          </Link>
         </div>
       </section>
 
