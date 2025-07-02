@@ -163,3 +163,27 @@ a[aria-label="Built with Spline"] {
 .brands-scroll:hover {
   animation-play-state: paused;
 }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-16px); }
+}
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float-hero {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+  50% { transform: translate(-50%, -50%) translateY(-24px); }
+}
+.animate-float-hero {
+  animation: float-hero 4s ease-in-out infinite;
+}
+
+@keyframes scale-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.07); }
+}
+.animate-scale-pulse {
+  animation: scale-pulse 3.5s ease-in-out infinite;
+}

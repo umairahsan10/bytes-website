@@ -84,10 +84,10 @@ const AppDevelopmentPage = () => {
   // Scrolling phone mockup data
   const [currentScreen, setCurrentScreen] = useState(0);
   const phoneContainerRef = useRef<HTMLDivElement>(null);
-  
+
   // Feature cards state
   const [selectedFeature, setSelectedFeature] = useState<number | null>(null);
-  
+
   const { scrollYProgress: phoneScrollProgress } = useScroll({
     target: phoneContainerRef,
     offset: ["start end", "end start"]
@@ -105,7 +105,7 @@ const AppDevelopmentPage = () => {
       features: ["User-friendly setup", "Progressive disclosure", "Interactive tutorials"]
     },
     {
-      id: "dashboard", 
+      id: "dashboard",
       title: "Powerful Dashboard",
       description: "Clean, data-driven dashboards that provide users with actionable insights at a glance.",
       image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=300&h=600&fit=crop&crop=center",
@@ -113,7 +113,7 @@ const AppDevelopmentPage = () => {
     },
     {
       id: "messaging",
-      title: "Smart Messaging", 
+      title: "Smart Messaging",
       description: "Built-in communication features that keep your users connected and engaged.",
       image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=300&h=600&fit=crop&crop=center",
       features: ["Real-time chat", "Push notifications", "Media sharing"]
@@ -122,7 +122,7 @@ const AppDevelopmentPage = () => {
       id: "profile",
       title: "User Profiles",
       description: "Personalized user experiences with comprehensive profile management and customization options.",
-      image: "https://images.unsplash.com/photo-1535303311164-664fc9ec6532?w=300&h=600&fit=crop&crop=center", 
+      image: "https://images.unsplash.com/photo-1535303311164-664fc9ec6532?w=300&h=600&fit=crop&crop=center",
       features: ["Profile customization", "Privacy controls", "Social integration"]
     }
   ];
@@ -143,7 +143,7 @@ const AppDevelopmentPage = () => {
       } else {
         newScreen = 3;        // End stays on 4th screen
       }
-      
+
       if (newScreen !== currentScreen) {
         setCurrentScreen(newScreen);
       }
@@ -158,16 +158,16 @@ const AppDevelopmentPage = () => {
   return (
     <>
       <Header className="app-header" />
-      
+
       {/* Simple Hero Section */}
-      <motion.section 
+      <motion.section
         ref={topHeroRef}
         style={{ y: topY, opacity: topOpacity }}
         className="relative flex flex-col md:flex-row items-center md:justify-between bg-[#2a3270] px-4 md:px-8 lg:px-16 py-20 md:py-0 md:h-screen"
       >
         {/* Left side - Text content */}
         <div className="relative z-10 text-left w-full md:w-3/10 lg:w-3/10 order-2 md:order-1 mt-8 md:mt-0">
-          <motion.h1 
+          <motion.h1
             ref={titleRef}
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight mb-6 md:mb-8"
             initial={{ opacity: 0, y: 100 }}
@@ -179,7 +179,7 @@ const AppDevelopmentPage = () => {
               MOBILE APPS
             </span>
           </motion.h1>
-          
+
           <AnimatedParagraph
             text="Transform your ideas into powerful mobile experiences with cutting-edge development expertise."
             className="text-base sm:text-lg md:text-xl lg:text-2xl text-white leading-relaxed max-w-2xl"
@@ -210,6 +210,10 @@ const AppDevelopmentPage = () => {
               alt="Team brainstorming on mobile-app UI"
               fill
               className="object-contain opacity-100 scale-150 -translate-x-20"
+              style={{
+                maskImage: 'linear-gradient(to left, transparent 0%, black 30%)',
+                WebkitMaskImage: 'linear-gradient(to left, transparent 0%, black 30%)'
+              }}
             />
           </motion.div>
 
@@ -227,7 +231,7 @@ const AppDevelopmentPage = () => {
             }}
             viewport={{ once: false }}
           />
-          
+
           <motion.div
             className="absolute bottom-32 left-16 w-12 h-12 bg-blue-500/20 rounded-full backdrop-blur-sm border border-blue-400/30"
             whileInView={{
@@ -264,10 +268,10 @@ const AppDevelopmentPage = () => {
       <div ref={phoneContainerRef} className="relative min-h-[400vh] bg-white py-16 md:py-20 lg:py-24">
         <div className="sticky top-0 h-screen flex items-start md:items-center justify-center overflow-hidden pt-16 md:pt-0">
           <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 items-start md:items-center">
-            
+
             {/* Left side - Phone mockup */}
             <div className="col-span-1 row-start-1 flex items-center justify-center">
-              <motion.div 
+              <motion.div
                 className="relative"
                 style={{
                   y: useTransform(
@@ -315,7 +319,7 @@ const AppDevelopmentPage = () => {
                             className="object-cover"
                             sizes="(max-width: 640px) 156px, (max-width: 768px) 188px, 204px"
                           />
-                          
+
                           {/* Screen overlay */}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent">
                             <div className="absolute bottom-3 left-3 right-3">
@@ -327,9 +331,8 @@ const AppDevelopmentPage = () => {
                                   {[1, 2, 3, 4].map((i) => (
                                     <div
                                       key={i}
-                                      className={`h-1 rounded-full ${
-                                        i <= index + 1 ? 'bg-purple-500' : 'bg-gray-300'
-                                      }`}
+                                      className={`h-1 rounded-full ${i <= index + 1 ? 'bg-purple-500' : 'bg-gray-300'
+                                        }`}
                                       style={{ width: `${12 + Math.random() * 18}px` }}
                                     />
                                   ))}
@@ -355,7 +358,7 @@ const AppDevelopmentPage = () => {
                     }}
                     viewport={{ once: false }}
                   />
-                  
+
                   <motion.div
                     className="absolute -left-3 bottom-20 w-8 h-8 bg-purple-500/20 rounded-full backdrop-blur-sm border border-purple-400/30"
                     whileInView={{
@@ -390,7 +393,7 @@ const AppDevelopmentPage = () => {
                       transformOrigin: 'top'
                     }}
                   />
-                  
+
                   {/* Circles positioned on the line - step-by-step */}
                   <motion.div
                     className="absolute inset-0"
@@ -408,27 +411,26 @@ const AppDevelopmentPage = () => {
                         className="absolute top-0 left-1/2 transform -translate-x-1/2 w-12 h-12"
                         style={{ top: `${index * 120}px` }}
                         initial={{ scale: 0, opacity: 0 }}
-                        animate={{ 
+                        animate={{
                           scale: index === currentScreen ? 1 : 0,
                           opacity: 1,
                         }}
-                        transition={{ 
-                          duration: 0.5, 
+                        transition={{
+                          duration: 0.5,
                           delay: index * 0.1,
                           ease: "easeOut"
                         }}
                       >
                         {/* Circle */}
-                        <div className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                          index === currentScreen
+                        <div className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${index === currentScreen
                             ? 'border-purple-600 bg-purple-600 text-white shadow-lg scale-125'
                             : index < currentScreen
                               ? 'border-purple-600 bg-purple-600 text-white'
                               : 'border-gray-300 bg-white text-gray-400'
-                        }`}>
+                          }`}>
                           <span className="text-lg font-semibold">{String(index + 1).padStart(2, '0')}</span>
                         </div>
-                        
+
                         {/* Active circle glow effect */}
                         {index === currentScreen && (
                           <motion.div
@@ -482,7 +484,7 @@ const AppDevelopmentPage = () => {
                       <p className="text-base lg:text-lg text-gray-600 mb-8 leading-relaxed">
                         {screen.description}
                       </p>
-                      
+
                       {/* Features list */}
                       <div className="space-y-4">
                         {screen.features.map((feature, featureIndex) => (
@@ -490,12 +492,12 @@ const AppDevelopmentPage = () => {
                             key={feature}
                             className="flex items-center space-x-3"
                             initial={{ opacity: 0, x: -20 }}
-                            animate={{ 
+                            animate={{
                               opacity: 1,
-                              x: index === currentScreen ? 0 : -20 
+                              x: index === currentScreen ? 0 : -20
                             }}
-                            transition={{ 
-                              duration: 0.5, 
+                            transition={{
+                              duration: 0.5,
                               delay: featureIndex * 0.1,
                               ease: "easeOut"
                             }}
@@ -553,7 +555,7 @@ const AppDevelopmentPage = () => {
                 text="Mobile apps aren't a luxury anymore — they're the frontline of customer experience. From start-ups to enterprises, every brand is racing to become an icon on the home screen."
                 className="text-lg text-gray-700 leading-relaxed"
               />
-            <AnimatedParagraph
+              <AnimatedParagraph
                 text="At Bytes Platform, we don't just code apps — we engineer mobile products that engage, retain, and scale."
                 className="text-lg text-gray-700 leading-relaxed"
               />
@@ -566,12 +568,12 @@ const AppDevelopmentPage = () => {
                   "End-to-end ownership — frontend, backend & cloud",
                   "Post-launch support & version management"
                 ].map((item, idx) => (
-                  <motion.li 
-                    key={idx} 
-                    className="flex items-start" 
-                    initial={{ opacity: 0, x: -30 }} 
-                    whileInView={{ opacity: 1, x: 0 }} 
-              viewport={{ once: false, amount: 0.3 }}
+                  <motion.li
+                    key={idx}
+                    className="flex items-start"
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: false, amount: 0.3 }}
                     transition={{ duration: 0.6, delay: idx * 0.1 }}
                   >
                     <div className="w-2 h-2 mt-2 mr-4 rounded-full bg-purple-600"></div>
@@ -591,27 +593,30 @@ const AppDevelopmentPage = () => {
             </motion.div>
 
             {/* Illustrative Image */}
-            <motion.div
-              className="order-1 lg:order-2 relative aspect-[3/2] w-full rounded-2xl overflow-hidden shadow-2xl"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              animate={{ y: [-10, 10, -10] }}
-              viewport={{ once: false, amount: 0.3 }}
+            <motion.div 
+              className="order-1 lg:order-2 relative aspect-[4/5] w-full max-w-lg mx-auto"
+              animate={{ 
+                y: [-10, 10, -10],
+                rotateY: [-2, 2, -2]
+              }}
               transition={{
                 y: {
-                  duration: 8,
+                  duration: 6,
                   repeat: Infinity,
                   ease: "easeInOut"
                 },
-                opacity: { duration: 0.8 },
-                scale: { duration: 0.8 }
+                rotateY: {
+                  duration: 8,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }
               }}
             >
               <Image
-                src="/assets/app-img-1.png"
+                src="/assets/newimages/mobileapp.png"
                 alt="Mobile app hero mockup"
                 fill
-                className="object-cover"
+                className="object-contain"
                 priority
               />
             </motion.div>
@@ -619,165 +624,161 @@ const AppDevelopmentPage = () => {
         </section>
 
         {/* Features Grid Section */}
-          <section className="py-32 px-6 bg-[#E1E1E1] overflow-hidden">
+        <section className="py-32 px-6 bg-[#E1E1E1] overflow-hidden">
           <div className="max-w-7xl mx-auto">
-            <motion.h2 
+            <motion.h2
               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-20 animate-section"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: false }}
-            transition={{ duration: 0.8 }}
-          >
-            Development Services
-          </motion.h2>
+              transition={{ duration: 0.8 }}
+            >
+              Development Services
+            </motion.h2>
 
-          <div className="features-grid grid md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
-            {/* Background overlay for selected card */}
-            {selectedFeature !== null && (
-              <motion.div
-                className="absolute inset-0 bg-black/20 backdrop-blur-sm z-40"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              />
-            )}
-            
-            {[
-              {
-                title: "Native iOS Development",
-                description: "Swift and SwiftUI applications optimized for Apple's ecosystem with seamless integration and performance.",
-                detailedDescription: "Build powerful iOS applications using Swift and SwiftUI that take full advantage of Apple's ecosystem. Our native development approach ensures optimal performance, seamless integration with iOS features like Face ID, Touch ID, and Apple Pay, and adherence to Apple's Human Interface Guidelines. We leverage Core Data for local storage, integrate with CloudKit for synchronization, and implement advanced features like ARKit for augmented reality experiences.",
-                gradient: "from-blue-500 to-cyan-500",
-                features: ["Swift & SwiftUI", "Core Data Integration", "CloudKit Sync", "ARKit Support", "Apple Pay Integration", "TestFlight Beta Testing"]
-              },
-              {
-                title: "Native Android Development", 
-                description: "Kotlin and Java applications leveraging Android's full capabilities for optimal user experience.",
-                detailedDescription: "Create robust Android applications using Kotlin and Java that harness the full power of the Android platform. Our development process includes Material Design implementation, integration with Google services, efficient memory management, and optimization for various screen sizes and Android versions. We implement advanced features like background processing, push notifications, and seamless integration with Google Play Services.",
-                gradient: "from-green-500 to-emerald-500",
-                features: ["Kotlin & Java", "Material Design", "Google Play Services", "Room Database", "WorkManager", "Firebase Integration"]
-              },
-              {
-                title: "Cross-Platform Solutions",
-                description: "React Native and Flutter apps that run efficiently on both iOS and Android with shared codebase.",
-                detailedDescription: "Develop cost-effective cross-platform applications using React Native and Flutter that deliver native-like performance on both iOS and Android. Our approach maximizes code reuse while maintaining platform-specific optimizations. We implement custom native modules when needed, ensure consistent UI/UX across platforms, and provide comprehensive testing on both operating systems.",
-                gradient: "from-purple-500 to-pink-500",
-                features: ["React Native", "Flutter", "Shared Codebase", "Platform Optimization", "Custom Native Modules", "Cross-Platform Testing"]
-              },
-              {
-                title: "UI/UX Design",
-                description: "Intuitive and engaging mobile interfaces designed with user-centered approach and modern aesthetics.",
-                detailedDescription: "Design beautiful and functional mobile interfaces that prioritize user experience and accessibility. Our design process includes user research, wireframing, prototyping, and usability testing. We create design systems that ensure consistency across your app, implement smooth animations and transitions, and optimize for various screen sizes and accessibility requirements.",
-                gradient: "from-orange-500 to-red-500",
-                features: ["User Research", "Wireframing & Prototyping", "Design Systems", "Accessibility", "Animation Design", "Usability Testing"]
-              },
-              {
-                title: "Backend Integration",
-                description: "Robust API development and third-party service integration for seamless data synchronization.",
-                detailedDescription: "Build and integrate powerful backend systems that support your mobile application's functionality. Our backend development includes RESTful API design, GraphQL implementation, real-time data synchronization, secure authentication systems, and integration with third-party services. We ensure scalable architecture, efficient caching strategies, and comprehensive error handling.",
-                gradient: "from-indigo-500 to-blue-500",
-                features: ["RESTful APIs", "GraphQL", "Real-time Sync", "Authentication", "Third-party Integration", "Scalable Architecture"]
-              },
-              {
-                title: "App Store Deployment",
-                description: "Complete deployment process including store optimization, testing, and post-launch support.",
-                detailedDescription: "Navigate the complete app store deployment process with our expert guidance. We handle app store optimization (ASO), create compelling store listings with screenshots and descriptions, manage the submission process for both Apple App Store and Google Play Store, implement analytics tracking, and provide ongoing support for updates and maintenance.",
-                gradient: "from-teal-500 to-green-500",
-                features: ["App Store Optimization", "Store Listings", "Submission Management", "Analytics Integration", "Update Management", "Post-launch Support"]
-              }
-            ].map((feature, index) => (
-              <motion.div
-                key={index}
-                className={`feature-card group relative bg-white rounded-2xl border transition-all duration-300 shadow-sm cursor-pointer ${
-                  selectedFeature === index 
-                    ? 'border-purple-400 shadow-2xl z-50' 
-                    : selectedFeature !== null
-                      ? 'border-purple-100 opacity-30'
-                      : 'border-purple-100 hover:border-purple-300'
-                }`}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false }}
-                transition={{ 
-                  delay: index * 0.1, 
-                  duration: 0.6,
-                  ease: [0.25, 0.1, 0.25, 1] as const
-                }}
-                whileHover={{ 
-                  scale: selectedFeature === index ? 1.02 : (selectedFeature !== null ? 1 : 1.02),
-                  z: selectedFeature === index ? 50 : (selectedFeature !== null ? 1 : 10)
-                }}
-                style={{ 
-                  transformOrigin: 'center center'
-                }}
-                onClick={() => setSelectedFeature(selectedFeature === index ? null : index)}
-              >
-                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} rounded-2xl transition-opacity duration-300 ${
-                  selectedFeature === index ? 'opacity-20' : 'opacity-0 group-hover:opacity-10'
-                }`} />
-                
-                <div className="relative z-10 p-8">
-                  <div 
-                    className={`bg-gradient-to-br ${feature.gradient} rounded-xl mb-6 flex items-center justify-center ${
-                      selectedFeature === index ? 'w-20 h-20' : 'w-16 h-16'
-                    } transition-all duration-300`}
-                  >
-                    <div 
-                      className={`bg-white/20 rounded-lg ${
-                        selectedFeature === index ? 'w-10 h-10' : 'w-8 h-8'
-                      } transition-all duration-300`}
-                    />
+            <div className="features-grid grid md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
+              {/* Background overlay for selected card */}
+              {selectedFeature !== null && (
+                <motion.div
+                  className="absolute inset-0 bg-black/20 backdrop-blur-sm z-40"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+              )}
+
+              {[
+                {
+                  title: "Native iOS Development",
+                  description: "Swift and SwiftUI applications optimized for Apple's ecosystem with seamless integration and performance.",
+                  detailedDescription: "Build powerful iOS applications using Swift and SwiftUI that take full advantage of Apple's ecosystem. Our native development approach ensures optimal performance, seamless integration with iOS features like Face ID, Touch ID, and Apple Pay, and adherence to Apple's Human Interface Guidelines. We leverage Core Data for local storage, integrate with CloudKit for synchronization, and implement advanced features like ARKit for augmented reality experiences.",
+                  gradient: "from-blue-500 to-cyan-500",
+                  features: ["Swift & SwiftUI", "Core Data Integration", "CloudKit Sync", "ARKit Support", "Apple Pay Integration", "TestFlight Beta Testing"]
+                },
+                {
+                  title: "Native Android Development",
+                  description: "Kotlin and Java applications leveraging Android's full capabilities for optimal user experience.",
+                  detailedDescription: "Create robust Android applications using Kotlin and Java that harness the full power of the Android platform. Our development process includes Material Design implementation, integration with Google services, efficient memory management, and optimization for various screen sizes and Android versions. We implement advanced features like background processing, push notifications, and seamless integration with Google Play Services.",
+                  gradient: "from-green-500 to-emerald-500",
+                  features: ["Kotlin & Java", "Material Design", "Google Play Services", "Room Database", "WorkManager", "Firebase Integration"]
+                },
+                {
+                  title: "Cross-Platform Solutions",
+                  description: "React Native and Flutter apps that run efficiently on both iOS and Android with shared codebase.",
+                  detailedDescription: "Develop cost-effective cross-platform applications using React Native and Flutter that deliver native-like performance on both iOS and Android. Our approach maximizes code reuse while maintaining platform-specific optimizations. We implement custom native modules when needed, ensure consistent UI/UX across platforms, and provide comprehensive testing on both operating systems.",
+                  gradient: "from-purple-500 to-pink-500",
+                  features: ["React Native", "Flutter", "Shared Codebase", "Platform Optimization", "Custom Native Modules", "Cross-Platform Testing"]
+                },
+                {
+                  title: "UI/UX Design",
+                  description: "Intuitive and engaging mobile interfaces designed with user-centered approach and modern aesthetics.",
+                  detailedDescription: "Design beautiful and functional mobile interfaces that prioritize user experience and accessibility. Our design process includes user research, wireframing, prototyping, and usability testing. We create design systems that ensure consistency across your app, implement smooth animations and transitions, and optimize for various screen sizes and accessibility requirements.",
+                  gradient: "from-orange-500 to-red-500",
+                  features: ["User Research", "Wireframing & Prototyping", "Design Systems", "Accessibility", "Animation Design", "Usability Testing"]
+                },
+                {
+                  title: "Backend Integration",
+                  description: "Robust API development and third-party service integration for seamless data synchronization.",
+                  detailedDescription: "Build and integrate powerful backend systems that support your mobile application's functionality. Our backend development includes RESTful API design, GraphQL implementation, real-time data synchronization, secure authentication systems, and integration with third-party services. We ensure scalable architecture, efficient caching strategies, and comprehensive error handling.",
+                  gradient: "from-indigo-500 to-blue-500",
+                  features: ["RESTful APIs", "GraphQL", "Real-time Sync", "Authentication", "Third-party Integration", "Scalable Architecture"]
+                },
+                {
+                  title: "App Store Deployment",
+                  description: "Complete deployment process including store optimization, testing, and post-launch support.",
+                  detailedDescription: "Navigate the complete app store deployment process with our expert guidance. We handle app store optimization (ASO), create compelling store listings with screenshots and descriptions, manage the submission process for both Apple App Store and Google Play Store, implement analytics tracking, and provide ongoing support for updates and maintenance.",
+                  gradient: "from-teal-500 to-green-500",
+                  features: ["App Store Optimization", "Store Listings", "Submission Management", "Analytics Integration", "Update Management", "Post-launch Support"]
+                }
+              ].map((feature, index) => (
+                <motion.div
+                  key={index}
+                  className={`feature-card group relative bg-white rounded-2xl border transition-all duration-300 shadow-sm cursor-pointer ${selectedFeature === index
+                      ? 'border-purple-400 shadow-2xl z-50'
+                      : selectedFeature !== null
+                        ? 'border-purple-100 opacity-30'
+                        : 'border-purple-100 hover:border-purple-300'
+                    }`}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: false }}
+                  transition={{
+                    delay: index * 0.1,
+                    duration: 0.6,
+                    ease: [0.25, 0.1, 0.25, 1] as const
+                  }}
+                  whileHover={{
+                    scale: selectedFeature === index ? 1.02 : (selectedFeature !== null ? 1 : 1.02),
+                    z: selectedFeature === index ? 50 : (selectedFeature !== null ? 1 : 10)
+                  }}
+                  style={{
+                    transformOrigin: 'center center'
+                  }}
+                  onClick={() => setSelectedFeature(selectedFeature === index ? null : index)}
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} rounded-2xl transition-opacity duration-300 ${selectedFeature === index ? 'opacity-20' : 'opacity-0 group-hover:opacity-10'
+                    }`} />
+
+                  <div className="relative z-10 p-8">
+                    <div
+                      className={`bg-gradient-to-br ${feature.gradient} rounded-xl mb-6 flex items-center justify-center ${selectedFeature === index ? 'w-20 h-20' : 'w-16 h-16'
+                        } transition-all duration-300`}
+                    >
+                      <div
+                        className={`bg-white/20 rounded-lg ${selectedFeature === index ? 'w-10 h-10' : 'w-8 h-8'
+                          } transition-all duration-300`}
+                      />
+                    </div>
+
+                    <h3
+                      className={`font-semibold`}
+                    >
+                      {feature.title}
+                    </h3>
+                    {/* Feature description placeholder */}
+                    <p className="text-sm text-gray-500">{feature.description}</p>
                   </div>
-                  
-                  <h3 
-                    className={`font-semibold`}
-                  >
-                    {feature.title}
-                  </h3>
-                  {/* Feature description placeholder */}
-                  <p className="text-sm text-gray-500">{feature.description}</p>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
         {/* Technology Stack Section (restored) */}
         <section className="py-32 px-6 bg-[#D6C3DF] overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            className="text-center mb-20 animate-section"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
+          <div className="max-w-7xl mx-auto">
+            <motion.div
+              className="text-center mb-20 animate-section"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: false }}
-            transition={{ duration: 0.8 }}
-          >
-            <motion.h2 
-              className="text-5xl md:text-6xl font-bold mb-8"
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: false }}
-              transition={{ duration: 1, ease: "easeOut" }}
+              transition={{ duration: 0.8 }}
             >
-                Technology <motion.span 
+              <motion.h2
+                className="text-5xl md:text-6xl font-bold mb-8"
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: false }}
+                transition={{ duration: 1, ease: "easeOut" }}
+              >
+                Technology <motion.span
                   className="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent"
                   initial={{ opacity: 0, x: -50 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: false }}
                   transition={{ duration: 0.8, delay: 0.3 }}
                 >
-                STACK
-              </motion.span>
-            </motion.h2>
+                  STACK
+                </motion.span>
+              </motion.h2>
               <AnimatedParagraph
                 text="We leverage the latest technologies and frameworks to build robust, scalable, and high-performance mobile applications."
                 className="text-xl text-gray-600 max-w-3xl mx-auto"
               />
-          </motion.div>
+            </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
                 { name: "React Native", category: "Cross-Platform", icon: "/assets/react-native-icon.png", color: "from-blue-500 to-cyan-500" },
                 { name: "Flutter", category: "Cross-Platform", icon: "/assets/flutter-icon.png", color: "from-blue-600 to-blue-800" },
                 { name: "Swift/SwiftUI", category: "iOS Native", icon: "/assets/swift-icon.png", color: "from-orange-500 to-red-500" },
@@ -786,60 +787,60 @@ const AppDevelopmentPage = () => {
                 { name: "Firebase", category: "Backend", icon: "/assets/firebase-icon.png", color: "from-orange-400 to-yellow-500" },
                 { name: "MongoDB", category: "Database", icon: "/assets/mongodb-icon.png", color: "from-green-600 to-green-800" },
                 { name: "AWS/Azure", category: "Cloud", icon: "/assets/aws-icon.png", color: "from-orange-600 to-red-600" }
-            ].map((tech, index) => (
-              <motion.div
-                key={index}
-                className="relative bg-purple-50 rounded-xl p-6 border border-purple-100 hover:border-purple-300 transition-all duration-500 group overflow-hidden"
-                initial={{ opacity: 0, y: 50, scale: 0.8 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: false }}
-                transition={{ 
-                  delay: index * 0.1, 
-                  duration: 0.8,
-                  ease: [0.25, 0.1, 0.25, 1] as const
-                }}
-                whileHover={{ 
-                  scale: 1.08, 
-                  y: -10,
-                  rotateY: 5,
-                  z: 50
-                }}
-                style={{ transformStyle: 'preserve-3d' }}
-              >
-                {/* Animated background gradient */}
+              ].map((tech, index) => (
                 <motion.div
-                  className={`absolute inset-0 bg-gradient-to-br ${tech.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
-                  initial={{ scale: 0 }}
-                  whileHover={{ scale: 1 }}
-                  transition={{ duration: 0.5 }}
-                />
-                  {/* Icon container */}
-                <motion.div 
-                  className="w-16 h-16 rounded-xl mb-6 mx-auto overflow-hidden flex items-center justify-center bg-white shadow-lg relative"
-                  whileHover={{ 
-                    scale: 1.1,
-                    rotate: 360
+                  key={index}
+                  className="relative bg-purple-50 rounded-xl p-6 border border-purple-100 hover:border-purple-300 transition-all duration-500 group overflow-hidden"
+                  initial={{ opacity: 0, y: 50, scale: 0.8 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: false }}
+                  transition={{
+                    delay: index * 0.1,
+                    duration: 0.8,
+                    ease: [0.25, 0.1, 0.25, 1] as const
                   }}
-                    transition={{ duration: 0.6, ease: "easeInOut" }}
+                  whileHover={{
+                    scale: 1.08,
+                    y: -10,
+                    rotateY: 5,
+                    z: 50
+                  }}
+                  style={{ transformStyle: 'preserve-3d' }}
                 >
+                  {/* Animated background gradient */}
                   <motion.div
-                    className={`absolute inset-0 bg-gradient-to-br ${tech.color} opacity-0 group-hover:opacity-20 rounded-xl`}
+                    className={`absolute inset-0 bg-gradient-to-br ${tech.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
+                    initial={{ scale: 0 }}
+                    whileHover={{ scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                  />
+                  {/* Icon container */}
+                  <motion.div
+                    className="w-16 h-16 rounded-xl mb-6 mx-auto overflow-hidden flex items-center justify-center bg-white shadow-lg relative"
+                    whileHover={{
+                      scale: 1.1,
+                      rotate: 360
+                    }}
+                    transition={{ duration: 0.6, ease: "easeInOut" }}
+                  >
+                    <motion.div
+                      className={`absolute inset-0 bg-gradient-to-br ${tech.color} opacity-0 group-hover:opacity-20 rounded-xl`}
                       animate={{ scale: [1, 1.1, 1] }}
                       transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                     />
                     <motion.div className="relative z-10" whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
                       <Image src={tech.icon} alt={`${tech.name} icon`} width={48} height={48} className="object-contain" />
+                    </motion.div>
                   </motion.div>
-                </motion.div>
                   <motion.h3 className="text-lg font-semibold text-center mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-purple-800 group-hover:bg-clip-text transition-all duration-300" whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
-                  {tech.name}
-                </motion.h3>
+                    {tech.name}
+                  </motion.h3>
                   <p className="text-sm text-gray-400 text-center group-hover:text-gray-600 transition-colors duration-300">{tech.category}</p>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
         {/* Call-to-Action Section */}
         <section className="relative py-32 px-6 bg-[#E1E1E1] overflow-hidden">
@@ -854,38 +855,38 @@ const AppDevelopmentPage = () => {
           {/* Semi-transparent overlay to improve text readability */}
           <div className="absolute inset-0 bg-white/40" />
 
-        <motion.div
+          <motion.div
             className="relative z-10 max-w-4xl mx-auto text-center animate-section"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false }}
-          transition={{ duration: 0.8 }}
-        >
-          <h2 className="text-5xl md:text-6xl font-bold mb-8">
-            Ready to Build Your
-            <br />
-            <span className="bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
-              Next App?
-            </span>
-          </h2>
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="text-5xl md:text-6xl font-bold mb-8">
+              Ready to Build Your
+              <br />
+              <span className="bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
+                Next App?
+              </span>
+            </h2>
 
             <AnimatedParagraph
               text="Transform your ideas into powerful mobile experiences. Let's discuss your project and bring your vision to life."
               className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto"
             />
 
-          <motion.button
+            <motion.button
               className="bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 px-12 py-4 rounded-full text-xl font-semibold text-white transition-all duration-300 transform hover:scale-105"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => router.push('/contact')}
-          >
-            Start Your Project
-          </motion.button>
-        </motion.div>
-      </section>
-    </div>
-  </>
+            >
+              Start Your Project
+            </motion.button>
+          </motion.div>
+        </section>
+      </div>
+    </>
   );
 };
 
