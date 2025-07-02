@@ -46,6 +46,18 @@ const LoaderProvider: React.FC<LoaderProviderProps> = ({ children }) => {
     // Force remount so that animations restart from their initial state.
     setContentKey((k) => k + 1);
 
+    // 🔄 Tell GSAP/ScrollTrigger to recalculate positions now that the loader is gone.
+    //   We import GSAP dynamically so that this code only ever runs in the browser.
+    //   `refresh()` is crucial because the fixed loader altered the initial scroll
+    //   positions – without it, ScrollTrigger-based animations can appear "stuck"
+    //   or trigger at the wrong time in production (especially on Vercel).
+    import('gsap').then(({ gsap }) =>
+      import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
+        gsap.registerPlugin(ScrollTrigger);
+        ScrollTrigger.refresh();
+      })
+    );
+
     // Unmount the loader after a short delay (matches GSAP fade-out duration)
     // to avoid cutting off the animation.
     const timeout = setTimeout(() => setShowLoader(false), 800);
