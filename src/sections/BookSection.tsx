@@ -21,7 +21,10 @@ export const BookSection = () => {
   const [showRipple, setShowRipple] = useState(false);
   const [scrollFlipDone, setScrollFlipDone] = useState(false);
   const [scrollReady, setScrollReady] = useState(false);
+  const [scrollLockActive, setScrollLockActive] = useState(false);
+  const autoFlipTimerRef = useRef<NodeJS.Timeout | null>(null);
   const touchStartYRef = useRef<number | null>(null);
+  const unlockTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     initializeAudio();
@@ -36,60 +39,53 @@ export const BookSection = () => {
   // Bind wheel-to-page-flip only while the book area is fully visible — disabled for now
   // useBookScroll(bookAreaRef);
 
-  // Observe when the book section enters the viewport and trigger first-page flip
+  // Helper: is the book canvas fully visible?
+  const isBookFullyVisible = () => {
+    if (!bookAreaRef.current) return false;
+    const rect = bookAreaRef.current.getBoundingClientRect();
+    return rect.top >= 0 && rect.bottom <= window.innerHeight;
+  };
+
+  // Engage scroll lock only when the book area itself is ~fully visible (≥80%).
+  // This avoids sudden auto-scrolling and lets the user arrive naturally.
   useEffect(() => {
-    if (!sectionRef.current || hasTriggered) return;
+    if (!bookAreaRef.current || scrollFlipDone) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
-        if (entry.intersectionRatio >= 0.4) {
-          setHasTriggered(true);
-          // Flip immediately with no delay when 40% of section is visible
-          setPage(1);
-          if (!userInteracted) {
-            setShowRipple(true);
-          }
-          // Allow scroll flip only after initial animation (~900ms)
-          setTimeout(() => setScrollReady(true), 900);
+        if (entry.intersectionRatio >= 0.8 && !scrollLockActive) {
+          setScrollLockActive(true);
           observer.disconnect();
         }
       },
-      { threshold: 0.4 }
+      { threshold: Array.from({ length: 17 }, (_, i) => i * 0.05) } // 0,0.05,...0.8
     );
 
-    observer.observe(sectionRef.current);
+    observer.observe(bookAreaRef.current);
 
-    // Clean up
     return () => {
       observer.disconnect();
+      if (autoFlipTimerRef.current) clearTimeout(autoFlipTimerRef.current);
     };
-  }, [hasTriggered, setPage, userInteracted]);
+  }, [scrollLockActive, scrollFlipDone]);
 
-  // Fallback scroll listener in case IntersectionObserver misses
+  // Auto-flip once scroll lock is active (runs only once)
+  const hasAutoFlipStartedRef = useRef(false);
   useEffect(() => {
-    if (hasTriggered) return;
-    const onScroll = () => {
-      if (hasTriggered || !sectionRef.current) return;
-      const rect = sectionRef.current.getBoundingClientRect();
-      const visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
-      const visibleRatio = visibleHeight / rect.height;
-      if (visibleRatio >= 0.4) {
-        setHasTriggered(true);
-        setPage(1);
-        if (!userInteracted) {
-          setShowRipple(true);
-        }
-        // Allow scroll flip only after initial animation (~900ms)
-        setTimeout(() => setScrollReady(true), 900);
-        window.removeEventListener('scroll', onScroll);
-      }
+    if (!scrollLockActive || hasAutoFlipStartedRef.current) return;
+
+    hasAutoFlipStartedRef.current = true;
+    autoFlipTimerRef.current = setTimeout(() => {
+      setPage(1);
+      if (!userInteracted) setShowRipple(true);
+      setTimeout(() => setScrollReady(true), 900);
+    }, 1000);
+
+    return () => {
+      if (autoFlipTimerRef.current) clearTimeout(autoFlipTimerRef.current);
     };
-    window.addEventListener('scroll', onScroll);
-    // run once on mount
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [hasTriggered, setPage, userInteracted]);
+  }, [scrollLockActive, setPage, userInteracted]);
 
   // When user interacts, hide the ripple
   useEffect(() => {
@@ -98,21 +94,60 @@ export const BookSection = () => {
     }
   }, [userInteracted]);
 
+  // Global scroll lock: prevent all wheel / touchmove/ key-scroll while active
+  useEffect(() => {
+    if (!scrollLockActive) return;
+
+    const preventDefault = (e: Event) => e.preventDefault();
+    const preventForKeys = (e: KeyboardEvent) => {
+      const keys = [' ', 'PageDown', 'PageUp', 'ArrowDown', 'ArrowUp', 'Home', 'End'];
+      if (keys.includes(e.key)) {
+        e.preventDefault();
+      }
+    };
+
+    const originalBodyOverflow = document.body.style.overflow;
+    const originalHtmlOverflow = document.documentElement.style.overflow;
+
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
+    window.addEventListener('wheel', preventDefault, { passive: false });
+    window.addEventListener('touchmove', preventDefault, { passive: false });
+    window.addEventListener('keydown', preventForKeys, { passive: false });
+
+    return () => {
+      window.removeEventListener('wheel', preventDefault as any);
+      window.removeEventListener('touchmove', preventDefault as any);
+      window.removeEventListener('keydown', preventForKeys as any);
+
+      document.body.style.overflow = originalBodyOverflow;
+      document.documentElement.style.overflow = originalHtmlOverflow;
+    };
+  }, [scrollLockActive]);
+
   // Allow a single wheel scroll to flip from page 1 ➜ 2 after auto flip
   useEffect(() => {
     if (scrollFlipDone) return;
 
     const handleWheel = (e: WheelEvent) => {
-      if (page !== 1 || scrollFlipDone) return;
+      // If scroll is locked, always prevent default site scrolling
+      if (scrollLockActive) {
+        e.preventDefault();
+      }
 
-      // Stop outer page scroll while we're on page 1
+      // We only want to flip when we're on page 1 and ready
+      if (page !== 1 || scrollFlipDone || !scrollReady) return;
+
+      // consume and flip second page
       e.preventDefault();
-
-      if (!scrollReady) return; // wait until auto flip animation done
-
       setPage(2);
       setScrollFlipDone(true);
-      // ripple already showing; keep it until user interacts
+      // release scroll lock after flip animation (~900 ms)
+      if (unlockTimerRef.current) clearTimeout(unlockTimerRef.current);
+      unlockTimerRef.current = setTimeout(() => {
+        setScrollLockActive(false);
+      }, 900);
     };
 
     const handleTouchStart = (e: TouchEvent) => {
@@ -121,6 +156,11 @@ export const BookSection = () => {
     };
 
     const handleTouchMove = (e: TouchEvent) => {
+      // Prevent site scroll while locked
+      if (scrollLockActive) {
+        e.preventDefault();
+      }
+
       if (page !== 1 || scrollFlipDone) return;
       const startY = touchStartYRef.current;
       if (startY === null) return;
@@ -133,6 +173,10 @@ export const BookSection = () => {
       if (Math.abs(deltaY) > 40) {
         setPage(2);
         setScrollFlipDone(true);
+        if (unlockTimerRef.current) clearTimeout(unlockTimerRef.current);
+        unlockTimerRef.current = setTimeout(() => {
+          setScrollLockActive(false);
+        }, 900);
       }
     };
 
@@ -144,15 +188,44 @@ export const BookSection = () => {
       window.removeEventListener('wheel', handleWheel as any);
       window.removeEventListener('touchstart', handleTouchStart as any);
       window.removeEventListener('touchmove', handleTouchMove as any);
+      // Do NOT clear unlockTimerRef here; it must complete to release scroll lock
     };
-  }, [page, scrollFlipDone, scrollReady, setPage]);
+  }, [page, scrollFlipDone, scrollReady, scrollLockActive, setPage]);
+
+  // Pause Lenis smooth scrolling while the lock is active (important because Lenis bypasses overflow hidden)
+  useEffect(() => {
+    const lenis = typeof window !== 'undefined' ? (window as any).lenis : null;
+    if (!lenis) return;
+
+    if (scrollLockActive) {
+      lenis.stop();
+    } else {
+      lenis.start();
+    }
+  }, [scrollLockActive]);
+
+  // Ensure the book area is centered after lock engages (after lenis stop)
+  useEffect(() => {
+    if (!scrollLockActive) return;
+    // slight timeout to allow lenis.stop() to finish flush
+    const id = setTimeout(() => {
+      if (isTouch) {
+        // On mobile, reveal the heading and avoid showing next section blank space
+        sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        // Desktop: keep book nicely centred
+        bookAreaRef.current?.scrollIntoView({ behavior: 'auto', block: 'center' });
+      }
+    }, 50);
+    return () => clearTimeout(id);
+  }, [scrollLockActive, isTouch]);
 
   return (
     <div id="technologies" className="py-20 lg:py-28 bg-[#010a14]" ref={sectionRef}>
       <div className="container text-white">
         <SectionHeader
           eyebrow="Interactive Book"
-          title="Explore Our Story"
+          title="Explore Our Blogs"
           description="Click through the pages to discover our journey"
         />
         <div className="mt-20 h-[600px] relative" ref={bookAreaRef}>
