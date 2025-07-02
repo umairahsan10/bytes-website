@@ -28,6 +28,7 @@ const Header: React.FC<HeaderProps> = ({
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
   const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
+  const [isJourneyDropdownOpen, setIsJourneyDropdownOpen] = useState(false);
   const router = useRouter();
   
   // Refs for DOM elements
@@ -137,6 +138,9 @@ const Header: React.FC<HeaderProps> = ({
       if (!target.closest('.products-dropdown')) {
         setIsProductsDropdownOpen(false);
       }
+      if (!target.closest('.journey-dropdown')) {
+        setIsJourneyDropdownOpen(false);
+      }
     };
 
     // Scroll listener to hide/show header
@@ -240,6 +244,7 @@ const Header: React.FC<HeaderProps> = ({
     // Close all dropdowns if open
     setIsServicesDropdownOpen(false);
     setIsProductsDropdownOpen(false);
+    setIsJourneyDropdownOpen(false);
     
     // Animate images out first (reverse of opening)
     if (isMobile) {
@@ -381,6 +386,25 @@ const Header: React.FC<HeaderProps> = ({
     }, 1300);
   };
 
+  // Handle Journey dropdown toggle
+  const handleJourneyDropdownToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsJourneyDropdownOpen(!isJourneyDropdownOpen);
+  };
+
+  // Handle Journey dropdown item click
+  const handleJourneyDropdownClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const href = e.currentTarget.getAttribute('href');
+    if (!href) return;
+    setIsJourneyDropdownOpen(false);
+    closeMenu();
+    setTimeout(() => {
+      router.push(href);
+    }, 1300);
+  };
+
   // Helper function to set image refs for GSAP animations
   const setImageRef = (index: number) => (el: HTMLImageElement | null) => {
     if (imagesRef.current) {
@@ -416,12 +440,16 @@ const Header: React.FC<HeaderProps> = ({
           <img src={logoImage} alt="Bytes Platform Logo" className="h-12 w-auto" />
         </div>
 
-        {/* Center text link */}
-        <div className="flex-1 text-center">
-          <Link href="/contact" className="text-white font-semibold uppercase tracking-wide hover:underline font-['PPNeueMontreal'] animate-pulse cursor-pointer">
-            BOOK A FREE CONSULTATION
-          </Link>
-        </div>
+        {/* Spacer to push right-side items */}
+        <div className="flex-1" />
+
+        {/* Consultation link - right side next to menu toggle */}
+        <Link
+          href="/contact"
+          className="text-[#F6C324] text-[10px] md:text-xs font-semibold uppercase tracking-wide hover:underline font-['PPNeueMontreal'] animate-pulse cursor-pointer mr-4 pointer-events-auto"
+        >
+          BOOK A FREE CONSULTATION
+        </Link>
 
         {!logoOnly && (
           <p className="menu-toggle relative z-[400]" onClick={isOpen ? handleMenuClose : handleMenuOpen}>
@@ -528,15 +556,28 @@ const Header: React.FC<HeaderProps> = ({
             <div className="menu-link">
               <p><a href="/industries" onClick={handleMenuLinkClick}>Industries</a></p>
             </div>
-            <div className="menu-link">
-              <p><a href="/careers" onClick={handleMenuLinkClick}>Careers</a></p>
+            <div className="menu-link journey-dropdown">
+              <p>
+                <a href="#" onClick={handleJourneyDropdownToggle}>
+                  Journey
+                  <span className={`dropdown-arrow ${isJourneyDropdownOpen ? 'open' : ''}`}>▼</span>
+                </a>
+              </p>
+              <div className={`dropdown-menu ${isJourneyDropdownOpen ? 'open' : ''}`}>
+                <div className="dropdown-item">
+                  <a href="/careers" onClick={handleJourneyDropdownClick}>Careers</a>
+                </div>
+                <div className="dropdown-item">
+                  <a href="/blogs" onClick={handleJourneyDropdownClick}>Blogs</a>
+                </div>
+              </div>
             </div>
             <div className="menu-link">
               <p><a href="/contact" onClick={handleMenuLinkClick}>Contact Us</a></p>
             </div>
-            <div className="menu-link">
+            {/* <div className="menu-link">
               <p><a href="#" onClick={handleBrandFlowClick}>The Brand Building Flow</a></p>
-            </div>
+            </div> */}
           </div>
           {/* Legal links at bottom */}
           <div className="legal-links menu-link">
