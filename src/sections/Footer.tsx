@@ -11,6 +11,11 @@ const quickLinks = [
   { title: 'Contact Us', href: '/contact' },
 ];
 
+const productsLinks = [
+  { title: 'Byte Bot', href: '/products/bytebots' },
+  { title: 'Byte Suite', href: '/products/bytesuite' },
+];
+
 const servicesLinks = [
   { title: 'Web Development', href: '/services/web' },
   { title: 'SEO', href: '/services/seo' },
@@ -21,10 +26,10 @@ const servicesLinks = [
 
 export const Footer = () => {
   return (
-    <footer className="bg-[#010a14] text-gray-200 pt-16 pb-8 px-6 md:px-12 lg:px-24">
+    <footer className="bg-[#010a14] text-gray-200 pt-8 pb-4 px-6 md:px-12 lg:px-24">
       <div className="max-w-7xl items-start mx-auto grid grid-cols-1 sm:grid-cols-2 gap-y-12 sm:gap-12 lg:flex lg:gap-12">
         {/* Logo / About */}
-        <div className="lg:w-2/5 sm:col-span-2 mb-6 lg:mb-0 text-center sm:text-left">
+        <div className="lg:w-1/5 sm:col-span-2 mb-6 lg:mb-0 text-center sm:text-left">
           <Image src="/assets/bytes-logo.png" alt="Bytes Logo" width={140} height={40} className="mb-4 mx-auto sm:mx-0" />
           <p className="text-sm leading-relaxed max-w-xs">
             Bytes Platform delivers cutting-edge digital solutions that empower businesses to innovate and grow.
@@ -41,6 +46,21 @@ export const Footer = () => {
               </li>
             ))}
           </ul>
+        </div>
+
+        {/* Products */}
+        <div className="lg:w-1/5 mb-6 lg:mb-0 text-center sm:text-left">
+          <h4 className="text-xl font-semibold mb-4">Products</h4>
+          <ul className="space-y-3">
+            {productsLinks.map((item) => (
+              <li key={item.title}>
+                <Link href={item.href} className="hover:text-white transition">{item.title}</Link>
+              </li>
+            ))}
+          </ul>
+          <div className="pt-5">
+            <h4 className="text-xl font-semibold mb-4">Blogs</h4>
+          </div>
         </div>
 
         {/* Services */}
@@ -88,7 +108,7 @@ export const Footer = () => {
         </div>
       </div>
 
-      <hr className="border-white/20 my-8" />
+      <hr className="border-white/20 my-4" />
 
       <p className="text-center text-sm">Developed by the interns of Bytes Platform Inc.</p>
     </footer>
