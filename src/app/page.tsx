@@ -11,7 +11,6 @@ import { AboutSection } from "@/sections/About";
 import { BookSection } from "@/sections/BookSection";
 import { ContactSection } from "@/sections/Contact";
 import CardsSection from "@/sections/CardsSection";
-import { LoadingPage } from "@/sections/LoadingPage";
 import { LineAnimationSection } from "@/sections/LineAnimationSection";
 import { BrandsSection } from "@/sections/brands";
 
@@ -21,9 +20,6 @@ export default function Home() {
 
   return (
     <main className="text-black min-h-screen">
-      {isLoading && <LoadingPage onLoadComplete={() => setIsLoading(false)} />}
-      {!isLoading && (
-        <>
           <Header />
           {[
             <HeroSection key="hero" />,
@@ -44,9 +40,6 @@ export default function Home() {
               {Section}
             </div>
           ))}
-          {/* Footer is now included globally in the RootLayout */}
-        </>
-      )}
     </main>
   );
 }
