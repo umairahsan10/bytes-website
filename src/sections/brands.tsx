@@ -35,7 +35,7 @@ export const BrandsSection = () => {
         />
 
         {/* Horizontal scrolling logos */}
-        <div className="mt-12 lg:mt-20 flex overflow-x-clip [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] py-4 -my-4">
+        <div className="mt-6 lg:mt-10 flex overflow-x-clip [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] py-4 -my-4">
           <div className="flex gap-8 pr-8 flex-none brands-scroll">
             {[...new Array(2)].fill(0).map((_, idx) => (
               <Fragment key={idx}>
@@ -50,8 +50,8 @@ export const BrandsSection = () => {
                     <Image
                       src={brand.src}
                       alt="Client logo"
-                      width={120}
-                      height={60}
+                      width={240}
+                      height={120}
                       className="object-contain w-28 h-14"
                     />
                   </a>
@@ -61,7 +61,7 @@ export const BrandsSection = () => {
           </div>
         </div>
 
-        <p className="mt-4 text-sm text-center text-gray-500 italic">
+        <p className="mt-4 text-md text-center text-gray-500 italic">
           These logos represent brands we've worked with — our past clients — not
           our partners.
         </p>
