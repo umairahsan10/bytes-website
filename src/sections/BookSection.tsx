@@ -8,6 +8,7 @@ import { Suspense } from "react";
 import { OrbitControls, Float } from "@react-three/drei";
 import { useAtom } from "jotai";
 import { pageAtom, userInteractedAtom } from "@/components/BookSlider/state";
+import Link from "next/link";
 // import { useBookScroll } from "@/components/BookSlider/useBookScroll";
 
 export const BookSection = () => {
@@ -77,9 +78,9 @@ export const BookSection = () => {
 
     hasAutoFlipStartedRef.current = true;
     autoFlipTimerRef.current = setTimeout(() => {
-      setPage(1);
+        setPage(1);
       if (!userInteracted) setShowRipple(true);
-      setTimeout(() => setScrollReady(true), 900);
+        setTimeout(() => setScrollReady(true), 900);
     }, 1000);
 
     return () => {
@@ -226,9 +227,9 @@ export const BookSection = () => {
         <SectionHeader
           eyebrow="Interactive Book"
           title="Explore Our Blogs"
-          description="Click through the pages to discover our journey"
+          // description="Click through the pages to discover our journey"
         />
-        <div className="mt-20 h-[600px] relative" ref={bookAreaRef}>
+        <div className="-mt-30 h-[600px] relative" ref={bookAreaRef}>
           <Canvas
             camera={{
               position: [0, 0, 4],
@@ -295,6 +296,15 @@ export const BookSection = () => {
               />
             </div>
           )}
+        </div>
+        {/* View more blogs button */}
+        <div className="-mt-15 flex justify-center">
+          <Link
+            href="/blogs"
+            className="inline-block rounded-md bg-white px-6 py-3 text-sm font-semibold text-black transition hover:bg-gray-200"
+          >
+            View More Blogs
+          </Link>
         </div>
       </div>
     </div>
