@@ -1,11 +1,11 @@
 export const SectionHeader = ({
     title,
     eyebrow,
-    // description,
+    description,
 }: {
     title: string;
     eyebrow: string;
-    // description: string;
+    description?: string;
 }) => {
     return (
         // code from project.tsx projectSection function after conainer has done
@@ -18,10 +18,11 @@ export const SectionHeader = ({
         </div>
         <h2 className="text-3xl font-serif text-center md:text-5xl mt-4 mb-10">{title}
         </h2>
-        {/* <p className="text-center md:text-lg lg:text-xl text-white-500">
-            {description}
-
-        </p> */}
+        {description && (
+            <p className="text-center md:text-lg lg:text-xl text-white-500">
+                {description}
+            </p>
+        )}
         
         </>
     );

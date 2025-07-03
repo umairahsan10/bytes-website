@@ -227,7 +227,6 @@ export const BookSection = () => {
         <SectionHeader
           eyebrow="Interactive Book"
           title="Explore Our Blogs"
-          // description="Click through the pages to discover our journey"
         />
         <div className="-mt-30 h-[600px] relative" ref={bookAreaRef}>
           <Canvas
