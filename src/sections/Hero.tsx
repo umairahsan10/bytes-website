@@ -224,7 +224,8 @@ const HeroSection = () => {
         }
 
         .land-image.loaded {
-          transform: translateY(20%);
+          /* Start exactly where the scroll-driven animation begins */
+          transform: translateY(0%);
           opacity: 1;
         }
 
@@ -262,7 +263,7 @@ const HeroSection = () => {
         }
 
         .hero-subtitle {
-          font-size: 1.5rem;
+          font-size: 2rem;
           color: #d3d3d3;
           margin-bottom: 3rem;
           opacity: 0;
@@ -272,16 +273,34 @@ const HeroSection = () => {
           letter-spacing: 0.2em;
           font-weight: 600;
           text-shadow: 0 0 10px rgba(211, 211, 211, 0.3);
-          border: 1px solid rgba(211, 211, 211, 0.2);
-          padding: 0.5rem 1.5rem;
-          border-radius: 4px;
-          background: rgba(211, 211, 211, 0.05);
-          backdrop-filter: blur(10px);
+          /* Remove bordered background so subtitle sits cleanly on hero */
+          border: none;
+          background: transparent;
+          backdrop-filter: none;
+          padding: 0.5rem 0;
+        }
+
+        .hero-subtitle.loaded {
+          opacity: 1;
+        }
+
+        /* Hide the forced line-break by default */
+        .mobile-break {
+          display: none;
         }
 
         @media (max-width: 768px) {
           .hero-title {
-            font-size: 3rem;
+            font-size: 3.5rem; /* larger heading on tablets/mobile */
+          }
+          
+          .future-word {
+            display: block; /* push to next line on smaller screens */
+          }
+          
+          .hero-subtitle {
+            font-size: 1rem; /* reduce subtitle size */
+            text-align: center;
           }
           
           .hero-content {
@@ -292,11 +311,20 @@ const HeroSection = () => {
             width: 500px;
             height: 500px;
           }
+
+          .mobile-break {
+            display: block; /* reveal the break on mobile */
+          }
         }
 
         @media (max-width: 480px) {
           .hero-title {
-            font-size: 2rem;
+            font-size: 3rem; /* still prominent on very small devices */
+          }
+          
+          .hero-subtitle {
+            font-size: 0.9rem;
+            text-align: center;
           }
           
           .hero-content {
@@ -306,6 +334,10 @@ const HeroSection = () => {
           .moon-container {
             width: 350px;
             height: 350px;
+          }
+
+          .mobile-break {
+            display: block;
           }
         }
       `}</style>
@@ -331,10 +363,10 @@ const HeroSection = () => {
         {/* Hero Content */}
         <div className="hero-content">
           <h1 ref={textRef} className={`hero-title ${isLoaded ? 'loaded' : ''}`}>
-            Welcome to the Future
+            Welcome to the <span className="future-word">Future</span>
           </h1>
           <p className="hero-subtitle">
-            Where innovation meets imagination
+            Where innovation <span className="mobile-break"></span>meets imagination
           </p>
         </div>
       </div>
