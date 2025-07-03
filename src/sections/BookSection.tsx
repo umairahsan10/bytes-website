@@ -297,10 +297,10 @@ export const BookSection = () => {
           )}
         </div>
         {/* View more blogs button */}
-        <div className="-mt-15 flex justify-center">
+        <div className="-mt-15 flex justify-center relative z-20 pointer-events-auto">
           <Link
-            href="/blogs"
-            className="inline-block rounded-md bg-white px-6 py-3 text-sm font-semibold text-black transition hover:bg-gray-200"
+            href="/blogs/page/1"
+            className="inline-block rounded-md bg-white px-6 py-3 text-sm font-semibold text-black transition hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#010a14]"
           >
             View More Blogs
           </Link>
