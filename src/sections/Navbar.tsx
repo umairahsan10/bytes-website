@@ -559,7 +559,7 @@ const Header: React.FC<HeaderProps> = ({
             <div className="menu-link journey-dropdown">
               <p>
                 <a href="#" onClick={handleJourneyDropdownToggle}>
-                  Journey
+                  Insights
                   <span className={`dropdown-arrow ${isJourneyDropdownOpen ? 'open' : ''}`}>▼</span>
                 </a>
               </p>
