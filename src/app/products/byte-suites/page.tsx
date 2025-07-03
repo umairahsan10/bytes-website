@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Header } from "@/sections/Navbar";
 import * as THREE from 'three';
 import { useRouter } from 'next/navigation';
@@ -16,6 +18,123 @@ const ByteSuitePage: React.FC = () => {
   const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const router = useRouter();
+
+  /* -------------------- Laptop Scroll Animation Setup -------------------- */
+  const laptopContainerRef = useRef<HTMLDivElement>(null); // whole scrolling section
+  const gridPinRef = useRef<HTMLDivElement>(null);         // pin the whole grid (all columns)
+  const [currentLaptopScreen, setCurrentLaptopScreen] = useState(0);
+
+  const springConfig = { stiffness: 300, damping: 30, restDelta: 0.001 } as const;
+  const autoProgress = useMotionValue(0); // will be driven by ScrollTrigger
+  const laptopScreenProgress = useSpring(autoProgress, springConfig);
+
+  const slideHeight = 320; // height of each laptop screen slide (px)
+
+  // Keep the laptop vertically fixed while background scrolls
+  const laptopMockupY = useTransform(laptopScreenProgress, [0, 1], [0, 0]);
+
+  const laptopScreens = [
+    {
+      id: 'lead',
+      title: 'Smart Lead Management',
+      description: 'Intelligent capture, qualification and nurture.',
+      image: '/assets/lead-management.jpg',
+      features: [
+        'Intelligent Lead Capture',
+        'AI-Powered Qualification',
+        'Custom Sales Pipelines',
+      ],
+    },
+    {
+      id: 'bytebot',
+      title: 'ByteBot AI Assistant',
+      description: '24/7 support and sales intelligence.',
+      image: '/assets/bytebot-ai.jpg',
+      features: [
+        'Always-on Customer Support',
+        'Real-time Sales Insights',
+        'Smart Action Recommendations',
+      ],
+    },
+    {
+      id: 'communication',
+      title: 'Communication Hub',
+      description: 'Unified inbox with calendar sync.',
+      image: '/assets/communication-hub.jpg',
+      features: [
+        'Unified Inbox',
+        'Calendar & Reminders',
+        'Team Collaboration',
+      ],
+    },
+    {
+      id: 'analytics',
+      title: 'Sales Automation & Analytics',
+      description: 'Automation & AI-driven insights.',
+      image: '/assets/Analytics.jpg',
+      features: [
+        'Deal Flow Automation',
+        'AI Sales Forecasting',
+        'Custom Dashboards',
+      ],
+    },
+    {
+      id: 'tools',
+      title: 'Built-in Business Tools',
+      description: 'Billing, scheduling, inventory & more.',
+      image: '/assets/Business.jpg',
+      features: [
+        'Branded Invoicing',
+        'Appointment Scheduler',
+        'Inventory Tracking',
+      ],
+    },
+  ] as const;
+
+  // Now that laptopScreens is defined we can compute snap translateY
+  const laptopTranslateY = useTransform(laptopScreenProgress, (p) => {
+    const index = Math.min(laptopScreens.length - 1, Math.floor(p * laptopScreens.length));
+    return -slideHeight * index;
+  });
+
+  useEffect(() => {
+    const unsubscribe = laptopScreenProgress.onChange((progress) => {
+      let newScreen = 0;
+      if (progress < 0.2) newScreen = 0;
+      else if (progress < 0.4) newScreen = 1;
+      else if (progress < 0.6) newScreen = 2;
+      else if (progress < 0.8) newScreen = 3;
+      else newScreen = 4;
+
+      if (newScreen !== currentLaptopScreen) {
+        setCurrentLaptopScreen(newScreen);
+      }
+    });
+    return () => unsubscribe();
+  }, [laptopScreenProgress, currentLaptopScreen]);
+
+  /* -------------------- GSAP ScrollTrigger Pin & Progress -------------------- */
+  useEffect(() => {
+    if (!laptopContainerRef.current || !gridPinRef.current) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const st = ScrollTrigger.create({
+      trigger: laptopContainerRef.current,
+      start: 'top top',
+      end: 'bottom top',
+      scrub: true,
+      pin: gridPinRef.current,
+      pinSpacing: true,
+      onUpdate: (self) => {
+        autoProgress.set(self.progress);
+      },
+    });
+
+    return () => {
+      st.kill();
+    };
+  }, []);
 
   // Three.js setup
   useEffect(() => {
@@ -811,130 +930,117 @@ const ByteSuitePage: React.FC = () => {
               />
             </motion.div>
 
-            <div className="space-y-20">
-              {[
-                {
-                  title: "Smart Lead Management",
-                  features: [
-                    "Intelligent Lead Capture - Webforms with automatic lead scoring and source tracking",
-                    "AI-Powered Lead Qualification - ByteBot pre-qualifies leads based on your criteria",
-                    "Custom Pipelines - Build pipelines that match your exact sales process",
-                    "Automated Nurturing - Email sequences, task reminders, and follow-up automation"
-                  ],
-                  image: "/assets/lead-management.jpg"
-                },
-                {
-                  title: "ByteBot AI Assistant",
-                  features: [
-                    "24/7 Customer Support - Answers FAQs, schedules appointments, captures leads",
-                    "Sales Intelligence - Provides real-time insights on deals and customer behavior",
-                    "Smart Recommendations - Suggests next best actions for each prospect",
-                    "CRM Integration - Reads your entire customer database to provide contextual responses"
-                  ],
-                  image: "/assets/bytebot-ai.jpg"
-                },
-                {
-                  title: "Communication Hub",
-                  features: [
-                    "Unified Inbox - Email, WhatsApp, SMS, and chat in one interface",
-                    "Calendar Sync - Automatic appointment scheduling and reminders",
-                    "Team Collaboration - Internal notes, task assignments, and team tagging",
-                    "Communication History - Complete interaction timeline for every contact"
-                  ],
-                  image: "/assets/communication-hub.jpg"
-                },
-                {
-                  title: "Sales Automation & Analytics",
-                  features: [
-                    "Deal Flow Automation - Automatic stage progression and notifications",
-                    "Sales Forecasting - AI-driven revenue predictions and trend analysis",
-                    "Custom Dashboards - Real-time KPIs and performance metrics",
-                    "Advanced Reporting - Sales performance, conversion rates, and ROI tracking"
-                  ],
-                  image: "/assets/sales-analytics.jpg"
-                },
-                {
-                  title: "Built-in Business Tools",
-                  features: [
-                    "Branded Invoicing - Professional invoices with automated billing",
-                    "Appointment Scheduler - Online booking with calendar sync and reminders",
-                    "Inventory Integration - Track products, SKUs, and stock levels",
-                    "Financial Reporting - Revenue tracking with tax/GST support"
-                  ],
-                  image: "/assets/business-tools.jpg"
-                }
-              ].map((section, index) => (
-                <motion.div
-                  key={index}
-                  variants={itemVariants}
-                  className="grid lg:grid-cols-2 gap-16 items-center"
-                >
-                  <motion.div 
-                    variants={index % 2 === 0 ? slideInFromLeft : slideInFromRight}
-                    className={`space-y-4 ${index % 2 === 1 ? 'lg:order-2' : ''}`}
-                  >
-                    <motion.h3 
-                      className="text-3xl lg:text-4xl font-bold"
-                      style={{ color: PRIMARY_COLOR }}
-                      variants={bounceIn}
-                    >
-                      {section.title}
-                    </motion.h3>
-                    <ul className="space-y-3">
-                      {section.features.map((feature, featureIndex) => (
-                        <motion.li 
-                          key={featureIndex} 
-                          className="flex items-start space-x-3"
-                          initial={{ opacity: 0, x: -20 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          transition={{ delay: featureIndex * 0.1 }}
-                        >
-                          <motion.span 
-                            className="text-xl"
-                            style={{ color: PRIMARY_COLOR }}
-                            variants={bounceIn}
-                          >
-                            ✓
-                          </motion.span>
-                          <span className="leading-relaxed text-base" style={{ color: PRIMARY_COLOR }}>{feature}</span>
-                        </motion.li>
+            {/* ---------------- Laptop Swiping Animation ---------------- */}
+            <div ref={laptopContainerRef} className="relative min-h-[400vh]">
+              <div ref={gridPinRef} className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 grid md:grid-cols-3 gap-12 items-center">
+                {/* Laptop Mock-up */}
+                <div className="flex items-center justify-center h-screen self-center">
+                  <div className="relative w-[500px] h-[320px] bg-gray-900 rounded-xl overflow-hidden shadow-2xl border-[12px] border-gray-800">
+                    <motion.div className="relative w-full h-full">
+                      {laptopScreens.map((screen, idx) => (
+                        <motion.img
+                          key={screen.id}
+                          src={screen.image}
+                          alt={screen.title}
+                          className="absolute top-0 left-0 w-full h-full object-cover"
+                          initial={false}
+                          animate={idx === currentLaptopScreen ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+                          transition={{ duration: 0.6, ease: 'easeOut' }}
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = `https://via.placeholder.com/800x600/010a14/ffffff?text=${screen.title}`;
+                          }}
+                        />
                       ))}
-                    </ul>
-                  </motion.div>
-                  <motion.div 
-                    variants={index % 2 === 0 ? slideInFromRight : slideInFromLeft}
-                    className={`${index % 2 === 1 ? 'lg:order-1' : ''}`}
-                  >
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-                      whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-                      transition={{ duration: 0.5 }}
-                      whileHover={{ scale: 1.05, rotate: 2 }}
-                      className="relative overflow-hidden rounded-lg"
-                      style={{ 
-                        backgroundColor: SECONDARY_COLOR,
-                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 10px 20px -5px rgba(0, 0, 0, 0.3)'
-                      }}
-                    >
-                      <img
-                        src={section.image}
-                        alt={section.title}
-                        className="w-full h-80 object-cover"
-                        onError={(e) => {
-                          e.currentTarget.src = `https://via.placeholder.com/700x500/010a14/ffffff?text=${section.title}`;
+                    </motion.div>
+                  </div>
+                </div>
+
+                {/* Center Timeline */}
+                <div className="hidden md:flex items-center justify-center self-center">
+                  <div className="relative flex flex-col items-center">
+                    <div className="relative w-px h-64 md:h-[60vh] bg-gray-300">
+                      {/* Progress line */}
+                      <motion.div
+                        className="absolute top-0 left-0 w-full bg-gradient-to-b from-purple-600 to-purple-800 origin-top"
+                        style={{
+                          scaleY: useTransform(laptopScreenProgress,[0.2,0.8],[0,1]),
+                          transformOrigin: 'top'
                         }}
                       />
-                      <motion.div 
-                        className="absolute inset-0 opacity-0"
-                        style={{ backgroundColor: PRIMARY_COLOR }}
-                        whileHover={{ opacity: 0.2 }}
-                        transition={{ duration: 0.3 }}
-                      />
-                    </motion.div>
-                  </motion.div>
-                </motion.div>
-              ))}
+                      {/* Circles */}
+                      <motion.div
+                        className="absolute inset-0"
+                        style={{ y: 0 }}
+                      >
+                        {laptopScreens.map((screen, index) => (
+                          <motion.div
+                            key={screen.id}
+                            className="absolute top-0 left-1/2 transform -translate-x-1/2 w-12 h-12"
+                            style={{ top: `${index*60}px` }}
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ duration: 0.4, delay: index*0.1 }}
+                          >
+                            <div className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${index===currentLaptopScreen?'border-[#010a14] bg-[#010a14] text-white shadow-lg scale-125': index<currentLaptopScreen? 'border-[#010a14] bg-[#010a14] text-white':'border-[#010a14] bg-white text-[#010a14]'}`}>
+                              <span className="text-lg font-semibold">{String(index+1).padStart(2,'0')}</span>
+                            </div>
+                            {index===currentLaptopScreen && (
+                              <motion.div
+                                className="absolute inset-0 w-12 h-12 rounded-full bg-purple-600/30"
+                                animate={{ scale:[1,1.5,1], opacity:[0.5,0,0.5] }}
+                                transition={{ duration:2, ease:'easeInOut', repeat:Infinity }}
+                              />
+                            )}
+                          </motion.div>
+                        ))}
+                      </motion.div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Dynamic Text */}
+                <div className="space-y-6 self-center">
+                  <motion.h3
+                    key={laptopScreens[currentLaptopScreen].id}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="text-3xl lg:text-4xl font-bold"
+                    style={{ color: PRIMARY_COLOR }}
+                  >
+                    {laptopScreens[currentLaptopScreen].title}
+                  </motion.h3>
+                  <motion.p
+                    key={`${laptopScreens[currentLaptopScreen].id}-desc`}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 0.05 }}
+                    className="text-base lg:text-lg text-gray-600 leading-relaxed"
+                  >
+                    {laptopScreens[currentLaptopScreen].description}
+                  </motion.p>
+
+                  {/* Features list */}
+                  <div className="space-y-3">
+                    {laptopScreens[currentLaptopScreen].features.map((feat,i)=>(
+                      <motion.div
+                        key={feat}
+                        className="flex items-start space-x-3"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.4, delay: 0.1 + i*0.05 }}
+                      >
+                        <div className="w-2 h-2 mt-2 rounded-full bg-[#010a14]" />
+                        <span className="text-gray-700">{feat}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
             </div>
+
+            
           </div>
         </motion.section>
 
@@ -1704,5 +1810,4 @@ const ByteSuitePage: React.FC = () => {
     </div>
   );
 };
-
 export default ByteSuitePage;
