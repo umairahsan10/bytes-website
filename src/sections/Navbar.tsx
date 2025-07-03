@@ -449,7 +449,7 @@ const Header: React.FC<HeaderProps> = ({
           className={`text-[#F6C324] text-[10px] md:text-xs font-semibold uppercase tracking-wide hover:underline font-['PPNeueMontreal'] cursor-pointer mr-4 pointer-events-auto text-center leading-tight transition-opacity duration-200 ${isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
         >
           <span className="block">BOOK A</span>
-          <span className="block animate-pulse text-[12px] md:text-sm" style={{ animationDuration: '0.8s' }}>FREE CONSULTATION</span>
+          <span className="block animate-pulse text-[12px] md:text-sm" style={{ animationDuration: '1.4s' }}>FREE CONSULTATION</span>
         </Link>
 
         {!logoOnly && (
