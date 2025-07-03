@@ -25,7 +25,13 @@ const SimplifiedMERNOrbital = () => {
     </svg>
   );
 
-  const Planet = ({ children, distance, duration, delay = 0, glow = '' }) => (
+  const Planet = ({ children, distance, duration, delay = 0, glow = '' }: { 
+    children: React.ReactNode; 
+    distance: number; 
+    duration: number; 
+    delay?: number; 
+    glow?: string; 
+  }) => (
     <div 
       className="absolute inset-0 animate-spin"
       style={{ 
