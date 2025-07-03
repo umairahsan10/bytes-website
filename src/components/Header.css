@@ -360,8 +360,10 @@
     } */
   }
 
-  /* Services Dropdown Styles */
-  .services-dropdown {
+  /* Dropdown Styles for links with sub-menus */
+  .services-dropdown,
+  .products-dropdown,
+  .journey-dropdown {
     position: relative;
     z-index: 10;
   }
@@ -373,7 +375,8 @@
 
   /* Active state for Services when dropdown is open */
   .services-dropdown.open .menu-link p,
-  .products-dropdown.open .menu-link p {
+  .products-dropdown.open .menu-link p,
+  .journey-dropdown.open .menu-link p {
     font-size: 28px;
     font-weight: 800;
     transform: scale(1.1);
@@ -626,4 +629,16 @@
     .legal-links {
       margin-top: auto;
     }
+  }
+
+  /* Position Journey dropdown menu so it appears right next to the word */
+  .journey-dropdown {
+    width: max-content;
+    display: inline-block;
+  }
+
+  .journey-dropdown .dropdown-menu {
+    left: 100%;
+    margin-left: 24px; /* small gap */
+    right: auto;
   }
