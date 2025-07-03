@@ -6,22 +6,27 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Header } from '@/sections/Navbar';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Script from 'next/script';
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+// Extend Window interface for VANTA
+declare global {
+  interface Window {
+    VANTA: any;
+  }
+}
+
 const ByteBotLanding: React.FC = () => {
-  // Hero video replacing former Spline 3-D model
-  const HERO_VIDEO_SRC = "/assets/bytes-bot/bytes-vid.webm";
   const router = useRouter();
   const heroRef = useRef<HTMLElement>(null);
-  const bgVideoRef = useRef<HTMLVideoElement>(null);
   const horizontalSectionsRef = useRef<HTMLDivElement>(null);
-  const heroCanvasRef = useRef<HTMLVideoElement>(null);
   // Root wrapper reference for background-colour animation
   const pageRef = useRef<HTMLDivElement>(null);
+  const vantaRef = useRef<any>(null);
 
   useEffect(() => {
     // Initialize animations
@@ -92,40 +97,45 @@ const ByteBotLanding: React.FC = () => {
           }
         });
       });
-
-      // Add parallax effect to hero video (same ref)
-      if (heroCanvasRef.current) {
-        ScrollTrigger.create({
-          trigger: heroRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1,
-          onUpdate: (self) => {
-            const progress = self.progress;
-            // No need to update video properties directly, as video plays automatically
-          }
-        });
-      }
     };
 
     initAnimations();
 
-    // smooth looping for 5s video to prevent flash
-    const vid = bgVideoRef.current;
-    let onTime: any;
-    if (vid) {
-      onTime = () => {
-        if (vid.duration && vid.currentTime >= vid.duration - 0.05) {
-          vid.currentTime = 0.05; // jump a few frames in to avoid flash
-        }
-      };
-      vid.addEventListener('timeupdate', onTime);
-    }
+    // Initialize Vanta.js globe animation
+    const initVanta = () => {
+      if (typeof window !== 'undefined' && window.VANTA && heroRef.current) {
+        vantaRef.current = window.VANTA.GLOBE({
+          el: heroRef.current,
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          minHeight: 200.00,
+          minWidth: 200.00,
+          scale: 1.00,
+          scaleMobile: 1.00,
+          color: 0x00d4ff,
+          backgroundColor: 0x0a0a0a
+        });
+      }
+    };
+
+    // Wait for VANTA to be available
+    const checkVanta = () => {
+      if (typeof window !== 'undefined' && window.VANTA) {
+        initVanta();
+      } else {
+        setTimeout(checkVanta, 100);
+      }
+    };
+
+    checkVanta();
 
     // Cleanup function
     return () => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-      if (vid && onTime) vid.removeEventListener('timeupdate', onTime);
+      if (vantaRef.current && vantaRef.current.destroy) {
+        vantaRef.current.destroy();
+      }
     };
   }, []);
 
@@ -163,6 +173,16 @@ const ByteBotLanding: React.FC = () => {
   return (
     <div ref={pageRef} className="font-inter overflow-x-hidden bg-white">
       <Header />
+      
+      {/* Load Vanta.js scripts */}
+      <Script
+        src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"
+        strategy="beforeInteractive"
+      />
+      <Script
+        src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"
+        strategy="beforeInteractive"
+      />
       <style jsx>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         
@@ -308,6 +328,450 @@ const ByteBotLanding: React.FC = () => {
           }
         }
         
+        /* Cloudy effect for plug and play image */
+        .cloudy-container {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .cloudy-bg {
+          position: absolute;
+          width: 120%;
+          height: 120%;
+          background: radial-gradient(circle at 30% 30%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                      radial-gradient(circle at 70% 70%, rgba(91, 115, 255, 0.1) 0%, transparent 50%),
+                      radial-gradient(circle at 50% 20%, rgba(0, 212, 255, 0.08) 0%, transparent 40%),
+                      radial-gradient(circle at 20% 80%, rgba(91, 115, 255, 0.08) 0%, transparent 40%);
+          border-radius: 50%;
+          animation: cloudy-float 8s ease-in-out infinite;
+          z-index: 1;
+        }
+        
+        .cloudy-bg::before {
+          content: '';
+          position: absolute;
+          top: -10%;
+          left: -10%;
+          width: 120%;
+          height: 120%;
+          background: radial-gradient(circle at 40% 60%, rgba(0, 212, 255, 0.05) 0%, transparent 60%),
+                      radial-gradient(circle at 80% 30%, rgba(91, 115, 255, 0.05) 0%, transparent 60%);
+          border-radius: 50%;
+          animation: cloudy-rotate 12s linear infinite;
+        }
+        
+        .cloudy-bg::after {
+          content: '';
+          position: absolute;
+          top: -5%;
+          left: -5%;
+          width: 110%;
+          height: 110%;
+          background: radial-gradient(circle at 60% 40%, rgba(0, 212, 255, 0.03) 0%, transparent 70%),
+                      radial-gradient(circle at 10% 90%, rgba(91, 115, 255, 0.03) 0%, transparent 70%);
+          border-radius: 50%;
+          animation: cloudy-pulse 6s ease-in-out infinite;
+        }
+        
+        .cloudy-image {
+          position: relative;
+          z-index: 2;
+          animation: image-float 4s ease-in-out infinite;
+        }
+        
+        @keyframes cloudy-float {
+          0%, 100% {
+            transform: translateY(0px) scale(1);
+            opacity: 0.8;
+          }
+          50% {
+            transform: translateY(-15px) scale(1.05);
+            opacity: 1;
+          }
+        }
+        
+        @keyframes cloudy-rotate {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+        
+        @keyframes cloudy-pulse {
+          0%, 100% {
+            transform: scale(1);
+            opacity: 0.6;
+          }
+          50% {
+            transform: scale(1.1);
+            opacity: 0.8;
+          }
+        }
+        
+        @keyframes image-float {
+          0%, 100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-8px);
+          }
+        }
+        
+        .perspective-1000 {
+          perspective: 1000px;
+        }
+        
+        .animate-rotate-3d {
+          animation: rotate3d 6s linear infinite;
+          transform-style: preserve-3d;
+        }
+        
+        @keyframes rotate3d {
+          from {
+            transform: rotateY(0deg);
+          }
+          to {
+            transform: rotateY(360deg);
+          }
+        }
+        
+        /* Particle effects */
+        .particle {
+          position: absolute;
+          width: 4px;
+          height: 4px;
+          background: linear-gradient(45deg, #00d4ff, #5b73ff);
+          border-radius: 50%;
+          animation: float-particle 4s ease-in-out infinite;
+        }
+        
+        .particle-1 {
+          top: 20%;
+          left: 20%;
+          animation-delay: 0s;
+        }
+        
+        .particle-2 {
+          top: 60%;
+          right: 30%;
+          animation-delay: 0.8s;
+        }
+        
+        .particle-3 {
+          bottom: 30%;
+          left: 40%;
+          animation-delay: 1.6s;
+        }
+        
+        .particle-4 {
+          top: 40%;
+          right: 20%;
+          animation-delay: 2.4s;
+        }
+        
+        .particle-5 {
+          bottom: 20%;
+          right: 40%;
+          animation-delay: 3.2s;
+        }
+        
+        .particle-6 {
+          top: 15%;
+          left: 60%;
+          animation-delay: 0.4s;
+        }
+        
+        .particle-7 {
+          top: 70%;
+          left: 15%;
+          animation-delay: 1.2s;
+        }
+        
+        .particle-8 {
+          bottom: 15%;
+          left: 70%;
+          animation-delay: 2.0s;
+        }
+        
+        .particle-9 {
+          top: 25%;
+          right: 15%;
+          animation-delay: 2.8s;
+        }
+        
+        .particle-10 {
+          bottom: 60%;
+          right: 60%;
+          animation-delay: 0.6s;
+        }
+        
+        .particle-11 {
+          top: 80%;
+          right: 50%;
+          animation-delay: 1.4s;
+        }
+        
+        .particle-12 {
+          bottom: 40%;
+          left: 25%;
+          animation-delay: 2.2s;
+        }
+        
+        @keyframes float-particle {
+          0%, 100% {
+            transform: translateY(0px) scale(1);
+            opacity: 0.7;
+          }
+          50% {
+            transform: translateY(-20px) scale(1.2);
+            opacity: 1;
+          }
+        }
+        
+        /* Learn text as shooting star in 360 orbit */
+        .shooting-star-orbit {
+          position: relative;
+          width: 300px;
+          height: 300px;
+          z-index: 10;
+        }
+        
+        .shooting-star {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform-origin: 0 0;
+          animation: shooting-star-orbit 8s linear infinite;
+        }
+        
+        .learn-text {
+          font-size: 1.2rem;
+          font-weight: 700;
+          color: #00d4ff;
+          text-shadow: 0 0 15px #00d4ff, 0 0 30px #00d4ff, 0 0 45px #00d4ff;
+          white-space: nowrap;
+          position: relative;
+          z-index: 2;
+          transform: translate(-50%, -50%);
+        }
+        
+        .star-trail {
+          position: absolute;
+          top: 50%;
+          left: -30px;
+          width: 40px;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, #00d4ff, #5b73ff);
+          transform: translateY(-50%);
+          border-radius: 1px;
+          box-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff;
+          z-index: 1;
+        }
+        
+        .star-trail::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: -8px;
+          width: 15px;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, #00d4ff);
+          transform: translateY(-50%);
+          border-radius: 0.5px;
+          box-shadow: 0 0 5px #00d4ff;
+        }
+        
+        @keyframes shooting-star-orbit {
+          0% {
+            transform: rotate(0deg) translateX(120px) rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg) translateX(120px) rotate(-360deg);
+          }
+        }
+        
+        /* Chatbot animations */
+        .chatbot-container {
+          position: relative;
+          width: 600px;
+          height: 600px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-top: -50px;
+        }
+        
+
+        
+        .chatbot-image {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          position: relative;
+          z-index: 2;
+          animation: chatbot-float 4s ease-in-out infinite;
+        }
+        
+        .chatbot-particles {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          z-index: 3;
+        }
+        
+        .particle-dot {
+          position: absolute;
+          width: 6px;
+          height: 6px;
+          background: linear-gradient(45deg, #00d4ff, #5b73ff);
+          border-radius: 50%;
+          animation: particle-float 5s ease-in-out infinite;
+          box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+        }
+        
+        .dot-1 {
+          top: 20%;
+          left: 20%;
+          animation-delay: 0s;
+        }
+        
+        .dot-2 {
+          top: 60%;
+          right: 25%;
+          animation-delay: 1s;
+        }
+        
+        .dot-3 {
+          bottom: 30%;
+          left: 30%;
+          animation-delay: 2s;
+        }
+        
+        .dot-4 {
+          top: 40%;
+          right: 15%;
+          animation-delay: 3s;
+        }
+        
+        .dot-5 {
+          bottom: 20%;
+          right: 40%;
+          animation-delay: 4s;
+        }
+        
+
+        
+        @keyframes chatbot-float {
+          0%, 100% {
+            transform: translateY(0px) scale(1);
+          }
+          50% {
+            transform: translateY(-10px) scale(1.02);
+          }
+        }
+        
+        @keyframes particle-float {
+          0%, 100% {
+            transform: translateY(0px) scale(1);
+            opacity: 0.7;
+          }
+          50% {
+            transform: translateY(-15px) scale(1.2);
+            opacity: 1;
+          }
+        }
+        
+        /* Robot with laser effects */
+        .robot-container {
+          position: relative;
+          width: 500px;
+          height: 500px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 10;
+          margin-top: -100px;
+        }
+        
+        .robot-image {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          position: relative;
+          z-index: 2;
+          animation: robot-pulse 3s ease-in-out infinite;
+        }
+        
+        .laser-beam {
+          position: absolute;
+          width: 4px;
+          height: 200px;
+          background: linear-gradient(to bottom, #ff0000, #ff6b6b, transparent);
+          border-radius: 2px;
+          z-index: 1;
+          animation: laser-shoot 2s ease-in-out infinite;
+          box-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000;
+        }
+        
+        .laser-left {
+          top: 25%;
+          left: 35%;
+          transform: rotate(-45deg);
+          animation-delay: 0s;
+        }
+        
+        .laser-right {
+          top: 25%;
+          right: 15%;
+          transform: rotate(45deg);
+          animation-delay: 0s;
+        }
+        
+        .laser-glow {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(circle, rgba(255, 0, 0, 0.1) 0%, transparent 70%);
+          border-radius: 50%;
+          animation: laser-glow-pulse 2s ease-in-out infinite;
+          z-index: 0;
+        }
+        
+        @keyframes robot-pulse {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.05);
+          }
+        }
+        
+        @keyframes laser-shoot {
+          0%, 100% {
+            opacity: 0.3;
+            height: 150px;
+          }
+          50% {
+            opacity: 1;
+            height: 250px;
+          }
+        }
+        
+        @keyframes laser-glow-pulse {
+          0%, 100% {
+            opacity: 0.2;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.4;
+            transform: scale(1.1);
+          }
+        }
+        
         @media (max-width: 768px) {
           /* Keep horizontal scrolling on mobile */
           .horizontal-sections {
@@ -378,10 +842,8 @@ const ByteBotLanding: React.FC = () => {
 
       {/* ---------------- Hero Section ---------------- */}
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center text-center pt-20">
-        {/* background video */}
-        <video ref={bgVideoRef} autoPlay loop muted playsInline src="/bots/botvid.mp4" className="absolute inset-0 w-full h-full object-cover"></video>
         {/* overlay for readability */}
-        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="absolute inset-0 bg-black/30"></div>
 
         {/* centered content */}
         <div className="relative z-10 px-6 max-w-4xl">
@@ -458,11 +920,14 @@ const ByteBotLanding: React.FC = () => {
                 </div>
                 
                 <div className="w-full lg:w-1/2 mobile-full-width flex justify-center items-center">
-                  <img 
-                    src="/bots/bot1.png" 
-                    alt="Integration Dashboard" 
-                    className="section-image object-cover h-[400px]"
-                  />
+                  <div className="cloudy-container">
+                    <div className="cloudy-bg"></div>
+                    <img 
+                      src="/assets/newimages/humanandrobo.png" 
+                      alt="Integration Dashboard" 
+                      className="cloudy-image section-image object-cover h-[400px]"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -471,7 +936,7 @@ const ByteBotLanding: React.FC = () => {
           {/* Section 2: Conversion Engine */}
           <div className="content-section">
             <div className="container mx-auto px-6">
-              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8">
+              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-start gap-8">
                 <div className="w-full lg:w-1/2 pr-12 mobile-full-width">
                   <h2 className="text-5xl font-bold text-gray-900 mb-6">
                     <span className="bubble-text gradient-text">Conversion</span>{' '}
@@ -520,12 +985,17 @@ const ByteBotLanding: React.FC = () => {
                   </ul>
                 </div>
                 
-                <div className="w-full lg:w-1/2 mobile-full-width">
-                  <img 
-                    src="/bots/mohamed-nohassi-2iUrK025cec-unsplash.jpg" 
-                    alt="Conversion Analytics" 
-                    className="section-image w-full h-96 object-cover rounded-2xl shadow-2xl"
-                  />
+                <div className="w-full lg:w-1/2 mobile-full-width flex justify-start items-center relative">
+                  <div className="robot-container" style={{ transform: 'scale(1.3) translateX(-100px)' }}>
+                    <img 
+                      src="/assets/newimages/laserrobo.png" 
+                      alt="Conversion Analytics" 
+                      className="robot-image"
+                    />
+                    <div className="laser-beam laser-left"></div>
+                    <div className="laser-beam laser-right"></div>
+                    <div className="laser-glow"></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -582,12 +1052,21 @@ const ByteBotLanding: React.FC = () => {
                   </ul>
                 </div>
                 
-                <div className="w-full lg:w-1/2 mobile-full-width">
-                  <img 
-                    src="/bots/mohamed-nohassi-9Ge8ngH6JeQ-unsplash.jpg" 
-                    alt="Data Intelligence Dashboard" 
-                    className="section-image w-full h-96 object-cover rounded-2xl shadow-2xl"
-                  />
+                <div className="w-full lg:w-1/2 mobile-full-width flex justify-center items-center">
+                  <div className="chatbot-container">
+                    <img 
+                      src="/assets/newimages/chatbot.png" 
+                      alt="Data Intelligence Dashboard" 
+                      className="chatbot-image"
+                    />
+                    <div className="chatbot-particles">
+                      <div className="particle-dot dot-1"></div>
+                      <div className="particle-dot dot-2"></div>
+                      <div className="particle-dot dot-3"></div>
+                      <div className="particle-dot dot-4"></div>
+                      <div className="particle-dot dot-5"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -643,12 +1122,44 @@ const ByteBotLanding: React.FC = () => {
                   </ul>
                 </div>
                 
-                <div className="w-full lg:w-1/2 mobile-full-width">
-                  <img 
-                    src="/bots/yuyang-liu-dp9Jrww_BRs-unsplash.jpg" 
-                    alt="AI Learning System" 
-                    className="section-image w-full h-96 object-cover rounded-2xl shadow-2xl"
-                  />
+                <div className="w-full lg:w-1/2 mobile-full-width flex justify-center items-center perspective-1000">
+                  <div className="relative">
+                    {/* Glow effect behind the image */}
+                    <div className="absolute inset-0 w-96 h-96 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-full blur-3xl opacity-30 animate-pulse"></div>
+                    
+                    {/* Main rotating container */}
+                    <div className="relative w-96 h-96 animate-rotate-3d">
+                      {/* Inner glow ring */}
+                      <div className="absolute inset-0 w-full h-full rounded-full bg-gradient-to-r from-cyan-400/20 via-blue-500/20 to-purple-600/20 border-2 border-cyan-400/30 animate-pulse"></div>
+                      
+                      {/* Image with enhanced styling */}
+                      <div className="relative w-full h-full flex items-center justify-center">
+                        <img 
+                          src="/assets/newimages/snake.png" 
+                          alt="AI Learning System" 
+                          className="w-80 h-80 object-contain drop-shadow-2xl filter brightness-110 contrast-110"
+                        />
+                      </div>
+                      
+                      {/* Floating particles effect */}
+                      <div className="absolute inset-0 overflow-hidden rounded-full">
+                        <div className="particle particle-1"></div>
+                        <div className="particle particle-2"></div>
+                        <div className="particle particle-3"></div>
+                        <div className="particle particle-4"></div>
+                        <div className="particle particle-5"></div>
+                        <div className="particle particle-6"></div>
+                        <div className="particle particle-7"></div>
+                        <div className="particle particle-8"></div>
+                        <div className="particle particle-9"></div>
+                        <div className="particle particle-10"></div>
+                        <div className="particle particle-11"></div>
+                        <div className="particle particle-12"></div>
+                      </div>
+                      
+
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
