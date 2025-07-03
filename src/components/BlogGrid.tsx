@@ -34,6 +34,7 @@ export default function BlogGrid({ posts, startIndexInPage = 0 }: BlogGridProps)
             key={post.id}
             href={`/blogs/${post.slug}`}
             className="bg-[#dcdfe5] rounded-xl overflow-hidden flex flex-col h-[30rem] shadow-lg hover:shadow-xl transition-shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#010a14]"
+            whileHover={{ scale: 1.08, transition: { duration: 0.12, ease: 'easeOut' } }}
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getBlogs } from "@/lib/getBlogs";
 import ReactMarkdown from "react-markdown";
 import { Header } from "@/sections/Navbar";
+import BlogDetailIntro from "@/components/BlogDetailIntro";
 
 export const dynamicParams = false; // pre-render all blog pages
 
@@ -44,10 +45,10 @@ export default async function BlogDetailPage({
             priority
           />
 
-          <h1 className="text-3xl md:text-4xl font-bold mt-8">{blog.title}</h1>
-          <p className="text-sm opacity-60 mt-2">
-            {new Date(blog.date).toLocaleDateString()}
-          </p>
+          <BlogDetailIntro
+            title={blog.title}
+            date={new Date(blog.date).toLocaleDateString()}
+          />
 
           <div className="prose md:prose-lg mt-6 max-w-none font-light prose-p:font-light">
             <ReactMarkdown components={markdownComponents}>{blog.content}</ReactMarkdown>

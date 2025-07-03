@@ -3,6 +3,7 @@ import { getBlogs } from "@/lib/getBlogs";
 import { Header } from "@/sections/Navbar";
 import BlogGrid from "@/components/BlogGrid";
 import Link from "next/link";
+import BlogListingIntro from "@/components/BlogListingIntro";
 
 const POSTS_PER_PAGE = 8;
 
@@ -36,10 +37,7 @@ export default async function BlogListPage({
       <Header />
       <main className="min-h-screen bg-white text-[#010a14] font-['PPNeueMontreal'] px-4 py-20">
         <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">Our Blogs</h1>
-          <p className="text-lg md:text-xl mb-12 max-w-3xl opacity-80 mx-auto font-light">
-            Insights, stories and updates from the Bytes Platform team.
-          </p>
+          <BlogListingIntro />
 
           <BlogGrid posts={visiblePosts} />
 
