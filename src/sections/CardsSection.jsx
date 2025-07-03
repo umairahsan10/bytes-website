@@ -275,7 +275,7 @@ export default function Home() {
 
         const staggerOffset = index * 0.05;
         const startOffset = 1 / 3 + staggerOffset;
-        const endOffset = 1 / 3 + staggerOffset;
+        const endOffset = 2 / 3 + staggerOffset;
 
         ScrollTrigger.create({
           trigger: container.current.querySelector(".cards"),
