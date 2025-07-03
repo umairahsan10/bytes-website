@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getBlogs } from "@/lib/getBlogs";
+import ReactMarkdown from "react-markdown";
 
 export const dynamicParams = false; // pre-render all blog pages
 
@@ -9,10 +10,19 @@ export async function generateStaticParams() {
   return blogs.map((b) => ({ slug: b.slug }));
 }
 
+const markdownComponents = {
+  h2: ({ node, ...props }: any) => (
+    <h2 className="text-xl md:text-2xl font-semibold mt-8 mb-4" {...props} />
+  ),
+  h3: ({ node, ...props }: any) => (
+    <h3 className="text-lg md:text-xl font-semibold mt-6 mb-3" {...props} />
+  ),
+};
+
 export default async function BlogDetailPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
   const blog = getBlogs().find((b) => b.slug === slug);
@@ -36,8 +46,8 @@ export default async function BlogDetailPage({
           {new Date(blog.date).toLocaleDateString()}
         </p>
 
-        <div className="prose md:prose-lg mt-6 max-w-none">
-          <p>{blog.content}</p>
+        <div className="prose md:prose-lg mt-6 max-w-none font-normal">
+          <ReactMarkdown components={markdownComponents}>{blog.content}</ReactMarkdown>
         </div>
       </article>
     </main>
