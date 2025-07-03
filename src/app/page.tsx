@@ -19,6 +19,17 @@ import { BrandsSection } from "@/sections/brands";
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
+  // Ensure page always starts at the very top on initial load / refresh
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Prevent browser from restoring previous scroll position
+      if ('scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'manual';
+      }
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }
+  }, []);
+
   return (
     <main className="text-black min-h-screen">
       {isLoading && <LoadingPage onLoadComplete={() => setIsLoading(false)} />}
