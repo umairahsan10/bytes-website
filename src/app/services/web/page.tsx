@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Image from "next/image";
 import { Header } from "@/sections/Navbar";
 import Link from "next/link";
+import SimplifiedMERNOrbital from "@/components/SimplifiedMERNOrbital";
 // @ts-ignore – lucide-react icons (ensure dependency installed in runtime)
 import { ChevronDown, Menu, X, Code, Zap, Users, Award, ArrowRight, Star, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Play, Smartphone, Monitor, Database, Cloud, Globe, Layers, BarChart, TrendingUp, LayoutDashboard, CreditCard, Plug, ShoppingCart } from 'lucide-react';
 
@@ -194,12 +195,12 @@ const WebDevelopmentLanding = () => {
     const duration = 2000;
     const targets = { projects: 10, clients: 10, lines: 10000, years: 1 } as const;
     type TargetKey = keyof typeof targets;
-    
+
     (Object.keys(targets) as TargetKey[]).forEach((key) => {
       let start = 0;
       const end = targets[key];
       const increment = end / (duration / 16);
-      
+
       const timer = setInterval(() => {
         start += increment;
         if (start >= end) {
@@ -212,27 +213,27 @@ const WebDevelopmentLanding = () => {
   };
 
   const webDevServices = [
-    { 
-      icon: Globe, 
-      title: "Frontend Development", 
+    {
+      icon: Globe,
+      title: "Frontend Development",
       desc: "Modern, responsive websites using React, Vue.js, and Angular with cutting-edge design principles",
       technologies: ["React", "Vue.js", "Angular", "TypeScript"]
     },
-    { 
-      icon: Database, 
-      title: "Backend Development", 
+    {
+      icon: Database,
+      title: "Backend Development",
       desc: "Scalable server-side solutions with robust APIs, databases, and cloud integration",
       technologies: ["Node.js", "Python", "PHP", "MongoDB"]
     },
-    { 
-      icon: Smartphone, 
-      title: "Mobile-First Design", 
+    {
+      icon: Smartphone,
+      title: "Mobile-First Design",
       desc: "Responsive web applications that work flawlessly across all devices and screen sizes",
       technologies: ["PWA", "Responsive", "Mobile UI", "Cross-platform"]
     },
-    { 
-      icon: Cloud, 
-      title: "Full-Stack Solutions", 
+    {
+      icon: Cloud,
+      title: "Full-Stack Solutions",
       desc: "End-to-end web development from concept to deployment with modern DevOps practices",
       technologies: ["MEAN", "MERN", "JAMstack", "Serverless"]
     }
@@ -263,12 +264,12 @@ const WebDevelopmentLanding = () => {
   ];
 
   const developmentProcess = [
-    { step: "01", title: "Discovery & Planning", desc: "We analyze your requirements and create a detailed project roadmap", details:["Stakeholder interviews & workshops","Competitive analysis","Technical feasibility study"] },
-    { step: "02", title: "Design & Prototyping", desc: "Creating wireframes and interactive prototypes for user validation", details:["User-flow mapping","High-fidelity UI mock-ups","Interactive prototypes"] },
-    { step: "03", title: "Development", desc: "Building your application with clean, maintainable, and scalable code", details:["Agile sprints","Code reviews","Continuous integration"] },
-    { step: "04", title: "Testing & Quality Assurance", desc: "Comprehensive testing to ensure bug-free, performant applications", details:["Unit & integration tests","Performance benchmarking","Security audits"] },
-    { step: "05", title: "Deployment & Launch", desc: "Seamless deployment with monitoring and performance optimization", details:["Automated CI/CD pipelines","Cloud environment setup","Zero-downtime rollouts"] },
-    { step: "06", title: "Maintenance & Support", desc: "Ongoing support, updates, and feature enhancements", details:["24/7 monitoring","Regular updates","Feature iterations based on user feedback"] }
+    { step: "01", title: "Discovery & Planning", desc: "We analyze your requirements and create a detailed project roadmap", details: ["Stakeholder interviews & workshops", "Competitive analysis", "Technical feasibility study"] },
+    { step: "02", title: "Design & Prototyping", desc: "Creating wireframes and interactive prototypes for user validation", details: ["User-flow mapping", "High-fidelity UI mock-ups", "Interactive prototypes"] },
+    { step: "03", title: "Development", desc: "Building your application with clean, maintainable, and scalable code", details: ["Agile sprints", "Code reviews", "Continuous integration"] },
+    { step: "04", title: "Testing & Quality Assurance", desc: "Comprehensive testing to ensure bug-free, performant applications", details: ["Unit & integration tests", "Performance benchmarking", "Security audits"] },
+    { step: "05", title: "Deployment & Launch", desc: "Seamless deployment with monitoring and performance optimization", details: ["Automated CI/CD pipelines", "Cloud environment setup", "Zero-downtime rollouts"] },
+    { step: "06", title: "Maintenance & Support", desc: "Ongoing support, updates, and feature enhancements", details: ["24/7 monitoring", "Regular updates", "Feature iterations based on user feedback"] }
   ];
 
   const cmsSolutions = [
@@ -316,50 +317,34 @@ const WebDevelopmentLanding = () => {
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
       <Header />
-
       {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center relative overflow-hidden pt-16 lg:pt-24">
-        {/* Animated Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 opacity-70" />
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-20 w-64 h-64 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse" />
-          <div className="absolute top-40 right-20 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-2000" />
-          <div className="absolute bottom-20 left-1/2 w-80 h-80 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-4000" />
-        </div>
-
-        <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-start relative z-10">
-          {/* Right Side - Video/Image (will be shown below text on mobile) */}
-          <div className="relative order-2 lg:order-2">
-            <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-700">
-              <video
-                src="/assets/WebDev/intro-video.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-blue-900/40 to-transparent pointer-events-none" />
-            </div>
-          </div>
-
+      <section id="home" className="min-h-screen bg-blue-200 flex items-center relative overflow-hidden pt-16 lg:pt-24">
+        <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10">
           {/* Left Side - Text */}
-          <div className="space-y-8 animate-fade-in-up text-center lg:text-left order-1 lg:order-1">
+          <div className="space-y-8 animate-fade-in-up text-center lg:text-left flex flex-col justify-center h-full min-h-[350px]">
             <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold leading-tight break-words">
-              <span className="text-gray-900">Web Development</span>
+              <span className="text-gray-900 lg:text-6xl">Web Development</span>
               <br />
               <span className="bg-gradient-to-r from-blue-700 to-blue-900 bg-clip-text text-transparent">Excellence.</span>
             </h1>
-            
             <p className="text-xl text-gray-600 leading-relaxed max-w-lg">
               Custom web applications built with modern technologies. From responsive websites to complex web platforms, we deliver scalable solutions that drive your business forward.
             </p>
-
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/contact" className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold hover:from-blue-700 hover:to-blue-800 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-center">
                 Start Your Project
               </Link>
             </div>
+          </div>
+          {/* Right Side - Background Image */}
+          <div
+            className="relative flex items-center justify-center h-full min-h-[350px] bg-center bg-no-repeat bg-contain"
+            style={{ backgroundImage: "url('/assets/newimages/laptop.png')" }}
+          >
+            {/* Right-side fade overlay */}
+            <div className="absolute right-0 top-0 h-full w-1/2 pointer-events-none"
+              style={{ background: "linear-gradient(to right, transparent 0%, #bfdbfe 100%)" }}
+            />
           </div>
         </div>
 
@@ -375,12 +360,12 @@ const WebDevelopmentLanding = () => {
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold mb-6">
               Web Development <span className="text-blue-600">Services</span>
-              </h2>
+            </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Comprehensive web development solutions using cutting-edge technologies and industry best practices. We build fast, secure, and scalable web applications tailored to your business needs.
             </p>
           </div>
-          
+
           <div className="grid lg:grid-cols-2 gap-8 mb-16">
             {webDevServices.map((service, index) => {
               const Icon = service.icon;
@@ -453,19 +438,19 @@ const WebDevelopmentLanding = () => {
                   </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
-                  <div 
+                  <div
                     className="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-1000 ease-out"
                     style={{ width: stackVisible ? `${tech.level}%` : '0%' }}
                   ></div>
-              </div>
+                </div>
                 <div className="text-right text-sm text-gray-600">{tech.level}%</div>
-                  </div>
-                ))}
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-{/* CMS Solutions Section */}
+      {/* CMS Solutions Section */}
       <section className="py-20 bg-gradient-to-r from-blue-50 to-white" ref={shopifyRef}>
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
@@ -497,30 +482,24 @@ const WebDevelopmentLanding = () => {
                   </ul>
                 </div>
               </div>
-              <div className={`relative h-48 sm:h-72 lg:h-[360px] rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 ${shopifyVisible ? 'animate-slide-in-right' : 'opacity-0 translate-x-10'}`}>
-                <Image
-                  src="/assets/WebDev/shopify.webp"
+              <div className={`flex items-center justify-center transition-all duration-700 ${shopifyVisible ? 'animate-slide-in-right' : 'opacity-0 translate-x-10'}`}>
+                <img
+                  src="\assets\newimages\shopify-nobg.png"
                   alt="Shopify store preview"
-                  fill
-                  quality={90}
-                  priority
-                  className="object-contain sm:object-cover object-center"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-contain animate-float"
+                  style={{ maxWidth: '100%', maxHeight: '320px' }}
                 />
               </div>
             </div>
 
             {/* WordPress Section */}
             <div className="grid lg:grid-cols-2 gap-12 items-center" ref={wpRef}>
-              <div className={`relative h-48 sm:h-72 lg:h-[360px] rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 order-2 lg:order-1 ${wpVisible ? 'animate-slide-in-left' : 'opacity-0 -translate-x-10'}`} style={{ transitionDelay: '300ms' }}>
-                <Image
-                  src="/assets/WebDev/wordpress.jpg"
+              <div className={`flex items-center justify-center transition-all duration-700 order-2 lg:order-1 ${wpVisible ? 'animate-slide-in-left' : 'opacity-0 -translate-x-10'}`} style={{ transitionDelay: '300ms' }}>
+                <img
+                  src="/assets/newimages/wordpress.png"
                   alt="WordPress site preview"
-                  fill
-                  quality={90}
-                  priority
-                  className="object-contain sm:object-cover object-center"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-contain animate-scale-pulse"
+                  style={{ maxWidth: '100%', maxHeight: '320px' }}
                 />
               </div>
               <div className={`transition-all duration-700 order-1 lg:order-2 ${wpVisible ? 'animate-slide-in-right' : 'opacity-0 translate-x-10'}`} style={{ transitionDelay: '300ms' }}>
@@ -561,16 +540,8 @@ const WebDevelopmentLanding = () => {
                   </ul>
                 </div>
               </div>
-              <div className={`relative h-48 sm:h-72 lg:h-[360px] rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 ${mernVisible ? 'animate-slide-in-right' : 'opacity-0 translate-x-10'}`} style={{ transitionDelay: '150ms' }}>
-                <Image
-                  src="/assets/WebDev/MERN.webp"
-                  alt="MERN stack preview"
-                  fill
-                  quality={90}
-                  priority
-                  className="object-contain sm:object-cover object-center"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
+              <div className={`flex items-center justify-center transition-all duration-700 ${mernVisible ? 'animate-slide-in-right' : 'opacity-0 translate-x-10'}`} style={{ transitionDelay: '150ms' }}>
+                <SimplifiedMERNOrbital />
               </div>
             </div>
           </div>
@@ -622,11 +593,11 @@ const WebDevelopmentLanding = () => {
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold mb-6">
               <span className="text-gray-900">Our</span> <span className="text-blue-600">Development&nbsp;Process</span>
-              </h2>
+            </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               We follow a proven development methodology that ensures quality, transparency, and timely delivery of your web project.
             </p>
-            </div>
+          </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {developmentProcess.map((process, index) => (
@@ -671,7 +642,7 @@ const WebDevelopmentLanding = () => {
               <p className="text-xl text-gray-600 leading-relaxed">
                 We combine technical expertise with creative problem-solving to deliver web solutions that not only meet your requirements but exceed your expectations.
               </p>
-              
+
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
                   <div className="w-6 h-6 bg-blue-600 rounded-full flex-shrink-0 mt-1"></div>
@@ -702,10 +673,6 @@ const WebDevelopmentLanding = () => {
                   </div>
                 </div>
               </div>
-
-              {/* <Link href="/contact" className="px-8 py-4 bg-blue-600 text-white rounded-full font-semibold hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 text-center inline-block">
-                Start Your Web Project
-              </Link> */}
             </div>
           </div>
         </div>
@@ -715,7 +682,7 @@ const WebDevelopmentLanding = () => {
       <section className="relative overflow-hidden py-24 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-center">
         {/* Background image */}
         <div
-          className="absolute inset-0 bg-center bg-cover opacity-20 pointer-events-none"
+          className="absolute inset-0 bg-center bg-cover opacity-70 pointer-events-none"
           style={{ backgroundImage: "url('/assets/WebDev/buildwithus.png')" }}
         />
 
@@ -734,63 +701,66 @@ const WebDevelopmentLanding = () => {
       </section>
 
       {/* Modal Overlay */}
-      {selectedService && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={closeServiceModal}>
-          <div
-            className={`w-[70vw] max-w-[70vw] bg-white rounded-3xl shadow-2xl p-10 relative overflow-y-auto max-h-[80vh] transform transition-all duration-300 ${serviceClosing ? 'animate-zoom-out' : 'animate-zoom-in'}`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-              onClick={closeServiceModal}
+      {
+        selectedService && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={closeServiceModal}>
+            <div
+              className={`w-[70vw] max-w-[70vw] bg-white rounded-3xl shadow-2xl p-10 relative overflow-y-auto max-h-[80vh] transform transition-all duration-300 ${serviceClosing ? 'animate-zoom-out' : 'animate-zoom-in'}`}
+              onClick={(e) => e.stopPropagation()}
             >
-              <X className="w-6 h-6" />
-            </button>
-            <div className="flex items-start space-x-6 mb-6">
-              <div className="flex-shrink-0 w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center">
-                <selectedService.icon className="w-10 h-10 text-blue-600" />
+              <button
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+                onClick={closeServiceModal}
+              >
+                <X className="w-6 h-6" />
+              </button>
+              <div className="flex items-start space-x-6 mb-6">
+                <div className="flex-shrink-0 w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center">
+                  <selectedService.icon className="w-10 h-10 text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="text-3xl font-bold mb-2">{selectedService.title}</h3>
+                  <p className="text-gray-600 text-lg leading-relaxed">{selectedService.desc}</p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-3xl font-bold mb-2">{selectedService.title}</h3>
-                <p className="text-gray-600 text-lg leading-relaxed">{selectedService.desc}</p>
+              <h4 className="font-semibold text-lg mb-3">Key Technologies</h4>
+              <div className="flex flex-wrap gap-3 mb-6">
+                {selectedService.technologies.map((tech, idx) => (
+                  <span key={idx} className="px-4 py-1 bg-blue-100 text-blue-600 rounded-full font-medium text-sm">
+                    {tech}
+                  </span>
+                ))}
               </div>
-              </div>
-            <h4 className="font-semibold text-lg mb-3">Key Technologies</h4>
-            <div className="flex flex-wrap gap-3 mb-6">
-              {selectedService.technologies.map((tech, idx) => (
-                <span key={idx} className="px-4 py-1 bg-blue-100 text-blue-600 rounded-full font-medium text-sm">
-                  {tech}
-                </span>
-              ))}
+              <p className="text-gray-600">Get in touch to learn how our {selectedService.title.toLowerCase()} expertise can accelerate your project.</p>
             </div>
-            <p className="text-gray-600">Get in touch to learn how our {selectedService.title.toLowerCase()} expertise can accelerate your project.</p>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* Process Modal */}
-      {selectedProcess && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={closeProcessModal}>
-          <div className={`w-[60vw] max-w-[60vw] bg-white rounded-3xl shadow-2xl p-10 relative transform transition-all duration-300 ${processClosing ? 'animate-zoom-out' : 'animate-zoom-in'}`} onClick={e=>e.stopPropagation()}>
-            <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-600" onClick={closeProcessModal}>
-              <X className="w-6 h-6" />
-            </button>
-            <div className="flex items-center space-x-6 mb-6">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center font-bold text-blue-600 text-xl">
-                {selectedProcess.step}
+      {
+        selectedProcess && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={closeProcessModal}>
+            <div className={`w-[60vw] max-w-[60vw] bg-white rounded-3xl shadow-2xl p-10 relative transform transition-all duration-300 ${processClosing ? 'animate-zoom-out' : 'animate-zoom-in'}`} onClick={e => e.stopPropagation()}>
+              <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-600" onClick={closeProcessModal}>
+                <X className="w-6 h-6" />
+              </button>
+              <div className="flex items-center space-x-6 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center font-bold text-blue-600 text-xl">
+                  {selectedProcess.step}
+                </div>
+                <h3 className="text-3xl font-bold">{selectedProcess.title}</h3>
               </div>
-              <h3 className="text-3xl font-bold">{selectedProcess.title}</h3>
+              <p className="text-gray-600 text-lg leading-relaxed mb-4">{selectedProcess.desc}</p>
+              <ul className="list-disc ml-6 space-y-2 text-gray-600">
+                {selectedProcess.details.map((d, idx) => (
+                  <li key={idx}>{d}</li>
+                ))}
+              </ul>
             </div>
-            <p className="text-gray-600 text-lg leading-relaxed mb-4">{selectedProcess.desc}</p>
-            <ul className="list-disc ml-6 space-y-2 text-gray-600">
-              {selectedProcess.details.map((d,idx)=>(
-                <li key={idx}>{d}</li>
-              ))}
-            </ul>
           </div>
-        </div>
-      )}
-
+        )
+      }
 
       <style jsx>{`
         .animate-fade-in-up {
