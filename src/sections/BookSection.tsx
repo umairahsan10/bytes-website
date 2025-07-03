@@ -152,7 +152,7 @@ export const BookSection = () => {
       <div className="container text-white">
         <SectionHeader
           eyebrow="Interactive Book"
-          title="Explore Our Story"
+          title="Explore Our Story Please"
           description="Click through the pages to discover our journey"
         />
         <div className="mt-20 h-[600px] relative" ref={bookAreaRef}>

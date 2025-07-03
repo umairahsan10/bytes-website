@@ -15,6 +15,7 @@ import CssIcon from "@/assets/icons/css3.svg";
 import GithubIcon from "@/assets/icons/github.svg";
 import ChromeIcon from "@/assets/icons/chrome.svg";
 import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg";
+import { useRouter } from "next/navigation";
 
 // Animated counter component
 function Counter({ from = 0, to, duration = 2, className = "" }) {
@@ -62,6 +63,734 @@ function CountUp({ end, duration = 2, suffix = "" }) {
   );
 }
 
+// Component to remount its children each time it enters the viewport
+const ResetOnView = ({ children, margin = "-100px" }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false, margin });
+  const [key, setKey] = useState(0);
+
+  useEffect(() => {
+    if (isInView) {
+      setKey(Date.now()); // trigger remount when entering view
+    }
+  }, [isInView]);
+
+  return (
+    <div ref={ref} key={key} className="w-full h-full">
+      {children}
+    </div>
+  );
+};
+
+// ────────────────────────────────────────────────────────────────────────────────
+// New animated service-showcase components
+// ────────────────────────────────────────────────────────────────────────────────
+
+const AnimatedCodeEditor = () => {
+  const [lines, setLines] = useState([]);
+
+  useEffect(() => {
+    const codeLines = [
+      "const app = new React.App();",
+      "app.render(<Component />);",
+      "export default app;",
+      "// Building magic...",
+    ];
+
+    const interval = setInterval(() => {
+      setLines(prev => {
+        if (prev.length >= codeLines.length) return [];
+        return [...prev, codeLines[prev.length]];
+      });
+    }, 800);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="p-6 font-mono text-sm overflow-hidden h-40">
+      <div className="flex items-center gap-2 mb-4">
+        <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+        <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+      </div>
+      {lines.map((line, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="text-green-400 mb-2"
+        >
+          {line}
+        </motion.div>
+      ))}
+      <motion.div
+        animate={{ opacity: [1, 0, 1] }}
+        transition={{ repeat: Infinity, duration: 1 }}
+        className="w-2 h-5 bg-green-400 inline-block"
+      />
+    </div>
+  );
+};
+
+const AnimatedNetworkGraph = () => {
+  const nodes = Array.from({ length: 8 }, (_, i) => ({
+    id: i,
+    x: Math.random() * 300,
+    y: Math.random() * 200,
+  }));
+
+  return (
+    <div className="relative w-full h-64 bg-gradient-to-br from-purple-900/20 to-blue-900/20 rounded-2xl overflow-hidden">
+      <svg className="w-full h-full">
+        {nodes.map((node, i) =>
+          nodes.slice(i + 1).map((otherNode, j) => (
+            <motion.line
+              key={`${i}-${j}`}
+              x1={node.x}
+              y1={node.y}
+              x2={otherNode.x}
+              y2={otherNode.y}
+              stroke="rgba(99, 102, 241, 0.3)"
+              strokeWidth="1"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 2, delay: i * 0.1 }}
+            />
+          ))
+        )}
+        {nodes.map((node, i) => (
+          <motion.circle
+            key={node.id}
+            cx={node.x}
+            cy={node.y}
+            r="6"
+            fill="#6366f1"
+            initial={{ scale: 0 }}
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
+          />
+        ))}
+      </svg>
+    </div>
+  );
+};
+
+const AnimatedGrowthChart = () => {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    let current = 0;
+    const interval = setInterval(() => {
+      current += 1;
+      if (current >= 100) {
+        setProgress(100);
+        clearInterval(interval);
+      } else {
+        setProgress(current);
+      }
+    }, 25);
+    return () => clearInterval(interval);
+  }, []);
+
+  const dataPoints = [20, 45, 30, 70, 60, 85, 95];
+
+  return (
+    <div className="p-6 bg-transparent">
+      <div className="grid grid-cols-7 gap-2 items-end h-32">
+        {dataPoints.map((height, i) => (
+          <motion.div
+            key={i}
+            className="bg-gradient-to-t from-emerald-400 to-teal-400 rounded-t"
+            initial={{ height: 0 }}
+            animate={{ height: `${(height * progress) / 100}%` }}
+            transition={{ duration: 0.25, ease: "linear" }}
+          />
+        ))}
+      </div>
+      <div className="flex justify-between mt-4 text-xs text-emerald-400">
+        <span>Jan</span>
+        <span>Feb</span>
+        <span>Mar</span>
+        <span>Apr</span>
+        <span>May</span>
+        <span>Jun</span>
+        <span>Jul</span>
+      </div>
+    </div>
+  );
+};
+
+const AnimatedAIBrain = () => {
+  const [pulses, setPulses] = useState([]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPulses(prev => [
+        ...prev,
+        { id: Date.now(), x: Math.random() * 100, y: Math.random() * 100 },
+      ]);
+    }, 500);
+
+    const cleanup = setInterval(() => {
+      setPulses(prev => prev.slice(-10));
+    }, 2000);
+
+    return () => {
+      clearInterval(interval);
+      clearInterval(cleanup);
+    };
+  }, []);
+
+  return (
+    <div className="relative w-full h-64 bg-gradient-to-br from-pink-900/20 to-orange-900/20 rounded-2xl overflow-hidden">
+      <div className="absolute inset-0">
+        {Array.from({ length: 20 }).map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-pink-400 rounded-full"
+            style={{
+              left: `${(i * 23) % 100}%`,
+              top: `${(i * 37) % 100}%`,
+            }}
+            animate={{
+              scale: [1, 1.5, 1],
+              opacity: [0.3, 1, 0.3],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              delay: i * 0.1,
+            }}
+          />
+        ))}
+      </div>
+
+      {pulses.map(pulse => (
+        <motion.div
+          key={pulse.id}
+          className="absolute w-4 h-4 border-2 border-pink-400 rounded-full"
+          style={{ left: `${pulse.x}%`, top: `${pulse.y}%` }}
+          initial={{ scale: 0, opacity: 1 }}
+          animate={{ scale: 3, opacity: 0 }}
+          transition={{ duration: 1 }}
+        />
+      ))}
+    </div>
+  );
+};
+
+// ────────────────────────────────────────────────────────────────────────────────
+// Animated Neural Network (replaces brain in Intelligence Layer)
+// ────────────────────────────────────────────────────────────────────────────────
+
+const AnimatedNeuralNetwork = () => {
+  const nodes = [
+    { id: 1, x: 20, y: 30, layer: 'input' },
+    { id: 2, x: 20, y: 50, layer: 'input' },
+    { id: 3, x: 20, y: 70, layer: 'input' },
+    { id: 4, x: 40, y: 20, layer: 'hidden1' },
+    { id: 5, x: 40, y: 40, layer: 'hidden1' },
+    { id: 6, x: 40, y: 60, layer: 'hidden1' },
+    { id: 7, x: 40, y: 80, layer: 'hidden1' },
+    { id: 8, x: 60, y: 30, layer: 'hidden2' },
+    { id: 9, x: 60, y: 50, layer: 'hidden2' },
+    { id: 10, x: 60, y: 70, layer: 'hidden2' },
+    { id: 11, x: 80, y: 40, layer: 'output' },
+    { id: 12, x: 80, y: 60, layer: 'output' },
+  ];
+
+  const connections = [
+    ...[1, 2, 3].flatMap((i) => [4, 5, 6, 7].map((j) => ({ from: i, to: j }))),
+    ...[4, 5, 6, 7].flatMap((i) => [8, 9, 10].map((j) => ({ from: i, to: j }))),
+    ...[8, 9, 10].flatMap((i) => [11, 12].map((j) => ({ from: i, to: j }))),
+  ];
+
+  const getNodeById = (id) => nodes.find((n) => n.id === id);
+
+  return (
+    <div className="relative w-full h-80 overflow-hidden">
+      <div
+        className="absolute inset-0 opacity-10"
+        style={{ backgroundImage: 'linear-gradient(rgba(59,130,246,0.1) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,0.1) 1px,transparent 1px)', backgroundSize: '20px 20px' }}
+      />
+
+      <svg className="absolute inset-0 w-full h-full">
+        {connections.map((conn, idx) => {
+          const from = getNodeById(conn.from);
+          const to = getNodeById(conn.to);
+          const x1 = `${from.x}%`, y1 = `${from.y}%`, x2 = `${to.x}%`, y2 = `${to.y}%`;
+          return (
+            <g key={idx}>
+              <motion.line x1={x1} y1={y1} x2={x2} y2={y2} stroke="rgba(59,130,246,0.3)" strokeWidth="1" initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }} transition={{ duration: 2, delay: idx * 0.05 }} />
+              <motion.circle r="2" fill="#3b82f6" initial={{ opacity: 0 }} animate={{ opacity: [0, 1, 0], cx: [x1, x2], cy: [y1, y2] }} transition={{ duration: 1.5, delay: 1 + idx * 0.1, repeat: Infinity, repeatDelay: 2 }} />
+            </g>
+          );
+        })}
+        {nodes.map((n, idx) => (
+          <motion.circle key={n.id} cx={`${n.x}%`} cy={`${n.y}%`} r="4" fill={{ input: '#10b981', hidden1: '#3b82f6', hidden2: '#8b5cf6', output: '#f59e0b' }[n.layer]} initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.5, delay: idx * 0.1 }}>
+            <motion.animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite" />
+          </motion.circle>
+        ))}
+      </svg>
+      {Array.from({ length: 8 }).map((_, i) => (
+        <motion.div key={i} className="absolute w-1 h-1 bg-cyan-400 rounded-full" initial={{ x: Math.random() * 400, y: Math.random() * 300, opacity: 0 }} animate={{ x: Math.random() * 400, y: Math.random() * 300, opacity: [0, 1, 0] }} transition={{ duration: 3 + Math.random() * 2, repeat: Infinity, delay: Math.random() * 2 }} />
+      ))}
+    </div>
+  );
+};
+
+const FloatingParticles = ({ children }) => {
+  return (
+    <div className="relative">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-2 h-2 bg-blue-400 rounded-full opacity-20"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+          animate={{ y: [-20, 20, -20], x: [-10, 10, -10] }}
+          transition={{ duration: 3 + i, repeat: Infinity, ease: "easeInOut" }}
+        />
+      ))}
+      {children}
+    </div>
+  );
+};
+
+const ServicesSection = () => {
+  // Animation variants
+  const slideInLeft = {
+    hidden: { opacity: 0, x: -100 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } },
+    exit: { opacity: 0, x: -100, transition: { duration: 0.5 } },
+  };
+
+  const slideInRight = {
+    hidden: { opacity: 0, x: 100 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } },
+    exit: { opacity: 0, x: 100, transition: { duration: 0.5 } },
+  };
+
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  };
+
+  const staggerContainer = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.1 } },
+  };
+
+  const scaleIn = {
+    hidden: { scale: 0, opacity: 0 },
+    visible: { scale: 1, opacity: 1, transition: { duration: 0.5 } },
+    exit: { scale: 0, opacity: 0, transition: { duration: 0.3 } },
+  };
+
+  const rotateIn = {
+    hidden: { opacity: 0, rotate: -10 },
+    visible: { opacity: 1, rotate: 0, transition: { duration: 0.8 } },
+    exit: { opacity: 0, rotate: 10, transition: { duration: 0.5 } },
+  };
+
+  return (
+    <div className="space-y-32 pt-8 pb-16 bg-[#010a14]">
+      {/* Digital Experiences - Left Aligned */}
+      <div className="container mx-auto px-4">
+        <div className="flex flex-col lg:flex-row items-center gap-16 max-w-7xl">
+          <motion.div
+            className="w-full lg:w-2/5 lg:ml-16"
+            variants={slideInLeft}
+            initial="hidden"
+            whileInView="visible"
+            exit="exit"
+            viewport={{ once: false, margin: "-100px" }}
+          >
+            <div className="space-y-6 px-2">
+              <motion.h3
+                className="text-4xl font-extrabold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-4 tracking-tight"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                {"Digital Experiences".split(" ").map((word, i) => (
+                  <motion.span
+                    key={word + i}
+                    className="inline-block mr-1"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 * i, duration: 0.45 }}
+                  >
+                    {word}
+                  </motion.span>
+                ))}
+              </motion.h3>
+              <motion.ul
+                className="space-y-4 text-lg text-gray-300"
+                initial="hidden"
+                whileInView="visible"
+                variants={staggerContainer}
+              >
+                {["Custom Website Development", "Native Mobile Applications (iOS & Android)", "Progressive Web Applications"].map(item => (
+                  <motion.li
+                    key={item}
+                    className="flex items-start group"
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                  >
+                    <motion.span
+                      className="mr-3 text-blue-400 text-xl"
+                      whileHover={{ scale: 1.2, rotate: 90 }}
+                      transition={{ type: "spring", stiffness: 400 }}
+                    >
+                      ▶
+                    </motion.span>
+                    <span className="group-hover:text-blue-300 transition-colors duration-300">{item}</span>
+                  </motion.li>
+                ))}
+              </motion.ul>
+            </div>
+          </motion.div>
+          <motion.div
+            className="w-full lg:w-3/5 lg:mr-0 flex items-center justify-center"
+            variants={slideInRight}
+            initial="hidden"
+            whileInView="visible"
+            exit="exit"
+            viewport={{ once: false, margin: "-100px" }}
+          >
+            <FloatingParticles>
+              <ResetOnView>
+                <AnimatedCodeEditor />
+              </ResetOnView>
+            </FloatingParticles>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Enterprise Solutions - Right Aligned */}
+      <div className="container mx-auto px-4">
+        <div className="flex flex-col lg:flex-row-reverse items-center gap-16 max-w-7xl mx-auto">
+          <motion.div
+            className="w-full lg:w-2/5 lg:mr-16"
+            variants={slideInRight}
+            initial="hidden"
+            whileInView="visible"
+            exit="exit"
+            viewport={{ once: false, margin: "-100px" }}
+          >
+            <div className="space-y-6 px-2">
+              <h3 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-6">
+                Enterprise Solutions
+              </h3>
+              <motion.ul
+                className="space-y-4 text-gray-300 text-lg"
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+              >
+                {["CRM & ERP Ecosystem Integration", "SaaS & Micro-SaaS Platforms", "AI-Powered Automation Systems"].map(item => (
+                  <motion.li key={item} variants={fadeInUp} className="flex items-center group">
+                    <motion.span
+                      className="mr-3 text-blue-400 text-xl"
+                      whileHover={{ scale: 1.2, rotate: 360 }}
+                      transition={{ type: "spring", stiffness: 400 }}
+                    >
+                      {item.includes('CRM') ? '⚡' : item.includes('SaaS') ? '🚀' : '🤖'}
+                    </motion.span>
+                    <span className="group-hover:text-blue-300 transition-colors duration-300">{item}</span>
+                  </motion.li>
+                ))}
+              </motion.ul>
+            </div>
+          </motion.div>
+          <motion.div
+            className="w-full lg:w-3/5"
+            variants={slideInLeft}
+            initial="hidden"
+            whileInView="visible"
+            exit="exit"
+            viewport={{ once: false, margin: "-100px" }}
+          >
+            <FloatingParticles>
+              <ResetOnView>
+                <AnimatedEnterpriseSystem />
+              </ResetOnView>
+            </FloatingParticles>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Growth Acceleration - Diagonal Layout */}
+      <div className="container mx-auto px-4">
+        <div className="relative max-w-7xl mx-auto">
+          <motion.div
+            className="absolute top-0 left-1/4 w-1/2 h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent"
+            variants={scaleIn}
+            initial="hidden"
+            whileInView="visible"
+            exit="exit"
+            viewport={{ once: false }}
+          />
+          <div className="flex flex-col lg:flex-row items-center gap-16 pt-12">
+            <motion.div
+              className="w-full lg:w-1/2"
+              variants={slideInLeft}
+              initial="hidden"
+              whileInView="visible"
+              exit="exit"
+              viewport={{ once: false, margin: "-100px" }}
+            >
+              <div className="space-y-6 px-2">
+                <h3 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-6">
+                  Growth Acceleration
+                </h3>
+                <motion.ul
+                  className="space-y-4 text-gray-300 text-lg"
+                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="visible"
+                >
+                  {["Advanced SEO & Technical Optimization", "Performance Marketing & PPC", "Conversion Rate Optimization"].map(item => (
+                    <motion.li key={item} variants={fadeInUp} className="flex items-center group">
+                      <motion.span
+                        className="mr-3 text-blue-400 text-xl"
+                        whileHover={{ scale: 1.2, y: -5 }}
+                        transition={{ type: "spring", stiffness: 400 }}
+                      >
+                        ↗
+                      </motion.span>
+                      <span className="group-hover:text-blue-300 transition-colors duration-300">{item}</span>
+                    </motion.li>
+                  ))}
+                </motion.ul>
+              </div>
+            </motion.div>
+            <motion.div
+              className="w-full lg:w-1/2"
+              variants={slideInRight}
+              initial="hidden"
+              whileInView="visible"
+              exit="exit"
+              viewport={{ once: false, margin: "-100px" }}
+            >
+              <ResetOnView>
+                <AnimatedGrowthChart />
+              </ResetOnView>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+
+      {/* Intelligence Layer */}
+      <div className="w-full bg-[#010a14] py-20">
+        <div className="container mx-auto px-4">
+          <div className="relative max-w-6xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <motion.div
+                variants={slideInLeft}
+                initial="hidden"
+                whileInView="visible"
+                exit="exit"
+                viewport={{ once: false, margin: "-100px" }}
+              >
+                <FloatingParticles>
+                  <ResetOnView margin="-150px">
+                    <AnimatedNeuralNetwork />
+                  </ResetOnView>
+                </FloatingParticles>
+              </motion.div>
+
+              <motion.div
+                variants={slideInRight}
+                initial="hidden"
+                whileInView="visible"
+                exit="exit"
+                viewport={{ once: false, margin: "-100px" }}
+              >
+                <div className="w-full space-y-6 px-2">
+                  <h3 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-6">
+                    Intelligence Layer
+                  </h3>
+                  <motion.ul
+                    className="space-y-4 text-gray-300 text-lg"
+                    variants={staggerContainer}
+                    initial="hidden"
+                    whileInView="visible"
+                  >
+                    {["Conversational AI & Chatbots", "Predictive Analytics Dashboards", "Social Media Automation"].map(item => (
+                      <motion.li key={item} variants={fadeInUp} className="flex items-center group">
+                        <motion.span
+                          className="mr-3 text-blue-400 text-xl"
+                          whileHover={{ scale: 1.2, rotate: 180 }}
+                          transition={{ type: "spring", stiffness: 400 }}
+                        >
+                          ◉
+                        </motion.span>
+                        <span className="group-hover:text-blue-300 transition-colors duration-300">{item}</span>
+                      </motion.li>
+                    ))}
+                  </motion.ul>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ────────────────────────────────────────────────────────────────────────────────
+// Enterprise animation - Server/Database visualization
+// ────────────────────────────────────────────────────────────────────────────────
+
+const AnimatedEnterpriseSystem = () => {
+  const [activeConnections, setActiveConnections] = useState([]);
+  const [dataFlow, setDataFlow] = useState([]);
+
+  useEffect(() => {
+    const connectionInterval = setInterval(() => {
+      const connections = Array.from({ length: 6 }, (_, i) => i);
+      setActiveConnections(connections.slice(0, Math.floor(Math.random() * 6) + 2));
+    }, 2000);
+
+    const dataInterval = setInterval(() => {
+      setDataFlow(prev => [
+        ...prev.slice(-5),
+        { id: Date.now(), path: Math.floor(Math.random() * 4) },
+      ]);
+    }, 300);
+
+    return () => {
+      clearInterval(connectionInterval);
+      clearInterval(dataInterval);
+    };
+  }, []);
+
+  const servers = [
+    { id: 'main', x: 150, y: 50, type: 'main', label: 'CRM Core' },
+    { id: 'db1', x: 50, y: 120, type: 'database', label: 'Analytics DB' },
+    { id: 'db2', x: 250, y: 120, type: 'database', label: 'User DB' },
+    { id: 'api1', x: 80, y: 200, type: 'api', label: 'REST API' },
+    { id: 'api2', x: 220, y: 200, type: 'api', label: 'GraphQL' },
+    { id: 'ai', x: 150, y: 270, type: 'ai', label: 'AI Engine' },
+  ];
+
+  const connections = [
+    { from: 'main', to: 'db1' },
+    { from: 'main', to: 'db2' },
+    { from: 'db1', to: 'api1' },
+    { from: 'db2', to: 'api2' },
+    { from: 'api1', to: 'ai' },
+    { from: 'api2', to: 'ai' },
+  ];
+
+  const getServerPosition = (id) => servers.find((s) => s.id === id);
+
+  return (
+    <div className="relative w-full h-80 overflow-hidden">
+      {/* grid */}
+      <div className="absolute inset-0 opacity-10">
+        <svg width="100%" height="100%">
+          <defs>
+            <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#8b5cf6" strokeWidth="1" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+        </svg>
+      </div>
+
+      <svg className="w-full h-full relative z-10" viewBox="0 0 300 320" preserveAspectRatio="xMidYMid meet">
+        {/* connections */}
+        {connections.map((conn, i) => {
+          const from = getServerPosition(conn.from);
+          const to = getServerPosition(conn.to);
+          const isActive = activeConnections.includes(i);
+
+          return (
+            <motion.line
+              key={`${conn.from}-${conn.to}`}
+              x1={from.x}
+              y1={from.y}
+              x2={to.x}
+              y2={to.y}
+              stroke={isActive ? '#a855f7' : '#6b21a8'}
+              strokeWidth={isActive ? '3' : '1'}
+              opacity={isActive ? 1 : 0.3}
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 1, delay: i * 0.2 }}
+            />
+          );
+        })}
+
+        {/* data flow particles */}
+        {dataFlow.map((flow) => {
+          const connection = connections[flow.path % connections.length];
+          const from = getServerPosition(connection.from);
+          const to = getServerPosition(connection.to);
+          return (
+            <motion.circle
+              key={flow.id}
+              r="3"
+              fill="#fbbf24"
+              initial={{ cx: from.x, cy: from.y, opacity: 1 }}
+              animate={{ cx: to.x, cy: to.y, opacity: 0 }}
+              transition={{ duration: 1.5, ease: 'easeInOut' }}
+            />
+          );
+        })}
+
+        {/* servers */}
+        {servers.map((server, i) => (
+          <g key={server.id}>
+            <motion.circle
+              cx={server.x}
+              cy={server.y}
+              r="20"
+              fill={server.type === 'main' ? '#8b5cf6' : server.type === 'ai' ? '#f59e0b' : '#6366f1'}
+              opacity="0.3"
+              animate={{ r: [15, 25, 15] }}
+              transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
+            />
+            <motion.rect
+              x={server.x - 12}
+              y={server.y - 8}
+              width="24"
+              height="16"
+              rx="4"
+              fill={server.type === 'main' ? '#a855f7' : server.type === 'ai' ? '#fbbf24' : '#6366f1'}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+            />
+            {[0, 1, 2].map((d) => (
+              <motion.circle
+                key={d}
+                cx={server.x - 8 + d * 4}
+                cy={server.y - 2}
+                r="1.5"
+                fill="#22c55e"
+                animate={{ opacity: [1, 0.3, 1] }}
+                transition={{ duration: 1, repeat: Infinity, delay: d * 0.2 }}
+              />
+            ))}
+            <text x={server.x} y={server.y + 25} textAnchor="middle" className="text-xs fill-purple-300 font-medium">
+              {server.label}
+            </text>
+          </g>
+        ))}
+      </svg>
+    </div>
+  );
+};
+
 export default function AboutPage() {
   const { scrollYProgress } = useScroll();
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [1, 0.8, 0.8, 0]);
@@ -71,6 +800,7 @@ export default function AboutPage() {
   const heroRef = useRef(null);
   const overlayRef = useRef(null);
   const [canInteract, setCanInteract] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -287,7 +1017,7 @@ export default function AboutPage() {
       
       {/* Hero Section with Beach/Logo Entry */}
       <section ref={heroRef} className="relative h-screen w-full overflow-hidden pt-20">
-        <div className="bg bg-[#141414] absolute inset-0"></div>
+        <div className="bg bg-[#010a14] absolute inset-0"></div>
         <div className="img-container relative flex flex-col gap-8 items-center justify-center h-full w-full will-change-transform transform-gpu">
           <Image className="image" src="/assets/bg.jpg" alt="Background" fill priority />
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
@@ -301,21 +1031,25 @@ export default function AboutPage() {
         </div>
 
         {/* Info overlay - Shows about content after animation */}
-        <div ref={overlayRef} className="info-overlay pointer-events-auto absolute inset-0 will-change-transform transform-gpu bg-white/90 backdrop-blur-xl">
+        <div
+          ref={overlayRef}
+          className="info-overlay pointer-events-auto absolute inset-0 will-change-transform transform-gpu bg-white/90 backdrop-blur-xl"
+          style={{ backgroundImage: 'url("/assets/aboutUs/hero.jpg")', backgroundSize: 'cover', backgroundPosition: 'center' }}
+        >
           <div className="h-full flex flex-col items-center justify-center text-center px-4 py-8 sm:py-12">
             <div className="w-full max-w-7xl mx-auto space-y-6 sm:space-y-8">
               <div className="pt-4 sm:pt-8">
-                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 mb-4 sm:mb-6">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6">
                   Who We Are
                 </h2>
-                <p className="max-w-2xl mx-auto text-center text-gray-600 text-base sm:text-lg md:text-xl lg:text-2xl">
+                <p className="max-w-2xl mx-auto text-center text-white text-base sm:text-lg md:text-xl lg:text-2xl">
                   We're a passionate team of innovators, designers, and developers dedicated to crafting exceptional digital experiences that drive meaningful change.
                 </p>
               </div>
 
               {/* Scroll indicator */}
               <div className="mt-8">
-                <p className="text-purple-600 font-semibold animate-bounce">↓ Scroll down to learn more about us ↓</p>
+                <p className="text-white font-semibold animate-bounce">↓ Scroll down to learn more about us ↓</p>
               </div>
               
             </div>
@@ -325,61 +1059,9 @@ export default function AboutPage() {
 
       {/* About Content Section */}
       <section id="about-us" className="relative">
-        
-        {/* Enhanced Floating Images with Parallax - Updated for white theme */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <motion.div 
-            className="absolute top-20 -right-10 w-80 h-96 bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-3xl backdrop-blur-sm border border-purple-200/30"
-            animate={{ 
-              rotate: [12, 8, 12],
-              y: [0, -20, 0],
-              scale: [1, 1.05, 1]
-            }}
-            transition={{ 
-              duration: 8, 
-              repeat: Infinity, 
-              ease: "easeInOut" 
-            }}
-          >
-            <div className="w-full h-full bg-gradient-to-br from-cyan-200 to-purple-300 rounded-3xl opacity-20"></div>
-          </motion.div>
-          
-          <motion.div 
-            className="absolute top-[500px] -left-16 w-64 h-48 bg-gradient-to-tr from-emerald-500/10 to-teal-500/10 rounded-2xl backdrop-blur-sm border border-emerald-200/30"
-            animate={{ 
-              rotate: [-6, 2, -6],
-              x: [0, 30, 0],
-              scale: [1, 0.95, 1]
-            }}
-            transition={{ 
-              duration: 10, 
-              repeat: Infinity, 
-              ease: "easeInOut",
-              delay: 1
-            }}
-          >
-            <div className="w-full h-full bg-gradient-to-tr from-emerald-200 to-cyan-300 rounded-2xl opacity-25"></div>
-          </motion.div>
-          
-          <motion.div 
-            className="absolute top-[800px] right-4 w-72 h-56 bg-gradient-to-tl from-indigo-500/10 to-purple-500/10 rounded-2xl backdrop-blur-sm border border-indigo-200/30"
-            animate={{ 
-              rotate: [-12, -6, -12],
-              y: [0, 25, 0]
-            }}
-            transition={{ 
-              duration: 12, 
-              repeat: Infinity, 
-              ease: "easeInOut",
-              delay: 2
-            }}
-          >
-            <div className="w-full h-full bg-gradient-to-tl from-indigo-200 to-purple-300 rounded-2xl opacity-20"></div>
-          </motion.div>
-        </div>
 
         {/* Hero Section - Full Width - Updated for white theme */}
-        <div className="relative z-10 w-full px-4 py-20">
+        <div className="relative z-10 w-full px-4 pt-20 pb-8 bg-[#010a14] text-white">
           <motion.div 
             className="text-center space-y-8 max-w-6xl mx-auto"
             variants={fadeInUp}
@@ -390,7 +1072,7 @@ export default function AboutPage() {
           >
             <div className="inline-block">
               <motion.h1 
-                className="text-6xl md:text-8xl lg:text-9xl font-black bg-gradient-to-r from-gray-900 via-[#010a14] to-purple-600 bg-clip-text text-transparent leading-tight"
+                className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-tight"
                 animate={{ 
                   backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
                 }}
@@ -404,7 +1086,7 @@ export default function AboutPage() {
                 About Bytes Platform
               </motion.h1>
               <motion.div 
-                className="h-2 w-48 bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500 mx-auto mt-6 rounded-full"
+                className="h-2 w-48 bg-gradient-to-r from-white via-[#010a14] to-white mx-auto mt-6 rounded-full"
                 animate={{ 
                   scaleX: [0.5, 1.2, 0.5],
                   opacity: [0.7, 1, 0.7]
@@ -417,7 +1099,7 @@ export default function AboutPage() {
               />
             </div>
             <motion.p 
-              className="text-2xl md:text-3xl text-gray-600 max-w-5xl mx-auto leading-relaxed"
+              className="text-sm sm:text-base md:text-lg lg:text-xl text-white max-w-5xl mx-auto leading-relaxed"
               variants={fadeInUp}
             >
               Your full-spectrum digital transformation partner, engineering tomorrow's most profitable brands with cutting-edge solutions that scale.
@@ -426,236 +1108,12 @@ export default function AboutPage() {
         </div>
 
         {/* Core Services - Asymmetric Layout */}
-        <div className="relative z-10 w-full space-y-32 py-20">
-          <motion.h2 
-            className="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent mb-20"
-            variants={scaleIn}
-            initial="hidden"
-            whileInView="visible"
-            exit="exit"
-            viewport={{ once: false, margin: "-50px" }}
-          >
-            What We Engineer
-          </motion.h2>
-          
-          {/* Digital Experiences - Left Aligned */}
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col lg:flex-row items-center gap-16 max-w-7xl">
-              <motion.div 
-                className="w-full lg:w-2/5 lg:ml-16"
-                variants={slideInLeft}
-                initial="hidden"
-                whileInView="visible"
-                exit="exit"
-                viewport={{ once: false, margin: "-100px" }}
-              >
-                <div className="space-y-6 p-8 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 backdrop-blur-sm border border-cyan-500/20 rounded-3xl">
-                  <h3 className="text-3xl font-bold text-cyan-400 mb-6">Digital Experiences</h3>
-                  <motion.ul 
-                    className="space-y-4 text-gray-600 text-lg"
-                    variants={staggerContainer}
-                    initial="hidden"
-                    whileInView="visible"
-                  >
-                    <motion.li variants={fadeInUp}>• Custom Website Architecture & Development</motion.li>
-                    <motion.li variants={fadeInUp}>• Native Mobile Applications (iOS & Android)</motion.li>
-                    <motion.li variants={fadeInUp}>• Progressive Web Applications</motion.li>
-                  </motion.ul>
-                </div>
-              </motion.div>
-              <motion.div 
-                className="w-full lg:w-3/5 lg:mr-0"
-                variants={slideInRight}
-                initial="hidden"
-                whileInView="visible"
-                exit="exit"
-                viewport={{ once: false, margin: "-100px" }}
-              >
-                <div className="relative group">
-                  <div className="absolute -inset-4 bg-gradient-to-r from-cyan-400/20 to-blue-600/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
-                  <Image 
-                    src="/textures/DSC01011.jpg" 
-                    alt="Digital Experiences" 
-                    width={1200} 
-                    height={800} 
-                    className="relative rounded-3xl object-cover w-full h-80 lg:h-96 shadow-2xl group-hover:scale-105 transition-transform duration-500" 
-                  />
-                </div>
-              </motion.div>
-            </div>
-          </div>
-
-          {/* Enterprise Solutions - Right Aligned */}
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col lg:flex-row-reverse items-center gap-16 max-w-7xl mx-auto">
-              <motion.div 
-                className="w-full lg:w-2/5 lg:mr-16"
-                variants={slideInRight}
-                initial="hidden"
-                whileInView="visible"
-                exit="exit"
-                viewport={{ once: false, margin: "-100px" }}
-              >
-                <div className="space-y-6 p-8 bg-gradient-to-bl from-purple-500/10 to-pink-500/10 backdrop-blur-sm border border-purple-500/20 rounded-3xl">
-                  <h3 className="text-3xl font-bold text-purple-400 mb-6">Enterprise Solutions</h3>
-                  <motion.ul 
-                    className="space-y-4 text-gray-600 text-lg"
-                    variants={staggerContainer}
-                    initial="hidden"
-                    whileInView="visible"
-                  >
-                    <motion.li variants={fadeInUp}>• CRM & ERP Ecosystem Integration</motion.li>
-                    <motion.li variants={fadeInUp}>• SaaS & Micro-SaaS Platforms</motion.li>
-                    <motion.li variants={fadeInUp}>• AI-Powered Automation Systems</motion.li>
-                  </motion.ul>
-                </div>
-              </motion.div>
-              <motion.div 
-                className="w-full lg:w-3/5"
-                variants={slideInLeft}
-                initial="hidden"
-                whileInView="visible"
-                exit="exit"
-                viewport={{ once: false, margin: "-100px" }}
-              >
-                <div className="relative group">
-                  <div className="absolute -inset-4 bg-gradient-to-l from-purple-400/20 to-pink-600/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
-                  <Image 
-                    src="/textures/DSC00983.jpg" 
-                    alt="Enterprise Solutions" 
-                    width={1200} 
-                    height={800} 
-                    className="relative rounded-3xl object-cover w-full h-80 lg:h-96 shadow-2xl group-hover:scale-105 transition-transform duration-500" 
-                  />
-                </div>
-              </motion.div>
-            </div>
-          </div>
-
-          {/* Growth Acceleration - Diagonal Layout */}
-          <div className="container mx-auto px-4">
-            <div className="relative max-w-7xl mx-auto">
-              <motion.div 
-                className="absolute top-0 left-1/4 w-1/2 h-px bg-gradient-to-r from-transparent via-emerald-400 to-transparent"
-                variants={scaleIn}
-                initial="hidden"
-                whileInView="visible"
-                exit="exit"
-                viewport={{ once: false }}
-              />
-              <div className="flex flex-col lg:flex-row items-center gap-16 pt-12">
-                <motion.div 
-                  className="w-full lg:w-1/2 transform lg:-skew-y-2"
-                  variants={rotateIn}
-                  initial="hidden"
-                  whileInView="visible"
-                  exit="exit"
-                  viewport={{ once: false, margin: "-100px" }}
-                >
-                  <div className="space-y-6 p-8 bg-gradient-to-tr from-emerald-500/10 to-teal-500/10 backdrop-blur-sm border border-emerald-500/20 rounded-3xl skew-y-2">
-                    <h3 className="text-3xl font-bold text-emerald-400 mb-6">Growth Acceleration</h3>
-                    <motion.ul 
-                      className="space-y-4 text-gray-600 text-lg"
-                      variants={staggerContainer}
-                      initial="hidden"
-                      whileInView="visible"
-                    >
-                      <motion.li variants={fadeInUp}>• Advanced SEO & Technical Optimization</motion.li>
-                      <motion.li variants={fadeInUp}>• Performance Marketing & PPC</motion.li>
-                      <motion.li variants={fadeInUp}>• Conversion Rate Optimization</motion.li>
-                    </motion.ul>
-                  </div>
-                </motion.div>
-                <motion.div 
-                  className="w-full lg:w-1/2 transform lg:skew-y-2"
-                  variants={slideInRight}
-                  initial="hidden"
-                  whileInView="visible"
-                  exit="exit"
-                  viewport={{ once: false, margin: "-100px" }}
-                >
-                  <div className="relative group">
-                    <div className="absolute -inset-4 bg-gradient-to-br from-emerald-400/20 to-teal-600/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500 -skew-y-2"></div>
-                    <Image 
-                      src="/textures/DSC02031.jpg" 
-                      alt="Growth Acceleration" 
-                      width={1200} 
-                      height={800} 
-                      className="relative rounded-3xl object-cover w-full h-80 lg:h-96 shadow-2xl group-hover:scale-105 transition-transform duration-500 -skew-y-2" 
-                    />
-                  </div>
-                </motion.div>
-              </div>
-            </div>
-          </div>
-
-          {/* Intelligence Layer - Centered with Side Elements */}
-          <div className="container mx-auto px-4">
-            <div className="relative max-w-6xl mx-auto">
-              <motion.div 
-                className="text-center mb-16"
-                variants={fadeInUp}
-                initial="hidden"
-                whileInView="visible"
-                exit="exit"
-                viewport={{ once: false, margin: "-50px" }}
-              >
-                <div className="inline-block relative">
-                  <h3 className="text-4xl font-bold text-pink-400 mb-6">Intelligence Layer</h3>
-                  <div className="absolute -left-20 top-1/2 w-16 h-px bg-gradient-to-r from-transparent to-pink-400"></div>
-                  <div className="absolute -right-20 top-1/2 w-16 h-px bg-gradient-to-l from-transparent to-pink-400"></div>
-                </div>
-              </motion.div>
-              
-              <div className="grid lg:grid-cols-2 gap-16 items-center">
-                <motion.div
-                  variants={slideInLeft}
-                  initial="hidden"
-                  whileInView="visible"
-                  exit="exit"
-                  viewport={{ once: false, margin: "-100px" }}
-                >
-                  <div className="relative group">
-                    <div className="absolute -inset-4 bg-gradient-to-tl from-pink-400/20 to-orange-600/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
-                    <Image 
-                      src="/textures/DSC02064.jpg" 
-                      alt="Intelligence Layer" 
-                      width={1200} 
-                      height={800} 
-                      className="relative rounded-3xl object-cover w-full h-80 lg:h-96 shadow-2xl group-hover:scale-105 transition-transform duration-500" 
-                    />
-                  </div>
-                </motion.div>
-                
-                <motion.div
-                  variants={slideInRight}
-                  initial="hidden"
-                  whileInView="visible"
-                  exit="exit"
-                  viewport={{ once: false, margin: "-100px" }}
-                >
-                  <div className="w-full space-y-6 p-8 bg-gradient-to-br from-pink-500/10 to-orange-500/10 backdrop-blur-sm border border-pink-500/20 rounded-3xl">
-                    <motion.ul 
-                      className="space-y-4 text-gray-600 text-lg"
-                      variants={staggerContainer}
-                      initial="hidden"
-                      whileInView="visible"
-                    >
-                      <motion.li variants={fadeInUp}>• Conversational AI & Chatbots</motion.li>
-                      <motion.li variants={fadeInUp}>• Predictive Analytics Dashboards</motion.li>
-                      <motion.li variants={fadeInUp}>• Social Media Automation</motion.li>
-                    </motion.ul>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ServicesSection />
 
         {/* Philosophy - Split Screen */}
-        <div className="w-full relative py-20 overflow-hidden bg-gradient-to-br from-cyan-900/30 via-purple-900/30 to-pink-900/30">
+        <div className="w-full relative py-12 overflow-hidden bg-white">
           <div className="container mx-auto px-4">
-            <div className="flex flex-col lg:flex-row items-stretch min-h-screen max-w-7xl mx-auto">
+            <div className="flex flex-col lg:flex-row items-stretch max-w-7xl mx-auto">
               <motion.div 
                 className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-16"
                 variants={slideInLeft}
@@ -665,23 +1123,17 @@ export default function AboutPage() {
                 viewport={{ once: false, margin: "-100px" }}
               >
                 <div className="space-y-8 max-w-lg">
-                  <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold bg-gradient-to-r from-cyan-600 to-purple-700 bg-clip-text text-transparent">
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-[#010a14] via-blue-800 to-[#010a14] bg-clip-text text-transparent">
                     Our Philosophy
                   </h2>
-                  <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-900 leading-relaxed">
+                  <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-900 leading-relaxed">
                     We merge velocity with precision, creativity with strategy, and vision with execution. Our teams don't just build digital products — we architect experiences that drive exponential growth and redefine market standards.
                   </p>
-                  <motion.div 
-                    className="text-sm text-gray-500 bg-gray-50 backdrop-blur-sm border border-gray-200 rounded-xl p-6"
-                    variants={scaleIn}
-                  >
-                    Based in Denton • Serving Global Markets • Rapid Deployment • Strategic Execution
-                  </motion.div>
                 </div>
               </motion.div>
               
               <motion.div 
-                className="w-full lg:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-6 p-4 lg:p-8"
+                className="w-full lg:w-1/2 p-4 lg:p-8"
                 variants={slideInRight}
                 initial="hidden"
                 whileInView="visible"
@@ -690,20 +1142,11 @@ export default function AboutPage() {
               >
                 <motion.div variants={fadeInUp}>
                   <Image 
-                    src="/textures/DSC01040.jpg" 
-                    alt="Philosophy Image 1" 
+                    src="/assets/aboutUs/image1.png" 
+                    alt="Philosophy" 
                     width={800} 
                     height={600} 
-                    className="rounded-3xl object-cover w-full h-72 shadow-2xl hover:scale-105 transition-transform duration-500" 
-                  />
-                </motion.div>
-                <motion.div variants={fadeInUp} transition={{ delay: 0.2 }}>
-                  <Image 
-                    src="/textures/DSC01103.jpg" 
-                    alt="Philosophy Image 2" 
-                    width={800} 
-                    height={600} 
-                    className="rounded-3xl object-cover w-full h-72 shadow-2xl hover:scale-105 transition-transform duration-500" 
+                    className="object-contain w-full h-[420px] lg:h-[500px]" 
                   />
                 </motion.div>
               </motion.div>
@@ -712,10 +1155,10 @@ export default function AboutPage() {
         </div>
 
         {/* The Bytes Advantage - Masonry Grid */}
-        <div className="w-full py-20">
+        <div className="w-full py-6 bg-[#010a14]">
           <div className="container mx-auto px-4 max-w-7xl">
             <motion.h2 
-              className="text-3xl sm:text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent mb-16"
+              className="text-2xl sm:text-3xl md:text-4xl font-bold text-center bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-4"
               variants={scaleIn}
               initial="hidden"
               whileInView="visible"
@@ -726,61 +1169,60 @@ export default function AboutPage() {
             </motion.h2>
             
             <motion.div 
-              className="grid lg:grid-cols-2 gap-8"
+              className="grid lg:grid-cols-2 gap-4"
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: false, margin: "-100px" }}
             >
               <motion.div 
-                className="w-full lg:row-span-1 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 backdrop-blur-sm border border-cyan-500/20 rounded-3xl p-6 sm:p-8 hover:scale-105 transition-all duration-500"
+                className="w-full lg:row-span-1 bg-white border border-blue-100 rounded-3xl p-3 sm:p-5 hover:scale-105 transition-all duration-500 order-1"
                 variants={rotateIn}
               >
-                <h3 className="text-2xl font-bold text-cyan-400 mb-4">Real-Time Development Visibility</h3>
-                <p className="text-gray-700 leading-relaxed">
+                <h3 className="text-xl font-bold text-[#010a14] mb-3">Real-Time Development Visibility</h3>
+                <p className="text-[#010a14] leading-relaxed">
                   Every client receives live staging environments throughout development. Watch your vision materialize, provide instant feedback, and iterate in real-time. No surprises, no delays, no compromises.
                 </p>
               </motion.div>
               
               <motion.div 
-                className="w-full lg:row-span-2 bg-gradient-to-r from-purple-500/10 to-pink-500/10 backdrop-blur-sm border border-purple-500/20 rounded-3xl p-6 sm:p-8 hover:scale-105 transition-all duration-500"
+                className="w-full lg:row-span-1 bg-white border border-blue-100 rounded-3xl p-3 sm:p-5 hover:scale-105 transition-all duration-500 order-2"
                 variants={slideInRight}
               >
-                <h3 className="text-2xl font-bold text-purple-400 mb-4">Hyper-Speed Delivery</h3>
-                <p className="text-gray-700 leading-relaxed mb-6">
+                <h3 className="text-xl font-bold text-[#010a14] mb-3">Hyper-Speed Delivery</h3>
+                <p className="text-[#010a14] leading-relaxed mb-6">
                   Our agile methodology and parallel processing workflows deliver production-ready solutions 3x faster than industry benchmarks — without sacrificing quality or cutting corners.
                 </p>
-                <motion.div 
-                  className="w-full h-32 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-2xl flex items-center justify-center"
-                  animate={{ scale: [1, 1.05, 1] }}
-                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  <motion.div
-                    animate={{ x: [0, 12, 0], y: [0, -12, 0] }}
-                    transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    <ArrowUpRightIcon className="w-12 h-12 sm:w-16 sm:h-16 text-purple-500" />
-                  </motion.div>
-                </motion.div>
               </motion.div>
               
               <motion.div 
-                className="w-full bg-gradient-to-r from-emerald-500/10 to-teal-500/10 backdrop-blur-sm border border-emerald-500/20 rounded-3xl p-6 sm:p-8 hover:scale-105 transition-all duration-500"
+                className="w-full lg:col-span-2 lg:w-1/2 mx-auto bg-white border border-blue-100 rounded-3xl p-3 sm:p-5 hover:scale-105 transition-all duration-500 order-5"
                 variants={fadeInUp}
               >
-                <h3 className="text-2xl font-bold text-emerald-400 mb-4">Bespoke Design Architecture</h3>
-                <p className="text-gray-700 leading-relaxed">
+                <h3 className="text-xl font-bold text-[#010a14] mb-3">Bespoke Design Architecture</h3>
+                <p className="text-[#010a14] leading-relaxed">
                   Zero templates, zero shortcuts. Every interface is meticulously crafted to align with your brand DNA, user psychology, and conversion objectives. Authenticity meets performance.
                 </p>
               </motion.div>
               
               <motion.div 
-                className="w-full bg-gradient-to-r from-pink-500/10 to-orange-500/10 backdrop-blur-sm border border-pink-500/20 rounded-3xl p-6 sm:p-8 hover:scale-105 transition-all duration-500"
+                className="w-full bg-white border border-blue-100 rounded-3xl p-3 sm:p-5 hover:scale-105 transition-all duration-500 order-4"
                 variants={slideInLeft}
               >
-                <h3 className="text-2xl font-bold text-pink-400 mb-4">Infinite Scalability</h3>
-                <p className="text-gray-700 leading-relaxed">
+                <h3 className="text-xl font-bold text-[#010a14] mb-3">Infinite Scalability</h3>
+                <p className="text-[#010a14] leading-relaxed">
                   From MVP to enterprise-grade platforms, our infrastructure scales seamlessly with your ambitions. Start lean, scale fast, dominate markets.
+                </p>
+              </motion.div>
+
+              {/* Cost Effective Solution Card */}
+              <motion.div 
+                className="w-full bg-white border border-blue-100 rounded-3xl p-3 sm:p-5 hover:scale-105 transition-all duration-500 order-4"
+                variants={fadeInUp}
+              >
+                <h3 className="text-xl font-bold text-[#010a14] mb-3">Cost Effective Solution</h3>
+                <p className="text-[#010a14] leading-relaxed">
+                  Our streamlined processes and reusable component library minimize development overhead, delivering exceptional results within your budget without compromising on quality or performance.
                 </p>
               </motion.div>
             </motion.div>
@@ -788,11 +1230,28 @@ export default function AboutPage() {
         </div>
 
         {/* Technology Stack - Showcase */}
-        <div className="w-full py-20 bg-gradient-to-br from-cyan-900/30 via-purple-900/30 to-pink-900/30">
+        <div className="w-full py-20 bg-white">
           <div className="container mx-auto px-4 max-w-7xl">
             <div className="flex flex-col lg:flex-row items-center gap-16">
+              {/* Left Image */}
               <motion.div 
-                className="w-full lg:w-1/2"
+                className="w-full lg:w-1/3"
+                variants={fadeInUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+              >
+                <Image
+                  src="/assets/aboutUs/img2.png"
+                  alt="Tech Stack Image Left"
+                  width={800}
+                  height={600}
+                  className="object-cover w-full h-64 rounded-2xl"
+                />
+              </motion.div>
+
+              <motion.div 
+                className="w-full lg:w-1/3"
                 variants={rotateIn}
                 initial="hidden"
                 whileInView="visible"
@@ -800,8 +1259,8 @@ export default function AboutPage() {
                 viewport={{ once: false, margin: "-100px" }}
               >
                 <div className="relative group">
-                  <div className="w-full h-96 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 rounded-3xl backdrop-blur-sm border border-indigo-500/30 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-400/30 to-purple-500/30 group-hover:scale-105 transition-transform duration-700"></div>
+                  <div className="w-full h-96 relative">
+                    <div className="absolute inset-0 hidden"></div>
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="text-center space-y-6">
                         <motion.div 
@@ -820,55 +1279,44 @@ export default function AboutPage() {
                           ].map(({ Icon, name }, idx) => (
                             <motion.div
                               key={name}
-                              className="w-16 h-16 sm:w-20 sm:h-20 bg-white/20 rounded-2xl flex items-center justify-center"
+                              className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center"
                               variants={scaleIn}
                               whileHover={{ scale: 1.1, rotate: 5 }}
                             >
-                              <Icon className="w-8 h-8 sm:w-10 sm:h-10 text-purple-600" aria-label={name} />
+                              <Icon className="w-8 h-8 sm:w-10 sm:h-10 text-[#010a14]" aria-label={name} />
                             </motion.div>
                           ))}
                         </motion.div>
-                        <p className="text-gray-900 font-medium text-base sm:text-lg">Modern Tech Stack</p>
-                        <p className="text-xs sm:text-sm text-gray-900 max-w-xs mx-auto">We harness the latest frameworks, languages, and cloud services to build resilient, future-proof applications tailored to your growth trajectory.</p>
+                        <p className="font-medium text-base sm:text-lg bg-gradient-to-r from-[#010a14] via-blue-800 to-[#010a14] bg-clip-text text-transparent">Modern Tech Stack</p>
+                        <p className="text-xs sm:text-sm text-[#010a14] max-w-xs mx-auto">We harness the latest frameworks, languages, and cloud services to build resilient, future-proof applications tailored to your growth trajectory.</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </motion.div>
               
+              {/* Right Image */}
               <motion.div 
-                className="w-full lg:w-1/2 grid grid-cols-2 gap-6 mt-8 lg:mt-0"
-                variants={slideInRight}
+                className="w-full lg:w-1/3 mt-8 lg:mt-0"
+                variants={fadeInUp}
                 initial="hidden"
                 whileInView="visible"
-                exit="exit"
-                viewport={{ once: false, margin: "-100px" }}
+                viewport={{ once: true, margin: "-100px" }}
               >
-                <motion.div variants={fadeInUp}>
                   <Image 
-                    src="/textures/DSC01461.jpg" 
-                    alt="Tech 1" 
+                  src="/assets/aboutUs/tech-stack.png"
+                  alt="Tech Stack Image Right"
                     width={800} 
                     height={600} 
-                    className="rounded-3xl object-cover w-full h-64 shadow-2xl hover:scale-105 transition-transform duration-500" 
-                  />
-                </motion.div>
-                <motion.div variants={fadeInUp} transition={{ delay: 0.2 }}>
-                  <Image 
-                    src="/textures/DSC02069.jpg" 
-                    alt="Tech 2" 
-                    width={800} 
-                    height={600} 
-                    className="rounded-3xl object-cover w-full h-64 shadow-2xl hover:scale-105 transition-transform duration-500" 
-                  />
-                </motion.div>
+                  className="object-cover w-full h-64 rounded-2xl"
+                />
               </motion.div>
             </div>
           </div>
         </div>
 
         {/* Integration Ecosystem - Floating Cards */}
-        <div className="w-full py-20">
+        <div className="w-full py-20 bg-[#010a14]">
           <div className="container mx-auto px-4 max-w-7xl">
             <motion.h2 
               className="text-3xl sm:text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent mb-16"
@@ -890,43 +1338,43 @@ export default function AboutPage() {
             >
               <div className="w-full space-y-6">
                 <motion.div 
-                  className="bg-gray-50 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 hover:bg-gray-100 transition-all duration-500 hover:scale-105 hover:rotate-1"
+                  className="bg-white border border-blue-100 rounded-2xl p-6 transition-all duration-500 hover:scale-105 hover:rotate-1"
                   variants={slideInLeft}
                   whileHover={{ y: -10 }}
                 >
-                  <h4 className="font-semibold text-cyan-400 mb-3 text-lg">Business Intelligence</h4>
-                  <p className="text-gray-700">CRM systems, Analytics platforms, Sales tracking, Performance dashboards</p>
+                  <h4 className="font-semibold text-[#010a14] mb-3 text-lg">Business Intelligence</h4>
+                  <p className="text-[#010a14]">CRM systems, Analytics platforms, Sales tracking, Performance dashboards</p>
                 </motion.div>
                 
                 <motion.div 
-                  className="bg-gray-50 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 hover:bg-gray-100 transition-all duration-500 hover:scale-105 hover:-rotate-1"
+                  className="bg-white border border-blue-100 rounded-2xl p-6 transition-all duration-500 hover:scale-105 hover:-rotate-1"
                   variants={slideInLeft}
                   whileHover={{ y: -10 }}
                   transition={{ delay: 0.1 }}
                 >
-                  <h4 className="font-semibold text-purple-400 mb-3 text-lg">AI & Automation</h4>
-                  <p className="text-gray-700">Custom chatbots, Workflow automation, Predictive algorithms</p>
+                  <h4 className="font-semibold text-[#010a14] mb-3 text-lg">AI & Automation</h4>
+                  <p className="text-[#010a14]">Custom chatbots, Workflow automation, Predictive algorithms</p>
                 </motion.div>
               </div>
               
               <div className="w-full space-y-6">
                 <motion.div 
-                  className="bg-gray-50 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 hover:bg-gray-100 transition-all duration-500 hover:scale-105 hover:rotate-1"
+                  className="bg-white border border-blue-100 rounded-2xl p-6 transition-all duration-500 hover:scale-105 hover:rotate-1"
                   variants={slideInRight}
                   whileHover={{ y: -10 }}
                 >
-                  <h4 className="font-semibold text-emerald-400 mb-3 text-lg">Commerce & Payments</h4>
-                  <p className="text-gray-700">Payment gateways, Booking systems, Subscription management</p>
+                  <h4 className="font-semibold text-[#010a14] mb-3 text-lg">Commerce & Payments</h4>
+                  <p className="text-[#010a14]">Payment gateways, Booking systems, Subscription management</p>
                 </motion.div>
                 
                 <motion.div 
-                  className="bg-gray-50 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 hover:bg-gray-100 transition-all duration-500 hover:scale-105 hover:-rotate-1"
+                  className="bg-white border border-blue-100 rounded-2xl p-6 transition-all duration-500 hover:scale-105 hover:-rotate-1"
                   variants={slideInRight}
                   whileHover={{ y: -10 }}
                   transition={{ delay: 0.1 }}
                 >
-                  <h4 className="font-semibold text-pink-400 mb-3 text-lg">Marketing Stack</h4>
-                  <p className="text-gray-700">Email automation, Social integration, Campaign management</p>
+                  <h4 className="font-semibold text-[#010a14] mb-3 text-lg">Marketing Stack</h4>
+                  <p className="text-[#010a14]">Email automation, Social integration, Campaign management</p>
                 </motion.div>
               </div>
             </motion.div>
@@ -934,7 +1382,7 @@ export default function AboutPage() {
         </div>
 
         {/* Support & Growth - Full Width Banner */}
-        <div className="w-full py-24 sm:py-32 relative overflow-hidden">
+        <div className="w-full py-24 sm:py-32 relative overflow-hidden bg-[#010a14] text-white">
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-white"></div>
             <motion.div 
@@ -973,15 +1421,21 @@ export default function AboutPage() {
               exit="exit"
               viewport={{ once: false, margin: "-100px" }}
             >
-              <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-cyan-600 to-purple-700 bg-clip-text text-transparent">
-                Beyond Launch
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-[#010a14]">
+                Ready to Elevate Your
+                <br />
+                <span className="text-xl sm:text-2xl md:text-3xl font-bold">
+                  Digital Presence?
+                </span>
               </h2>
+              
               <motion.p 
-                className="text-lg sm:text-xl md:text-2xl text-gray-900 max-w-4xl mx-auto leading-relaxed"
+                className="text-base sm:text-lg text-gray-700 mb-8 max-w-2xl mx-auto leading-relaxed"
                 variants={fadeInUp}
               >
-                Premium hosting, proactive maintenance, security monitoring, and continuous optimization. Your success is our ongoing mission.
+                Transform your ideas into impactful solutions. Contact our team and let's bring your vision to life.
               </motion.p>
+              
               <motion.div 
                 className="flex flex-wrap justify-center gap-6 sm:gap-8 mt-12"
                 variants={staggerContainer}
@@ -990,13 +1444,13 @@ export default function AboutPage() {
               >
                 {[
                   { label: '24/7 Support', icon: (
-                    <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636A9 9 0 105.636 18.364 9 9 0 0018.364 5.636z" /></svg>) },
+                    <svg className="w-5 h-5 text-[#010a14]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636A9 9 0 105.636 18.364 9 9 0 0018.364 5.636z" /></svg>) },
                   { label: 'Auto Updates', icon: (
-                    <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v6h6M20 20v-6h-6M5 19l4-4M19 5l-4 4" /></svg>) },
+                    <svg className="w-5 h-5 text-[#010a14]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v6h6M20 20v-6h-6M5 19l4-4M19 5l-4 4" /></svg>) },
                   { label: 'Performance Monitoring', icon: (
-                    <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3v18h18M16 3v18M8 9h8M8 15h8" /></svg>) },
+                    <svg className="w-5 h-5 text-[#010a14]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3v18h18M16 3v18M8 9h8M8 15h8" /></svg>) },
                   { label: 'Growth Analytics', icon: (
-                    <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 17l6-6 4 4 8-8" /></svg>) }
+                    <svg className="w-5 h-5 text-[#010a14]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 17l6-6 4 4 8-8" /></svg>) }
                 ].map((item, index) => (
                   <motion.div 
                     key={item.label}
@@ -1007,7 +1461,7 @@ export default function AboutPage() {
                     <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-3 mx-auto backdrop-blur-sm border border-white/20">
                       {item.icon}
                     </div>
-                    <p className="text-gray-700 text-sm uppercase tracking-wider">{item.label}</p>
+                    <p className="text-[#010a14] text-sm uppercase tracking-wider">{item.label}</p>
                   </motion.div>
                 ))}
               </motion.div>
@@ -1016,10 +1470,10 @@ export default function AboutPage() {
         </div>
 
         {/* Final CTA - Explosive */}
-        <div className="w-full py-24 sm:py-32 relative overflow-hidden">
+        <div className="w-full py-24 sm:py-32 relative overflow-hidden bg-[#010a14] text-white">
           <div className="absolute inset-0">
             <motion.div 
-              className="absolute inset-0 bg-gradient-to-br from-cyan-900/30 via-purple-900/30 to-pink-900/30"
+              className="absolute inset-0 bg-[#010a14]"
               animate={{ 
                 backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"]
               }}
@@ -1042,23 +1496,13 @@ export default function AboutPage() {
               viewport={{ once: false, margin: "-100px" }}
             >
               <motion.h2 
-                className="text-4xl sm:text-6xl md:text-8xl font-black bg-gradient-to-r from-cyan-600 to-purple-700 bg-clip-text text-transparent"
-                animate={{ 
-                  backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
-                }}
-                transition={{ 
-                  duration: 3, 
-                  repeat: Infinity, 
-                  ease: "linear" 
-                }}
-                style={{ backgroundSize: "200% 200%" }}
+                className="text-4xl sm:text-6xl md:text-8xl font-black text-white"
               >
                 Ready to Build the Future?
               </motion.h2>
               
               <motion.p 
-                className="text-lg sm:text-xl md:text-2xl text-gray-900 max-w-4xl mx-auto leading-relaxed"
-                variants={fadeInUp}
+                className="text-lg sm:text-xl md:text-2xl text-white max-w-4xl mx-auto leading-relaxed"
               >
                 Transform your vision into reality. Scale your impact. Dominate your market.
               </motion.p>
@@ -1068,21 +1512,12 @@ export default function AboutPage() {
                 variants={scaleIn}
               >
                 <motion.div 
-                  className="w-64 h-2 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-400 rounded-full"
-                  animate={{ 
-                    scaleX: [0.5, 1.5, 0.5],
-                    opacity: [0.7, 1, 0.7]
-                  }}
-                  transition={{ 
-                    duration: 2, 
-                    repeat: Infinity, 
-                    ease: "easeInOut" 
-                  }}
+                  className="w-64 h-2 bg-gradient-to-r from-blue-400 via-white to-blue-400 rounded-full"
                 />
               </motion.div>
               
               <motion.div 
-                className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-16"
+                className="mt-16 bg-white rounded-3xl p-8 grid grid-cols-2 md:grid-cols-4 gap-8"
                 variants={staggerContainer}
                 initial="hidden"
                 whileInView="visible"
@@ -1099,16 +1534,64 @@ export default function AboutPage() {
                     variants={rotateIn}
                     whileHover={{ scale: 1.1, rotateY: 15 }}
                   >
-                    <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyan-600 to-purple-700 bg-clip-text text-transparent mb-2">
+                    <div className="text-4xl md:text-5xl font-bold text-[#010a14] mb-2">
                       <CountUp end={stat.number} duration={3} suffix={stat.suffix} />
                     </div>
-                    <p className="text-gray-700 text-sm uppercase tracking-wider">{stat.label}</p>
+                    <p className="text-[#010a14] text-sm uppercase tracking-wider">{stat.label}</p>
                   </motion.div>
                 ))}
               </motion.div>
             </motion.div>
           </div>
         </div>
+      </section>
+
+      {/* Global Call-to-Action Section */}
+      <section className="relative py-16 px-4 bg-[#E1E1E1] overflow-hidden">
+        {/* Decorative background image */}
+        <Image
+          src="/assets/aboutUs/aboutus-contact.png"
+          alt="Contact illustration"
+          fill
+          className="object-cover absolute inset-0"
+          priority
+        />
+        {/* Semi-transparent overlay to improve text readability */}
+        <div className="absolute inset-0 bg-white/40" />
+
+        <motion.div
+          className="relative z-10 max-w-4xl mx-auto text-center"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-8">
+            Ready to Elevate Your
+            <br />
+            <span className="text-4xl sm:text-5xl md:text-6xl font-bold">
+              Digital Presence?
+            </span>
+          </h2>
+
+          <motion.p
+            className="text-base sm:text-lg text-gray-700 mb-8 max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            Transform your ideas into impactful solutions. Contact our team and let's bring your vision to life.
+          </motion.p>
+
+          <motion.button
+            className="bg-gradient-to-r from-gray-600 to-gray-600 hover:from-gray-700 hover:to-gray-700 px-8 py-3 rounded-full text-lg font-semibold text-white transition-all duration-300"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => router.push('/contact')}
+          >
+            Start Your Project
+          </motion.button>
+        </motion.div>
       </section>
     </main>
   );
