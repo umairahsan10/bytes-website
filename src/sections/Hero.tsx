@@ -52,8 +52,15 @@ const HeroSection = () => {
   }, [isLoaded, moonVisible]);
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    // Wrapper ensures additional scroll space so the hero can stay pinned while its animation plays
+    <div className="hero-wrapper relative w-full">
+      {/* The following inline styles apply only to this component */}
       <style jsx>{`
+        /* Wrapper grants extra scroll length (180% of viewport) */
+        .hero-wrapper {
+          height: 180vh; /* allows about 80vh of scroll while hero is pinned */
+        }
+
         @keyframes slideUpFromBottom {
           0% {
             transform: translateY(100%);
@@ -137,7 +144,10 @@ const HeroSection = () => {
         }
 
         .hero-section {
-          position: relative;
+          /* Make the hero stay fixed while its container scrolls */
+          position: sticky;
+          top: 0;
+
           width: 100%;
           height: 100vh;
           overflow: hidden;
@@ -310,7 +320,7 @@ const HeroSection = () => {
             ref={moonRef}
             className="moon moon-1"
           ></div>
-      </div>
+        </div>
 
         {/* Land Image */}
         <div 
