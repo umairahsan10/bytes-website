@@ -49,7 +49,7 @@ export default async function BlogDetailPage({
             {new Date(blog.date).toLocaleDateString()}
           </p>
 
-          <div className="prose md:prose-lg mt-6 max-w-none font-normal">
+          <div className="prose md:prose-lg mt-6 max-w-none font-light prose-p:font-light">
             <ReactMarkdown components={markdownComponents}>{blog.content}</ReactMarkdown>
           </div>
         </article>
