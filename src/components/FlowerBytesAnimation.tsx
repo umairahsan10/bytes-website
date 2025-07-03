@@ -192,95 +192,88 @@ function TextLine() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  // Listen for scroll progress events from parent component
   useEffect(() => {
-    const section = document.getElementById('about')
-
-    const handleScroll = () => {
-      if (!section) return
-
-      const sectionTop = section.offsetTop
-      const sectionHeight = section.offsetHeight
-
-      const currentScroll = window.scrollY
-
-      let progress = 0
-
-      // For sticky sections with height equal to viewport, ensure a non-zero scroll range
-      const startOffset = window.innerHeight * 0.4
-      const effectiveHeight = window.innerHeight * 1.2 // 120% of viewport height scroll range
-
-      const startScroll = sectionTop - startOffset
-      const endScroll = startScroll + effectiveHeight
-
-      if (currentScroll < startScroll) {
-        progress = 0
-      } else if (currentScroll > endScroll) {
-        progress = 1
-      } else {
-        progress = (currentScroll - startScroll) / effectiveHeight
+    const handleScrollProgress = (event: CustomEvent) => {
+      const progress = event.detail.progress;
+      // Only update if progress is valid
+      if (typeof progress === 'number' && progress >= 0 && progress <= 1) {
+        targetProgressRef.current = progress;
       }
+    };
 
-      targetProgressRef.current = progress
-    }
-
-    handleScroll()
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  // State flag to start animation after delay
-  const [animationStarted, setAnimationStarted] = useState(false)
-
-  // Start animation after a short delay (e.g., 1.5s)
-  useEffect(() => {
-    const timer = setTimeout(() => setAnimationStarted(true), 2500)
-    return () => clearTimeout(timer)
-  }, [])
+    window.addEventListener('scrollProgress', handleScrollProgress as EventListener);
+    
+    return () => {
+      window.removeEventListener('scrollProgress', handleScrollProgress as EventListener);
+    };
+  }, []);
 
   // "DON'T DRAW IT AGAIN AND AGAIN": Inside the animation loop (useFrame),
   // we are NOT re-creating the geometry. We are just telling the GPU
   // "how much" of the pre-built, cached geometry to render using `setDrawRange`.
   // This is extremely fast and efficient.
   useFrame(() => {
-    if (!animationStarted) return // wait for delay before drawing
+    // Smooth lerp for scroll progress - works in both directions
+    scrollProgressRef.current += (targetProgressRef.current - scrollProgressRef.current) * 0.15;
 
-    // Smaller lerp factor for smoother scrolling animation
-    scrollProgressRef.current += (targetProgressRef.current - scrollProgressRef.current) * 0.08
-
-    const totalLetters = letterCurves.length
-    // Lower multiplier means letters reveal more slowly
-    const revealMultiplier = 0.8
-
-    // Apply 20% scroll delay: ignore first 20% of progress
-    const effectiveScroll = Math.max(0, scrollProgressRef.current - 0.15) / 0.8 // 0 ->1 after 20%
+    const totalLetters = letterCurves.length;
+    
+    // Map scroll progress to animation phases:
+    // 0-0.4: 3D animation reveal (sections 1-2)
+    // 0.4-1.0: Continue 3D animation and enhance effects (sections 3-5)
+    const animationProgress = Math.min(1, scrollProgressRef.current / 0.4);
+    const enhancementProgress = Math.max(0, (scrollProgressRef.current - 0.4) / 0.6);
 
     letterCurves.forEach((curve, letterIndex) => {
-      const tubeRef = tubeRefs.current[letterIndex]
-      const sphereRef = sphereRefs.current[letterIndex]
-      const geom = fullGeometries[letterIndex]
+      const tubeRef = tubeRefs.current[letterIndex];
+      const sphereRef = sphereRefs.current[letterIndex];
+      const geom = fullGeometries[letterIndex];
 
-      if (!tubeRef || !sphereRef || !geom) return
+      if (!tubeRef || !sphereRef || !geom) return;
 
+      // Calculate letter reveal progress based on animation phase
       const letterProgress = Math.max(0, Math.min(1,
-        (effectiveScroll * totalLetters * (revealMultiplier + 0.1)) - letterIndex
-      ))
+        (animationProgress * totalLetters * 0.8) - letterIndex
+      ));
 
       if (letterProgress > 0) {
         // This is the core optimization: just reveal part of the existing geometry.
-        const indexCount = geom.index ? geom.index.count : 0
-        const drawCount = Math.floor(indexCount * letterProgress)
-        geom.setDrawRange(0, drawCount)
-        tubeRef.visible = true
+        const indexCount = geom.index ? geom.index.count : 0;
+        const drawCount = Math.floor(indexCount * letterProgress);
+        geom.setDrawRange(0, drawCount);
+        tubeRef.visible = true;
 
-        const headPoint = curve.getPoint(letterProgress)
-        sphereRef.position.copy(headPoint)
-        sphereRef.visible = letterProgress > 0.02 // Prevents dot appearing too early
+        // Add enhancement effects in later sections
+        if (enhancementProgress > 0) {
+          const material = tubeRef.material as THREE.MeshBasicMaterial;
+          material.opacity = 0.5 + (enhancementProgress * 0.5);
+          material.color.setHex(0x5ee5ff);
+        } else {
+          // Reset to base opacity when scrolling back
+          const material = tubeRef.material as THREE.MeshBasicMaterial;
+          material.opacity = 0.5;
+        }
+
+        const headPoint = curve.getPoint(letterProgress);
+        sphereRef.position.copy(headPoint);
+        sphereRef.visible = letterProgress > 0.02; // Prevents dot appearing too early
+        
+        // Enhance sphere in later sections
+        if (enhancementProgress > 0) {
+          const sphereMaterial = sphereRef.material as THREE.MeshBasicMaterial;
+          sphereMaterial.opacity = 0.5 + (enhancementProgress * 0.5);
+        } else {
+          // Reset to base opacity when scrolling back
+          const sphereMaterial = sphereRef.material as THREE.MeshBasicMaterial;
+          sphereMaterial.opacity = 0.5;
+        }
       } else {
-        tubeRef.visible = false
-        sphereRef.visible = false
+        tubeRef.visible = false;
+        sphereRef.visible = false;
       }
-    })
-  })
+    });
+  });
   
   // Cleanup geometries on unmount to prevent memory leaks
   useEffect(() => {
