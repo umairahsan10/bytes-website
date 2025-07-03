@@ -84,16 +84,18 @@ const AppDevelopmentPage = () => {
   // Scrolling phone mockup data
   const [currentScreen, setCurrentScreen] = useState(0);
   const phoneContainerRef = useRef<HTMLDivElement>(null);
+  const [scrollThreshold, setScrollThreshold] = useState(0);
+  const [hasCompletedAllScreens, setHasCompletedAllScreens] = useState(false);
 
   // Feature cards state
   const [selectedFeature, setSelectedFeature] = useState<number | null>(null);
 
   const { scrollYProgress: phoneScrollProgress } = useScroll({
     target: phoneContainerRef,
-    offset: ["start end", "end start"]
+    offset: ["start start", "end start"]
   });
 
-  const springConfig = { stiffness: 300, damping: 30, restDelta: 0.001 };
+  const springConfig = { stiffness: 80, damping: 25, restDelta: 0.001 };
   const screenProgress = useSpring(phoneScrollProgress, springConfig);
 
   const appScreens = [
@@ -127,21 +129,25 @@ const AppDevelopmentPage = () => {
     }
   ];
 
-  // Enhanced scroll mapping with smooth transitions
+  // Enhanced scroll tracking with threshold + extended 4th screen time
   useEffect(() => {
     const unsubscribe = phoneScrollProgress.onChange((progress) => {
-      // Smooth transition between screens based on scroll progress
+      // Mark section complete after reaching 0.7
+      if (progress >= 0.7 && !hasCompletedAllScreens) {
+        setHasCompletedAllScreens(true);
+      }
+
+      setScrollThreshold(progress);
+
       let newScreen;
-      if (progress < 0.3) {
-        newScreen = 0;        // First segment
+      if (progress < 0.2) {
+        newScreen = 0;        // first screen
+      } else if (progress < 0.35) {
+        newScreen = 1;        // second screen
       } else if (progress < 0.5) {
-        newScreen = 1;        // Second segment
-      } else if (progress < 0.7) {
-        newScreen = 2;        // Third segment
-      } else if (progress < 0.9) {
-        newScreen = 3;        // Fourth segment
+        newScreen = 2;        // third screen
       } else {
-        newScreen = 3;        // End stays on 4th screen
+        newScreen = 3;        // fourth screen
       }
 
       if (newScreen !== currentScreen) {
@@ -149,7 +155,7 @@ const AppDevelopmentPage = () => {
       }
     });
     return () => unsubscribe();
-  }, [phoneScrollProgress, currentScreen]);
+  }, [phoneScrollProgress, currentScreen, hasCompletedAllScreens]);
 
   // Create smooth image movement transforms for vertical sliding
   const mockupTranslateY = useTransform(phoneScrollProgress, [0, 1], [0, -300]);
@@ -265,7 +271,14 @@ const AppDevelopmentPage = () => {
       </motion.section>
 
       {/* Scrolling Phone Mockup Section */}
-      <div ref={phoneContainerRef} className="relative min-h-[400vh] bg-white py-16 md:py-20 lg:py-24">
+      <div
+        ref={phoneContainerRef}
+        className="relative bg-white py-16 md:py-20 lg:py-24"
+        style={{
+          minHeight: '400vh',
+          scrollBehavior: 'smooth',
+        }}
+      >
         <div className="sticky top-0 h-screen flex items-start md:items-center justify-center overflow-hidden pt-16 md:pt-0">
           <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 items-start md:items-center">
 
@@ -275,9 +288,9 @@ const AppDevelopmentPage = () => {
                 className="relative"
                 style={{
                   y: useTransform(
-                    phoneScrollProgress,
-                    [0, 0.1, 0.9, 1], // Move down to stick by 10%, stay fixed until 90%, then move up
-                    [100, 0, 0, -300]
+                    screenProgress,
+                    [0, 0.7, 1],
+                    [0, 0, -100]
                   )
                 }}
               >
@@ -300,9 +313,9 @@ const AppDevelopmentPage = () => {
                       className="relative w-full h-full"
                       style={{
                         y: useTransform(
-                          phoneScrollProgress,
-                          [0.1, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], // Start after section is stuck, step-by-step movement
-                          [0, 0, -442, -442, -884, -884, -1326, -1326, -1768]
+                          screenProgress,
+                          [0.1, 0.2, 0.2, 0.35, 0.35, 0.5, 0.5, 0.7, 0.7, 1],
+                          [0, 0, -442, -442, -884, -884, -1326, -1326, -1326, -1326]
                         )
                       }}
                     >
@@ -386,8 +399,8 @@ const AppDevelopmentPage = () => {
                     className="absolute top-0 left-0 w-full bg-gradient-to-b from-purple-600 to-purple-800 origin-top"
                     style={{
                       scaleY: useTransform(
-                        phoneScrollProgress,
-                        [0.1, 0.8], // Timeline fills during the step-by-step phase
+                        screenProgress,
+                        [0.1, 0.7],
                         [0, 1]
                       ),
                       transformOrigin: 'top'
@@ -399,9 +412,9 @@ const AppDevelopmentPage = () => {
                     className="absolute inset-0"
                     style={{
                       y: useTransform(
-                        phoneScrollProgress,
-                        [0.1, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], // Start after section is stuck, step-by-step movement
-                        [0, 0, -60, -60, -120, -120, -240, -240, -360]
+                        screenProgress,
+                        [0.1, 0.2, 0.2, 0.35, 0.35, 0.5, 0.5, 0.7, 0.7, 1],
+                        [0, 0, -60, -60, -120, -120, -180, -180, -180, -180]
                       )
                     }}
                   >
@@ -461,9 +474,9 @@ const AppDevelopmentPage = () => {
                   className="relative w-full h-full"
                   style={{
                     y: useTransform(
-                      phoneScrollProgress,
-                      [0.1, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], // Start after section is stuck, step-by-step movement
-                      [0, 0, -400, -400, -800, -800, -1200, -1200, -1600]
+                      screenProgress,
+                      [0.1, 0.2, 0.2, 0.35, 0.35, 0.5, 0.5, 0.7, 0.7, 1],
+                      [0, 0, -400, -400, -800, -800, -1200, -1200, -1200, -1200]
                     )
                   }}
                 >
@@ -478,10 +491,10 @@ const AppDevelopmentPage = () => {
                       }}
                       transition={{ duration: 0.6, ease: "easeOut" }}
                     >
-                      <h2 className="text-3xl lg:text-4xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
+                      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
                         {screen.title}
                       </h2>
-                      <p className="text-base lg:text-lg text-gray-600 mb-8 leading-relaxed">
+                      <p className="text-base md:text-lg text-gray-600 mb-8 leading-relaxed">
                         {screen.description}
                       </p>
 
@@ -538,29 +551,29 @@ const AppDevelopmentPage = () => {
       <div ref={containerRef} className="bg-white text-gray-900">
         {/* Value Proposition & Offerings Section */}
         {/* NOTE: Replace placeholder numbers / credentials with your company-specific facts where applicable. */}
-        <section className="py-32 px-6 bg-white overflow-hidden">
-          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+        <section className="pt-[0.5rem] pb-[1.5rem] md:pt-[0.75rem] md:pb-[2rem] px-6 bg-white overflow-hidden">
+          <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-4 md:gap-6 items-center">
             {/* Copy Block */}
             <motion.div
-              className="space-y-8 order-2 lg:order-1"
+              className="space-y-4 order-2 lg:order-1"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: false, amount: 0.3 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
+              <h2 className="text-xl sm:text-2xl lg:text-4xl font-bold leading-tight">
                 The Future <span className="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">Is&nbsp;Mobile</span>
               </h2>
               <AnimatedParagraph
                 text="Mobile apps aren't a luxury anymore — they're the frontline of customer experience. From start-ups to enterprises, every brand is racing to become an icon on the home screen."
-                className="text-lg text-gray-700 leading-relaxed"
+                className="text-sm md:text-base text-gray-700 leading-relaxed"
               />
               <AnimatedParagraph
                 text="At Bytes Platform, we don't just code apps — we engineer mobile products that engage, retain, and scale."
-                className="text-lg text-gray-700 leading-relaxed"
+                className="text-sm md:text-base text-gray-700 leading-relaxed"
               />
 
-              <ul className="space-y-4">
+              <ul className="space-y-1">
                 {[
                   "Apple App Store Listed Developer", // <-- replace / verify real credentials
                   "Google Play Certified Publisher",   // <-- replace / verify real credentials
@@ -577,13 +590,13 @@ const AppDevelopmentPage = () => {
                     transition={{ duration: 0.6, delay: idx * 0.1 }}
                   >
                     <div className="w-2 h-2 mt-2 mr-4 rounded-full bg-purple-600"></div>
-                    <span className="text-gray-800">{item}</span>
+                    <span className="text-sm md:text-base text-gray-800">{item}</span>
                   </motion.li>
                 ))}
               </ul>
 
               <motion.button
-                className="bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 px-8 py-4 rounded-full text-white font-semibold mt-6"
+                className="bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 px-4 py-2 md:px-6 md:py-3 rounded-full text-white font-semibold text-sm md:text-base mt-3"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => router.push('/contact')}
@@ -594,7 +607,7 @@ const AppDevelopmentPage = () => {
 
             {/* Illustrative Image */}
             <motion.div 
-              className="order-1 lg:order-2 relative aspect-[4/5] w-full max-w-lg mx-auto"
+              className="order-1 lg:order-2 relative aspect-[4/5] w-full max-w-md mx-auto"
               animate={{ 
                 y: [-10, 10, -10],
                 rotateY: [-2, 2, -2]
