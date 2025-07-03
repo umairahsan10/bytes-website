@@ -156,7 +156,8 @@ export default function Home() {
       // Set initial states for mobile cards
       cards.forEach((card, index) => {
         gsap.set(card, {
-          opacity: 0,
+          // Start fully visible (remove fade-in)
+          opacity: 1,
           y: 60,
           scale: 0.9,
           rotation: 0,
@@ -171,15 +172,14 @@ export default function Home() {
       // Create simple reveal animations for each card
       cards.forEach((card, index) => {
         gsap.to(card, {
-          opacity: 1,
           y: 0,
           scale: 1,
           duration: 0.8,
           ease: "power2.out",
           scrollTrigger: {
             trigger: card,
-            start: "top 80%",
-            end: "bottom 20%",
+            start: "top 40%",
+            end: "bottom 40%",
             toggleActions: "play none none reverse",
             markers: false
           }
@@ -189,31 +189,38 @@ export default function Home() {
         const frontEl = card.querySelector(".flip-card-front");
         const backEl = card.querySelector(".flip-card-back");
         
-        gsap.to(frontEl, {
-          rotateY: -180,
-          duration: 1,
-          ease: "power2.inOut",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 70%",
-            end: "bottom 30%",
-            toggleActions: "play none none reverse",
-            markers: false
+        // Use scrubbed progress so rotation reverses visibly as it crosses 50vh
+        gsap.fromTo(
+          frontEl,
+          { rotateY: 0 },
+          {
+            rotateY: -180,
+            ease: "none",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 40%",
+              end: "bottom 40%",
+              scrub: true,
+              markers: false,
+            },
           }
-        });
+        );
 
-        gsap.to(backEl, {
-          rotateY: 0,
-          duration: 1,
-          ease: "power2.inOut",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 70%",
-            end: "bottom 30%",
-            toggleActions: "play none none reverse",
-            markers: false
+        gsap.fromTo(
+          backEl,
+          { rotateY: 180 },
+          {
+            rotateY: 0,
+            ease: "none",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 40%",
+              end: "bottom 40%",
+              scrub: true,
+              markers: false,
+            },
           }
-        });
+        );
       });
 
     } else {
@@ -268,7 +275,7 @@ export default function Home() {
 
         const staggerOffset = index * 0.05;
         const startOffset = 1 / 3 + staggerOffset;
-        const endOffset = 2 / 3 + staggerOffset;
+        const endOffset = 1 / 3 + staggerOffset;
 
         ScrollTrigger.create({
           trigger: container.current.querySelector(".cards"),
