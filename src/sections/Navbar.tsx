@@ -446,9 +446,10 @@ const Header: React.FC<HeaderProps> = ({
         {/* Consultation link - right side next to menu toggle */}
         <Link
           href="/contact"
-          className="text-[#F6C324] text-[10px] md:text-xs font-semibold uppercase tracking-wide hover:underline font-['PPNeueMontreal'] animate-pulse cursor-pointer mr-4 pointer-events-auto"
+          className={`text-[#F6C324] text-[10px] md:text-xs font-semibold uppercase tracking-wide hover:underline font-['PPNeueMontreal'] cursor-pointer mr-4 pointer-events-auto text-center leading-tight transition-opacity duration-200 ${isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
         >
-          BOOK A FREE CONSULTATION
+          <span className="block">BOOK A</span>
+          <span className="block animate-pulse text-[12px] md:text-sm" style={{ animationDuration: '0.8s' }}>FREE CONSULTATION</span>
         </Link>
 
         {!logoOnly && (
