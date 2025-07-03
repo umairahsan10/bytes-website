@@ -137,8 +137,17 @@ export default function Home() {
 
     const cards = cardRefs.current;
     
-    // Clear existing ScrollTriggers
-    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    // Clear ONLY the ScrollTriggers that belong to this component.
+    // Strategy: if the trigger element (vars.trigger) is inside our container,
+    // we assume it was created here. This safely removes duplicates when the
+    // hook re-runs (e.g., on mobile ↔ desktop resize) without touching
+    // ScrollTriggers from other sections (like TextAnimation).
+    ScrollTrigger.getAll().forEach((trigger) => {
+      const trg = trigger.vars?.trigger;
+      if (trg && container.current && container.current.contains(trg)) {
+        trigger.kill();
+      }
+    });
 
     if (isMobileDevice) {
       // Mobile Animation: Simple sequential reveal without pinning
@@ -294,7 +303,12 @@ export default function Home() {
 
   useEffect(() => {
     return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      ScrollTrigger.getAll().forEach((trigger) => {
+        const trg = trigger.vars?.trigger;
+        if (trg && container.current && container.current.contains(trg)) {
+          trigger.kill();
+        }
+      });
     };
   }, []);
 
