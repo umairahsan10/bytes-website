@@ -23,6 +23,7 @@ const ByteSuitePage: React.FC = () => {
   const laptopContainerRef = useRef<HTMLDivElement>(null); // whole scrolling section
   const gridPinRef = useRef<HTMLDivElement>(null);         // pin the whole grid (all columns)
   const [currentLaptopScreen, setCurrentLaptopScreen] = useState(0);
+  const [isMobileScreen, setIsMobileScreen] = useState(false);
 
   const springConfig = { stiffness: 300, damping: 30, restDelta: 0.001 } as const;
   const autoProgress = useMotionValue(0); // will be driven by ScrollTrigger
@@ -99,19 +100,34 @@ const ByteSuitePage: React.FC = () => {
 
   useEffect(() => {
     const unsubscribe = laptopScreenProgress.onChange((progress) => {
-      let newScreen = 0;
-      if (progress < 0.2) newScreen = 0;
-      else if (progress < 0.4) newScreen = 1;
-      else if (progress < 0.6) newScreen = 2;
-      else if (progress < 0.8) newScreen = 3;
-      else newScreen = 4;
+      let computed = 0;
+      if (progress < 0.2) computed = 0;
+      else if (progress < 0.4) computed = 1;
+      else if (progress < 0.6) computed = 2;
+      else if (progress < 0.8) computed = 3;
+      else computed = 4;
+
+      let newScreen = computed;
+
+      // On mobile, allow transition by only one step at a time
+      if (isMobileScreen && Math.abs(computed - currentLaptopScreen) > 1) {
+        newScreen = computed > currentLaptopScreen ? currentLaptopScreen + 1 : currentLaptopScreen - 1;
+      }
 
       if (newScreen !== currentLaptopScreen) {
         setCurrentLaptopScreen(newScreen);
       }
     });
     return () => unsubscribe();
-  }, [laptopScreenProgress, currentLaptopScreen]);
+  }, [laptopScreenProgress, currentLaptopScreen, isMobileScreen]);
+
+  // Detect mobile screen size
+  useEffect(() => {
+    const updateScreen = () => setIsMobileScreen(window.innerWidth < 768);
+    updateScreen();
+    window.addEventListener('resize', updateScreen);
+    return () => window.removeEventListener('resize', updateScreen);
+  }, []);
 
   /* -------------------- GSAP ScrollTrigger Pin & Progress -------------------- */
   useEffect(() => {
@@ -126,15 +142,20 @@ const ByteSuitePage: React.FC = () => {
       scrub: true,
       pin: gridPinRef.current,
       pinSpacing: true,
+      snap: 1 / (laptopScreens.length - 1),
       onUpdate: (self) => {
-        autoProgress.set(self.progress);
+        const rawProgress = self.progress;
+        const snappedProgress = isMobileScreen
+          ? Math.floor(rawProgress * (laptopScreens.length - 1)) / (laptopScreens.length - 1)
+          : rawProgress;
+        autoProgress.set(snappedProgress);
       },
     });
 
     return () => {
       st.kill();
     };
-  }, []);
+  }, [isMobileScreen, laptopScreens]);
 
   // Three.js setup
   useEffect(() => {
@@ -282,7 +303,7 @@ const ByteSuitePage: React.FC = () => {
       window.removeEventListener('resize', handleResize);
       renderer.dispose();
     };
-  }, []);
+  }, [isMobileScreen, laptopScreens]);
 
   /* -------------------- Animation Variants -------------------- */
   const containerVariants = {
@@ -353,7 +374,7 @@ const ByteSuitePage: React.FC = () => {
   } as const;
 
   const bounceIn = {
-    hidden: { opacity: 0, scale: 0.3, y: 50 },
+    hidden: { opacity: 0, scale: 0.3, y: 10 },
     visible: { 
       opacity: 1, 
       scale: 1, 
@@ -361,7 +382,7 @@ const ByteSuitePage: React.FC = () => {
       transition: { 
         duration: 0.4,
         type: "spring",
-        stiffness: 300
+        stiffness: 100
       } 
     },
   } as const;
@@ -932,10 +953,10 @@ const ByteSuitePage: React.FC = () => {
 
             {/* ---------------- Laptop Swiping Animation ---------------- */}
             <div ref={laptopContainerRef} className="relative min-h-[400vh]">
-              <div ref={gridPinRef} className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 grid md:grid-cols-3 gap-12 items-center">
+              <div ref={gridPinRef} className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 grid md:grid-cols-3 gap-12 items-center pt-24 md:pt-0">
                 {/* Laptop Mock-up */}
-                <div className="flex items-center justify-center h-screen self-center">
-                  <div className="relative w-[500px] h-[320px] bg-gray-900 rounded-xl overflow-hidden shadow-2xl border-[12px] border-gray-800">
+                <div className="flex items-center justify-center md:h-screen h-auto self-center">
+                  <div className="relative w-full max-w-[500px] aspect-[5/3] md:w-[500px] md:h-[320px] bg-gray-900 rounded-xl overflow-hidden shadow-2xl border-[12px] border-gray-800">
                     <motion.div className="relative w-full h-full">
                       {laptopScreens.map((screen, idx) => (
                         <motion.img
@@ -945,7 +966,7 @@ const ByteSuitePage: React.FC = () => {
                           className="absolute top-0 left-0 w-full h-full object-cover"
                           initial={false}
                           animate={idx === currentLaptopScreen ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-                          transition={{ duration: 0.6, ease: 'easeOut' }}
+                          transition={{ duration: isMobileScreen ? 0.25 : 0.6, ease: 'easeOut' }}
                           onError={(e) => {
                             (e.currentTarget as HTMLImageElement).src = `https://via.placeholder.com/800x600/010a14/ffffff?text=${screen.title}`;
                           }}
