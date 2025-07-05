@@ -66,7 +66,7 @@ body {
   /* DON'T set overflow-x: hidden here - it breaks sticky positioning */
 
   /* Global gradient background */
-  background: linear-gradient(to bottom, #744B93, #C889B5, #FCE5CC, #D0ADC4, #736EAE);
+  background: #010A14;
 }
 
 /* Hide horizontal scrollbar while preserving functionality */
