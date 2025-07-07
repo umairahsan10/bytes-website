@@ -1,53 +1,23 @@
-import darkSaasLandingPage from "@/assets/images/dark-saas-landing-page.png";
-import lightSaasLandingPage from "@/assets/images/light-saas-landing-page.png";
-import aiStartupLandingPage from "@/assets/images/ai-startup-landing-page.png";
+import bytesTest2 from "../../public/portfolio/bytes-test-2.png";
+import bytesTest3 from "../../public/portfolio/bytes-test-3.png";
+import bytesTest5 from "../../public/portfolio/bytes-test-5.png";
+import bytesTest6 from "../../public/portfolio/bytes-test-6.png";
 import Image from "next/image";
 import CheckIcon from "@/assets/icons/check-circle.svg"
 import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg"
 import { SectionHeader } from "@/components/SectionHeader"
 import { Card } from "@/components/Card"
-import grainImage from "@/public/images/grain.png" 
+import { useAutoScroll } from "@/hooks/useAutoScroll";
 
 const portfolioProjects = [
-  {
-    company: "Acme Corp",
-    year: "2022",
-    title: "Dark Saas Landing Page",
-    results: [
-      { title: "Enhanced user experience by 40%" },
-      { title: "Improved site speed by 50%" },
-      { title: "Increased mobile traffic by 35%" },
-    ],
-    link: "https://youtu.be/4k7IdSLxh6w",
-    image: darkSaasLandingPage,
-  },
-  {
-    company: "Innovative Co",
-    year: "2021",
-    title: "Light Saas Landing Page",
-    results: [
-      { title: "Boosted sales by 20%" },
-      { title: "Expanded customer reach by 35%" },
-      { title: "Increased brand awareness by 15%" },
-    ],
-    link: "https://youtu.be/7hi5zwO75yc",
-    image: lightSaasLandingPage,
-  },
-  {
-    company: "Quantum Dynamics",
-    year: "2023",
-    title: "AI Startup Landing Page",
-    results: [
-      { title: "Enhanced user experience by 40%" },
-      { title: "Improved site speed by 50%" },
-      { title: "Increased mobile traffic by 35%" },
-    ],
-    link: "https://youtu.be/Z7I5uSRHMHg",
-    image: aiStartupLandingPage,
-  },
+  { img: bytesTest2, url: "https://bytes-test-2.com" },
+  { img: bytesTest3, url: "https://bytes-test-3.com" },
+  { img: bytesTest5, url: "https://bytes-test-5.com" },
+  { img: bytesTest6, url: "https://bytes-test-6.com" },
 ];
 
 export const ProjectsSection = () => {
+  const scrollRef = useAutoScroll<HTMLDivElement>(0.5);
   return (
     <section id="projects" className="pb-16 lg:py-24 items-center bg-[#010a14]">
       <div className="container text-white">
@@ -56,44 +26,34 @@ export const ProjectsSection = () => {
           title="Featured Projects"
           description="See how i transformed concepts into engaging digital experience"
         />
-        <div className=" gap-20 flex flex-col mt-10 md:mt-20 items-center">
-          {portfolioProjects.map((project, projectIndex) => (
-            <Card
-              key={project.title} 
-              className="px-8 pt-8 pb-0 md:pt-12 md:px-10 lg:px-20 lg:pt-16 lg:px-20 bg-gray-900 sticky"
-              style={{
-                top: `calc(64px + ${projectIndex * 40}px)`,
-              }}
-            >
-              <div className="lg:grid lg:grid-cols-2 lg:gap-16">
-                <div className="lg:pb-16">
-                  <div className="bg-gradient-to-r from-emerald-300 to-sky-400 inline-flex gap-2 font-bold upercase tracking-widset text-sm text-transparent bg-clip-text">
-                    <span>{project.company}</span>
-                    <span>&bull;</span>
-                    <span>{project.year}</span>
-                  </div>
-                  <h3 className="font-serif text-2xl md:text-4xl mt-2 md:mt-4 text-white">{project.title}</h3>
-                  <hr className="border-t-2 border-white/5 mt-4 md:mt-5" />
-                  <ul className="flex flex-col gap-4 mt-4 md:mt-5">
-                    {project.results.map((result) => (
-                      <li key={result.title} className="flex gap-2 text-sm md:text-base text-white/50">
-                        <CheckIcon className="size-5 md:mt-6 lg:mt-0 text-emerald-300" />
-                        <span>{result.title}</span></li>
-                    ))}
-                  </ul>
-                  <a href={project.link}>
-                    <button className="bg-white text-gray-950 h-12 w-full md:w-auto md:px-8 rounded-xl font-semibold inline-flex items-center justify-center gap-2 mt-8">
-                      <span>Visit Live Site</span>
-                      <ArrowUpRightIcon className="size-4" />
+        {/* Draggable / swipeable horizontal slider */}
+        <div
+          ref={scrollRef}
+          className="mt-10 lg:mt-20 overflow-x-hidden overscroll-x-none touch-pan-y [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] py-4 -my-4 cursor-grab select-none"
+        >
+          <div className="flex gap-4 sm:gap-6 lg:gap-8 pr-8 flex-none">
+            {[...new Array(2)].fill(0).map((_, copyIdx) => (
+              portfolioProjects.map((item, idx) => (
+                <div key={`${copyIdx}-${idx}`} className="relative flex-shrink-0 w-64 sm:w-72 md:w-80 lg:w-auto">
+                  <Image
+                    src={item.img}
+                    alt={`Project ${idx + 1}`}
+                    className="h-48 sm:h-56 md:h-64 lg:h-[28rem] w-full object-cover rounded-3xl"
+                  />
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2"
+                  >
+                    <button className="bg-white text-gray-900 px-4 py-2 rounded-xl text-sm font-semibold shadow-md whitespace-nowrap">
+                      Visit Live Site
                     </button>
                   </a>
                 </div>
-                <div className="relative">
-                  <Image src={project.image} alt={project.title} className="mt-8 -mb-4 md:-mb-0 lg:mt-0 lg:absolute lg:h-full lg:w-auto lg:max-w-none" />
-                </div>
-              </div>
-            </Card>
-          ))}
+              ))
+            ))}
+          </div>
         </div>
       </div>
     </section>

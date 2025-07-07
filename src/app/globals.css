@@ -165,6 +165,20 @@ a[aria-label="Built with Spline"] {
   animation-play-state: paused;
 }
 
+/* Horizontal scrolling for portfolio */
+@keyframes portfolio-scroll {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.portfolio-scroll {
+  animation: portfolio-scroll 60s linear infinite;
+}
+
+.portfolio-scroll:hover {
+  animation-play-state: paused;
+}
+
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-16px); }
