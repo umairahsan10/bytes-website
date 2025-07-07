@@ -5,10 +5,15 @@ import { motion, useInView, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { Header } from '@/sections/Navbar';
 import { useRouter } from 'next/navigation';
+import Lottie from 'lottie-react';
 
 const IndustriesPage = () => {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const [animationData, setAnimationData] = useState(null);
+  const [healthAnimationData, setHealthAnimationData] = useState(null);
+  const [retailAnimationData, setRetailAnimationData] = useState(null);
+  const [federalAnimationData, setFederalAnimationData] = useState(null);
 
   // Animated sections refs
   const heroRef = useRef<HTMLDivElement | null>(null);
@@ -59,6 +64,36 @@ const IndustriesPage = () => {
       </AnimatePresence>
     );
   };
+
+  // Load animation data
+  useEffect(() => {
+    const loadAnimations = async () => {
+      try {
+        // Load finance animation
+        const financeData = await fetch('/assets/newimages/Animation - 1751914349014.json');
+        const financeJsonData = await financeData.json();
+        setAnimationData(financeJsonData);
+
+        // Load health animation
+        const healthData = await fetch('/assets/newimages/Animation - 1751915546890.json');
+        const healthJsonData = await healthData.json();
+        setHealthAnimationData(healthJsonData);
+
+        // Load retail animation
+        const retailData = await fetch('/assets/newimages/Animation - 1751922478340.json');
+        const retailJsonData = await retailData.json();
+        setRetailAnimationData(retailJsonData);
+
+        // Load federal government animation
+        const federalData = await fetch('/assets/newimages/Animation - 1751923093110.json');
+        const federalJsonData = await federalData.json();
+        setFederalAnimationData(federalJsonData);
+      } catch (error) {
+        console.error('Error loading animations:', error);
+      }
+    };
+    loadAnimations();
+  }, []);
 
   // Update animation states when sections come into view
   useEffect(() => {
@@ -367,12 +402,12 @@ const IndustriesPage = () => {
             </motion.p>
 
             <motion.div variants={paragraphVariants as any} className="flex items-center gap-4">
-              <motion.div 
-                className="w-12 h-12 bg-[#010a14] rounded-full flex items-center justify-center"
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              >
-                <span className="text-white font-bold text-xl">▶</span>
-              </motion.div>
+                          <motion.div 
+              className="w-12 h-12 bg-gradient-to-r from-emerald-300 to-sky-400 rounded-full flex items-center justify-center"
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            >
+              <span className="text-gray-900 font-bold text-xl">▶</span>
+            </motion.div>
               <motion.span 
                 className="text-sm text-white"
                 initial={{ opacity: 0, x: -20 }}
@@ -392,9 +427,9 @@ const IndustriesPage = () => {
           >
             {/* Placeholder for industries image */}
             <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-[500px] lg:h-[500px] mx-auto bg-white rounded-full flex items-center justify-center">
-              <div className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-80 lg:h-80 bg-[#010a14] rounded-full flex items-center justify-center">
+              <div className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-80 lg:h-80 bg-gradient-to-r from-emerald-300 to-sky-400 rounded-full flex items-center justify-center">
                 <motion.div 
-                  className="text-3xl sm:text-4xl md:text-6xl text-white font-bold flex items-center justify-center"
+                  className="text-3xl sm:text-4xl md:text-6xl text-gray-900 font-bold flex items-center justify-center"
                   initial={{ scale: 0, rotate: -180 }}
                   animate={animationsTriggered.hero ? { scale: 1, rotate: 0 } : { scale: 0, rotate: -180 }}
                   transition={{ delay: 0.5, duration: 1, type: "spring", stiffness: 100 }}
@@ -410,7 +445,7 @@ const IndustriesPage = () => {
               transition={{ duration: 3, repeat: Infinity }}
             >
               <motion.div 
-                className="text-[#010a14] text-base sm:text-lg md:text-2xl font-bold"
+                className="text-gray-900 text-base sm:text-lg md:text-2xl font-bold"
                 initial={{ opacity: 0, scale: 0 }}
                 animate={animationsTriggered.hero ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
                 transition={{ delay: 1.2, duration: 0.5 }}
@@ -418,7 +453,7 @@ const IndustriesPage = () => {
                 15+
               </motion.div>
               <motion.div 
-                className="text-[10px] sm:text-xs text-[#010a14]"
+                className="text-[10px] sm:text-xs text-gray-900"
                 initial={{ opacity: 0 }}
                 animate={animationsTriggered.hero ? { opacity: 1 } : { opacity: 0 }}
                 transition={{ delay: 1.4, duration: 0.5 }}
@@ -439,22 +474,29 @@ const IndustriesPage = () => {
             animate={animationsTriggered.fintech ? 'visible' : 'hidden'}
             className="relative order-2 lg:order-1"
           >
-            {/* Banking image */}
-            <div className="relative w-80 h-80 sm:w-96 sm:h-96 md:w-[500px] md:h-[500px] mx-auto">
-              <div className="absolute inset-0 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={animationsTriggered.fintech ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
-                  transition={{ delay: 0.5, duration: 0.8, type: "spring" }}
-                  className="w-full h-full"
-                >
-                  <img
-                    src="/assets/money.jpg"
-                    alt="Banking and Financial Services"
-                    className="w-full h-full object-cover object-[60%_center] rounded-lg"
+            {/* Banking Lottie animation */}
+            <div className="relative w-96 h-96 sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] mx-auto">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={animationsTriggered.fintech ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+                transition={{ delay: 0.2, duration: 0.4, type: "spring", stiffness: 200 }}
+                className="w-full h-full"
+              >
+                {animationData && (
+                  <Lottie
+                    animationData={animationData}
+                    loop={true}
+                    autoplay={true}
+                    className="w-full h-full"
+                    style={{
+                      imageRendering: 'crisp-edges',
+                      backfaceVisibility: 'hidden',
+                      transform: 'translateZ(0)',
+                      willChange: 'transform'
+                    }}
                   />
-                </motion.div>
-              </div>
+                )}
+              </motion.div>
             </div>
           </motion.div>
 
@@ -474,7 +516,7 @@ const IndustriesPage = () => {
                 FINANCIAL SECTOR
               </AnimatedHeader>
               <motion.div 
-                className="h-1 bg-[#010a14]"
+                className="h-1 bg-gradient-to-r from-emerald-300 to-sky-400"
                 initial={{ width: 0 }}
                 animate={animationsTriggered.fintech ? { width: "100%" } : { width: 0 }}
                 transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
@@ -498,7 +540,7 @@ const IndustriesPage = () => {
                 "Ensuring compliance and risk mitigation through robust security architectures"
               ]}
               className="text-[#010a14]"
-              bulletColor="bg-[#010a14]"
+              bulletColor="bg-gradient-to-r from-emerald-300 to-sky-400"
               inView={animationsTriggered.fintech}
             />
           </motion.div>
@@ -522,7 +564,7 @@ const IndustriesPage = () => {
                 HEALTH SECTOR
               </AnimatedHeader>
               <motion.div 
-                className="h-1 bg-[#010a14]"
+                className="h-1 bg-gradient-to-r from-purple-500 to-pink-500"
                 initial={{ width: 0 }}
                 animate={animationsTriggered.healthcare ? { width: "100%" } : { width: 0 }}
                 transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
@@ -547,7 +589,7 @@ const IndustriesPage = () => {
                   "Enhancing patient engagement via mobile apps and portals"
                 ]}
                 className="text-white/80"
-                bulletColor="bg-white"
+                bulletColor="bg-gradient-to-r from-purple-500 to-pink-500"
                 inView={animationsTriggered.healthcare}
               />
             </motion.div>
@@ -559,22 +601,29 @@ const IndustriesPage = () => {
             animate={animationsTriggered.healthcare ? 'visible' : 'hidden'}
             className="relative order-2 lg:order-1"
           >
-            {/* Placeholder for healthcare image */}
+            {/* Healthcare Lottie animation */}
             <div className="relative w-80 h-80 sm:w-96 sm:h-96 md:w-[500px] md:h-[500px] mx-auto">
-              <div className="absolute inset-0 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={animationsTriggered.healthcare ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
-                  transition={{ delay: 0.5, duration: 0.8, type: "spring" }}
-                  className="w-full h-full"
-                >
-                  <img
-                    src="/assets/olga-guryanova-tMFeatBSS4s-unsplash.jpg"
-                    alt="Healthcare"
-                    className="w-full h-full object-cover rounded-lg"
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={animationsTriggered.healthcare ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+                transition={{ delay: 0.5, duration: 0.8, type: "spring" }}
+                className="w-full h-full"
+              >
+                {healthAnimationData && (
+                  <Lottie
+                    animationData={healthAnimationData}
+                    loop={true}
+                    autoplay={true}
+                    className="w-full h-full"
+                    style={{
+                      imageRendering: 'crisp-edges',
+                      backfaceVisibility: 'hidden',
+                      transform: 'translateZ(0)',
+                      willChange: 'transform'
+                    }}
                   />
-                </motion.div>
-              </div>
+                )}
+              </motion.div>
             </div>
           </motion.div>
         </div>
@@ -589,27 +638,28 @@ const IndustriesPage = () => {
             animate={animationsTriggered.ecommerce ? 'visible' : 'hidden'}
             className="relative order-2 lg:order-2"
           >
-            {/* Placeholder for e-commerce mockup */}
-            <div className="relative w-80 h-80 sm:w-96 sm:h-96 md:w-[500px] md:h-[500px] mx-auto">
-              <div className="absolute inset-0 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={animationsTriggered.ecommerce ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
-                  transition={{ delay: 0.5, duration: 0.8, type: "spring" }}
-                  className="w-full h-full"
-                >
-                  <img
-                    src="/assets/pexels-pixabay-264502.jpg"
-                    alt="Retail Solutions"
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                </motion.div>
-              </div>
+            {/* Retail Lottie animation */}
+            <div className="relative w-96 h-96 sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] mx-auto">
               <motion.div
-                className="absolute -top-4 -right-4 bg-[#010a14] text-white px-4 py-2 rounded-lg text-sm"
-                animate={animationsTriggered.ecommerce ? { x: [0, 10, 0], transition: { duration: 2, repeat: Infinity, repeatType: "reverse" } } : { x: 0 }}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={animationsTriggered.ecommerce ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+                transition={{ delay: 0.2, duration: 0.4, type: "spring", stiffness: 200 }}
+                className="w-full h-full"
               >
-                <div className="text-white font-bold">SHOP</div>
+                {retailAnimationData && (
+                  <Lottie
+                    animationData={retailAnimationData}
+                    loop={true}
+                    autoplay={true}
+                    className="w-full h-full"
+                    style={{
+                      imageRendering: 'crisp-edges',
+                      backfaceVisibility: 'hidden',
+                      transform: 'translateZ(0)',
+                      willChange: 'transform'
+                    }}
+                  />
+                )}
               </motion.div>
             </div>
           </motion.div>
@@ -630,7 +680,7 @@ const IndustriesPage = () => {
                 SOLUTIONS
               </AnimatedHeader>
               <motion.div 
-                className="h-1 bg-[#010a14]"
+                className="h-1 bg-gradient-to-r from-cyan-500 to-blue-600"
                 initial={{ width: 0 }}
                 animate={animationsTriggered.ecommerce ? { width: "100%" } : { width: 0 }}
                 transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
@@ -653,13 +703,13 @@ const IndustriesPage = () => {
                 "Enhancing e-commerce platforms with fast, responsive interfaces",
                 "Enabling supply chain visibility and operational efficiency"
               ]}
-              className="text-white/80"
-              bulletColor="bg-white"
+                              className="text-white/80"
+                bulletColor="bg-gradient-to-r from-cyan-500 to-blue-600"
               inView={animationsTriggered.ecommerce}
             />
             
             <motion.button
-              className="bg-white text-[#010a14] px-8 py-3 rounded font-medium"
+              className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-8 py-3 rounded font-medium hover:from-cyan-600 hover:to-blue-700 transition-all duration-300"
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
               animate={animationsTriggered.ecommerce ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.9 }}
               transition={{ delay: 1.2, duration: 0.5, type: "spring", stiffness: 200 }}
@@ -690,7 +740,7 @@ const IndustriesPage = () => {
                 CONTRACTORS
               </AnimatedHeader>
               <motion.div 
-                className="h-1 bg-[#010a14]"
+                className="h-1 bg-gradient-to-r from-emerald-300 to-sky-400"
                 initial={{ width: 0 }}
                 animate={animationsTriggered.education ? { width: "100%" } : { width: 0 }}
                 transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
@@ -714,7 +764,7 @@ const IndustriesPage = () => {
                 "Partnering with government contractors to meet mission-critical needs"
               ]}
               className="text-[#010a14] text-sm md:text-base"
-              bulletColor="bg-[#010a14]"
+              bulletColor="bg-gradient-to-r from-emerald-300 to-sky-400"
               inView={animationsTriggered.education}
             />
           </motion.div>
@@ -725,22 +775,29 @@ const IndustriesPage = () => {
             animate={animationsTriggered.education ? 'visible' : 'hidden'}
             className="relative order-2 lg:order-1"
           >
-            {/* Placeholder for federal government image */}
-            <div className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-[350px] md:h-[350px] mx-auto">
-              <div className="absolute inset-0 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={animationsTriggered.education ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
-                  transition={{ delay: 0.5, duration: 0.8, type: "spring" }}
-                  className="w-full h-full flex items-center justify-center"
-                >
-                  <img
-                    src="/assets/federal-govt.webp"
-                    alt="Federal Government"
-                    className="w-full h-full object-cover rounded-lg"
+            {/* Federal Government Lottie animation */}
+            <div className="relative w-96 h-96 sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] mx-auto">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={animationsTriggered.education ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+                transition={{ delay: 0.2, duration: 0.4, type: "spring", stiffness: 200 }}
+                className="w-full h-full"
+              >
+                {federalAnimationData && (
+                  <Lottie
+                    animationData={federalAnimationData}
+                    loop={true}
+                    autoplay={true}
+                    className="w-full h-full"
+                    style={{
+                      imageRendering: 'crisp-edges',
+                      backfaceVisibility: 'hidden',
+                      transform: 'translateZ(0)',
+                      willChange: 'transform'
+                    }}
                   />
-                </motion.div>
-              </div>
+                )}
+              </motion.div>
             </div>
           </motion.div>
         </div>
