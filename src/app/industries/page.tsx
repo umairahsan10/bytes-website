@@ -234,7 +234,7 @@ const IndustriesPage = () => {
     </motion.h1>
   );
 
-  const AnimatedBulletPoints = ({ points, className = "", inView }: any) => (
+  const AnimatedBulletPoints = ({ points, className = "", inView, bulletColor = "bg-yellow-400" }: any) => (
     <motion.div
       className={`space-y-3 ${className}`}
       initial="hidden"
@@ -249,7 +249,7 @@ const IndustriesPage = () => {
           custom={index}
         >
           <motion.div
-            className="w-2 h-2 bg-yellow-400 rounded-full mt-2 flex-shrink-0"
+            className={`w-2 h-2 ${bulletColor} rounded-full mt-2 flex-shrink-0`}
             initial={{ scale: 0, rotate: 0 }}
             animate={inView ? { scale: 1, rotate: 360 } : { scale: 0, rotate: 0 }}
             transition={{ 
@@ -275,7 +275,7 @@ const IndustriesPage = () => {
   const HeroAnimatedText = ({ text }: { text: string }) => {
     return (
       <motion.div
-        className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl leading-none text-[#010a14] font-bold tracking-wider uppercase"
+        className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-none text-white font-bold tracking-wider uppercase"
         style={{ fontFamily: 'Bebas Neue, sans-serif', fontWeight: 700 }}
         initial="hidden"
         animate={animationsTriggered.hero ? "visible" : "hidden"}
@@ -328,11 +328,11 @@ const IndustriesPage = () => {
       <Header />
 
       {/* Hero Section */}
-      <section ref={heroRef} className="order-0 min-h-screen flex items-center px-6 pt-20 relative z-10">
+      <section ref={heroRef} className="order-0 min-h-screen flex items-center px-6 pt-12 md:pt-20 relative z-10">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/assets/industry-bg.png"
+            src="/assets/industry/hero.png"
             alt="Industry Background"
             fill
             className="object-cover"
@@ -342,7 +342,7 @@ const IndustriesPage = () => {
           <div className="absolute inset-0 bg-[rgba(1,10,20,0.2)]"></div>
         </div>
         
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center relative z-10">
           <motion.div
             variants={staggerContainer as any}
             initial="hidden"
@@ -352,7 +352,7 @@ const IndustriesPage = () => {
             <motion.div variants={staggerContainer as any} className="space-y-6">
               <HeroAnimatedText text="Industries We Serve" />
               <motion.div 
-                className="h-1 bg-yellow-400"
+                className="h-1 bg-[#010a14]"
                 initial={{ width: 0 }}
                 animate={animationsTriggered.hero ? { width: "100%" } : { width: 0 }}
                 transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
@@ -361,20 +361,20 @@ const IndustriesPage = () => {
 
             <motion.p 
               variants={paragraphVariants as any} 
-              className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-[#010a14] max-w-2xl md:max-w-3xl lg:max-w-4xl"
+              className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-white max-w-2xl md:max-w-3xl lg:max-w-4xl"
             >
               We deliver cutting-edge solutions across diverse industries, transforming businesses with innovative technology.
             </motion.p>
 
             <motion.div variants={paragraphVariants as any} className="flex items-center gap-4">
               <motion.div 
-                className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center"
+                className="w-12 h-12 bg-[#010a14] rounded-full flex items-center justify-center"
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
               >
-                <span className="text-[#010a14] font-bold text-xl">▶</span>
+                <span className="text-white font-bold text-xl">▶</span>
               </motion.div>
               <motion.span 
-                className="text-sm text-[#010a14]"
+                className="text-sm text-white"
                 initial={{ opacity: 0, x: -20 }}
                 animate={animationsTriggered.hero ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
                 transition={{ delay: 1.5, duration: 0.5 }}
@@ -388,13 +388,13 @@ const IndustriesPage = () => {
             variants={scaleIn as any}
             initial="hidden"
             animate={animationsTriggered.hero ? 'visible' : 'hidden'}
-            className="relative"
+            className="relative mt-8 md:-mt-12 lg:-mt-16 md:-ml-8"
           >
             {/* Placeholder for industries image */}
-            <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-[500px] md:h-[500px] mx-auto bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center">
-              <div className="w-56 h-56 md:w-64 md:h-64 lg:w-80 lg:h-80 bg-[#010a14] rounded-full flex items-center justify-center">
+            <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-[500px] lg:h-[500px] mx-auto bg-white rounded-full flex items-center justify-center">
+              <div className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-80 lg:h-80 bg-[#010a14] rounded-full flex items-center justify-center">
                 <motion.div 
-                  className="text-6xl text-yellow-400 font-bold flex items-center justify-center"
+                  className="text-3xl sm:text-4xl md:text-6xl text-white font-bold flex items-center justify-center"
                   initial={{ scale: 0, rotate: -180 }}
                   animate={animationsTriggered.hero ? { scale: 1, rotate: 0 } : { scale: 0, rotate: -180 }}
                   transition={{ delay: 0.5, duration: 1, type: "spring", stiffness: 100 }}
@@ -405,12 +405,12 @@ const IndustriesPage = () => {
             </div>
 
             <motion.div
-              className="absolute top-8 right-8 bg-[rgba(1,10,20,0.8)] backdrop-blur-sm rounded-lg p-4"
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 md:top-8 md:right-8 bg-[rgba(255,255,255,0.8)] backdrop-blur-sm rounded-lg p-2 sm:p-3 md:p-4"
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 3, repeat: Infinity }}
             >
               <motion.div 
-                className="text-yellow-400 text-2xl font-bold"
+                className="text-[#010a14] text-base sm:text-lg md:text-2xl font-bold"
                 initial={{ opacity: 0, scale: 0 }}
                 animate={animationsTriggered.hero ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
                 transition={{ delay: 1.2, duration: 0.5 }}
@@ -418,7 +418,7 @@ const IndustriesPage = () => {
                 15+
               </motion.div>
               <motion.div 
-                className="text-xs text-white"
+                className="text-[10px] sm:text-xs text-[#010a14]"
                 initial={{ opacity: 0 }}
                 animate={animationsTriggered.hero ? { opacity: 1 } : { opacity: 0 }}
                 transition={{ delay: 1.4, duration: 0.5 }}
@@ -431,7 +431,7 @@ const IndustriesPage = () => {
       </section>
 
       {/* Fintech Section */}
-      <section ref={fintechRef} className="order-3 pt-16 md:pt-24 lg:pt-28 pb-12 bg-white text-[#010a14] px-6 relative scroll-mt-28">
+      <section ref={fintechRef} className="order-3 min-h-screen flex items-center bg-white text-[#010a14] px-6 pt-24 md:pt-0 relative scroll-mt-28">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
             variants={slideInLeft as any}
@@ -474,7 +474,7 @@ const IndustriesPage = () => {
                 FINANCIAL SECTOR
               </AnimatedHeader>
               <motion.div 
-                className="h-1 bg-yellow-400"
+                className="h-1 bg-[#010a14]"
                 initial={{ width: 0 }}
                 animate={animationsTriggered.fintech ? { width: "100%" } : { width: 0 }}
                 transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
@@ -498,6 +498,7 @@ const IndustriesPage = () => {
                 "Ensuring compliance and risk mitigation through robust security architectures"
               ]}
               className="text-[#010a14]"
+              bulletColor="bg-[#010a14]"
               inView={animationsTriggered.fintech}
             />
           </motion.div>
@@ -521,7 +522,7 @@ const IndustriesPage = () => {
                 HEALTH SECTOR
               </AnimatedHeader>
               <motion.div 
-                className="h-1 bg-yellow-400"
+                className="h-1 bg-[#010a14]"
                 initial={{ width: 0 }}
                 animate={animationsTriggered.healthcare ? { width: "100%" } : { width: 0 }}
                 transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
@@ -546,6 +547,7 @@ const IndustriesPage = () => {
                   "Enhancing patient engagement via mobile apps and portals"
                 ]}
                 className="text-white/80"
+                bulletColor="bg-white"
                 inView={animationsTriggered.healthcare}
               />
             </motion.div>
@@ -579,7 +581,7 @@ const IndustriesPage = () => {
       </section>
 
       {/* E-commerce Section */}
-      <section ref={ecommerceRef} className="order-2 pt-16 md:pt-24 lg:pt-28 pb-12 bg-[#010a14] text-white px-6 relative scroll-mt-28">
+      <section ref={ecommerceRef} className="order-2 min-h-screen flex items-center bg-[#010a14] text-white px-6 pt-24 md:pt-0 relative scroll-mt-28">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
             variants={slideInLeft as any}
@@ -607,7 +609,7 @@ const IndustriesPage = () => {
                 className="absolute -top-4 -right-4 bg-[#010a14] text-white px-4 py-2 rounded-lg text-sm"
                 animate={animationsTriggered.ecommerce ? { x: [0, 10, 0], transition: { duration: 2, repeat: Infinity, repeatType: "reverse" } } : { x: 0 }}
               >
-                <div className="text-yellow-400 font-bold">SHOP</div>
+                <div className="text-white font-bold">SHOP</div>
               </motion.div>
             </div>
           </motion.div>
@@ -628,7 +630,7 @@ const IndustriesPage = () => {
                 SOLUTIONS
               </AnimatedHeader>
               <motion.div 
-                className="h-1 bg-yellow-400"
+                className="h-1 bg-[#010a14]"
                 initial={{ width: 0 }}
                 animate={animationsTriggered.ecommerce ? { width: "100%" } : { width: 0 }}
                 transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
@@ -652,11 +654,12 @@ const IndustriesPage = () => {
                 "Enabling supply chain visibility and operational efficiency"
               ]}
               className="text-white/80"
+              bulletColor="bg-white"
               inView={animationsTriggered.ecommerce}
             />
             
             <motion.button
-              className="bg-yellow-400 text-[#010a14] px-8 py-3 rounded font-medium"
+              className="bg-white text-[#010a14] px-8 py-3 rounded font-medium"
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
               animate={animationsTriggered.ecommerce ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.9 }}
               transition={{ delay: 1.2, duration: 0.5, type: "spring", stiffness: 200 }}
@@ -669,17 +672,17 @@ const IndustriesPage = () => {
       </section>
 
       {/* Education Section */}
-      <section ref={educationRef} className="order-1 -mt-12 md:-mt-14 lg:-mt-16 pt-2 pb-12 bg-white text-[#010a14] px-6 relative z-10 scroll-mt-28">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <section ref={educationRef} className="order-1 min-h-screen flex items-center bg-white text-[#010a14] px-4 md:px-6 pt-24 md:pt-0 relative z-10 scroll-mt-28">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           <motion.div
             variants={staggerContainer as any}
             initial="hidden"
             animate={animationsTriggered.education ? 'visible' : 'hidden'}
-            className="space-y-8 order-1 lg:order-2"
+            className="space-y-6 order-1 lg:order-2"
           >
             <motion.div variants={staggerContainer as any} className="space-y-6">
               <AnimatedHeader
-                className="text-4xl lg:text-6xl font-bold leading-none"
+                className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight"
                 inView={animationsTriggered.education}
               >
                 FEDERAL GOVERNMENT
@@ -687,7 +690,7 @@ const IndustriesPage = () => {
                 CONTRACTORS
               </AnimatedHeader>
               <motion.div 
-                className="h-1 bg-yellow-400"
+                className="h-1 bg-[#010a14]"
                 initial={{ width: 0 }}
                 animate={animationsTriggered.education ? { width: "100%" } : { width: 0 }}
                 transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
@@ -698,7 +701,7 @@ const IndustriesPage = () => {
               variants={paragraphVariants as any} 
               initial="hidden"
               animate={animationsTriggered.education ? "visible" : "hidden"}
-              className="text-lg text-[#010a14] max-w-2xl"
+              className="text-base md:text-lg text-[#010a14] max-w-2xl"
             >
               We specialize in delivering innovative digital solutions tailored specifically for federal and state government contractors.
             </motion.p>
@@ -710,7 +713,8 @@ const IndustriesPage = () => {
                 "Improving efficiency with workflow automation and cloud infrastructure",
                 "Partnering with government contractors to meet mission-critical needs"
               ]}
-              className="text-[#010a14]"
+              className="text-[#010a14] text-sm md:text-base"
+              bulletColor="bg-[#010a14]"
               inView={animationsTriggered.education}
             />
           </motion.div>
@@ -722,7 +726,7 @@ const IndustriesPage = () => {
             className="relative order-2 lg:order-1"
           >
             {/* Placeholder for federal government image */}
-            <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-[500px] md:h-[500px] mx-auto">
+            <div className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-[350px] md:h-[350px] mx-auto">
               <div className="absolute inset-0 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.5 }}
