@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 function TextLine() {
   const tubeRefs = useRef<(THREE.Mesh | null)[]>([])
@@ -29,7 +31,7 @@ function TextLine() {
     const letterSpacing = 1 * scale // Increased spacing
     const lineHeight = 6 * scale // Increased line height
     const startX = 0 * scale // Adjusted start position
-    const startY = 0 * scale
+    const startY = -0.35 * scale
     
     const letters: THREE.CatmullRomCurve3[] = []
     
@@ -193,39 +195,34 @@ function TextLine() {
   }, [])
 
   useEffect(() => {
-    const section = document.getElementById('about')
+    gsap.registerPlugin(ScrollTrigger)
 
-    const handleScroll = () => {
+    const section = document.getElementById('about-line')
       if (!section) return
 
-      const sectionTop = section.offsetTop
-      const sectionHeight = section.offsetHeight
+    const st = ScrollTrigger.create({
+      trigger: section,
+      start: 'top top',
+      // Match the 200% pin span
+      end: '+=200%',
+      scrub: true,
+      onEnter: () => {
+        // Reset any progress that may have accumulated before entering
+        targetProgressRef.current = 0;
+        scrollProgressRef.current = 0;
+        fullGeometries.forEach(g => g.setDrawRange(0, 0));
+      },
+      onUpdate: (self: any) => {
+        // Only advance while section is actively pinned
+        if (self.isActive) {
+          targetProgressRef.current = self.progress;
+        }
+      },
+    })
 
-      const currentScroll = window.scrollY
-
-      let progress = 0
-
-      // For sticky sections with height equal to viewport, ensure a non-zero scroll range
-      const startOffset = window.innerHeight * 0.4
-      const effectiveHeight = window.innerHeight * 1.2 // 120% of viewport height scroll range
-
-      const startScroll = sectionTop - startOffset
-      const endScroll = startScroll + effectiveHeight
-
-      if (currentScroll < startScroll) {
-        progress = 0
-      } else if (currentScroll > endScroll) {
-        progress = 1
-      } else {
-        progress = (currentScroll - startScroll) / effectiveHeight
-      }
-
-      targetProgressRef.current = progress
+    return () => {
+      st.kill()
     }
-
-    handleScroll()
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   // State flag to start animation after delay

@@ -2,10 +2,35 @@
 
 import FlowerBytesAnimation from '@/components/FlowerBytesAnimation';
 import TextAnimation from "@/components/TextAnimation";
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export const LineAnimationSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+
+    // Pin the section for twice the viewport height to allow both animations to finish
+    const pinTrigger = ScrollTrigger.create({
+      trigger: sectionRef.current,
+      start: 'top top',
+      end: '+=200%',
+      pin: true,
+      pinSpacing: true,
+      scrub: false,
+    });
+
+    return () => {
+      pinTrigger.kill();
+    };
+  }, []);
+
   return (
-    <section id="about" className="relative w-full bg-[#010a14] min-h-[100vh] overflow-hidden">
+    <section ref={sectionRef} id="about-line" className="relative w-full bg-black overflow-hidden">
       {/* Sticky container keeps animation and text pinned together */}
       <div className="sticky top-0 h-screen w-full">
         {/* Background line animation */}
