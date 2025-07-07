@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Header } from '@/sections/Navbar';
 import { useRouter } from 'next/navigation';
 import Lottie from 'lottie-react';
@@ -287,8 +288,8 @@ const IndustriesPage = () => {
             className={`w-2 h-2 ${bulletColor} rounded-full mt-2 flex-shrink-0`}
             initial={{ scale: 0, rotate: 0 }}
             animate={inView ? { scale: 1, rotate: 360 } : { scale: 0, rotate: 0 }}
-            transition={{ 
-              delay: index * 0.2 + 0.5, 
+            transition={{
+              delay: index * 0.2 + 0.5,
               duration: 0.5,
               type: "spring",
               stiffness: 200
@@ -376,7 +377,7 @@ const IndustriesPage = () => {
           {/* Overlay for better text readability */}
           <div className="absolute inset-0 bg-[rgba(1,10,20,0.2)]"></div>
         </div>
-        
+
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center relative z-10">
           <motion.div
             variants={staggerContainer as any}
@@ -386,7 +387,7 @@ const IndustriesPage = () => {
           >
             <motion.div variants={staggerContainer as any} className="space-y-6">
               <HeroAnimatedText text="Industries We Serve" />
-              <motion.div 
+              <motion.div
                 className="h-1 bg-[#010a14]"
                 initial={{ width: 0 }}
                 animate={animationsTriggered.hero ? { width: "100%" } : { width: 0 }}
@@ -394,21 +395,21 @@ const IndustriesPage = () => {
               />
             </motion.div>
 
-            <motion.p 
-              variants={paragraphVariants as any} 
+            <motion.p
+              variants={paragraphVariants as any}
               className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-white max-w-2xl md:max-w-3xl lg:max-w-4xl"
             >
               We deliver cutting-edge solutions across diverse industries, transforming businesses with innovative technology.
             </motion.p>
 
             <motion.div variants={paragraphVariants as any} className="flex items-center gap-4">
-                          <motion.div 
-              className="w-12 h-12 bg-gradient-to-r from-emerald-300 to-sky-400 rounded-full flex items-center justify-center"
-              transition={{ type: "spring", stiffness: 400, damping: 25 }}
-            >
-              <span className="text-gray-900 font-bold text-xl">▶</span>
-            </motion.div>
-              <motion.span 
+              <motion.div
+                className="w-12 h-12 bg-gradient-to-r from-emerald-300 to-sky-400 rounded-full flex items-center justify-center"
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              >
+                <span className="text-gray-900 font-bold text-xl">▶</span>
+              </motion.div>
+              <motion.span
                 className="text-sm text-white"
                 initial={{ opacity: 0, x: -20 }}
                 animate={animationsTriggered.hero ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
@@ -426,10 +427,10 @@ const IndustriesPage = () => {
             className="relative mt-8 md:-mt-12 lg:-mt-16 md:-ml-8"
           >
             {/* Placeholder for industries image */}
-            <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-[500px] lg:h-[500px] mx-auto bg-white rounded-full flex items-center justify-center">
-              <div className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-80 lg:h-80 bg-gradient-to-r from-emerald-300 to-sky-400 rounded-full flex items-center justify-center">
-                <motion.div 
-                  className="text-3xl sm:text-4xl md:text-6xl text-gray-900 font-bold flex items-center justify-center"
+            <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-[500px] lg:h-[500px] mx-auto bg-gradient-to-r from-emerald-300 to-sky-400 rounded-full flex items-center justify-center">
+              <div className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-80 lg:h-80 bg-[#010a14] rounded-full flex items-center justify-center shadow-lg">
+                <motion.div
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white font-bold flex items-center justify-center"
                   initial={{ scale: 0, rotate: -180 }}
                   animate={animationsTriggered.hero ? { scale: 1, rotate: 0 } : { scale: 0, rotate: -180 }}
                   transition={{ delay: 0.5, duration: 1, type: "spring", stiffness: 100 }}
@@ -444,7 +445,7 @@ const IndustriesPage = () => {
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 3, repeat: Infinity }}
             >
-              <motion.div 
+              <motion.div
                 className="text-gray-900 text-base sm:text-lg md:text-2xl font-bold"
                 initial={{ opacity: 0, scale: 0 }}
                 animate={animationsTriggered.hero ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
@@ -452,7 +453,7 @@ const IndustriesPage = () => {
               >
                 15+
               </motion.div>
-              <motion.div 
+              <motion.div
                 className="text-[10px] sm:text-xs text-gray-900"
                 initial={{ opacity: 0 }}
                 animate={animationsTriggered.hero ? { opacity: 1 } : { opacity: 0 }}
@@ -515,7 +516,7 @@ const IndustriesPage = () => {
                 <br />
                 FINANCIAL SECTOR
               </AnimatedHeader>
-              <motion.div 
+              <motion.div
                 className="h-1 bg-gradient-to-r from-emerald-300 to-sky-400"
                 initial={{ width: 0 }}
                 animate={animationsTriggered.fintech ? { width: "100%" } : { width: 0 }}
@@ -523,8 +524,8 @@ const IndustriesPage = () => {
               />
             </motion.div>
 
-            <motion.p 
-              variants={paragraphVariants as any} 
+            <motion.p
+              variants={paragraphVariants as any}
               initial="hidden"
               animate={animationsTriggered.fintech ? "visible" : "hidden"}
               className="text-lg text-[#010a14] max-w-md"
@@ -545,6 +546,7 @@ const IndustriesPage = () => {
             />
           </motion.div>
         </div>
+
       </section>
 
       {/* Healthcare Section */}
@@ -563,23 +565,23 @@ const IndustriesPage = () => {
               >
                 HEALTH SECTOR
               </AnimatedHeader>
-              <motion.div 
+              <motion.div
                 className="h-1 bg-gradient-to-r from-purple-500 to-pink-500"
                 initial={{ width: 0 }}
                 animate={animationsTriggered.healthcare ? { width: "100%" } : { width: 0 }}
                 transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
               />
             </motion.div>
-            
-            <motion.p 
-              variants={paragraphVariants as any} 
+
+            <motion.p
+              variants={paragraphVariants as any}
               initial="hidden"
               animate={animationsTriggered.healthcare ? "visible" : "hidden"}
               className="text-lg text-white/90 max-w-lg"
             >
               We specialize in digital health solutions that enhance patient care and streamline medical operations.
             </motion.p>
-            
+
             <motion.div variants={staggerContainer as any}>
               <AnimatedBulletPoints
                 points={[
@@ -594,13 +596,14 @@ const IndustriesPage = () => {
               />
             </motion.div>
           </motion.div>
-          
+
           <motion.div
             variants={slideInRight as any}
             initial="hidden"
             animate={animationsTriggered.healthcare ? 'visible' : 'hidden'}
             className="relative order-2 lg:order-1"
           >
+
             {/* Healthcare Lottie animation */}
             <div className="relative w-80 h-80 sm:w-96 sm:h-96 md:w-[500px] md:h-[500px] mx-auto">
               <motion.div
@@ -663,7 +666,7 @@ const IndustriesPage = () => {
               </motion.div>
             </div>
           </motion.div>
-          
+
           <motion.div
             variants={staggerContainer as any}
             initial="hidden"
@@ -679,23 +682,23 @@ const IndustriesPage = () => {
                 <br />
                 SOLUTIONS
               </AnimatedHeader>
-              <motion.div 
+              <motion.div
                 className="h-1 bg-gradient-to-r from-cyan-500 to-blue-600"
                 initial={{ width: 0 }}
                 animate={animationsTriggered.ecommerce ? { width: "100%" } : { width: 0 }}
                 transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
               />
             </motion.div>
-            
-            <motion.p 
-              variants={paragraphVariants as any} 
+
+            <motion.p
+              variants={paragraphVariants as any}
               initial="hidden"
               animate={animationsTriggered.ecommerce ? "visible" : "hidden"}
               className="text-lg text-white/90 max-w-md"
             >
               We specialize in comprehensive retail solutions that boost sales and elevate the customer experience.
             </motion.p>
-            
+
             <AnimatedBulletPoints
               points={[
                 "Driving omnichannel retail strategies for better customer experiences",
@@ -703,11 +706,11 @@ const IndustriesPage = () => {
                 "Enhancing e-commerce platforms with fast, responsive interfaces",
                 "Enabling supply chain visibility and operational efficiency"
               ]}
-                              className="text-white/80"
-                bulletColor="bg-gradient-to-r from-cyan-500 to-blue-600"
+              className="text-white/80"
+              bulletColor="bg-gradient-to-r from-cyan-500 to-blue-600"
               inView={animationsTriggered.ecommerce}
             />
-            
+
             <motion.button
               className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-8 py-3 rounded font-medium hover:from-cyan-600 hover:to-blue-700 transition-all duration-300"
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
@@ -719,6 +722,7 @@ const IndustriesPage = () => {
             </motion.button>
           </motion.div>
         </div>
+
       </section>
 
       {/* Education Section */}
@@ -739,23 +743,23 @@ const IndustriesPage = () => {
                 <br />
                 CONTRACTORS
               </AnimatedHeader>
-              <motion.div 
+              <motion.div
                 className="h-1 bg-gradient-to-r from-emerald-300 to-sky-400"
                 initial={{ width: 0 }}
                 animate={animationsTriggered.education ? { width: "100%" } : { width: 0 }}
                 transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
               />
             </motion.div>
-            
-            <motion.p 
-              variants={paragraphVariants as any} 
+
+            <motion.p
+              variants={paragraphVariants as any}
               initial="hidden"
               animate={animationsTriggered.education ? "visible" : "hidden"}
               className="text-base md:text-lg text-[#010a14] max-w-2xl"
             >
               We specialize in delivering innovative digital solutions tailored specifically for federal and state government contractors.
             </motion.p>
-            
+
             <AnimatedBulletPoints
               points={[
                 "Delivering secure, compliant technology for federal and state agencies",
@@ -768,7 +772,7 @@ const IndustriesPage = () => {
               inView={animationsTriggered.education}
             />
           </motion.div>
-          
+
           <motion.div
             variants={slideInRight as any}
             initial="hidden"
@@ -802,9 +806,9 @@ const IndustriesPage = () => {
           </motion.div>
         </div>
       </section>
-
       {/* Footer is provided globally via RootLayout */}
     </div>
+
   );
 };
 
