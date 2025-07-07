@@ -8,12 +8,8 @@ import {
   AnimatePresence,
   animate,
 } from 'framer-motion';
-
-// Path to the optimized video placed in /public for static serving by Vite.
-const VIDEO_SRC = '/landingVideo_720.mp4';
-
-// Fallback gradient background when video is not available
-const FALLBACK_BACKGROUND = 'linear-gradient(135deg, #000000 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #000000 100%)';
+// import AdvancedFpvAnimation from './AdvancedFpvAnimation';
+import TunnelScene from './videocontent/tunnelscene';
 
 // Define the ServiceCard interface
 interface ServiceCard {
@@ -151,11 +147,10 @@ if (typeof document !== 'undefined' && !document.getElementById('gold-shine-styl
 
 function VideoScroll() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
-  // State for video duration and readiness
-  const [duration, setDuration] = useState<number>(0);
-  const [isReady, setIsReady] = useState<boolean>(false);
+  // State for animation duration and readiness
+  const [duration, setDuration] = useState<number>(100); // Animation duration in seconds
+  const [isReady, setIsReady] = useState<boolean>(true);
 
   // State for mobile menu
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -163,20 +158,20 @@ function VideoScroll() {
   // State for mobile detection
   const [isMobile, setIsMobile] = useState<boolean>(typeof window !== 'undefined' ? window.matchMedia('(max-width: 768px)').matches : false);
 
-  // Capture scroll progress for the video section
+  // Capture scroll progress for the tunnel animation section
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   });
 
-  // Map scroll progress to video time and apply spring inertia
-  const rawVideoTime = useTransform(scrollYProgress, [0, 1], [0, duration]);
-  const videoTime = useSpring(rawVideoTime, {
+  // Map scroll progress to animation time and apply spring inertia
+  const rawAnimationTime = useTransform(scrollYProgress, [0, 1], [0, duration]);
+  const animationTime = useSpring(rawAnimationTime, {
     stiffness: 80, // Increased stiffness for more responsive tracking
     damping: 25,  // Slightly higher damping to reduce overshoot
   });
 
-  // Track desired video time and intro overlay
+  // Track desired animation time and intro overlay
   const desiredTimeRef = useRef<number>(0);
   const [showIntro, setShowIntro] = useState<boolean>(true);
   const [currentService, setCurrentService] = useState<ServiceCard | null>(null);
@@ -205,52 +200,17 @@ function VideoScroll() {
     setShowIntro(t < 7);
   }, []);
 
-  // Update video time and service selection
-  useMotionValueEvent(videoTime, 'change', (t) => {
+  // Update animation time and service selection
+  useMotionValueEvent(animationTime, 'change', (t) => {
     desiredTimeRef.current = Math.max(0, Math.min(t, duration));
     selectService(t);
   });
-
-  // Sync video time with scroll
-  useEffect(() => {
-    if (!isReady) return;
-    let animationId: number;
-    const THRESHOLD = 1 / 30;
-
-    const tick = () => {
-      const video = videoRef.current;
-      if (video) {
-        const wanted = desiredTimeRef.current;
-        if (Math.abs(wanted - video.currentTime) > THRESHOLD) {
-          video.currentTime = wanted;
-        }
-      }
-      animationId = requestAnimationFrame(tick);
-    };
-    animationId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(animationId);
-  }, [isReady, duration]);
-
-  // Handle video metadata loading
-  const handleLoadedMetadata = () => {
-    if (!videoRef.current) return;
-    setDuration(videoRef.current.duration);
-    videoRef.current.pause();
-    setIsReady(true);
-  };
-
-  // Initialize video settings
-  useEffect(() => {
-    if (!videoRef.current) return;
-    videoRef.current.pause();
-    videoRef.current.muted = true;
-  }, []);
 
   // Service data
   const services: ServiceCard[] = [
     {
       start: 20,
-      end: 26,
+      end: 30,
       side: 'left',
       title: 'App Development',
       desc: 'Build impactful mobile apps',
@@ -267,8 +227,8 @@ function VideoScroll() {
       image: '/assets/video/app-dev.png',
     },
     {
-      start: 32,
-      end: 38,
+      start: 35,
+      end: 45,
       side: 'right',
       title: 'Web Development',
       desc: 'Create lightning-fast websites',
@@ -285,8 +245,8 @@ function VideoScroll() {
       image: '/assets/video/web-dev.png',
     },
     {
-      start: 44,
-      end: 50,
+      start: 50,
+      end: 60,
       side: 'left',
       title: 'SEO',
       desc: 'Boost organic search visibility',
@@ -303,8 +263,8 @@ function VideoScroll() {
       image: '/assets/video/seo.png',
     },
     {
-      start: 56,
-      end: 62,
+      start: 65,
+      end: 75,
       side: 'right',
       title: 'Social Media Marketing',
       desc: 'Grow your brand on social',
@@ -321,8 +281,8 @@ function VideoScroll() {
       image: '/assets/video/smm.png',
     },
     {
-      start: 68,
-      end: 75,
+      start: 80,
+      end: 100,
       side: 'center',
       title: 'Contact Us',
       desc: 'Ready to get started?',
@@ -350,9 +310,6 @@ function VideoScroll() {
     const targetY = containerTop + progress * scrollRange;
 
     desiredTimeRef.current = time;
-    if (videoRef.current) {
-      videoRef.current.currentTime = time;
-    }
     selectService(time);
     setIsMenuOpen(false);
 
@@ -372,43 +329,10 @@ function VideoScroll() {
         position: 'relative',
       }}
     >
-      {/* Fallback Background */}
-      <div
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          background: FALLBACK_BACKGROUND,
-          pointerEvents: 'none',
-          zIndex: 1,
-        }}
-      />
-      
-      <video
-        ref={videoRef}
-        src={VIDEO_SRC}
-        playsInline
-        preload="auto"
-        muted
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          objectFit: 'cover',
-          pointerEvents: 'none',
-          zIndex: 2,
-        }}
-        onLoadedMetadata={handleLoadedMetadata}
-        onError={(e) => {
-          // Hide video on error and show fallback background
-          e.currentTarget.style.display = 'none';
-        }}
-      />
-
+      {/* Tunnel Scene Background Animation */}
+      <div className="relative w-full overflow-x-hidden">
+        <TunnelScene scrollContainer={containerRef as React.RefObject<HTMLDivElement>} />
+      </div>
       {/* Dark overlay for better text readability */}
       <div
         style={{
@@ -422,6 +346,7 @@ function VideoScroll() {
             : 'transparent',
           pointerEvents: 'none',
           transition: 'background 0.8s ease',
+          zIndex: 10,
         }}
       />
 
@@ -926,16 +851,17 @@ function VideoScroll() {
           boxShadow: '0 0 5px rgba(0, 255, 255, 0.2)',
         }}
       >
-        <div
+        <motion.div
           style={{
-            width: `${(desiredTimeRef.current / duration) * 100}%`,
             height: '100%',
             background: 'linear-gradient(90deg, #0080ff, #0080ff)',
             borderRadius: '2px',
-            transition: 'width 0.1s ease',
             boxShadow: '0 0 6px #0080ff',
             animation: 'NeonGlow 3s ease-in-out infinite',
           }}
+          initial={{ width: '0%' }}
+          animate={{ width: `${scrollYProgress.get() * 100}%` }}
+          transition={{ duration: 0.1 }}
         />
       </div>
 

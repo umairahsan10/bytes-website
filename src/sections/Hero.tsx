@@ -83,10 +83,10 @@ const HeroSection = () => {
 
         @keyframes textGlow {
           0%, 100% {
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+            text-shadow: 0 0 10px rgba(125, 165, 240, 0.4);
           }
           50% {
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.6);
+            text-shadow: 0 0 15px rgba(125, 165, 240, 0.8), 0 0 20px rgba(125, 165, 240, 0.6);
           }
         }
 
@@ -125,10 +125,10 @@ const HeroSection = () => {
 
         @keyframes glow {
           0%, 100% {
-            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.6));
+            filter: drop-shadow(0 0 40px rgba(120, 164, 204, 0.6));
           }
           50% {
-            filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 60px rgba(255, 255, 255, 0.4));
+            filter: drop-shadow(0 0 60px rgba(120, 164, 204, 0.9)) drop-shadow(0 0 80px rgba(120, 164, 204, 0.4));
           }
         }
 
