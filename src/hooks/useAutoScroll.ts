@@ -14,30 +14,40 @@ export const useAutoScroll = <T extends HTMLElement>(baseSpeed = 0.5) => {
     const el = ref.current;
     if (!el) return;
 
-    let speed = baseSpeed; // px / frame
-    // Current scroll velocity (px per frame). Will increase during a drag
-    // then gradually ease back to the baseline `baseSpeed`.
-    let targetSpeed = baseSpeed;
-    let isDragging = false; // active pointer down & move gesture
-    let isHovering = false; // pointer is over the container (mouse) or finger touching (touch)
+    // Current scroll velocity (px / frame). It is animated every frame and
+    // gradually interpolates back to the provided `baseSpeed` when the user
+    // is not interacting.
+    let speed = baseSpeed;
+    let isPointerDown = false; // pointer is pressed (holding or dragging)
+    let isDragging = false; // became true after surpassing movement threshold (actively dragging)
+    let isHovering = false; // reserved (not used but kept for future)
     let startX = 0;
     let startScrollLeft = 0;
     let lastX = 0;
     let lastTs = 0;
 
+    const dragThreshold = 5; // pixels before we treat as an actual drag
+
     /* -------------------------- Autoplay --------------------------- */
     const step = () => {
-      if (!isDragging && !isHovering) {
-        // Ease speed back toward the base speed (inertia / friction)
-        speed += (baseSpeed - speed) * 0.05; // 0.05 smoothing factor
+      const shouldAuto = !isPointerDown && !isHovering;
+
+      if (shouldAuto) {
+        // Ease speed back toward the baseline speed.
+        speed += (baseSpeed - speed) * 0.04;
         el.scrollLeft += speed;
       }
-      const singleLoop = el.scrollWidth / 2; // since content is duplicated
-      if (el.scrollLeft >= singleLoop) {
-        el.scrollLeft -= singleLoop;
-      } else if (el.scrollLeft <= 0) {
-        el.scrollLeft += singleLoop;
+
+      // Only perform seamless looping when auto-scrolling (prevents jumps while holding)
+      if (shouldAuto && !isDragging) {
+        const singleLoop = el.scrollWidth / 2;
+        if (el.scrollLeft >= singleLoop) {
+          el.scrollLeft -= singleLoop;
+        } else if (el.scrollLeft <= 0) {
+          el.scrollLeft += singleLoop;
+        }
       }
+
       requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
@@ -46,8 +56,11 @@ export const useAutoScroll = <T extends HTMLElement>(baseSpeed = 0.5) => {
     const getPageX = (e: PointerEvent) => e.pageX;
 
     const onPointerDown = (e: PointerEvent) => {
-      isDragging = true;
-      speed = 0; // immediately halt ongoing auto-scroll while holding
+      // Prevent browser-native behaviors (e.g., drag image, text selection)
+      e.preventDefault();
+      isPointerDown = true;
+      isDragging = false; // will become true once movement exceeds threshold
+      speed = 0; // halt auto-scroll while pointer is held
       startX = getPageX(e);
       startScrollLeft = el.scrollLeft;
       lastX = startX;
@@ -57,59 +70,76 @@ export const useAutoScroll = <T extends HTMLElement>(baseSpeed = 0.5) => {
     };
 
     const onPointerMove = (e: PointerEvent) => {
-      if (!isDragging) return;
+      if (!isPointerDown) return;
+
       const currentX = getPageX(e);
       const delta = currentX - startX;
 
-      if (delta < 0) {
-        el.scrollLeft = startScrollLeft - delta;
+      // Only start actual dragging after surpassing threshold *and* moving left (delta negative)
+      if (!isDragging && delta <= -dragThreshold) {
+        isDragging = true;
       }
 
-      // velocity-based speed update
-      const now = performance.now();
-      const dt = now - lastTs;
-      if (dt > 0) {
-        const vx = (lastX - currentX) / dt; // px per ms (positive for forward drags)
+      if (isDragging) {
+        if (delta < 0) {
+          // Apply scroll only for leftward movement
+          el.scrollLeft = startScrollLeft - delta;
 
-        // Convert instantaneous velocity into scroll/frame speed and apply it directly.
-        const flingSpeed = baseSpeed + vx * 50; // tune factor 50 for sensitivity
-        speed = Math.max(baseSpeed, flingSpeed);
+          // --- Determine velocity (px/ms) for inertia ---
+          const now = performance.now();
+          const dt = now - lastTs;
+          if (dt > 0) {
+            const vx = (lastX - currentX) / dt; // positive when dragging left
+            speed = vx * 1000 / 60; // px/frame
+          }
+
+          lastX = currentX;
+          lastTs = performance.now();
+        } else {
+          // Prevent rightward drag influence
+          el.scrollLeft = startScrollLeft;
+          speed = 0;
+        }
       }
-      lastX = currentX;
-      lastTs = now;
     };
 
     const onPointerUp = (e: PointerEvent) => {
+      const wasDragging = isDragging;
+      isPointerDown = false;
       isDragging = false;
       el.releasePointerCapture(e.pointerId);
-      // If no significant fling occurred, resume baseline speed.
-      if (speed === 0) {
+      if (!wasDragging) {
+        // For a simple tap/hold (no drag), immediately resume baseline speed
         speed = baseSpeed;
+      } else {
+        // If it was a fling/drag, keep the inertia (speed already set)
+        if (Math.abs(speed) < 0.1) {
+          speed = baseSpeed;
+        }
       }
       el.classList.remove("cursor-grabbing");
     };
 
-    /* --------------------------- Hover / Press pause --------------------------- */
-    const onPointerEnter = () => {
-      isHovering = true;
-    };
-    const onPointerLeave = () => {
-      isHovering = false;
+    /* --------------------------- Wheel Guard --------------------------- */
+    const onWheel = (e: WheelEvent) => {
+      // If the gesture contains a horizontal component greater than the vertical one,
+      // treat it as an attempt to horizontally scroll the gallery. Prevent it from
+      // affecting layout so page position stays intact.
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        e.preventDefault();
+      }
     };
 
-    el.addEventListener("pointerdown", onPointerDown);
+    el.addEventListener("pointerdown", onPointerDown, { passive: false, capture: true });
     el.addEventListener("pointermove", onPointerMove);
     window.addEventListener("pointerup", onPointerUp);
-
-    el.addEventListener("pointerenter", onPointerEnter);
-    el.addEventListener("pointerleave", onPointerLeave);
+    el.addEventListener("wheel", onWheel, { passive: false });
 
     return () => {
       el.removeEventListener("pointerdown", onPointerDown);
       el.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
-      el.removeEventListener("pointerenter", onPointerEnter);
-      el.removeEventListener("pointerleave", onPointerLeave);
+      el.removeEventListener("wheel", onWheel);
     };
   }, [baseSpeed]);
 
