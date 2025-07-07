@@ -101,35 +101,6 @@ const ByteBotLanding: React.FC = () => {
 
     initAnimations();
 
-    // Initialize Vanta.js globe animation
-    const initVanta = () => {
-      if (typeof window !== 'undefined' && window.VANTA && heroRef.current) {
-        vantaRef.current = window.VANTA.GLOBE({
-          el: heroRef.current,
-          mouseControls: true,
-          touchControls: true,
-          gyroControls: false,
-          minHeight: 200.00,
-          minWidth: 200.00,
-          scale: 1.00,
-          scaleMobile: 1.00,
-          color: 0x00d4ff,
-          backgroundColor: 0x0a0a0a
-        });
-      }
-    };
-
-    // Wait for VANTA to be available
-    const checkVanta = () => {
-      if (typeof window !== 'undefined' && window.VANTA) {
-        initVanta();
-      } else {
-        setTimeout(checkVanta, 100);
-      }
-    };
-
-    checkVanta();
-
     // Cleanup function
     return () => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
@@ -177,11 +148,30 @@ const ByteBotLanding: React.FC = () => {
       {/* Load Vanta.js scripts */}
       <Script
         src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"
-        strategy="beforeInteractive"
-      />
-      <Script
-        src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"
-        strategy="beforeInteractive"
+        strategy="afterInteractive"
+        onLoad={() => {
+          // Three.js loaded, now load Vanta
+          const vantaScript = document.createElement('script');
+          vantaScript.src = "https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js";
+          vantaScript.onload = () => {
+            // Both scripts loaded, initialize Vanta
+            if (typeof window !== 'undefined' && window.VANTA && heroRef.current) {
+              vantaRef.current = window.VANTA.GLOBE({
+                el: heroRef.current,
+                mouseControls: true,
+                touchControls: true,
+                gyroControls: false,
+                minHeight: 200.00,
+                minWidth: 200.00,
+                scale: 1.00,
+                scaleMobile: 1.00,
+                color: 0x00d4ff,
+                backgroundColor: 0x0a0a0a
+              });
+            }
+          };
+          document.head.appendChild(vantaScript);
+        }}
       />
       <style jsx>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');

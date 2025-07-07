@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Header } from "@/sections/Navbar";
 import Link from "next/link";
 import SimplifiedMERNOrbital from "@/components/SimplifiedMERNOrbital";
+import AnimatedBeam from "@/components/AnimatedBeam";
 // @ts-ignore – lucide-react icons (ensure dependency installed in runtime)
 import { ChevronDown, Menu, X, Code, Zap, Users, Award, ArrowRight, Star, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Play, Smartphone, Monitor, Database, Cloud, Globe, Layers, BarChart, TrendingUp, LayoutDashboard, CreditCard, Plug, ShoppingCart } from 'lucide-react';
 
@@ -193,7 +194,7 @@ const WebDevelopmentLanding = () => {
 
   const animateCounters = () => {
     const duration = 2000;
-    const targets = { projects: 10, clients: 10, lines: 10000, years: 1 } as const;
+    const targets = { projects: 99, clients: 99, lines: 10000, years: 4 } as const;
     type TargetKey = keyof typeof targets;
 
     (Object.keys(targets) as TargetKey[]).forEach((key) => {
@@ -398,7 +399,7 @@ const WebDevelopmentLanding = () => {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             <div className="space-y-2">
               <div className="text-4xl lg:text-5xl font-bold">{counters.projects}+</div>
-              <div className="text-blue-200">Web Projects</div>
+              <div className="text-blue-200">Products Developed</div>
             </div>
             <div className="space-y-2">
               <div className="text-4xl lg:text-5xl font-bold">{counters.clients}+</div>
@@ -495,12 +496,34 @@ const WebDevelopmentLanding = () => {
             {/* WordPress Section */}
             <div className="grid lg:grid-cols-2 gap-12 items-center" ref={wpRef}>
               <div className={`flex items-center justify-center transition-all duration-700 order-2 lg:order-1 ${wpVisible ? 'animate-slide-in-left' : 'opacity-0 -translate-x-10'}`} style={{ transitionDelay: '300ms' }}>
-                <img
-                  src="/assets/newimages/wordpress.png"
-                  alt="WordPress site preview"
-                  className="object-contain animate-scale-pulse"
-                  style={{ maxWidth: '100%', maxHeight: '320px' }}
-                />
+                <div className="w-full h-80 rounded-2xl overflow-hidden">
+                  <AnimatedBeam>
+                    <div className="flex min-h-80 w-full flex-col items-center justify-center text-xl text-white md:text-3xl">
+                      <div className="max-w-lg rounded-xl bg-opacity-10 p-4 text-center font-light backdrop-blur-sm">
+                        Look at the{' '}
+                        <span className="line-through">
+                          themes
+                        </span>
+                        {' '}
+                        <strong>
+                          plugins
+                        </strong>
+                        ! Look how they{' '}
+                        <span className="line-through">
+                          work
+                        </span>
+                        {' '}
+                        <strong>
+                         transform 
+                        </strong>
+                        
+                        {' '}just
+                      
+                        {' '}for you!
+                      </div>
+                    </div>
+                  </AnimatedBeam>
+                </div>
               </div>
               <div className={`transition-all duration-700 order-1 lg:order-2 ${wpVisible ? 'animate-slide-in-right' : 'opacity-0 translate-x-10'}`} style={{ transitionDelay: '300ms' }}>
                 <div className="p-8 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300">
@@ -545,11 +568,11 @@ const WebDevelopmentLanding = () => {
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </div >
+      </section >
 
       {/* Add-ons Section */}
-      <section className="py-20" ref={addOnsRef}>
+      < section className="py-20" ref={addOnsRef} >
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold mb-6">
@@ -585,10 +608,10 @@ const WebDevelopmentLanding = () => {
             })}
           </div>
         </div>
-      </section>
+      </section >
 
       {/* Development Process Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-50 to-white" ref={processRef}>
+      < section className="py-20 bg-gradient-to-r from-blue-50 to-white" ref={processRef} >
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold mb-6">
@@ -616,16 +639,16 @@ const WebDevelopmentLanding = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section >
 
       {/* Why Choose Us Section */}
-      <section className="py-20" ref={chooseRef}>
+      < section className="py-20" ref={chooseRef} >
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Side - Image */}
-            <div className={`relative aspect-square rounded-3xl overflow-hidden shadow-2xl transition-all duration-700 ${chooseVisible ? 'animate-slide-in-right' : 'opacity-0 translate-x-10'}`}>
+            <div className={`relative aspect-square rounded-3xl overflow-hidden shadow-3xl transition-all duration-500 ${chooseVisible ? 'animate-slide-in-right' : 'opacity-0'}`}>
               <Image
-                src="/assets/WebDev/last-section.jpg"
+                src="/assets/newimages/whychoseus.png"
                 alt="Why choose our web development services"
                 fill
                 className="object-cover"
@@ -635,53 +658,53 @@ const WebDevelopmentLanding = () => {
             </div>
 
             {/* Right Side - Text */}
-            <div className={`space-y-8 transition-all duration-700 ${chooseVisible ? 'animate-slide-in-left' : 'opacity-0 -translate-x-10'}`}>
-              <h2 className="text-4xl lg:text-5xl font-bold">
+            <div className={`space-y-6 transition-all duration-700 ${chooseVisible ? 'animate-slide-in-left' : 'opacity-0 -translate-x-10'}`}>
+              <h2 className="text-3xl lg:text-4xl font-bold">
                 Why Choose Our <span className="text-blue-600">Web Development</span>
               </h2>
-              <p className="text-xl text-gray-600 leading-relaxed">
+              <p className="text-lg text-gray-600 leading-relaxed">
                 We combine technical expertise with creative problem-solving to deliver web solutions that not only meet your requirements but exceed your expectations.
               </p>
 
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="w-6 h-6 bg-blue-600 rounded-full flex-shrink-0 mt-1"></div>
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <div className="w-4 h-4 bg-blue-600 rounded-full flex-shrink-0 mt-1"></div>
                   <div>
-                    <h4 className="font-semibold text-lg mb-2">Modern Architecture</h4>
-                    <p className="text-gray-600">Built with scalable, maintainable code using industry best practices and modern frameworks.</p>
+                    <h4 className="font-semibold text-base mb-1">Modern Architecture</h4>
+                    <p className="text-gray-600 text-sm">Built with scalable, maintainable code using industry best practices and modern frameworks.</p>
                   </div>
                 </div>
-                <div className="flex items-start space-x-4">
-                  <div className="w-6 h-6 bg-blue-600 rounded-full flex-shrink-0 mt-1"></div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-4 h-4 bg-blue-600 rounded-full flex-shrink-0 mt-1"></div>
                   <div>
-                    <h4 className="font-semibold text-lg mb-2">Performance Optimized</h4>
-                    <p className="text-gray-600">Lightning-fast loading times and optimized performance across all devices and browsers.</p>
+                    <h4 className="font-semibold text-base mb-1">Performance Optimized</h4>
+                    <p className="text-gray-600 text-sm">Lightning-fast loading times and optimized performance across all devices and browsers.</p>
                   </div>
                 </div>
-                <div className="flex items-start space-x-4">
-                  <div className="w-6 h-6 bg-blue-600 rounded-full flex-shrink-0 mt-1"></div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-4 h-4 bg-blue-600 rounded-full flex-shrink-0 mt-1"></div>
                   <div>
-                    <h4 className="font-semibold text-lg mb-2">Security First</h4>
-                    <p className="text-gray-600">Robust security measures and best practices to protect your application and user data.</p>
+                    <h4 className="font-semibold text-base mb-1">Security First</h4>
+                    <p className="text-gray-600 text-sm">Robust security measures and best practices to protect your application and user data.</p>
                   </div>
                 </div>
-                <div className="flex items-start space-x-4">
-                  <div className="w-6 h-6 bg-blue-600 rounded-full flex-shrink-0 mt-1"></div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-4 h-4 bg-blue-600 rounded-full flex-shrink-0 mt-1"></div>
                   <div>
-                    <h4 className="font-semibold text-lg mb-2">Ongoing Support</h4>
-                    <p className="text-gray-600">Comprehensive maintenance, updates, and technical support to keep your application running smoothly.</p>
+                    <h4 className="font-semibold text-base mb-1">Ongoing Support</h4>
+                    <p className="text-gray-600 text-sm">Comprehensive maintenance, updates, and technical support to keep your application running smoothly.</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </section >
 
       {/* Call To Action Section */}
-      <section className="relative overflow-hidden py-24 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-center">
+      < section className="relative overflow-hidden py-24 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-center" >
         {/* Background image */}
-        <div
+        < div
           className="absolute inset-0 bg-center bg-cover opacity-70 pointer-events-none"
           style={{ backgroundImage: "url('/assets/WebDev/buildwithus.png')" }}
         />
@@ -698,7 +721,7 @@ const WebDevelopmentLanding = () => {
             Build&nbsp;With&nbsp;Us
           </Link>
         </div>
-      </section>
+      </section >
 
       {/* Modal Overlay */}
       {
@@ -853,7 +876,7 @@ const WebDevelopmentLanding = () => {
           }
         }
       `}</style>
-    </div>
+    </div >
   );
 };
 
