@@ -31,7 +31,7 @@ function TextLine() {
     const letterSpacing = 1 * scale // Increased spacing
     const lineHeight = 6 * scale // Increased line height
     const startX = 0 * scale // Adjusted start position
-    const startY = 0 * scale
+    const startY = -0.35 * scale
     
     const letters: THREE.CatmullRomCurve3[] = []
     
