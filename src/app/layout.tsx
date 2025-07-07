@@ -28,16 +28,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Google Tag Manager */}
+        <GTM id="GTM-MNW4L2XD" />
+      </head>
       <body
         className={twMerge(
           inter.variable,
           calistoga.variable,
           "text-black antialiased font-sans min-h-screen flex flex-col"
         )}
-      ><main className="flex-1">
-        {/* Google Tag Manager */}
-        <GTM />
-        <GTMNoScript />
+      >
+        {/* GTM noscript fallback */}
+        <GTMNoScript id="GTM-MNW4L2XD" />
+        <main className="flex-1">
           {children}
         </main>
         <Footer />
