@@ -139,14 +139,17 @@ const ByteSuitePage: React.FC = () => {
       trigger: laptopContainerRef.current,
       start: 'top top',
       end: 'bottom top',
-      scrub: true,
+      scrub: 0.15,
       pin: gridPinRef.current,
       pinSpacing: true,
       snap: 1 / (laptopScreens.length - 1),
       onUpdate: (self) => {
         const rawProgress = self.progress;
+        // On mobile, round to the nearest slide instead of always flooring. This lets the
+        // final (5th) slide reach its snapped state *before* the ScrollTrigger ends,
+        // ensuring the section stays pinned while that slide is in view.
         const snappedProgress = isMobileScreen
-          ? Math.floor(rawProgress * (laptopScreens.length - 1)) / (laptopScreens.length - 1)
+          ? Math.round(rawProgress * (laptopScreens.length - 1)) / (laptopScreens.length - 1)
           : rawProgress;
         autoProgress.set(snappedProgress);
       },
@@ -952,7 +955,7 @@ const ByteSuitePage: React.FC = () => {
             </motion.div>
 
             {/* ---------------- Laptop Swiping Animation ---------------- */}
-            <div ref={laptopContainerRef} className="relative min-h-[400vh]">
+            <div ref={laptopContainerRef} className="relative min-h-[500vh]">
               <div ref={gridPinRef} className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 grid md:grid-cols-3 gap-12 items-center pt-24 md:pt-0">
                 {/* Laptop Mock-up */}
                 <div className="flex items-center justify-center md:h-screen h-auto self-center">
