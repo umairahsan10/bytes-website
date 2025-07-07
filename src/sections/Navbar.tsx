@@ -446,16 +446,43 @@ const Header: React.FC<HeaderProps> = ({
         {/* Consultation link - right side next to menu toggle */}
         <Link
           href="/contact"
-          className={`text-[#F6C324] text-[10px] md:text-xs font-semibold uppercase tracking-wide hover:underline font-['PPNeueMontreal'] cursor-pointer mr-4 pointer-events-auto text-center leading-tight transition-opacity duration-200 ${isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+          className={`text-[#F6C324] text-[10px] md:text-xs font-semibold uppercase tracking-wide no-underline font-league cursor-pointer mr-4 pointer-events-auto text-center leading-tight transition-opacity duration-200 ${isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
         >
-          <span className="block">BOOK A</span>
+          <span className="block text-white">BOOK A</span>
           <span className="block animate-pulse text-[12px] md:text-sm" style={{ animationDuration: '1.4s' }}>FREE CONSULTATION</span>
         </Link>
 
         {!logoOnly && (
-          <p className="menu-toggle relative z-[400]" onClick={isOpen ? handleMenuClose : handleMenuOpen}>
-            {buttonText}
-          </p>
+          <button
+            aria-label="Toggle menu"
+            className="menu-toggle hamburger relative z-[400] w-6 h-4 pointer-events-auto"
+            onClick={isOpen ? handleMenuClose : handleMenuOpen}
+          >
+            {/* Top bar */}
+            <span
+              className={`absolute left-0 w-full h-0.5 bg-white transition-all duration-500 ease-in-out ${
+                isOpen
+                  ? 'top-1/2 -translate-y-1/2 rotate-45'
+                  : 'top-0'
+              }`}
+            />
+            {/* Middle bar */}
+            <span
+              className={`absolute left-0 w-full h-0.5 bg-white transition-all duration-500 ease-in-out ${
+                isOpen
+                  ? 'opacity-0 top-1/2 -translate-y-1/2'
+                  : 'top-1/2 -translate-y-1/2'
+              }`}
+            />
+            {/* Bottom bar */}
+            <span
+              className={`absolute left-0 w-full h-0.5 bg-white transition-all duration-500 ease-in-out ${
+                isOpen
+                  ? 'top-1/2 -translate-y-1/2 -rotate-45'
+                  : 'bottom-0'
+              }`}
+            />
+          </button>
         )}
       </nav>
 
