@@ -36,7 +36,7 @@ const AnimatedBeam: React.FC<AnimatedBeamProps> = ({ children }) => {
       trail: Array<{ x: number; y: number; alpha: number }>;
 
       constructor() {
-        this.x = Math.random() * canvas.width;
+        this.x = Math.random() * (canvas?.width || 800);
         this.y = -10;
         this.vx = (Math.random() - 0.5) * 2;
         this.vy = Math.random() * 3 + 2;
@@ -58,6 +58,8 @@ const AnimatedBeam: React.FC<AnimatedBeamProps> = ({ children }) => {
       }
 
       draw() {
+        if (!ctx) return;
+        
         ctx.save();
         
         // Draw trail
@@ -81,7 +83,7 @@ const AnimatedBeam: React.FC<AnimatedBeamProps> = ({ children }) => {
       }
 
       isDead() {
-        return this.alpha <= 0 || this.y > canvas.height;
+        return this.alpha <= 0 || this.y > (canvas?.height || 600);
       }
     }
 
