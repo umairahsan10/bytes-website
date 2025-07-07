@@ -39,14 +39,14 @@ export default function Home() {
           {[
             <HeroSection key="hero" />,
             <ByteBotsSection key="bytebots" />,
-            <ProjectsSection key="projects" />,
-            // <TapeSection key="tape" />,
-            <BrandsSection key="brands" />,
             <CardsSection key="cards" />,
             <LineAnimationSection key="line" />,
+            <ProjectsSection key="projects" />,
+            <BrandsSection key="brands" />,
             <BookSection key="book" />,
-            // <TestimonialsSection key="testimonials" />,
             <ContactSection key="contact" />,
+            // <TapeSection key="tape" />,
+            // <TestimonialsSection key="testimonials" />,
           ].map((Section, idx) => (
             <div
               key={idx}
