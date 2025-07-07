@@ -5,6 +5,7 @@ import Lenis from "lenis";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { useRouter } from 'next/navigation';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -53,6 +54,7 @@ export default function Home() {
   const cardRefs = useRef([]);
   const [focusedCard, setFocusedCard] = useState(null);
   const [isMobileDevice, setIsMobileDevice] = useState(false);
+  const router = useRouter();
 
   // Initialize Lenis
   useLenis();
@@ -71,61 +73,61 @@ export default function Home() {
 
   const cardData = [
     {
-      category: "DEVELOPMENT",
-      title: "Web & App Development",
-      icon: "D",
+      category: "Web DEVELOPMENT",
+      title: "Web Development Highlights",
+      icon: "W",
       services: [
-        "React & Next.js Development",
-        "Mobile App Development", 
-        "E-commerce Solutions",
-        "Progressive Web Apps",
-        "API Integration"
-      ]
+        "Responsive frontend excellence",
+        "Scalable backend solutions", 
+        "Mobile-first design",
+        "Full-stack development",
+        "Secure, optimized performance"
+      ],
+      link: "/services/web"
     },
     {
-      category: "UI/UX DESIGN", 
-      title: "User Experience Design",
-      icon: "U",
+      category: "SEO", 
+      title: "SEO Highlights",
+      icon: "S",
       services: [
-        "User Interface Design",
-        "User Experience Research",
-        "Wireframing & Prototyping", 
-        "Design Systems",
-        "Usability Testing"
-      ]
+        "Targeted keyword strategy",
+        "Optimized, engaging content",
+        "Comprehensive technical audits", 
+        "Detailed performance reporting",
+        "Effective local SEO"
+      ],
+      link: "/services/seo"
     },
     {
-      category: "TECH",
-      title: "Development",
-      icon: "T", 
+      category: "App DEVELOPMENT",
+      title: "Mobile App Development",
+      icon: "A", 
       services: [
-        "WebGL Development",
-        "Web Development",
-        "Unity/Unreal",
-        "Interactive Installations",
-        "VR/AR"
-      ]
+        "Intuitive onboarding engages",
+        "Dynamic dashboards inform", 
+        "Smart messaging connects",
+        "Personalized profiles customize",
+        "End-to-end development"
+      ],
+      link: "/services/app"
     },
     {
-      category: "PRODUCTION",
-      title: "3D & Animation",
-      icon: "P",
+      category: "Marketing",
+      title: "Social Media Marketing Highlights",
+      icon: "M",
       services: [
-        "Procedural Modeling",
-        "3D Asset Creation",
-        "3D Asset Optimization", 
-        "Animation",
-        "3D Pipeline"
-      ]
+        "Viral content creation",
+        "Engaged community building",
+        "Influencer Colab Strategy", 
+        "Data-driven PPC campaigns",
+        "High-ROI ad optimization"
+      ],
+      link: "/services/marketing"
     }
   ];
 
   const handleCardClick = (index) => {
-    if (focusedCard === index) {
-      setFocusedCard(null);
-    } else {
-      setFocusedCard(index);
-    }
+    router.push(cardData[index].link);
   };
 
   const handleOverlayClick = () => {
