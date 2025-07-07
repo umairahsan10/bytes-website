@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useRef, useLayoutEffect, useEffect } from "react";
+import React, { useRef, useLayoutEffect } from "react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 /**
- * TextAnimation – animates each word of a long paragraph based on scroll progress.
- * Each word fades from 0.2 → 1 based on scroll position from parent component.
+ * TextAnimation – animates each word of a long paragraph as the user scrolls.
+ * Each word fades from 0.2 → 1 based on scroll position.
  */
 
 const phrase =
@@ -13,70 +14,35 @@ const phrase =
 
 export default function TextAnimation() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const wordsRef = useRef<HTMLSpanElement[]>([]);
-  const scrollProgressRef = useRef(0);
 
   useLayoutEffect(() => {
     if (typeof window === "undefined" || !containerRef.current) return;
 
-    // Initialize words with low opacity
-    gsap.set(wordsRef.current, { opacity: 0.2 });
-  }, []);
+    gsap.registerPlugin(ScrollTrigger);
 
-  // Listen for scroll progress events from parent component
-  useEffect(() => {
-    const handleScrollProgress = (event: CustomEvent) => {
-      const progress = event.detail.progress;
-      
-      // Only update if progress is valid
-      if (typeof progress === 'number' && progress >= 0 && progress <= 1) {
-        scrollProgressRef.current = progress;
-        
-        // Text animation starts at 40% scroll progress (section 3)
-        const textStartProgress = 0.4;
-        const textEndProgress = 1.0;
-        
-        if (progress >= textStartProgress) {
-          const textProgress = (progress - textStartProgress) / (textEndProgress - textStartProgress);
-          animateText(textProgress);
-        } else {
-          // Keep text hidden before section 3
-          gsap.set(wordsRef.current, { opacity: 0.2 });
-        }
-      }
-    };
+    // Grab all spans inside the container
+    const words = gsap.utils.toArray<HTMLSpanElement>(
+      containerRef.current.querySelectorAll("span")
+    );
 
-    window.addEventListener('scrollProgress', handleScrollProgress as EventListener);
-    
-    return () => {
-      window.removeEventListener('scrollProgress', handleScrollProgress as EventListener);
-    };
-  }, []);
+    gsap.set(words, { opacity: 0.2 });
 
-  const animateText = (progress: number) => {
-    const totalWords = wordsRef.current.length;
-    
-    // Calculate how many words should be revealed based on progress
-    const wordsToReveal = Math.floor(progress * totalWords);
-    
-    wordsRef.current.forEach((word, index) => {
-      if (index < wordsToReveal) {
-        // Reveal word with stagger effect
-        const wordProgress = Math.min(1, (progress * totalWords - index) * 2);
-        gsap.to(word, {
-          opacity: 0.2 + (wordProgress * 0.8),
-          duration: 0.1,
-          ease: "power2.out"
-        });
-      } else {
-        // Keep word hidden or fade out when scrolling back
-        gsap.to(word, {
-          opacity: 0.2,
-          duration: 0.1
-        });
-      }
+    const tl = gsap.to(words, {
+      opacity: 1,
+      ease: "none",
+      stagger: 0.1,
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "top top", // begin when section is pinned
+        end: "+=200%", // finish across the whole pin duration
+        scrub: true,
+      },
     });
-  };
+
+    return () => {
+      tl.scrollTrigger?.kill();
+    };
+  }, []);
 
   return (
     <div
@@ -86,13 +52,7 @@ export default function TextAnimation() {
       <h2 className="text-white text-4xl md:text-6xl font-bold text-center">About Us</h2>
       <p className="text-center text-white/90 text-xl md:text-3xl leading-snug w-[70%] max-w-none">
         {phrase.split(" ").map((word, idx) => (
-          <span 
-            key={`${word}-${idx}`} 
-            className="inline-block mr-1 opacity-20"
-            ref={(el) => {
-              if (el) wordsRef.current[idx] = el;
-            }}
-          >
+          <span key={`${word}-${idx}`} className="inline-block mr-1 opacity-20">
             {word}
           </span>
         ))}
