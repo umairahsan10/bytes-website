@@ -332,7 +332,7 @@ const WebDevelopmentLanding = () => {
               Custom web applications built with modern technologies. From responsive websites to complex web platforms, we deliver scalable solutions that drive your business forward.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/contact" className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold hover:from-blue-700 hover:to-blue-800 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-center">
+              <Link href="/contact" data-cta="true" className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold hover:from-blue-700 hover:to-blue-800 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-center">
                 Start Your Project
               </Link>
             </div>
@@ -716,6 +716,7 @@ const WebDevelopmentLanding = () => {
           </h2>
           <Link
             href="/contact"
+            data-cta="true"
             className="inline-block px-10 py-4 bg-white text-blue-700 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
           >
             Build&nbsp;With&nbsp;Us
