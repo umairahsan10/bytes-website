@@ -222,7 +222,17 @@ export const BookSection = () => {
   }, [scrollLockActive, isTouch]);
 
   return (
-    <div id="technologies" className="py-20 lg:py-28 bg-[#010a14]" ref={sectionRef}>
+    <div
+      id="technologies"
+      className="py-20 lg:py-28 bg-[#010a14]"
+      ref={sectionRef}
+      style={{
+        backgroundImage: "url('/assets/Book/table.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
       <div className="container text-white">
         <SectionHeader
           eyebrow="Interactive Book"
