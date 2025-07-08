@@ -279,6 +279,7 @@ const AdvancedServicesPage: React.FC = () => {
           <AnimatedWords text="Ready to Transform Your Business?" className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 sm:mb-6" />
           <AnimatedWords text="Let's discuss how our advanced services can accelerate your digital transformation journey." className="text-lg sm:text-xl text-white mb-6 sm:mb-8 leading-relaxed" />
           <button
+            data-cta="true"
             className="bg-[#09122C] hover:bg-[#0C1A40] text-white font-semibold py-3 sm:py-4 px-6 sm:px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#19274D] text-sm sm:text-base"
             aria-label="Get started with advanced services"
             onClick={() => router.push('/contact')}
