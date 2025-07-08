@@ -224,7 +224,7 @@ const ByteBotsSection = () => {
             className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-4 sm:mb-6"
           >
             <span className="bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
-              Byte Bot
+              Byte Bots
             </span>
           </h1>
           <p
@@ -236,7 +236,7 @@ const ByteBotsSection = () => {
               willChange: "opacity, transform",
             }}
           >
-            The Future of Conversation
+            The Power of Artificial Intelligence
           </p>
         </div>
       </div>
