@@ -102,7 +102,7 @@ export const ProjectsSection = () => {
             <button
               aria-label="Previous slide"
               onClick={prevSlide}
-              className="hidden sm:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-gray-900/40 hover:bg-gray-900/70 backdrop-blur rounded-full p-2"
+              className="flex absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-gray-900/40 hover:bg-gray-900/70 backdrop-blur rounded-full p-2"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -122,7 +122,7 @@ export const ProjectsSection = () => {
             <button
               aria-label="Next slide"
               onClick={nextSlide}
-              className="hidden sm:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-gray-900/40 hover:bg-gray-900/70 backdrop-blur rounded-full p-2"
+              className="flex absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-gray-900/40 hover:bg-gray-900/70 backdrop-blur rounded-full p-2"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -157,7 +157,7 @@ export const ProjectsSection = () => {
             </div>
 
             {/* Right Slider (Text) */}
-            <div className="w-full md:w-2/5 overflow-hidden mt-4 md:mt-0">
+            <div className="w-full md:w-2/5 overflow-hidden -mt-16 md:mt-0">
               <div
                 className="flex transition-transform duration-700 ease-in-out"
                 style={{ transform: `translateX(-${index * 100}%)`, transitionProperty: withTransition ? 'transform' : 'none' }}

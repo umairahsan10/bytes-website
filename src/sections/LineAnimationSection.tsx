@@ -30,7 +30,7 @@ export const LineAnimationSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} id="about-line" className="relative w-full bg-black overflow-hidden">
+    <section ref={sectionRef} id="about-line" className="relative w-full bg-[#010a14] overflow-hidden">
       {/* Sticky container keeps animation and text pinned together */}
       <div className="sticky top-0 h-screen w-full">
         {/* Background line animation */}

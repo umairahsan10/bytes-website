@@ -308,9 +308,9 @@ export const BookSection = () => {
         <div className="-mt-15 flex justify-center relative z-20 pointer-events-auto">
           <Link
             href="/blogs/page/1"
-            className="inline-block rounded-md bg-white px-6 py-3 text-sm font-semibold text-black transition hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#010a14]"
+            className="inline-block rounded-full bg-gradient-to-r from-pink-500 to-purple-600 px-8 py-3 text-base font-semibold text-white shadow-lg transform transition-all duration-200 hover:scale-105 hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
           >
-            View More Blogs
+            View&nbsp;More&nbsp;Blogs
           </Link>
         </div>
       </div>
