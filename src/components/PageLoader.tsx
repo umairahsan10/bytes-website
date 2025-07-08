@@ -13,6 +13,25 @@ const PageLoader: React.FC<PageLoaderProps> = ({ children }) => {
   const pathname = usePathname();
   const [loading, setLoading] = useState<boolean>(true);
 
+  // Force each page (initial load or route change) to start at the very top
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      // Prevent browser from attempting to restore the previous scroll position
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "manual";
+      }
+
+      // Immediately jump to the top of the document
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+
+      // If Lenis smooth-scroll is active, also reset its internal position
+      const lenis = (window as any).lenis;
+      if (lenis && typeof lenis.scrollTo === "function") {
+        lenis.scrollTo(0, { immediate: true });
+      }
+    }
+  }, [pathname]);
+
   // Refresh ScrollTrigger positions when loader completes to fix animations that rely on layout (especially on mobile)
   useEffect(() => {
     if (!loading) {

@@ -170,17 +170,59 @@ function TextLine() {
     return letters
   }, [dimensions.width])
 
-  // "DRAW THE IMAGE ONCE": The 3D tube model (the "image") for each letter is 
-  // built here one time. This is the expensive part, so we do it only when the
-  // path or radius changes, and never inside the animation loop.
+  // Pre-compute overall x-bounds once so we can create a smooth gradient that spans the whole word
+  const bounds = useMemo(() => {
+    let minX = Infinity
+    let maxX = -Infinity
+    letterCurves.forEach(curve => {
+      curve.getPoints(50).forEach(p => {
+        if (p.x < minX) minX = p.x
+        if (p.x > maxX) maxX = p.x
+      })
+    })
+    return { minX, maxX }
+  }, [letterCurves])
+
   const fullGeometries = useMemo(() => {
+    const purple     = new THREE.Color('#8b5cf6')      // purple-500
+    const pink       = new THREE.Color('#ec4899')      // pink-500
+
     return letterCurves.map(curve => {
-      // Increase segment count for smoother progressive reveal
+      // High segment count for smooth reveal
       const geo = new THREE.TubeGeometry(curve, 1000, tubeRadius, 16, false)
-      geo.setDrawRange(0, 0) // Start with nothing visible
+      geo.setDrawRange(0, 0)
+
+      // Build per-vertex gradient across global X axis
+      const posAttr = geo.attributes.position as THREE.BufferAttribute
+      const count = posAttr.count
+      const colors: number[] = []
+
+      const { minX, maxX } = bounds
+      const range = maxX - minX || 1 // guard against zero
+
+      for (let i = 0; i < count; i++) {
+        const x = posAttr.getX(i)
+        const t = (x - minX) / range // 0 → 1 across whole word
+
+        let color: THREE.Color
+
+        if (t < 0.5) {
+          // Purple → Pink (first half)
+          const f = t * 2 // 0..1
+          color = purple.clone().lerp(pink, f)
+        } else {
+          // Pink → Purple (second half)
+          const f = (t - 0.5) * 2 // 0..1
+          color = pink.clone().lerp(purple, f)
+        }
+
+        colors.push(color.r, color.g, color.b)
+      }
+
+      geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
       return geo
     })
-  }, [letterCurves, tubeRadius])
+  }, [letterCurves, tubeRadius, bounds])
 
   // Handle window resize
   useEffect(() => {
@@ -293,7 +335,7 @@ function TextLine() {
           <mesh
             ref={(ref) => { tubeRefs.current[index] = ref }}
             geometry={fullGeometries[index]}
-            material={new THREE.MeshBasicMaterial({ color: '#5ee5ff', transparent: true, opacity: 0.5 })}
+            material={new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.85 })}
             visible={false}
           />
           <mesh
@@ -302,7 +344,7 @@ function TextLine() {
             visible={false}
           >
             <sphereGeometry args={[tubeRadius * 1.5, 16, 16]} />
-            <meshBasicMaterial color="#5ee5ff" transparent opacity={0.5} />
+            <meshBasicMaterial color="#ec4899" transparent opacity={0.85} />
           </mesh>
         </React.Fragment>
       ))}
