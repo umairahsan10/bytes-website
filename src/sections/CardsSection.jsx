@@ -154,9 +154,21 @@ export default function Home() {
     if (isMobileDevice) {
       // Mobile Animation: Simple sequential reveal without pinning
       const section = container.current.querySelector(".cards");
+
+      const isShortScreen = window.innerHeight < 700;
+
+      // Reveal (fade/slide) keeps same timings for all mobiles
+      const revealStart = "top 20%";
+      const revealEnd = "bottom 20%";
+
+      // Flip timings: for very short screens (e.g., iPhone SE)
+      // rotate a bit earlier so the effect completes while the card is
+      // fully visible. Begin at 90 % and finish at 80 %.
+      const flipStart = isShortScreen ? "bottom 90%" : "top 20%";
+      const flipEnd   = isShortScreen ? "bottom 80%" : "bottom 20%";
       
       // Set initial states for mobile cards
-      cards.forEach((card, index) => {
+      cards.forEach((card) => {
         gsap.set(card, {
           // Start fully visible (remove fade-in)
           opacity: 1,
@@ -167,12 +179,12 @@ export default function Home() {
           left: "auto",
           top: "auto",
           transform: "none",
-          zIndex: 1
+          zIndex: 1,
         });
       });
 
       // Create simple reveal animations for each card
-      cards.forEach((card, index) => {
+      cards.forEach((card) => {
         gsap.to(card, {
           y: 0,
           scale: 1,
@@ -180,17 +192,17 @@ export default function Home() {
           ease: "power2.out",
           scrollTrigger: {
             trigger: card,
-            start: "top 40%",
-            end: "bottom 40%",
+            start: revealStart,
+            end: revealEnd,
             toggleActions: "play none none reverse",
-            markers: false
-          }
+            markers: false,
+          },
         });
 
         // Simple flip animation when card comes into view
         const frontEl = card.querySelector(".flip-card-front");
         const backEl = card.querySelector(".flip-card-back");
-        
+
         // Use scrubbed progress so rotation reverses visibly as it crosses 50vh
         gsap.fromTo(
           frontEl,
@@ -200,12 +212,12 @@ export default function Home() {
             ease: "none",
             scrollTrigger: {
               trigger: card,
-              start: "top 40%",
-              end: "bottom 40%",
+              start: flipStart,
+              end: flipEnd,
               scrub: true,
               markers: false,
             },
-          }
+          },
         );
 
         gsap.fromTo(
@@ -216,12 +228,12 @@ export default function Home() {
             ease: "none",
             scrollTrigger: {
               trigger: card,
-              start: "top 40%",
-              end: "bottom 40%",
+              start: flipStart,
+              end: flipEnd,
               scrub: true,
               markers: false,
             },
-          }
+          },
         );
       });
 
