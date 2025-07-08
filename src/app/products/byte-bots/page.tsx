@@ -7,6 +7,7 @@ import { Header } from '@/sections/Navbar';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Script from 'next/script';
+import LottieAnimation from '@/components/LottieAnimation';
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
@@ -27,8 +28,22 @@ const ByteBotLanding: React.FC = () => {
   // Root wrapper reference for background-colour animation
   const pageRef = useRef<HTMLDivElement>(null);
   const vantaRef = useRef<any>(null);
+  const [integrationAnimationData, setIntegrationAnimationData] = React.useState<any>(null);
 
   useEffect(() => {
+    // Load animation data
+    const loadAnimationData = async () => {
+      try {
+        const response = await fetch('/assets/newimages/Animation - 1751932404864.json');
+        const data = await response.json();
+        setIntegrationAnimationData(data);
+      } catch (error) {
+        console.error('Failed to load animation data:', error);
+      }
+    };
+
+    loadAnimationData();
+
     // Initialize animations
     const initAnimations = () => {
       // Hero text animations (only within hero section)
@@ -152,21 +167,21 @@ const ByteBotLanding: React.FC = () => {
         onLoad={() => {
           // Three.js loaded, now load Vanta
           const vantaScript = document.createElement('script');
-          vantaScript.src = "https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js";
+          vantaScript.src = "https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.halo.min.js";
           vantaScript.onload = () => {
             // Both scripts loaded, initialize Vanta
             if (typeof window !== 'undefined' && window.VANTA && heroRef.current) {
-              vantaRef.current = window.VANTA.GLOBE({
+              vantaRef.current = window.VANTA.HALO({
                 el: heroRef.current,
                 mouseControls: true,
                 touchControls: true,
                 gyroControls: false,
                 minHeight: 200.00,
                 minWidth: 200.00,
-                scale: 1.00,
-                scaleMobile: 1.00,
-                color: 0x00d4ff,
-                backgroundColor: 0x0a0a0a
+                color: 0xffffff,
+                backgroundColor: 0x000000,
+                amplitudeFactor: 2.00,
+                size: 1.50
               });
             }
           };
@@ -833,7 +848,7 @@ const ByteBotLanding: React.FC = () => {
       {/* ---------------- Hero Section ---------------- */}
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center text-center pt-20">
         {/* overlay for readability */}
-        <div className="absolute inset-0 bg-black/30"></div>
+        <div className="absolute inset-0 bg-black/50"></div>
 
         {/* centered content */}
         <div className="relative z-10 px-6 max-w-4xl">
@@ -862,18 +877,18 @@ const ByteBotLanding: React.FC = () => {
               <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8">
                 <div className="w-full lg:w-1/2 pr-12 mobile-full-width">
                   <h2 className="text-5xl font-bold text-gray-900 mb-6">
-                    <span className="bubble-text">Plug</span>{' '}
-                    <span className="bubble-text">&</span>{' '}
-                    <span className="bubble-text">Play</span>{' '}
-                    <span className="bubble-text gradient-text">Integrations</span>
+                    <span>Plug</span>{' '}
+                    <span>&</span>{' '}
+                    <span>Play</span>{' '}
+                    <span className="gradient-text">Integrations</span>
                   </h2>
                   
-                  <p className="text-xl text-gray-600 mb-8 bubble-text">
+                  <p className="text-xl text-gray-600 mb-8">
                     Seamlessly fits into your existing tools.
                   </p>
                   
                   <ul className="space-y-4 text-lg text-gray-700">
-                    <li className="flex items-center bubble-text">
+                    <li className="flex items-center">
                       <div className="w-6 h-6 bg-cyan-500 rounded-full mr-4 flex items-center justify-center">
                         <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M12.5 2a.5.5 0 00-.5.5v3a.5.5 0 001 0V3.707l1.146 1.147a.5.5 0 00.708-.708L13.5 2.793V2.5a.5.5 0 00-.5-.5zM7.5 18a.5.5 0 00.5-.5v-3a.5.5 0 00-1 0v2.293l-1.146-1.147a.5.5 0 00-.708.708L6.5 17.207v.293a.5.5 0 00.5.5zM2.5 7.5a.5.5 0 01.5-.5h3a.5.5 0 010 1H3.707l1.147 1.146a.5.5 0 01-.708.708L2.793 8.5H2.5a.5.5 0 01-.5-.5zM17.5 12.5a.5.5 0 01-.5.5h-3a.5.5 0 010-1h2.293l-1.147-1.146a.5.5 0 01.708-.708L17.207 11.5h.293a.5.5 0 01.5.5z"/>
@@ -881,7 +896,7 @@ const ByteBotLanding: React.FC = () => {
                       </div>
                       Website widget (API, iframe or overlay)
                     </li>
-                    <li className="flex items-center bubble-text">
+                    <li className="flex items-center">
                       <div className="w-6 h-6 bg-blue-500 rounded-full mr-4 flex items-center justify-center">
                         <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clipRule="evenodd"/>
@@ -889,7 +904,7 @@ const ByteBotLanding: React.FC = () => {
                       </div>
                       CRM & ERP connectors (Salesforce, HubSpot, NetSuite…)
                     </li>
-                    <li className="flex items-center bubble-text">
+                    <li className="flex items-center">
                       <div className="w-6 h-6 bg-green-500 rounded-full mr-4 flex items-center justify-center">
                         <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
@@ -898,7 +913,7 @@ const ByteBotLanding: React.FC = () => {
                       </div>
                       Chat channels (Slack, Teams, WhatsApp)
                     </li>
-                    <li className="flex items-center bubble-text">
+                    <li className="flex items-center">
                       <div className="w-6 h-6 bg-purple-500 rounded-full mr-4 flex items-center justify-center">
                         <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd"/>
@@ -910,14 +925,23 @@ const ByteBotLanding: React.FC = () => {
                 </div>
                 
                 <div className="w-full lg:w-1/2 mobile-full-width flex justify-center items-center">
-                  <div className="cloudy-container">
-                    <div className="cloudy-bg"></div>
+                  {integrationAnimationData ? (
+                    <div className="section-image h-[400px] flex items-center justify-center">
+                      <LottieAnimation
+                        animationData={integrationAnimationData}
+                        loop={true}
+                        autoplay={true}
+                        style={{ width: '100%', height: '100%' }}
+                        className="object-contain"
+                      />
+                    </div>
+                  ) : (
                     <img 
                       src="/assets/newimages/humanandrobo.png" 
                       alt="Integration Dashboard" 
-                      className="cloudy-image section-image object-cover h-[400px]"
+                      className="section-image object-cover h-[400px]"
                     />
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
