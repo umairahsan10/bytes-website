@@ -35,7 +35,7 @@ export default function Home() {
       {isLoading && <LoadingPage onLoadComplete={() => setIsLoading(false)} />}
       {!isLoading && (
         <>
-          <Header />
+          <Header transparentNav={true} />
           {[
             <HeroSection key="hero" />,
             <ByteBotsSection key="bytebots" />,

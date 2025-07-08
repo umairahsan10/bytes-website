@@ -49,8 +49,8 @@ export default function TextAnimation() {
       ref={containerRef}
       className="flex flex-col items-center justify-center w-full min-h-screen px-4 space-y-8"
     >
-      <h2 className="text-white text-4xl md:text-6xl font-bold text-center relative -top-20 md:-top-22">About Us</h2>
-      <p className="text-center text-white/90 text-2x1 md:text-4xl leading-snug w-[70%] max-w-none relative -top-6 md:-top-8">
+      <h2 className="text-white text-4xl md:text-6xl font-bold text-center">About Us</h2>
+      <p className="text-center text-white/90 text-2x1 md:text-4xl leading-snug w-[70%] max-w-none mt-4">
         {phrase.split(" ").map((word, idx) => (
           <span key={`${word}-${idx}`} className="inline-block mr-1 opacity-20">
             {word}
@@ -59,4 +59,4 @@ export default function TextAnimation() {
       </p>
     </div>
   );
-} 
+}
