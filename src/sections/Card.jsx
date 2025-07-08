@@ -3,10 +3,10 @@ import Image from 'next/image';
 
 const Card = forwardRef(({id, frontSrc, frontAlt, category, title, services, icon, className, onClick}, ref) => {
   return (
-    <div className={`card ${className || ''}`} id={id} ref={ref} onClick={onClick}>
+    <div className={`card ${className || ''}`} id={id} ref={ref}>
         <div className='card-wrapper'>
             <div className='flip-card-inner'>
-                <div className="flip-card-front">
+                <div className="flip-card-front" onClick={onClick}>
                     <Image 
                         priority
                         src={frontSrc}
