@@ -42,11 +42,11 @@ const PageLoader: React.FC<PageLoaderProps> = ({ children }) => {
 
   return (
     <>
-      {loading ? (
-        <LoadingPage onLoadComplete={handleLoadComplete} />
-      ) : (
-        children
-      )}
+      {/* Always render the page content so that assets begin loading immediately */}
+      {children}
+
+      {/* Overlay the loading screen until the load sequence completes */}
+      {loading && <LoadingPage onLoadComplete={handleLoadComplete} />}
     </>
   );
 };
