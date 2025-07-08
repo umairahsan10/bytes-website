@@ -1584,6 +1584,7 @@ export default function AboutPage() {
           </motion.p>
 
           <motion.button
+            data-cta="true"
             className="bg-gradient-to-r from-gray-600 to-gray-600 hover:from-gray-700 hover:to-gray-700 px-8 py-3 rounded-full text-lg font-semibold text-white transition-all duration-300"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}

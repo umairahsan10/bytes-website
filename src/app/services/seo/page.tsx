@@ -1281,6 +1281,7 @@ const SEOPage: React.FC = () => {
             className="text-center mt-16"
           >
             <motion.button
+              data-cta="true"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => router.push('/contact')}
@@ -1308,6 +1309,7 @@ const SEOPage: React.FC = () => {
               <AnimatedWords text="Your competitors are showing up first — not because they're better, but because they're optimised. If your site isn't ranking for custom, high-converting keywords, you're sending leads straight to them." className="text-lg sm:text-xl leading-relaxed px-2 text-blue-200" />
               <AnimatedWords text="Stop being invisible. Start dominating search." className="text-base sm:text-lg leading-relaxed px-2 text-blue-100" />
               <motion.button
+                data-cta="true"
                 className="bg-gradient-to-r from-blue-200 via-blue-25 to-white text-[#010a14] px-10 py-4 rounded-xl font-semibold tracking-wide transition-all duration-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -1363,6 +1365,7 @@ const SEOPage: React.FC = () => {
             </p>
             <div className="flex justify-center">
               <motion.button
+                data-cta="true"
                 className="bg-gradient-to-r from-[#010a14] to-[#1a365d] text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

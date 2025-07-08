@@ -465,8 +465,8 @@ const Header: React.FC<HeaderProps> = ({
           href="/contact"
           className={`text-[#F6C324] text-[10px] md:text-xs font-semibold uppercase tracking-wide no-underline font-league cursor-pointer mr-4 pointer-events-auto text-center leading-tight transition-opacity duration-200 ${isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
         >
-          <span className="block text-white">BOOK A</span>
-          <span className="block animate-pulse text-[12px] md:text-sm" style={{ animationDuration: '1.4s' }}>FREE CONSULTATION</span>
+          <span data-cta="true" className="block text-white">BOOK A</span>
+          <span data-cta="true" className="block animate-pulse text-[12px] md:text-sm" style={{ animationDuration: '1.4s' }}>FREE CONSULTATION</span>
         </Link>
 
         {!logoOnly && (
