@@ -9,6 +9,7 @@ import { OrbitControls, Float } from "@react-three/drei";
 import { useAtom } from "jotai";
 import { pageAtom, userInteractedAtom } from "@/components/BookSlider/state";
 import Link from "next/link";
+import "./bookSection.css";
 // import { useBookScroll } from "@/components/BookSlider/useBookScroll";
 
 export const BookSection = () => {
@@ -224,13 +225,10 @@ export const BookSection = () => {
   return (
     <div
       id="technologies"
-      className="py-20 lg:py-28 bg-[#010a14]"
+      className="min-h-screen py-0 sm:py-20 lg:py-28 bg-[#010a14] bg-center bg-no-repeat bg-cover book-tall-center"
       ref={sectionRef}
       style={{
         backgroundImage: "url('/assets/Book/table.jpg')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
       }}
     >
       <div className="container text-white">

@@ -1,0 +1,6 @@
+@media (max-width: 639px) and (min-height: 800px) {
+  /* Shift BookSection content lower on very tall mobile screens */
+  .book-tall-center {
+    padding-top: 10vh; /* push ~10% of viewport height from top */
+  }
+} 
