@@ -248,7 +248,7 @@ function App() {
             </section>
 
             {/* Contact Section */}
-            <section ref={contactRef} className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-gray-50 to-blue-50 md:min-h-screen md:flex md:items-center">
+            <section ref={contactRef} className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-gray-50 to-blue-50">
                 <div className="container mx-auto px-4">
                     <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center max-w-7xl mx-auto">
                         {/* Left side - Contact Form */}
@@ -277,7 +277,7 @@ function App() {
                                             required
                                             value=""
                                             onChange={() => { }}
-                                            className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 bg-white/50 backdrop-blur-sm text-sm sm:text-base"
+                                            className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 bg-white/50 backdrop-blur-sm text-sm sm:text-base h-12 sm:h-14"
                                             placeholder="John Doe"
                                         />
                                     </div>
@@ -289,7 +289,7 @@ function App() {
                                             required
                                             value=""
                                             onChange={() => { }}
-                                            className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 bg-white/50 backdrop-blur-sm text-sm sm:text-base"
+                                            className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 bg-white/50 backdrop-blur-sm text-sm sm:text-base h-12 sm:h-14"
                                             placeholder="john@example.com"
                                         />
                                     </div>
@@ -351,33 +351,12 @@ function App() {
                             initial={{ opacity: 0, x: 50 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.8, delay: 0.2 }}
-                            className="relative"
+                            className="relative h-full flex items-start justify-center pt-6 sm:pt-8"
                         >
-                            <div
-                                className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl h-64 sm:h-[420px] lg:h-[600px]"
-                                style={{ aspectRatio: "4/5" }}
-                            >
-                                <Image src={contactImg} alt="Contact" fill className="object-cover" />
-                                <div className="absolute inset-0 bg-black/30" />
-
-                                {/* Decorative elements */}
-                                <div className="absolute top-4 right-4 w-12 h-12 sm:w-16 lg:w-20 sm:h-16 lg:h-20 bg-white/10 rounded-full backdrop-blur-sm"></div>
-                                <div className="absolute bottom-4 left-4 w-10 h-10 sm:w-12 lg:w-16 sm:h-12 lg:h-16 bg-white/10 rounded-full backdrop-blur-sm"></div>
-                                <div className="absolute top-1/2 left-4 w-6 h-6 sm:w-8 sm:h-8 bg-white/10 rounded-full backdrop-blur-sm"></div>
-                            </div>
-
-                            {/* Floating stats */}
-                            <div className="absolute -top-4 sm:-top-6 -right-4 sm:-right-6 bg-white/90 backdrop-blur-sm p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-xl border border-white/50">
-                                <div className="text-center">
-                                    <div className="text-xl sm:text-2xl font-bold text-blue-600">50+</div>
-                                    <div className="text-xs sm:text-sm text-gray-600">Team Members</div>
-                                </div>
-                            </div>
-
-                            <div className="absolute -bottom-4 sm:-bottom-6 -left-4 sm:-left-6 bg-white/90 backdrop-blur-sm p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-xl border border-white/50">
-                                <div className="text-center">
-                                    <div className="text-xl sm:text-2xl font-bold text-purple-600">100%</div>
-                                    <div className="text-xs sm:text-sm text-gray-600">On-site / Remote Friendly</div>
+                            <div className="relative w-full max-w-sm lg:max-w-md xl:max-w-lg rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl mt-[22%] scale-[1.01]">
+                                <div className="aspect-[4/5] relative">
+                                    <Image src={contactImg} alt="Contact" fill className="object-cover" />
+                                    <div className="absolute inset-0 bg-black/30" />
                                 </div>
                             </div>
                         </motion.div>

@@ -7,6 +7,7 @@ import { Header } from '@/sections/Navbar';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Script from 'next/script';
+import LottieAnimation from '@/components/LottieAnimation';
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
@@ -27,8 +28,78 @@ const ByteBotLanding: React.FC = () => {
   // Root wrapper reference for background-colour animation
   const pageRef = useRef<HTMLDivElement>(null);
   const vantaRef = useRef<any>(null);
+  const [integrationAnimationData, setIntegrationAnimationData] = React.useState<any>(null);
+  const [vantaScriptsLoaded, setVantaScriptsLoaded] = React.useState(false);
+
+  // Load Vanta scripts once
+  useEffect(() => {
+    let threeLoaded = false;
+    let vantaLoaded = false;
+
+    const checkAndSetLoaded = () => {
+      if (threeLoaded && vantaLoaded) setVantaScriptsLoaded(true);
+    };
+
+    // Load three.js
+    const threeScript = document.createElement('script');
+    threeScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js';
+    threeScript.onload = () => {
+      threeLoaded = true;
+      // Load Vanta after three.js
+      const vantaScript = document.createElement('script');
+      vantaScript.src = 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.halo.min.js';
+      vantaScript.onload = () => {
+        vantaLoaded = true;
+        checkAndSetLoaded();
+      };
+      document.head.appendChild(vantaScript);
+    };
+    document.head.appendChild(threeScript);
+
+    return () => {
+      // Optionally remove scripts if needed
+    };
+  }, []);
+
+  // Vanta initialization (runs only after scripts loaded and ref ready)
+  useEffect(() => {
+    if (vantaScriptsLoaded && typeof window !== 'undefined' && window.VANTA && heroRef.current) {
+      const isMobile = window.innerWidth < 640;
+      vantaRef.current = window.VANTA.HALO({
+        el: heroRef.current,
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: isMobile ? 100 : 200.00,
+        minWidth: isMobile ? 100 : 200.00,
+        color: 0xffffff,
+        backgroundColor: 0x000000,
+        amplitudeFactor: isMobile ? 1.2 : 2.00,
+        size: isMobile ? 1.0 : 1.50,
+        mouseEase: true
+      });
+    }
+    return () => {
+      if (vantaRef.current && vantaRef.current.destroy) {
+        vantaRef.current.destroy();
+      }
+    };
+  }, [vantaScriptsLoaded]);
 
   useEffect(() => {
+    // Load animation data
+    const loadAnimationData = async () => {
+      try {
+        const response = await fetch('/assets/newimages/Animation - 1751994926313.json');
+        const data = await response.json();
+        setIntegrationAnimationData(data);
+      } catch (error) {
+        console.error('Failed to load animation data:', error);
+      }
+    };
+
+    loadAnimationData();
+
     // Initialize animations
     const initAnimations = () => {
       // Hero text animations (only within hero section)
@@ -104,9 +175,6 @@ const ByteBotLanding: React.FC = () => {
     // Cleanup function
     return () => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-      if (vantaRef.current && vantaRef.current.destroy) {
-        vantaRef.current.destroy();
-      }
     };
   }, []);
 
@@ -145,34 +213,6 @@ const ByteBotLanding: React.FC = () => {
     <div ref={pageRef} className="font-inter overflow-x-hidden bg-white">
       <Header />
       
-      {/* Load Vanta.js scripts */}
-      <Script
-        src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"
-        strategy="afterInteractive"
-        onLoad={() => {
-          // Three.js loaded, now load Vanta
-          const vantaScript = document.createElement('script');
-          vantaScript.src = "https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js";
-          vantaScript.onload = () => {
-            // Both scripts loaded, initialize Vanta
-            if (typeof window !== 'undefined' && window.VANTA && heroRef.current) {
-              vantaRef.current = window.VANTA.GLOBE({
-                el: heroRef.current,
-                mouseControls: true,
-                touchControls: true,
-                gyroControls: false,
-                minHeight: 200.00,
-                minWidth: 200.00,
-                scale: 1.00,
-                scaleMobile: 1.00,
-                color: 0x00d4ff,
-                backgroundColor: 0x0a0a0a
-              });
-            }
-          };
-          document.head.appendChild(vantaScript);
-        }}
-      />
       <style jsx>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         
@@ -771,11 +811,12 @@ const ByteBotLanding: React.FC = () => {
           .content-section {
             width: 100vw;
             min-height: 100vh;
+            padding: 60px 0;
           }
           
           .mobile-full-width {
             width: 100% !important;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
           }
           
           .action-card {
@@ -787,14 +828,32 @@ const ByteBotLanding: React.FC = () => {
             padding-right: 1rem;
           }
           .content-section h2 {
-            font-size: 2rem !important;
+            font-size: 2.5rem !important;
             line-height: 1.2;
+            margin-bottom: 1.5rem !important;
           }
           .content-section p {
-            font-size: 1rem !important;
+            font-size: 1.1rem !important;
+            margin-bottom: 2rem !important;
+          }
+          .content-section ul {
+            margin-bottom: 2rem !important;
+          }
+          .content-section li {
+            margin-bottom: 1rem !important;
           }
           .section-image {
-            height: 48vw !important;
+            height: 60vw !important;
+            margin-top: 1rem !important;
+          }
+          .robot-container {
+            transform: scale(1.1) translateX(-30px) !important;
+            margin-top: -50px !important;
+          }
+          .chatbot-container {
+            width: 400px !important;
+            height: 400px !important;
+            margin-top: -30px !important;
           }
         }
         
@@ -826,6 +885,50 @@ const ByteBotLanding: React.FC = () => {
             font-size: 0.875rem !important;
           }
           
+          .content-section {
+            padding: 40px 0 !important;
+            min-height: auto !important;
+          }
+          
+          .content-section h2 {
+            font-size: 2rem !important;
+            margin-bottom: 1rem !important;
+          }
+          
+          .content-section p {
+            font-size: 1rem !important;
+            margin-bottom: 1.5rem !important;
+          }
+          
+          .content-section ul {
+            margin-bottom: 1.5rem !important;
+          }
+          
+          .content-section li {
+            font-size: 0.95rem !important;
+            margin-bottom: 0.75rem !important;
+          }
+          
+          .section-image {
+            height: 50vw !important;
+            margin-top: 0.5rem !important;
+          }
+          
+          .robot-container {
+            transform: scale(0.9) translateX(-20px) !important;
+            margin-top: -30px !important;
+          }
+          
+          .chatbot-container {
+            width: 300px !important;
+            height: 300px !important;
+            margin-top: -20px !important;
+          }
+          
+          .mobile-full-width {
+            margin-bottom: 20px !important;
+          }
+          
         }
         
       `}</style>
@@ -833,7 +936,7 @@ const ByteBotLanding: React.FC = () => {
       {/* ---------------- Hero Section ---------------- */}
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center text-center pt-20">
         {/* overlay for readability */}
-        <div className="absolute inset-0 bg-black/30"></div>
+        <div className="absolute inset-0 bg-black/50"></div>
 
         {/* centered content */}
         <div className="relative z-10 px-6 max-w-4xl">
@@ -859,21 +962,21 @@ const ByteBotLanding: React.FC = () => {
           {/* Section 1: Plug & Play Integrations */}
           <div className="content-section">
             <div className="container mx-auto px-6">
-              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8">
-                <div className="w-full lg:w-1/2 pr-12 mobile-full-width">
+              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 md:gap-8 lg:gap-12">
+                <div className="w-full lg:w-1/2 lg:pr-12 mobile-full-width">
                   <h2 className="text-5xl font-bold text-gray-900 mb-6">
-                    <span className="bubble-text">Plug</span>{' '}
-                    <span className="bubble-text">&</span>{' '}
-                    <span className="bubble-text">Play</span>{' '}
-                    <span className="bubble-text gradient-text">Integrations</span>
+                    <span>Plug</span>{' '}
+                    <span>&</span>{' '}
+                    <span>Play</span>{' '}
+                    <span className="gradient-text">Integrations</span>
                   </h2>
                   
-                  <p className="text-xl text-gray-600 mb-8 bubble-text">
+                  <p className="text-xl text-gray-600 mb-8">
                     Seamlessly fits into your existing tools.
                   </p>
                   
                   <ul className="space-y-4 text-lg text-gray-700">
-                    <li className="flex items-center bubble-text">
+                    <li className="flex items-center">
                       <div className="w-6 h-6 bg-cyan-500 rounded-full mr-4 flex items-center justify-center">
                         <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M12.5 2a.5.5 0 00-.5.5v3a.5.5 0 001 0V3.707l1.146 1.147a.5.5 0 00.708-.708L13.5 2.793V2.5a.5.5 0 00-.5-.5zM7.5 18a.5.5 0 00.5-.5v-3a.5.5 0 00-1 0v2.293l-1.146-1.147a.5.5 0 00-.708.708L6.5 17.207v.293a.5.5 0 00.5.5zM2.5 7.5a.5.5 0 01.5-.5h3a.5.5 0 010 1H3.707l1.147 1.146a.5.5 0 01-.708.708L2.793 8.5H2.5a.5.5 0 01-.5-.5zM17.5 12.5a.5.5 0 01-.5.5h-3a.5.5 0 010-1h2.293l-1.147-1.146a.5.5 0 01.708-.708L17.207 11.5h.293a.5.5 0 01.5.5z"/>
@@ -881,7 +984,7 @@ const ByteBotLanding: React.FC = () => {
                       </div>
                       Website widget (API, iframe or overlay)
                     </li>
-                    <li className="flex items-center bubble-text">
+                    <li className="flex items-center">
                       <div className="w-6 h-6 bg-blue-500 rounded-full mr-4 flex items-center justify-center">
                         <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clipRule="evenodd"/>
@@ -889,7 +992,7 @@ const ByteBotLanding: React.FC = () => {
                       </div>
                       CRM & ERP connectors (Salesforce, HubSpot, NetSuite…)
                     </li>
-                    <li className="flex items-center bubble-text">
+                    <li className="flex items-center">
                       <div className="w-6 h-6 bg-green-500 rounded-full mr-4 flex items-center justify-center">
                         <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
@@ -898,7 +1001,7 @@ const ByteBotLanding: React.FC = () => {
                       </div>
                       Chat channels (Slack, Teams, WhatsApp)
                     </li>
-                    <li className="flex items-center bubble-text">
+                    <li className="flex items-center">
                       <div className="w-6 h-6 bg-purple-500 rounded-full mr-4 flex items-center justify-center">
                         <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd"/>
@@ -910,14 +1013,23 @@ const ByteBotLanding: React.FC = () => {
                 </div>
                 
                 <div className="w-full lg:w-1/2 mobile-full-width flex justify-center items-center">
-                  <div className="cloudy-container">
-                    <div className="cloudy-bg"></div>
+                  {integrationAnimationData ? (
+                    <div className="section-image h-[440px] flex items-center justify-center -mt-8">
+                      <LottieAnimation
+                        animationData={integrationAnimationData}
+                        loop={true}
+                        autoplay={true}
+                        style={{ width: '140%', height: '140%' }}
+                        className="object-contain"
+                      />
+                    </div>
+                  ) : (
                     <img 
                       src="/assets/newimages/humanandrobo.png" 
                       alt="Integration Dashboard" 
-                      className="cloudy-image section-image object-cover h-[400px]"
+                      className="section-image object-cover h-[400px]"
                     />
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -926,8 +1038,8 @@ const ByteBotLanding: React.FC = () => {
           {/* Section 2: Conversion Engine */}
           <div className="content-section">
             <div className="container mx-auto px-6">
-              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-start gap-8">
-                <div className="w-full lg:w-1/2 pr-12 mobile-full-width">
+              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-start gap-6 md:gap-8 lg:gap-12">
+                <div className="w-full lg:w-1/2 lg:pr-12 mobile-full-width">
                   <h2 className="text-5xl font-bold text-gray-900 mb-6">
                     <span className="bubble-text gradient-text">Conversion</span>{' '}
                     <span className="bubble-text text-white">Engine</span>
@@ -976,7 +1088,7 @@ const ByteBotLanding: React.FC = () => {
                 </div>
                 
                 <div className="w-full lg:w-1/2 mobile-full-width flex justify-start items-center relative">
-                  <div className="robot-container" style={{ transform: 'scale(1.3) translateX(-100px)' }}>
+                  <div className="robot-container" style={{ transform: 'scale(1.3) translateX(-50px)' }}>
                     <img 
                       src="/assets/newimages/laserrobo.png" 
                       alt="Conversion Analytics" 
@@ -994,8 +1106,8 @@ const ByteBotLanding: React.FC = () => {
           {/* Section 3: Data-Driven Intelligence */}
           <div className="content-section">
             <div className="container mx-auto px-6">
-              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8">
-                <div className="w-full lg:w-1/2 pr-12 mobile-full-width">
+              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 md:gap-8 lg:gap-12">
+                <div className="w-full lg:w-1/2 lg:pr-12 mobile-full-width">
                   <h2 className="text-5xl font-bold text-gray-900 mb-6">
                     <span className="bubble-text">Data-Driven</span>{' '}
                     <span className="bubble-text gradient-text">Intelligence</span>
@@ -1065,8 +1177,8 @@ const ByteBotLanding: React.FC = () => {
           {/* Section 4: Continuous Learning & Compliance */}
           <div className="content-section">
             <div className="container mx-auto px-6">
-              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8">
-                <div className="w-full lg:w-1/2 pr-12 mobile-full-width">
+              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 md:gap-8 lg:gap-12">
+                <div className="w-full lg:w-1/2 lg:pr-12 mobile-full-width">
                   <h2 className="text-5xl font-bold text-gray-900 mb-6">
                     <span className="bubble-text text-white">Continuous Learning & </span>{' '}
                     <span className="bubble-text gradient-text">Compliance</span>
@@ -1080,7 +1192,7 @@ const ByteBotLanding: React.FC = () => {
                     <li className="flex items-center bubble-text">
                       <div className="w-6 h-6 bg-pink-500 rounded-full mr-4 flex items-center justify-center">
                         <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd"/>
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 10-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd"/>
                         </svg>
                       </div>
                       Contextual memory & evolving vocabulary
