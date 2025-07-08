@@ -10,7 +10,7 @@ import {
 } from 'framer-motion';
 
 // Path to the optimized video placed in /public for static serving by Vite.
-const VIDEO_SRC = '/landingVideo_720.mp4';
+const VIDEO_SRC = '/landngVideo_1080.mp4';
 
 // Fallback gradient background when video is not available
 const FALLBACK_BACKGROUND = 'linear-gradient(135deg, #000000 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #000000 100%)';

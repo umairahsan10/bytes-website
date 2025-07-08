@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import TextFlip from '../components/TextFlip';
 
 const HeroSection = () => {
   const textRef = useRef<HTMLHeadingElement>(null);
@@ -244,7 +245,7 @@ const HeroSection = () => {
         }
 
         .hero-title {
-          font-size: 6rem;
+          font-size: 4.5rem;
           font-weight: 900;
           color: #ffffff;
           text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -278,6 +279,9 @@ const HeroSection = () => {
           background: transparent;
           backdrop-filter: none;
           padding: 0.5rem 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
 
         .hero-subtitle.loaded {
@@ -291,7 +295,7 @@ const HeroSection = () => {
 
         @media (max-width: 768px) {
           .hero-title {
-            font-size: 3.5rem; /* larger heading on tablets/mobile */
+            font-size: 2.8rem; /* smaller heading on tablets/mobile */
           }
           
           .future-word {
@@ -319,7 +323,7 @@ const HeroSection = () => {
 
         @media (max-width: 480px) {
           .hero-title {
-            font-size: 3rem; /* still prominent on very small devices */
+            font-size: 2.2rem; /* smaller heading on very small devices */
           }
           
           .hero-subtitle {
@@ -363,11 +367,11 @@ const HeroSection = () => {
         {/* Hero Content */}
         <div className="hero-content">
           <h1 ref={textRef} className={`hero-title ${isLoaded ? 'loaded' : ''}`}>
-            Welcome to the <span className="future-word">Future</span>
+            Full Stack Digital <span className="future-word">Power House</span>
           </h1>
-          <p className="hero-subtitle">
-            Where innovation <span className="mobile-break"></span>meets imagination
-          </p>
+          <div className="hero-subtitle">
+            <TextFlip />
+          </div>
         </div>
       </div>
     </div>
