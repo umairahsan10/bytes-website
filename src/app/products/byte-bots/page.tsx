@@ -29,12 +29,68 @@ const ByteBotLanding: React.FC = () => {
   const pageRef = useRef<HTMLDivElement>(null);
   const vantaRef = useRef<any>(null);
   const [integrationAnimationData, setIntegrationAnimationData] = React.useState<any>(null);
+  const [vantaScriptsLoaded, setVantaScriptsLoaded] = React.useState(false);
+
+  // Load Vanta scripts once
+  useEffect(() => {
+    let threeLoaded = false;
+    let vantaLoaded = false;
+
+    const checkAndSetLoaded = () => {
+      if (threeLoaded && vantaLoaded) setVantaScriptsLoaded(true);
+    };
+
+    // Load three.js
+    const threeScript = document.createElement('script');
+    threeScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js';
+    threeScript.onload = () => {
+      threeLoaded = true;
+      // Load Vanta after three.js
+      const vantaScript = document.createElement('script');
+      vantaScript.src = 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.halo.min.js';
+      vantaScript.onload = () => {
+        vantaLoaded = true;
+        checkAndSetLoaded();
+      };
+      document.head.appendChild(vantaScript);
+    };
+    document.head.appendChild(threeScript);
+
+    return () => {
+      // Optionally remove scripts if needed
+    };
+  }, []);
+
+  // Vanta initialization (runs only after scripts loaded and ref ready)
+  useEffect(() => {
+    if (vantaScriptsLoaded && typeof window !== 'undefined' && window.VANTA && heroRef.current) {
+      const isMobile = window.innerWidth < 640;
+      vantaRef.current = window.VANTA.HALO({
+        el: heroRef.current,
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: isMobile ? 100 : 200.00,
+        minWidth: isMobile ? 100 : 200.00,
+        color: 0xffffff,
+        backgroundColor: 0x000000,
+        amplitudeFactor: isMobile ? 1.2 : 2.00,
+        size: isMobile ? 1.0 : 1.50,
+        mouseEase: true
+      });
+    }
+    return () => {
+      if (vantaRef.current && vantaRef.current.destroy) {
+        vantaRef.current.destroy();
+      }
+    };
+  }, [vantaScriptsLoaded]);
 
   useEffect(() => {
     // Load animation data
     const loadAnimationData = async () => {
       try {
-        const response = await fetch('/assets/newimages/Animation - 1751932404864.json');
+        const response = await fetch('/assets/newimages/Animation - 1751994926313.json');
         const data = await response.json();
         setIntegrationAnimationData(data);
       } catch (error) {
@@ -119,9 +175,6 @@ const ByteBotLanding: React.FC = () => {
     // Cleanup function
     return () => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-      if (vantaRef.current && vantaRef.current.destroy) {
-        vantaRef.current.destroy();
-      }
     };
   }, []);
 
@@ -160,34 +213,6 @@ const ByteBotLanding: React.FC = () => {
     <div ref={pageRef} className="font-inter overflow-x-hidden bg-white">
       <Header />
       
-      {/* Load Vanta.js scripts */}
-      <Script
-        src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"
-        strategy="afterInteractive"
-        onLoad={() => {
-          // Three.js loaded, now load Vanta
-          const vantaScript = document.createElement('script');
-          vantaScript.src = "https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.halo.min.js";
-          vantaScript.onload = () => {
-            // Both scripts loaded, initialize Vanta
-            if (typeof window !== 'undefined' && window.VANTA && heroRef.current) {
-              vantaRef.current = window.VANTA.HALO({
-                el: heroRef.current,
-                mouseControls: true,
-                touchControls: true,
-                gyroControls: false,
-                minHeight: 200.00,
-                minWidth: 200.00,
-                color: 0xffffff,
-                backgroundColor: 0x000000,
-                amplitudeFactor: 2.00,
-                size: 1.50
-              });
-            }
-          };
-          document.head.appendChild(vantaScript);
-        }}
-      />
       <style jsx>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         
@@ -926,12 +951,12 @@ const ByteBotLanding: React.FC = () => {
                 
                 <div className="w-full lg:w-1/2 mobile-full-width flex justify-center items-center">
                   {integrationAnimationData ? (
-                    <div className="section-image h-[400px] flex items-center justify-center">
+                    <div className="section-image h-[440px] flex items-center justify-center -mt-8">
                       <LottieAnimation
                         animationData={integrationAnimationData}
                         loop={true}
                         autoplay={true}
-                        style={{ width: '100%', height: '100%' }}
+                        style={{ width: '110%', height: '110%' }}
                         className="object-contain"
                       />
                     </div>
@@ -1000,7 +1025,7 @@ const ByteBotLanding: React.FC = () => {
                 </div>
                 
                 <div className="w-full lg:w-1/2 mobile-full-width flex justify-start items-center relative">
-                  <div className="robot-container" style={{ transform: 'scale(1.3) translateX(-100px)' }}>
+                  <div className="robot-container" style={{ transform: 'scale(1.3) translateX(-50px)' }}>
                     <img 
                       src="/assets/newimages/laserrobo.png" 
                       alt="Conversion Analytics" 
@@ -1104,7 +1129,7 @@ const ByteBotLanding: React.FC = () => {
                     <li className="flex items-center bubble-text">
                       <div className="w-6 h-6 bg-pink-500 rounded-full mr-4 flex items-center justify-center">
                         <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd"/>
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 10-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd"/>
                         </svg>
                       </div>
                       Contextual memory & evolving vocabulary
