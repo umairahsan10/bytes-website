@@ -12,7 +12,7 @@ const img1 = "/assets/img1.jpg";
 const img2 = "/assets/img-2.jpg";
 const img3 = "/assets/img-3.jpg";
 const img4 = "/assets/img-4.jpg";
-const projImg = "/assets/Careers/Proj.png";
+const projImg = "/assets/Careers/proj.png";
 const cloudImg = "/assets/Careers/cloud.png";
 const uiImg = "/assets/Careers/ui.png";
 const marketImg = "/assets/Careers/market.png";
@@ -26,6 +26,12 @@ function App() {
     const [scrollPos, setScrollPos] = useState(0);
     const contactRef = useRef(null);
     const jobsRef = useRef(null);
+
+    // Handle contact form submission
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        alert('Application submitted!');
+    };
 
     return (
         <div className="w-full min-h-screen overflow-x-hidden">
@@ -267,28 +273,24 @@ function App() {
                                 </p>
                             </div>
 
-                            <div className="space-y-6 bg-white/80 backdrop-blur-sm p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl border border-white/50">
+                            <form onSubmit={handleSubmit} className="space-y-6 bg-white/80 backdrop-blur-sm p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl border border-white/50">
                                 <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
                                     <div className="space-y-2">
-                                        <label className="block text-gray-700 font-medium text-sm">Full Name</label>
+                                        <label className="block text-gray-700 font-medium text-sm">Full Name <span className="text-red-500">*</span></label>
                                         <input
                                             type="text"
                                             name="name"
                                             required
-                                            value=""
-                                            onChange={() => { }}
                                             className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 bg-white/50 backdrop-blur-sm text-sm sm:text-base h-12 sm:h-14"
                                             placeholder="John Doe"
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="block text-gray-700 font-medium text-sm">Email Address</label>
+                                        <label className="block text-gray-700 font-medium text-sm">Email Address <span className="text-red-500">*</span></label>
                                         <input
                                             type="email"
                                             name="email"
                                             required
-                                            value=""
-                                            onChange={() => { }}
                                             className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 bg-white/50 backdrop-blur-sm text-sm sm:text-base h-12 sm:h-14"
                                             placeholder="john@example.com"
                                         />
@@ -296,38 +298,35 @@ function App() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="block text-gray-700 font-medium text-sm">Subject</label>
+                                    <label className="block text-gray-700 font-medium text-sm">Subject <span className="text-red-500">*</span></label>
                                     <input
                                         type="text"
                                         name="subject"
-                                        value=""
-                                        onChange={() => { }}
+                                        required
                                         className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 bg-white/50 backdrop-blur-sm text-sm sm:text-base"
                                         placeholder="Job Application - Frontend Engineer"
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="block text-gray-700 font-medium text-sm">Message</label>
+                                    <label className="block text-gray-700 font-medium text-sm">Message <span className="text-red-500">*</span></label>
                                     <textarea
                                         name="message"
                                         rows="4"
                                         required
-                                        value=""
-                                        onChange={() => { }}
                                         className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 resize-none bg-white/50 backdrop-blur-sm text-sm sm:text-base"
                                         placeholder="Tell us about yourself and why you're interested in joining our team..."
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="block text-gray-700 font-medium text-sm">Upload Your CV</label>
+                                    <label className="block text-gray-700 font-medium text-sm">Upload Your CV <span className="text-red-500">*</span></label>
                                     <div className="relative">
                                         <input
                                             type="file"
                                             name="cv"
+                                            required
                                             accept="application/pdf,.doc,.docx"
-                                            onChange={() => { }}
                                             className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 bg-white/50 backdrop-blur-sm file:mr-2 sm:file:mr-4 file:py-1 sm:file:py-2 file:px-2 sm:file:px-4 file:rounded-lg file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 text-sm sm:text-base"
                                         />
                                     </div>
@@ -335,15 +334,15 @@ function App() {
                                 </div>
 
                                 <motion.button
-                                    type="button"
+                                    data-cta="true"
+                                    type="submit"
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
-                                    onClick={() => alert('Form submitted! (In a real app, this would handle the submission)')}
                                     className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 sm:py-4 px-6 sm:px-8 rounded-lg sm:rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl text-sm sm:text-base"
                                 >
                                     Send Application
                                 </motion.button>
-                            </div>
+                            </form>
                         </motion.div>
 
                         {/* Right side - Elegant Image */}

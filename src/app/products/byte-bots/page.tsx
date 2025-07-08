@@ -948,6 +948,7 @@ const ByteBotLanding: React.FC = () => {
 
           <Link
             href="/contact"
+            data-cta="true"
             className="inline-block bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-full shadow-lg transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-cyan-300"
           >
             Book a free&nbsp;Byte-Bot&nbsp;demo
@@ -1278,6 +1279,7 @@ const ByteBotLanding: React.FC = () => {
           <p className="text-lg md:text-xl text-gray-200 mb-8">Book a free Byte-Bot demo and see how AI can power your business.</p>
           <Link
             href="/contact"
+            data-cta="true"
             className="inline-block bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-full shadow-lg transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-cyan-300"
           >
             Book a Demo
