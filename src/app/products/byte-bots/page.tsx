@@ -811,11 +811,12 @@ const ByteBotLanding: React.FC = () => {
           .content-section {
             width: 100vw;
             min-height: 100vh;
+            padding: 60px 0;
           }
           
           .mobile-full-width {
             width: 100% !important;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
           }
           
           .action-card {
@@ -827,14 +828,32 @@ const ByteBotLanding: React.FC = () => {
             padding-right: 1rem;
           }
           .content-section h2 {
-            font-size: 2rem !important;
+            font-size: 2.5rem !important;
             line-height: 1.2;
+            margin-bottom: 1.5rem !important;
           }
           .content-section p {
-            font-size: 1rem !important;
+            font-size: 1.1rem !important;
+            margin-bottom: 2rem !important;
+          }
+          .content-section ul {
+            margin-bottom: 2rem !important;
+          }
+          .content-section li {
+            margin-bottom: 1rem !important;
           }
           .section-image {
-            height: 48vw !important;
+            height: 60vw !important;
+            margin-top: 1rem !important;
+          }
+          .robot-container {
+            transform: scale(1.1) translateX(-30px) !important;
+            margin-top: -50px !important;
+          }
+          .chatbot-container {
+            width: 400px !important;
+            height: 400px !important;
+            margin-top: -30px !important;
           }
         }
         
@@ -864,6 +883,50 @@ const ByteBotLanding: React.FC = () => {
           
           .action-card p {
             font-size: 0.875rem !important;
+          }
+          
+          .content-section {
+            padding: 40px 0 !important;
+            min-height: auto !important;
+          }
+          
+          .content-section h2 {
+            font-size: 2rem !important;
+            margin-bottom: 1rem !important;
+          }
+          
+          .content-section p {
+            font-size: 1rem !important;
+            margin-bottom: 1.5rem !important;
+          }
+          
+          .content-section ul {
+            margin-bottom: 1.5rem !important;
+          }
+          
+          .content-section li {
+            font-size: 0.95rem !important;
+            margin-bottom: 0.75rem !important;
+          }
+          
+          .section-image {
+            height: 50vw !important;
+            margin-top: 0.5rem !important;
+          }
+          
+          .robot-container {
+            transform: scale(0.9) translateX(-20px) !important;
+            margin-top: -30px !important;
+          }
+          
+          .chatbot-container {
+            width: 300px !important;
+            height: 300px !important;
+            margin-top: -20px !important;
+          }
+          
+          .mobile-full-width {
+            margin-bottom: 20px !important;
           }
           
         }
@@ -899,8 +962,8 @@ const ByteBotLanding: React.FC = () => {
           {/* Section 1: Plug & Play Integrations */}
           <div className="content-section">
             <div className="container mx-auto px-6">
-              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8">
-                <div className="w-full lg:w-1/2 pr-12 mobile-full-width">
+              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 md:gap-8 lg:gap-12">
+                <div className="w-full lg:w-1/2 lg:pr-12 mobile-full-width">
                   <h2 className="text-5xl font-bold text-gray-900 mb-6">
                     <span>Plug</span>{' '}
                     <span>&</span>{' '}
@@ -956,7 +1019,7 @@ const ByteBotLanding: React.FC = () => {
                         animationData={integrationAnimationData}
                         loop={true}
                         autoplay={true}
-                        style={{ width: '110%', height: '110%' }}
+                        style={{ width: '140%', height: '140%' }}
                         className="object-contain"
                       />
                     </div>
@@ -975,8 +1038,8 @@ const ByteBotLanding: React.FC = () => {
           {/* Section 2: Conversion Engine */}
           <div className="content-section">
             <div className="container mx-auto px-6">
-              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-start gap-8">
-                <div className="w-full lg:w-1/2 pr-12 mobile-full-width">
+              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-start gap-6 md:gap-8 lg:gap-12">
+                <div className="w-full lg:w-1/2 lg:pr-12 mobile-full-width">
                   <h2 className="text-5xl font-bold text-gray-900 mb-6">
                     <span className="bubble-text gradient-text">Conversion</span>{' '}
                     <span className="bubble-text text-white">Engine</span>
@@ -1043,8 +1106,8 @@ const ByteBotLanding: React.FC = () => {
           {/* Section 3: Data-Driven Intelligence */}
           <div className="content-section">
             <div className="container mx-auto px-6">
-              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8">
-                <div className="w-full lg:w-1/2 pr-12 mobile-full-width">
+              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 md:gap-8 lg:gap-12">
+                <div className="w-full lg:w-1/2 lg:pr-12 mobile-full-width">
                   <h2 className="text-5xl font-bold text-gray-900 mb-6">
                     <span className="bubble-text">Data-Driven</span>{' '}
                     <span className="bubble-text gradient-text">Intelligence</span>
@@ -1114,8 +1177,8 @@ const ByteBotLanding: React.FC = () => {
           {/* Section 4: Continuous Learning & Compliance */}
           <div className="content-section">
             <div className="container mx-auto px-6">
-              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8">
-                <div className="w-full lg:w-1/2 pr-12 mobile-full-width">
+              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 md:gap-8 lg:gap-12">
+                <div className="w-full lg:w-1/2 lg:pr-12 mobile-full-width">
                   <h2 className="text-5xl font-bold text-gray-900 mb-6">
                     <span className="bubble-text text-white">Continuous Learning & </span>{' '}
                     <span className="bubble-text gradient-text">Compliance</span>
