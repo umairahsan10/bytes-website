@@ -157,15 +157,18 @@ export default function Home() {
 
       const isShortScreen = window.innerHeight < 700;
 
-      // Reveal (fade/slide) keeps same timings for all mobiles
-      const revealStart = "top 20%";
-      const revealEnd = "bottom 20%";
+      // Adjust timings again – users reported the previous change fired *too* early.
+      // "top 40%" means the element’s top must get closer to the viewport top
+      // (scroll a bit more) before the animations begin – producing a **later**
+      // opening compared with the 80 % variant but still earlier than the old
+      // 20 % setting.
+      const revealStart = "top 40%";
+      const revealEnd   = "bottom 20%";
 
-      // Flip timings: for very short screens (e.g., iPhone SE)
-      // rotate a bit earlier so the effect completes while the card is
-      // fully visible. Begin at 90 % and finish at 80 %.
-      const flipStart = isShortScreen ? "bottom 90%" : "top 20%";
-      const flipEnd   = isShortScreen ? "bottom 80%" : "bottom 20%";
+      // Flip timings: keep very-short screens special-cased, but for normal
+      // mobiles start at 40 % and finish at 10 % of the viewport.
+      const flipStart = isShortScreen ? "bottom 90%" : "top 40%";
+      const flipEnd   = isShortScreen ? "bottom 80%" : "top 10%";
       
       // Set initial states for mobile cards
       cards.forEach((card) => {
