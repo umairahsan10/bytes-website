@@ -432,14 +432,13 @@
   .dropdown-item {
     padding: 0;
     opacity: 0;
-    transform: translateX(-10px);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(0);
+    transition: opacity 0.2s ease, transform 0.2s ease;
     margin-bottom: 0.2rem;
   }
 
   .dropdown-menu.open .dropdown-item {
     opacity: 1;
-    transform: translateX(0);
   }
 
   /* Staggered animation for dropdown items */
@@ -451,7 +450,8 @@
 
   .dropdown-item a {
     display: block;
-    padding: 4px 8px;
+    width: 100%; /* Make the entire dropdown row clickable */
+    padding: 8px 12px; /* more vertical space for easier hover */
     color: #fff;
     text-decoration: none;
     font-size: 16px;
@@ -461,6 +461,7 @@
     margin: 0;
     opacity: 0.7;
     background: transparent;
+    cursor: pointer;
   }
 
   .dropdown-item a:hover {
@@ -640,5 +641,11 @@
   .journey-dropdown .dropdown-menu {
     left: 100%;
     margin-left: 24px; /* small gap */
+    right: auto;
+  }
+
+  /* Move the Services dropdown panel slightly right to avoid overlap with subsequent menu links */
+  .services-dropdown .dropdown-menu {
+    left: 160px; /* shift right from its trigger */
     right: auto;
   }

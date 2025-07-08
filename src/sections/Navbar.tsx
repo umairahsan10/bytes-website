@@ -29,6 +29,7 @@ const Header: React.FC<HeaderProps> = ({
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
   const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
   const [isJourneyDropdownOpen, setIsJourneyDropdownOpen] = useState(false);
+  const [isHeroInView, setIsHeroInView] = useState(true);
   const router = useRouter();
   
   // Refs for DOM elements
@@ -174,6 +175,22 @@ const Header: React.FC<HeaderProps> = ({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (!transparentNav) return;
+    const heroElement = document.querySelector('.hero-wrapper');
+    if (!heroElement) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        setIsHeroInView(entry.isIntersecting);
+      });
+    }, { threshold: 0 });
+
+    observer.observe(heroElement);
+
+    return () => observer.disconnect();
+  }, [transparentNav]);
 
   // Open menu animation - TOP TO BOTTOM
   const openMenu = () => {
@@ -431,10 +448,10 @@ const Header: React.FC<HeaderProps> = ({
     <div className={`bytes-menu-container ${className} ${isOpen ? 'menu-open' : ''}`}>
       {/* Navigation bar */}
       <nav className={`bytes-nav h-14 flex items-center py-0 px-4 z-[200] transition-transform duration-300 ${ isHeaderHidden ? '-translate-y-full' : 'translate-y-0' } ${
-        transparentNav 
-          ? 'bg-transparent' 
-          : 'bg-[#101010]'
-      }`}>
+        isOpen || !(transparentNav && isHeroInView)
+          ? 'bg-[#101010]'
+          : 'bg-transparent'
+      } transition-colors duration-300`}>
         <div className="logo" onClick={handleLogoClick}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={logoImage} alt="Bytes Platform Logo" className="h-12 w-auto" />
