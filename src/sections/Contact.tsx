@@ -123,7 +123,7 @@ function Contact() {
                 <div className="input-container textarea">
                   <textarea name="message" className="input" placeholder="Message" onChange={handleChange}></textarea>
                 </div>
-                <input type="submit" value="Send" className="btn" />
+                <input type="submit" data-cta="true" value="Send" className="btn" />
               </form>
             </div>
           </div>

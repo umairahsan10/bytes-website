@@ -628,6 +628,7 @@ const IndustriesPage = () => {
             />
 
             <motion.button
+              data-cta="true"
               className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-8 py-3 rounded font-medium hover:from-cyan-600 hover:to-blue-700 transition-all duration-300"
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
               animate={animationsTriggered.ecommerce ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.9 }}
@@ -820,6 +821,7 @@ const IndustriesPage = () => {
           </h2>
           <Link
             href="/contact"
+            data-cta="true"
             className="inline-block px-10 py-4 bg-white text-blue-700 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
           >
             Get&nbsp;In&nbsp;Touch
