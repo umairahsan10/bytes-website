@@ -6,7 +6,7 @@ const Card = forwardRef(({id, frontSrc, frontAlt, category, title, services, ico
     <div className={`card ${className || ''}`} id={id} ref={ref}>
         <div className='card-wrapper'>
             <div className='flip-card-inner'>
-                <div className="flip-card-front" onClick={onClick}>
+                <div className="flip-card-front">
                     <Image 
                         priority
                         src={frontSrc}
@@ -15,7 +15,7 @@ const Card = forwardRef(({id, frontSrc, frontAlt, category, title, services, ico
                         alt={frontAlt}
                     />
                 </div>
-                <div className="flip-card-back">
+                <div className="flip-card-back" onClick={onClick}>
                     <div className="card-header">
                         <h2 className="card-category">{category}</h2>
                         <div className="card-icon">{icon}</div>

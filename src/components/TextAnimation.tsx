@@ -11,7 +11,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
  */
 
 const phrase =
-  "Bytes Platform builds custom websites and digital marketing strategies that drive measurable growth. Our team handles design, development, SEO, SEM and social media with clear communication and transparent reporting. From SSL security to performance optimization, we deliver end-to-end solutions that help you stand out online.";
+  "Bytes Platform delivers custom websites, apps, SEO, marketing, chatbots, and tailored ERP/CRM solutions that fuel growth. We combine innovative design, seamless development, and transparent reporting with top-notch security and optimization. From strategy to launch, we provide end-to-end digital solutions built to scale — helping your brand dominate online with measurable results and zero compromises.";
 
 // Load Roboto Slab font (only for this component)
 const robotoSlab = Roboto_Slab({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-robotoslab" });

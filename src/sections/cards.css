@@ -237,6 +237,16 @@
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 }
 
+/* Make the front face non-clickable so only the back side triggers actions */
+.flip-card-front {
+    pointer-events: none;
+}
+
+/* Ensure the back side is clickable */
+.flip-card-back {
+    pointer-events: auto;
+}
+
 /* Desktop hover effects */
 .cards-container.desktop .card:hover .flip-card-front,
 .cards-container.desktop .card:hover .flip-card-back {
@@ -306,7 +316,7 @@
 .card-icon {
     font-size: 24px;
     font-weight: 900;
-    color: #ffffff;
+    color: #F6C324; /* Updated to brand gold */
     line-height: 1;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
@@ -380,36 +390,44 @@
     background-image: url('/assets/card-1.png');
 }
 
-#card-1 .card-category,
-#card-1 .card-icon {
+#card-1 .card-category {
     color: #ffffff;
+}
+#card-1 .card-icon {
+    color: #F6C324; /* Updated icon color */
 }
 
 #card-2 .flip-card-back {
     background-image: url('/assets/card-2.png');
 }
 
-#card-2 .card-category,
-#card-2 .card-icon {
+#card-2 .card-category {
     color: #ffffff;
+}
+#card-2 .card-icon {
+    color: #F6C324;
 }
 
 #card-3 .flip-card-back {
     background-image: url('/assets/card-3.png');
 }
 
-#card-3 .card-category,
-#card-3 .card-icon {
+#card-3 .card-category {
     color: #ffffff;
+}
+#card-3 .card-icon {
+    color: #F6C324;
 }
 
 #card-4 .flip-card-back {
     background-image: url('/assets/card-4.png');
 }
 
-#card-4 .card-category,
-#card-4 .card-icon {
+#card-4 .card-category {
     color: #ffffff;
+}
+#card-4 .card-icon {
+    color: #F6C324;
 }
 
 @keyframes floating {

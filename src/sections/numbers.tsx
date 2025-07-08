@@ -26,27 +26,21 @@ export const NumbersSection = () => {
 
   const stats = [
     {
-      target: 3,
+      target: 2,
       suffix: "+",
       label: "Years of Continual Excellence",
       color: "text-fuchsia-500",
     },
     {
-      target: 18,
+      target: 300,
       suffix: "+",
-      label: "Countries Served Across Diverse Industries",
-      color: "text-pink-500",
-    },
-    {
-      target: 5000,
-      suffix: "+",
-      label: "Digital Innovators Shaping Transformation",
+      label: "Successful Projects Deployed",
       color: "text-lime-300",
     },
     {
-      target: 320,
+      target: 90,
       suffix: "+",
-      label: "Global Clients Thriving With Our Solutions",
+      label: "Employees",
       color: "text-lime-300",
     },
   ];
@@ -65,10 +59,12 @@ export const NumbersSection = () => {
       if (!el) return;
 
       const observer = new IntersectionObserver(
-        (entries) => {
+        (entries, obs) => {
           const [entry] = entries;
           if (entry.isIntersecting && !startedRef.current) {
             startedRef.current = true;
+            obs.unobserve(entry.target); // Stop observing after first trigger
+
             const duration = 2000; // ms
             const startTime = performance.now();
 
@@ -123,10 +119,10 @@ export const NumbersSection = () => {
           </h2>
 
           <a
-            href="/about"
+            href="/contact"
             className="inline-flex items-center mt-10 px-10 py-3 text-white font-semibold rounded-full shadow-lg bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-600 hover:from-purple-600 hover:via-fuchsia-500 hover:to-pink-500 hover:scale-105 transition-all duration-300 mx-auto lg:mx-0"
           >
-            LEARN MORE &raquo;
+            Get in Touch &raquo;
           </a>
         </div>
 
@@ -213,11 +209,11 @@ export const NumbersSection = () => {
       </div>
 
       {/* Stats Row */}
-      <div className="relative container mx-auto px-4 py-6 md:py-8 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-0 text-center md:text-left">
+      <div className="relative container mx-auto px-4 py-6 md:py-8 grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-0 text-center">
         {stats.map(({ target, suffix, label, color }, idx) => (
           <div
             key={idx}
-            className={`flex flex-col items-center md:items-start ${
+            className={`flex flex-col items-center ${
               idx !== stats.length - 1 ? "md:border-r md:border-gray-600/40" : ""
             } px-4 md:px-8`}
           >

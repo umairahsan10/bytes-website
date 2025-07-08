@@ -74,53 +74,53 @@ export default function Home() {
   const cardData = [
     {
       category: "Web DEVELOPMENT",
-      title: "Web Development Highlights",
-      icon: "W",
+      // title: "Web Development Highlights",
+      icon: "B",
       services: [
-        "Responsive frontend excellence",
-        "Scalable backend solutions", 
-        "Mobile-first design",
-        "Full-stack development",
-        "Secure, optimized performance"
+        "Lightning-Fast Load Times",
+        "Pixel-Perfect Design",
+        "Fully Responsive",
+        "Secure & Stable",
+        "Easy Maintenance"
       ],
       link: "/services/web"
     },
     {
       category: "SEO", 
-      title: "SEO Highlights",
-      icon: "S",
+      // title: "SEO Highlights",
+      icon: "Y",
       services: [
-        "Targeted keyword strategy",
-        "Optimized, engaging content",
-        "Comprehensive technical audits", 
-        "Detailed performance reporting",
-        "Effective local SEO"
+        "Top Search Rankings",
+        "Smart Keyword Targeting",
+        "Strong Backlink Profile",
+        "In-Depth SEO Audits",
+        "Real-Time Analytics"
       ],
       link: "/services/seo"
     },
     {
       category: "App DEVELOPMENT",
-      title: "Mobile App Development",
-      icon: "A", 
+      // title: "Mobile App Development",
+      icon: "T", 
       services: [
-        "Intuitive onboarding engages",
-        "Dynamic dashboards inform", 
-        "Smart messaging connects",
-        "Personalized profiles customize",
-        "End-to-end development"
+        "IOS & Android Ready",
+        "Fast & Fluid Performance",
+        "Custom Features",
+        "Seamless Integrations",
+        "End-to-End Support"
       ],
       link: "/services/app"
     },
     {
       category: "Marketing",
-      title: "Social Media Marketing Highlights",
-      icon: "M",
+      // title: "Social Media Marketing Highlights",
+      icon: "E",
       services: [
-        "Viral content creation",
-        "Engaged community building",
-        "Influencer Colab Strategy", 
-        "Data-driven PPC campaigns",
-        "High-ROI ad optimization"
+        "Brand-Centric Strategies",
+        "ROI-Focused Campaigns",
+        "Omnichannel Reach",
+        "Creative Ad Design",
+        "A/B Testing & Optimization"
       ],
       link: "/services/marketing"
     }
@@ -204,6 +204,7 @@ export default function Home() {
         const backEl = card.querySelector(".flip-card-back");
 
         // Use scrubbed progress so rotation reverses visibly as it crosses 50vh
+        // Front side rotates to back
         gsap.fromTo(
           frontEl,
           { rotateY: 0 },
@@ -216,6 +217,11 @@ export default function Home() {
               end: flipEnd,
               scrub: true,
               markers: false,
+              // Disable clicks when the card is showing its back side
+              onUpdate: (self) => {
+                // Always keep front face non-interactive
+                frontEl.style.pointerEvents = "none";
+              },
             },
           },
         );
@@ -306,8 +312,12 @@ export default function Home() {
               const backRotation = 180 - 180 * animationProgress;
               const cardRotation = rotation[index] * (1 - animationProgress);
 
+              // Rotate the faces
               gsap.to(frontEl, { rotateY: frontRotation, ease: "power1.out" });
               gsap.to(backEl, { rotateY: backRotation, ease: "power1.out" });
+
+              // Toggle pointer events based on which side is visible
+              frontEl.style.pointerEvents = "none";
 
               gsap.to(card, {
                 xPercent: -50,
