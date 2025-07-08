@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 import "../sections/cards.css";
 import { Footer } from "@/sections/Footer";
 import GTM, { GTMNoScript } from "@/components/GTM";
+import PageLoader from "@/components/PageLoader";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const calistoga = Calistoga({
@@ -41,10 +42,12 @@ export default function RootLayout({
       >
         {/* GTM noscript fallback */}
         <GTMNoScript id="GTM-MNW4L2XD" />
-        <main className="flex-1">
-          {children}
-        </main>
-        <Footer />
+        <PageLoader>
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
+        </PageLoader>
       </body>
     </html>
   );
