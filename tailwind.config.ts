@@ -21,6 +21,9 @@ const config: Config = {
       },
     },
     extend: {
+      colors: {
+        foreground: "hsl(var(--foreground))",
+      },
       fontFamily: {
         sans: ["var(--font-sans)"],
         serif: ["var(--font-serif)"],
@@ -30,6 +33,7 @@ const config: Config = {
         // 'ping-large': "ping-large 1s ease-in-out infinite",
         'slide-in-left': "slide-in-left 1s ease-out forwards",
         'slide-in-right': "slide-in-right 1s ease-out forwards",
+        "flip-words": "flip-words 8s infinite",
       },
       keyframes: {
         // 'ping-large': {
@@ -57,6 +61,22 @@ const config: Config = {
             transform: 'translateX(0%)',
             opacity: '1',
           },
+        },
+        "flip-words": {
+          "6%" : { transform: "translateY(-112%)" },
+          "14%" : { transform: "translateY(-100%)" },
+          "20%" : { transform: "translateY(-122%)" },
+          "28%" : { transform: "translateY(-200%)" },
+          "34%" : { transform: "translateY(-312%)" },
+          "42%" : { transform: "translateY(-300%)" },
+          "48%" : { transform: "translateY(-412%)" },
+          "56%" : { transform: "translateY(-400%)" },
+          "63%" : { transform: "translateY(-512%)" },
+          "71%" : { transform: "translateY(-500%)" },
+          "77%" : { transform: "translateY(-612%)" },
+          "85%" : { transform: "translateY(-600%)" },
+          "92%" : { transform: "translateY(-712%)" },
+          "100%" : { transform: "translateY(-700%)" },
         },
       },
       spacing: {
