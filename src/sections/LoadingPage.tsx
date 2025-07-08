@@ -24,7 +24,7 @@ export const LoadingPage: React.FC<LoadingPageProps> = ({ onLoadComplete }) => {
       display: "flex"
     });
 
-    const MINIMUM_DISPLAY_TIME = 2500; // 2 seconds minimum display time
+    const MINIMUM_DISPLAY_TIME = 2500; // 2.5 seconds minimum display time
     const FADE_OUT_DURATION = 800; // 0.8 seconds fade out
 
     const completeLoading = () => {
@@ -42,15 +42,29 @@ export const LoadingPage: React.FC<LoadingPageProps> = ({ onLoadComplete }) => {
       });
     };
 
-    // Single timeout for the main animation
-    const loadTimeout = setTimeout(completeLoading, MINIMUM_DISPLAY_TIME);
+    const startTime = Date.now();
 
-    // Fallback timeout
-    const fallbackTimeout = setTimeout(completeLoading, MINIMUM_DISPLAY_TIME + FADE_OUT_DURATION + 2000);
+    // Helper to ensure the loader stays for at least MINIMUM_DISPLAY_TIME
+    const finishAfterMinimum = () => {
+      const elapsed = Date.now() - startTime;
+      const remaining = Math.max(0, MINIMUM_DISPLAY_TIME - elapsed);
+      setTimeout(completeLoading, remaining);
+    };
+
+    // If the page has already fully loaded (e.g., on route change) we just respect the minimum time.
+    if (document.readyState === 'complete') {
+      finishAfterMinimum();
+    } else {
+      // Wait for the window load event which fires when all resources (images, fonts...) are done loading.
+      window.addEventListener('load', finishAfterMinimum, { once: true });
+    }
+
+    // Fallback: ensure we never wait longer than 12 s in total.
+    const fallbackTimeout = setTimeout(completeLoading, 12000);
 
     return () => {
-      clearTimeout(loadTimeout);
       clearTimeout(fallbackTimeout);
+      window.removeEventListener('load', finishAfterMinimum);
       document.body.style.overflow = 'auto';
     };
   }, [onLoadComplete]);
