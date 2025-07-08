@@ -364,7 +364,7 @@ const IndustriesPage = () => {
       <Header />
 
       {/* Hero Section */}
-      <section ref={heroRef} className="order-0 min-h-screen flex items-center px-6 pt-12 md:pt-20 relative z-10">
+      <section ref={heroRef} className="min-h-screen flex items-center px-6 pt-12 md:pt-20 relative z-10">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -466,60 +466,28 @@ const IndustriesPage = () => {
         </div>
       </section>
 
-      {/* Fintech Section */}
-      <section ref={fintechRef} className="order-3 min-h-screen flex items-center bg-white text-[#010a14] px-6 pt-24 md:pt-0 relative scroll-mt-28">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <motion.div
-            variants={slideInLeft as any}
-            initial="hidden"
-            animate={animationsTriggered.fintech ? 'visible' : 'hidden'}
-            className="relative order-2 lg:order-1"
-          >
-            {/* Banking Lottie animation */}
-            <div className="relative w-96 h-96 sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] mx-auto">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={animationsTriggered.fintech ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
-                transition={{ delay: 0.2, duration: 0.4, type: "spring", stiffness: 200 }}
-                className="w-full h-full"
-              >
-                {animationData && (
-                  <Lottie
-                    animationData={animationData}
-                    loop={true}
-                    autoplay={true}
-                    className="w-full h-full"
-                    style={{
-                      imageRendering: 'crisp-edges',
-                      backfaceVisibility: 'hidden',
-                      transform: 'translateZ(0)',
-                      willChange: 'transform'
-                    }}
-                  />
-                )}
-              </motion.div>
-            </div>
-          </motion.div>
-
+      {/* Federal Government Contractors Section */}
+      <section ref={educationRef} className="min-h-screen flex items-center bg-white text-[#010a14] px-4 md:px-6 pt-24 md:pt-0 relative z-10 scroll-mt-28">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           <motion.div
             variants={staggerContainer as any}
             initial="hidden"
-            animate={animationsTriggered.fintech ? 'visible' : 'hidden'}
-            className="space-y-8 order-1 lg:order-2"
+            animate={animationsTriggered.education ? 'visible' : 'hidden'}
+            className="space-y-6 order-1 lg:order-2"
           >
             <motion.div variants={staggerContainer as any} className="space-y-6">
               <AnimatedHeader
-                className="text-4xl lg:text-6xl font-bold leading-none"
-                inView={animationsTriggered.fintech}
+                className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight"
+                inView={animationsTriggered.education}
               >
-                BANKING &amp;
+                FEDERAL GOVERNMENT
                 <br />
-                FINANCIAL SECTOR
+                CONTRACTORS
               </AnimatedHeader>
               <motion.div
                 className="h-1 bg-gradient-to-r from-emerald-300 to-sky-400"
                 initial={{ width: 0 }}
-                animate={animationsTriggered.fintech ? { width: "100%" } : { width: 0 }}
+                animate={animationsTriggered.education ? { width: "100%" } : { width: 0 }}
                 transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
               />
             </motion.div>
@@ -527,94 +495,42 @@ const IndustriesPage = () => {
             <motion.p
               variants={paragraphVariants as any}
               initial="hidden"
-              animate={animationsTriggered.fintech ? "visible" : "hidden"}
-              className="text-lg text-[#010a14] max-w-md"
+              animate={animationsTriggered.education ? "visible" : "hidden"}
+              className="text-base md:text-lg text-[#010a14] max-w-2xl"
             >
-              We specialize in secure, scalable digital solutions for modern banking and financial institutions.
+              We specialize in delivering innovative digital solutions tailored specifically for federal and state government contractors.
             </motion.p>
 
             <AnimatedBulletPoints
               points={[
-                "Empowering banks, fintechs, and investment firms with secure, scalable digital solutions",
-                "Streamlining operations through intelligent automation and data-driven decision-making",
-                "Enhancing customer engagement with seamless digital experiences",
-                "Ensuring compliance and risk mitigation through robust security architectures"
+                "Delivering secure, compliant technology for federal and state agencies",
+                "Supporting digital modernization initiatives across public services",
+                "Improving efficiency with workflow automation and cloud infrastructure",
+                "Partnering with government contractors to meet mission-critical needs"
               ]}
-              className="text-[#010a14]"
+              className="text-[#010a14] text-sm md:text-base"
               bulletColor="bg-gradient-to-r from-emerald-300 to-sky-400"
-              inView={animationsTriggered.fintech}
+              inView={animationsTriggered.education}
             />
-          </motion.div>
-        </div>
-
-      </section>
-
-      {/* Healthcare Section */}
-      <section ref={healthcareRef} className="order-4 pt-24 md:pt-28 pb-12 bg-[#010a14] text-white px-6 relative z-10 scroll-mt-28">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <motion.div
-            variants={staggerContainer as any}
-            initial="hidden"
-            animate={animationsTriggered.healthcare ? 'visible' : 'hidden'}
-            className="space-y-8"
-          >
-            <motion.div variants={staggerContainer as any} className="space-y-6">
-              <AnimatedHeader
-                className="text-4xl lg:text-6xl font-bold leading-none"
-                inView={animationsTriggered.healthcare}
-              >
-                HEALTH SECTOR
-              </AnimatedHeader>
-              <motion.div
-                className="h-1 bg-gradient-to-r from-purple-500 to-pink-500"
-                initial={{ width: 0 }}
-                animate={animationsTriggered.healthcare ? { width: "100%" } : { width: 0 }}
-                transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
-              />
-            </motion.div>
-
-            <motion.p
-              variants={paragraphVariants as any}
-              initial="hidden"
-              animate={animationsTriggered.healthcare ? "visible" : "hidden"}
-              className="text-lg text-white/90 max-w-lg"
-            >
-              We specialize in digital health solutions that enhance patient care and streamline medical operations.
-            </motion.p>
-
-            <motion.div variants={staggerContainer as any}>
-              <AnimatedBulletPoints
-                points={[
-                  "Supporting patient-centric care through digital transformation",
-                  "Developing HIPAA-compliant solutions for clinics, hospitals, and health systems",
-                  "Improving health outcomes with data interoperability and AI-driven insights",
-                  "Enhancing patient engagement via mobile apps and portals"
-                ]}
-                className="text-white/80"
-                bulletColor="bg-gradient-to-r from-purple-500 to-pink-500"
-                inView={animationsTriggered.healthcare}
-              />
-            </motion.div>
           </motion.div>
 
           <motion.div
             variants={slideInRight as any}
             initial="hidden"
-            animate={animationsTriggered.healthcare ? 'visible' : 'hidden'}
+            animate={animationsTriggered.education ? 'visible' : 'hidden'}
             className="relative order-2 lg:order-1"
           >
-
-            {/* Healthcare Lottie animation */}
-            <div className="relative w-80 h-80 sm:w-96 sm:h-96 md:w-[500px] md:h-[500px] mx-auto">
+            {/* Federal Government Lottie animation */}
+            <div className="relative w-96 h-96 sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] mx-auto">
               <motion.div
                 initial={{ opacity: 0, scale: 0.5 }}
-                animate={animationsTriggered.healthcare ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
-                transition={{ delay: 0.5, duration: 0.8, type: "spring" }}
+                animate={animationsTriggered.education ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+                transition={{ delay: 0.2, duration: 0.4, type: "spring", stiffness: 200 }}
                 className="w-full h-full"
               >
-                {healthAnimationData && (
+                {federalAnimationData && (
                   <Lottie
-                    animationData={healthAnimationData}
+                    animationData={federalAnimationData}
                     loop={true}
                     autoplay={true}
                     className="w-full h-full"
@@ -632,8 +548,8 @@ const IndustriesPage = () => {
         </div>
       </section>
 
-      {/* E-commerce Section */}
-      <section ref={ecommerceRef} className="order-2 min-h-screen flex items-center bg-[#010a14] text-white px-6 pt-24 md:pt-0 relative scroll-mt-28">
+      {/* Retail Solutions Section */}
+      <section ref={ecommerceRef} className="min-h-screen flex items-center bg-[#010a14] text-white px-6 pt-24 md:pt-0 relative scroll-mt-28">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
             variants={slideInLeft as any}
@@ -722,31 +638,62 @@ const IndustriesPage = () => {
             </motion.button>
           </motion.div>
         </div>
-
       </section>
 
-      {/* Education Section */}
-      <section ref={educationRef} className="order-1 min-h-screen flex items-center bg-white text-[#010a14] px-4 md:px-6 pt-24 md:pt-0 relative z-10 scroll-mt-28">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      {/* Banking & Financial Sector Section */}
+      <section ref={fintechRef} className="min-h-screen flex items-center bg-white text-[#010a14] px-6 pt-24 md:pt-0 relative scroll-mt-28">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <motion.div
+            variants={slideInLeft as any}
+            initial="hidden"
+            animate={animationsTriggered.fintech ? 'visible' : 'hidden'}
+            className="relative order-2 lg:order-1"
+          >
+            {/* Banking Lottie animation */}
+            <div className="relative w-96 h-96 sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] mx-auto">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={animationsTriggered.fintech ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+                transition={{ delay: 0.2, duration: 0.4, type: "spring", stiffness: 200 }}
+                className="w-full h-full"
+              >
+                {animationData && (
+                  <Lottie
+                    animationData={animationData}
+                    loop={true}
+                    autoplay={true}
+                    className="w-full h-full"
+                    style={{
+                      imageRendering: 'crisp-edges',
+                      backfaceVisibility: 'hidden',
+                      transform: 'translateZ(0)',
+                      willChange: 'transform'
+                    }}
+                  />
+                )}
+              </motion.div>
+            </div>
+          </motion.div>
+
           <motion.div
             variants={staggerContainer as any}
             initial="hidden"
-            animate={animationsTriggered.education ? 'visible' : 'hidden'}
-            className="space-y-6 order-1 lg:order-2"
+            animate={animationsTriggered.fintech ? 'visible' : 'hidden'}
+            className="space-y-8 order-1 lg:order-2"
           >
             <motion.div variants={staggerContainer as any} className="space-y-6">
               <AnimatedHeader
-                className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight"
-                inView={animationsTriggered.education}
+                className="text-4xl lg:text-6xl font-bold leading-none"
+                inView={animationsTriggered.fintech}
               >
-                FEDERAL GOVERNMENT
+                BANKING &amp;
                 <br />
-                CONTRACTORS
+                FINANCIAL SECTOR
               </AnimatedHeader>
               <motion.div
                 className="h-1 bg-gradient-to-r from-emerald-300 to-sky-400"
                 initial={{ width: 0 }}
-                animate={animationsTriggered.education ? { width: "100%" } : { width: 0 }}
+                animate={animationsTriggered.fintech ? { width: "100%" } : { width: 0 }}
                 transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
               />
             </motion.div>
@@ -754,42 +701,93 @@ const IndustriesPage = () => {
             <motion.p
               variants={paragraphVariants as any}
               initial="hidden"
-              animate={animationsTriggered.education ? "visible" : "hidden"}
-              className="text-base md:text-lg text-[#010a14] max-w-2xl"
+              animate={animationsTriggered.fintech ? "visible" : "hidden"}
+              className="text-lg text-[#010a14] max-w-md"
             >
-              We specialize in delivering innovative digital solutions tailored specifically for federal and state government contractors.
+              We specialize in secure, scalable digital solutions for modern banking and financial institutions.
             </motion.p>
 
             <AnimatedBulletPoints
               points={[
-                "Delivering secure, compliant technology for federal and state agencies",
-                "Supporting digital modernization initiatives across public services",
-                "Improving efficiency with workflow automation and cloud infrastructure",
-                "Partnering with government contractors to meet mission-critical needs"
+                "Empowering banks, fintechs, and investment firms with secure, scalable digital solutions",
+                "Streamlining operations through intelligent automation and data-driven decision-making",
+                "Enhancing customer engagement with seamless digital experiences",
+                "Ensuring compliance and risk mitigation through robust security architectures"
               ]}
-              className="text-[#010a14] text-sm md:text-base"
+              className="text-[#010a14]"
               bulletColor="bg-gradient-to-r from-emerald-300 to-sky-400"
-              inView={animationsTriggered.education}
+              inView={animationsTriggered.fintech}
             />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Health Sector Section */}
+      <section ref={healthcareRef} className="pt-24 md:pt-28 pb-12 bg-[#010a14] text-white px-6 relative z-10 scroll-mt-28">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <motion.div
+            variants={staggerContainer as any}
+            initial="hidden"
+            animate={animationsTriggered.healthcare ? 'visible' : 'hidden'}
+            className="space-y-8"
+          >
+            <motion.div variants={staggerContainer as any} className="space-y-6">
+              <AnimatedHeader
+                className="text-4xl lg:text-6xl font-bold leading-none"
+                inView={animationsTriggered.healthcare}
+              >
+                HEALTH SECTOR
+              </AnimatedHeader>
+              <motion.div
+                className="h-1 bg-gradient-to-r from-purple-500 to-pink-500"
+                initial={{ width: 0 }}
+                animate={animationsTriggered.healthcare ? { width: "100%" } : { width: 0 }}
+                transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+              />
+            </motion.div>
+
+            <motion.p
+              variants={paragraphVariants as any}
+              initial="hidden"
+              animate={animationsTriggered.healthcare ? "visible" : "hidden"}
+              className="text-lg text-white/90 max-w-lg"
+            >
+              We specialize in digital health solutions that enhance patient care and streamline medical operations.
+            </motion.p>
+
+            <motion.div variants={staggerContainer as any}>
+              <AnimatedBulletPoints
+                points={[
+                  "Supporting patient-centric care through digital transformation",
+                  "Developing HIPAA-compliant solutions for clinics, hospitals, and health systems",
+                  "Improving health outcomes with data interoperability and AI-driven insights",
+                  "Enhancing patient engagement via mobile apps and portals"
+                ]}
+                className="text-white/80"
+                bulletColor="bg-gradient-to-r from-purple-500 to-pink-500"
+                inView={animationsTriggered.healthcare}
+              />
+            </motion.div>
           </motion.div>
 
           <motion.div
             variants={slideInRight as any}
             initial="hidden"
-            animate={animationsTriggered.education ? 'visible' : 'hidden'}
+            animate={animationsTriggered.healthcare ? 'visible' : 'hidden'}
             className="relative order-2 lg:order-1"
           >
-            {/* Federal Government Lottie animation */}
-            <div className="relative w-96 h-96 sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] mx-auto">
+
+            {/* Healthcare Lottie animation */}
+            <div className="relative w-80 h-80 sm:w-96 sm:h-96 md:w-[500px] md:h-[500px] mx-auto">
               <motion.div
                 initial={{ opacity: 0, scale: 0.5 }}
-                animate={animationsTriggered.education ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
-                transition={{ delay: 0.2, duration: 0.4, type: "spring", stiffness: 200 }}
+                animate={animationsTriggered.healthcare ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+                transition={{ delay: 0.5, duration: 0.8, type: "spring" }}
                 className="w-full h-full"
               >
-                {federalAnimationData && (
+                {healthAnimationData && (
                   <Lottie
-                    animationData={federalAnimationData}
+                    animationData={healthAnimationData}
                     loop={true}
                     autoplay={true}
                     className="w-full h-full"
@@ -806,6 +804,29 @@ const IndustriesPage = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Call To Action Section */}
+      <section className="relative overflow-hidden py-24 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-center">
+        {/* Background image */}
+        <div
+          className="absolute inset-0 bg-center bg-cover opacity-70 pointer-events-none"
+          style={{ backgroundImage: "url('/assets/WebDev/buildwithus.png')" }}
+        />
+
+        {/* Content */}
+        <div className="relative z-10 container mx-auto px-6">
+          <h2 className="text-4xl lg:text-5xl font-bold mb-8">
+            Ready to revolutionize&nbsp;<span className="text-white">your sector?</span>
+          </h2>
+          <Link
+            href="/contact"
+            className="inline-block px-10 py-4 bg-white text-blue-700 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+          >
+            Get&nbsp;In&nbsp;Touch
+          </Link>
+        </div>
+      </section>
+
       {/* Footer is provided globally via RootLayout */}
     </div>
 
