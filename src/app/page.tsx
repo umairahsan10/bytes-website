@@ -13,6 +13,7 @@ import { ContactSection } from "@/sections/Contact";
 import CardsSection from "@/sections/CardsSection";
 import { LineAnimationSection } from "@/sections/LineAnimationSection";
 import { BrandsSection } from "@/sections/brands";
+import { NumbersSection } from "@/sections/numbers";
 
 
 export default function Home() {
@@ -35,6 +36,7 @@ export default function Home() {
         <ByteBotsSection key="bytebots" />,
         <CardsSection key="cards" />,
         <LineAnimationSection key="line" />,
+        <NumbersSection key="numbers" />,
         <ProjectsSection key="projects" />,
         <BrandsSection key="brands" />,
         <BookSection key="book" />,
