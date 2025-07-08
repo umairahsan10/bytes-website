@@ -3,12 +3,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Header } from '@/sections/Navbar';
 import { useRouter } from 'next/navigation';
+import Lottie from 'lottie-react';
 
 const IndustriesPage = () => {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const [animationData, setAnimationData] = useState(null);
+  const [healthAnimationData, setHealthAnimationData] = useState(null);
+  const [retailAnimationData, setRetailAnimationData] = useState(null);
+  const [federalAnimationData, setFederalAnimationData] = useState(null);
 
   // Animated sections refs
   const heroRef = useRef<HTMLDivElement | null>(null);
@@ -59,6 +65,36 @@ const IndustriesPage = () => {
       </AnimatePresence>
     );
   };
+
+  // Load animation data
+  useEffect(() => {
+    const loadAnimations = async () => {
+      try {
+        // Load finance animation
+        const financeData = await fetch('/assets/newimages/Animation - 1751914349014.json');
+        const financeJsonData = await financeData.json();
+        setAnimationData(financeJsonData);
+
+        // Load health animation
+        const healthData = await fetch('/assets/newimages/Animation - 1751915546890.json');
+        const healthJsonData = await healthData.json();
+        setHealthAnimationData(healthJsonData);
+
+        // Load retail animation
+        const retailData = await fetch('/assets/newimages/Animation - 1751922478340.json');
+        const retailJsonData = await retailData.json();
+        setRetailAnimationData(retailJsonData);
+
+        // Load federal government animation
+        const federalData = await fetch('/assets/newimages/Animation - 1751923093110.json');
+        const federalJsonData = await federalData.json();
+        setFederalAnimationData(federalJsonData);
+      } catch (error) {
+        console.error('Error loading animations:', error);
+      }
+    };
+    loadAnimations();
+  }, []);
 
   // Update animation states when sections come into view
   useEffect(() => {
@@ -252,8 +288,8 @@ const IndustriesPage = () => {
             className={`w-2 h-2 ${bulletColor} rounded-full mt-2 flex-shrink-0`}
             initial={{ scale: 0, rotate: 0 }}
             animate={inView ? { scale: 1, rotate: 360 } : { scale: 0, rotate: 0 }}
-            transition={{ 
-              delay: index * 0.2 + 0.5, 
+            transition={{
+              delay: index * 0.2 + 0.5,
               duration: 0.5,
               type: "spring",
               stiffness: 200
@@ -328,7 +364,7 @@ const IndustriesPage = () => {
       <Header />
 
       {/* Hero Section */}
-      <section ref={heroRef} className="order-0 min-h-screen flex items-center px-6 pt-12 md:pt-20 relative z-10">
+      <section ref={heroRef} className="min-h-screen flex items-center px-6 pt-12 md:pt-20 relative z-10">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -341,7 +377,7 @@ const IndustriesPage = () => {
           {/* Overlay for better text readability */}
           <div className="absolute inset-0 bg-[rgba(1,10,20,0.2)]"></div>
         </div>
-        
+
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center relative z-10">
           <motion.div
             variants={staggerContainer as any}
@@ -351,7 +387,7 @@ const IndustriesPage = () => {
           >
             <motion.div variants={staggerContainer as any} className="space-y-6">
               <HeroAnimatedText text="Industries We Serve" />
-              <motion.div 
+              <motion.div
                 className="h-1 bg-[#010a14]"
                 initial={{ width: 0 }}
                 animate={animationsTriggered.hero ? { width: "100%" } : { width: 0 }}
@@ -359,21 +395,21 @@ const IndustriesPage = () => {
               />
             </motion.div>
 
-            <motion.p 
-              variants={paragraphVariants as any} 
+            <motion.p
+              variants={paragraphVariants as any}
               className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-white max-w-2xl md:max-w-3xl lg:max-w-4xl"
             >
               We deliver cutting-edge solutions across diverse industries, transforming businesses with innovative technology.
             </motion.p>
 
             <motion.div variants={paragraphVariants as any} className="flex items-center gap-4">
-              <motion.div 
-                className="w-12 h-12 bg-[#010a14] rounded-full flex items-center justify-center"
+              <motion.div
+                className="w-12 h-12 bg-gradient-to-r from-emerald-300 to-sky-400 rounded-full flex items-center justify-center"
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
               >
-                <span className="text-white font-bold text-xl">▶</span>
+                <span className="text-gray-900 font-bold text-xl">▶</span>
               </motion.div>
-              <motion.span 
+              <motion.span
                 className="text-sm text-white"
                 initial={{ opacity: 0, x: -20 }}
                 animate={animationsTriggered.hero ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
@@ -391,10 +427,10 @@ const IndustriesPage = () => {
             className="relative mt-8 md:-mt-12 lg:-mt-16 md:-ml-8"
           >
             {/* Placeholder for industries image */}
-            <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-[500px] lg:h-[500px] mx-auto bg-white rounded-full flex items-center justify-center">
-              <div className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-80 lg:h-80 bg-[#010a14] rounded-full flex items-center justify-center">
-                <motion.div 
-                  className="text-3xl sm:text-4xl md:text-6xl text-white font-bold flex items-center justify-center"
+            <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-[500px] lg:h-[500px] mx-auto bg-gradient-to-r from-emerald-300 to-sky-400 rounded-full flex items-center justify-center">
+              <div className="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-80 lg:h-80 bg-[#010a14] rounded-full flex items-center justify-center shadow-lg">
+                <motion.div
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white font-bold flex items-center justify-center"
                   initial={{ scale: 0, rotate: -180 }}
                   animate={animationsTriggered.hero ? { scale: 1, rotate: 0 } : { scale: 0, rotate: -180 }}
                   transition={{ delay: 0.5, duration: 1, type: "spring", stiffness: 100 }}
@@ -409,16 +445,16 @@ const IndustriesPage = () => {
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 3, repeat: Infinity }}
             >
-              <motion.div 
-                className="text-[#010a14] text-base sm:text-lg md:text-2xl font-bold"
+              <motion.div
+                className="text-gray-900 text-base sm:text-lg md:text-2xl font-bold"
                 initial={{ opacity: 0, scale: 0 }}
                 animate={animationsTriggered.hero ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
                 transition={{ delay: 1.2, duration: 0.5 }}
               >
                 15+
               </motion.div>
-              <motion.div 
-                className="text-[10px] sm:text-xs text-[#010a14]"
+              <motion.div
+                className="text-[10px] sm:text-xs text-gray-900"
                 initial={{ opacity: 0 }}
                 animate={animationsTriggered.hero ? { opacity: 1 } : { opacity: 0 }}
                 transition={{ delay: 1.4, duration: 0.5 }}
@@ -430,8 +466,182 @@ const IndustriesPage = () => {
         </div>
       </section>
 
-      {/* Fintech Section */}
-      <section ref={fintechRef} className="order-3 min-h-screen flex items-center bg-white text-[#010a14] px-6 pt-24 md:pt-0 relative scroll-mt-28">
+      {/* Federal Government Contractors Section */}
+      <section ref={educationRef} className="min-h-screen flex items-center bg-white text-[#010a14] px-4 md:px-6 pt-24 md:pt-0 relative z-10 scroll-mt-28">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <motion.div
+            variants={staggerContainer as any}
+            initial="hidden"
+            animate={animationsTriggered.education ? 'visible' : 'hidden'}
+            className="space-y-6 order-1 lg:order-2"
+          >
+            <motion.div variants={staggerContainer as any} className="space-y-6">
+              <AnimatedHeader
+                className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight"
+                inView={animationsTriggered.education}
+              >
+                FEDERAL GOVERNMENT
+                <br />
+                CONTRACTORS
+              </AnimatedHeader>
+              <motion.div
+                className="h-1 bg-gradient-to-r from-emerald-300 to-sky-400"
+                initial={{ width: 0 }}
+                animate={animationsTriggered.education ? { width: "100%" } : { width: 0 }}
+                transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+              />
+            </motion.div>
+
+            <motion.p
+              variants={paragraphVariants as any}
+              initial="hidden"
+              animate={animationsTriggered.education ? "visible" : "hidden"}
+              className="text-base md:text-lg text-[#010a14] max-w-2xl"
+            >
+              We specialize in delivering innovative digital solutions tailored specifically for federal and state government contractors.
+            </motion.p>
+
+            <AnimatedBulletPoints
+              points={[
+                "Delivering secure, compliant technology for federal and state agencies",
+                "Supporting digital modernization initiatives across public services",
+                "Improving efficiency with workflow automation and cloud infrastructure",
+                "Partnering with government contractors to meet mission-critical needs"
+              ]}
+              className="text-[#010a14] text-sm md:text-base"
+              bulletColor="bg-gradient-to-r from-emerald-300 to-sky-400"
+              inView={animationsTriggered.education}
+            />
+          </motion.div>
+
+          <motion.div
+            variants={slideInRight as any}
+            initial="hidden"
+            animate={animationsTriggered.education ? 'visible' : 'hidden'}
+            className="relative order-2 lg:order-1"
+          >
+            {/* Federal Government Lottie animation */}
+            <div className="relative w-96 h-96 sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] mx-auto">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={animationsTriggered.education ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+                transition={{ delay: 0.2, duration: 0.4, type: "spring", stiffness: 200 }}
+                className="w-full h-full"
+              >
+                {federalAnimationData && (
+                  <Lottie
+                    animationData={federalAnimationData}
+                    loop={true}
+                    autoplay={true}
+                    className="w-full h-full"
+                    style={{
+                      imageRendering: 'crisp-edges',
+                      backfaceVisibility: 'hidden',
+                      transform: 'translateZ(0)',
+                      willChange: 'transform'
+                    }}
+                  />
+                )}
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Retail Solutions Section */}
+      <section ref={ecommerceRef} className="min-h-screen flex items-center bg-[#010a14] text-white px-6 pt-24 md:pt-0 relative scroll-mt-28">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <motion.div
+            variants={slideInLeft as any}
+            initial="hidden"
+            animate={animationsTriggered.ecommerce ? 'visible' : 'hidden'}
+            className="relative order-2 lg:order-2"
+          >
+            {/* Retail Lottie animation */}
+            <div className="relative w-96 h-96 sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] mx-auto">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={animationsTriggered.ecommerce ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+                transition={{ delay: 0.2, duration: 0.4, type: "spring", stiffness: 200 }}
+                className="w-full h-full"
+              >
+                {retailAnimationData && (
+                  <Lottie
+                    animationData={retailAnimationData}
+                    loop={true}
+                    autoplay={true}
+                    className="w-full h-full"
+                    style={{
+                      imageRendering: 'crisp-edges',
+                      backfaceVisibility: 'hidden',
+                      transform: 'translateZ(0)',
+                      willChange: 'transform'
+                    }}
+                  />
+                )}
+              </motion.div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            variants={staggerContainer as any}
+            initial="hidden"
+            animate={animationsTriggered.ecommerce ? 'visible' : 'hidden'}
+            className="space-y-8 order-1 lg:order-1"
+          >
+            <motion.div variants={staggerContainer as any} className="space-y-6">
+              <AnimatedHeader
+                className="text-4xl lg:text-6xl font-bold leading-none"
+                inView={animationsTriggered.ecommerce}
+              >
+                RETAIL
+                <br />
+                SOLUTIONS
+              </AnimatedHeader>
+              <motion.div
+                className="h-1 bg-gradient-to-r from-cyan-500 to-blue-600"
+                initial={{ width: 0 }}
+                animate={animationsTriggered.ecommerce ? { width: "100%" } : { width: 0 }}
+                transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+              />
+            </motion.div>
+
+            <motion.p
+              variants={paragraphVariants as any}
+              initial="hidden"
+              animate={animationsTriggered.ecommerce ? "visible" : "hidden"}
+              className="text-lg text-white/90 max-w-md"
+            >
+              We specialize in comprehensive retail solutions that boost sales and elevate the customer experience.
+            </motion.p>
+
+            <AnimatedBulletPoints
+              points={[
+                "Driving omnichannel retail strategies for better customer experiences",
+                "Leveraging data analytics to optimize inventory and personalization",
+                "Enhancing e-commerce platforms with fast, responsive interfaces",
+                "Enabling supply chain visibility and operational efficiency"
+              ]}
+              className="text-white/80"
+              bulletColor="bg-gradient-to-r from-cyan-500 to-blue-600"
+              inView={animationsTriggered.ecommerce}
+            />
+
+            <motion.button
+              className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-8 py-3 rounded font-medium hover:from-cyan-600 hover:to-blue-700 transition-all duration-300"
+              initial={{ opacity: 0, y: 20, scale: 0.9 }}
+              animate={animationsTriggered.ecommerce ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.9 }}
+              transition={{ delay: 1.2, duration: 0.5, type: "spring", stiffness: 200 }}
+              onClick={() => router.push('/contact')}
+            >
+              Start project
+            </motion.button>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Banking & Financial Sector Section */}
+      <section ref={fintechRef} className="min-h-screen flex items-center bg-white text-[#010a14] px-6 pt-24 md:pt-0 relative scroll-mt-28">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
             variants={slideInLeft as any}
@@ -439,22 +649,29 @@ const IndustriesPage = () => {
             animate={animationsTriggered.fintech ? 'visible' : 'hidden'}
             className="relative order-2 lg:order-1"
           >
-            {/* Banking image */}
-            <div className="relative w-80 h-80 sm:w-96 sm:h-96 md:w-[500px] md:h-[500px] mx-auto">
-              <div className="absolute inset-0 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={animationsTriggered.fintech ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
-                  transition={{ delay: 0.5, duration: 0.8, type: "spring" }}
-                  className="w-full h-full"
-                >
-                  <img
-                    src="/assets/money.jpg"
-                    alt="Banking and Financial Services"
-                    className="w-full h-full object-cover object-[60%_center] rounded-lg"
+            {/* Banking Lottie animation */}
+            <div className="relative w-96 h-96 sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] mx-auto">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={animationsTriggered.fintech ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+                transition={{ delay: 0.2, duration: 0.4, type: "spring", stiffness: 200 }}
+                className="w-full h-full"
+              >
+                {animationData && (
+                  <Lottie
+                    animationData={animationData}
+                    loop={true}
+                    autoplay={true}
+                    className="w-full h-full"
+                    style={{
+                      imageRendering: 'crisp-edges',
+                      backfaceVisibility: 'hidden',
+                      transform: 'translateZ(0)',
+                      willChange: 'transform'
+                    }}
                   />
-                </motion.div>
-              </div>
+                )}
+              </motion.div>
             </div>
           </motion.div>
 
@@ -473,16 +690,16 @@ const IndustriesPage = () => {
                 <br />
                 FINANCIAL SECTOR
               </AnimatedHeader>
-              <motion.div 
-                className="h-1 bg-[#010a14]"
+              <motion.div
+                className="h-1 bg-gradient-to-r from-emerald-300 to-sky-400"
                 initial={{ width: 0 }}
                 animate={animationsTriggered.fintech ? { width: "100%" } : { width: 0 }}
                 transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
               />
             </motion.div>
 
-            <motion.p 
-              variants={paragraphVariants as any} 
+            <motion.p
+              variants={paragraphVariants as any}
               initial="hidden"
               animate={animationsTriggered.fintech ? "visible" : "hidden"}
               className="text-lg text-[#010a14] max-w-md"
@@ -498,15 +715,15 @@ const IndustriesPage = () => {
                 "Ensuring compliance and risk mitigation through robust security architectures"
               ]}
               className="text-[#010a14]"
-              bulletColor="bg-[#010a14]"
+              bulletColor="bg-gradient-to-r from-emerald-300 to-sky-400"
               inView={animationsTriggered.fintech}
             />
           </motion.div>
         </div>
       </section>
 
-      {/* Healthcare Section */}
-      <section ref={healthcareRef} className="order-4 pt-24 md:pt-28 pb-12 bg-[#010a14] text-white px-6 relative z-10 scroll-mt-28">
+      {/* Health Sector Section */}
+      <section ref={healthcareRef} className="pt-24 md:pt-28 pb-12 bg-[#010a14] text-white px-6 relative z-10 scroll-mt-28">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
             variants={staggerContainer as any}
@@ -521,23 +738,23 @@ const IndustriesPage = () => {
               >
                 HEALTH SECTOR
               </AnimatedHeader>
-              <motion.div 
-                className="h-1 bg-[#010a14]"
+              <motion.div
+                className="h-1 bg-gradient-to-r from-purple-500 to-pink-500"
                 initial={{ width: 0 }}
                 animate={animationsTriggered.healthcare ? { width: "100%" } : { width: 0 }}
                 transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
               />
             </motion.div>
-            
-            <motion.p 
-              variants={paragraphVariants as any} 
+
+            <motion.p
+              variants={paragraphVariants as any}
               initial="hidden"
               animate={animationsTriggered.healthcare ? "visible" : "hidden"}
               className="text-lg text-white/90 max-w-lg"
             >
               We specialize in digital health solutions that enhance patient care and streamline medical operations.
             </motion.p>
-            
+
             <motion.div variants={staggerContainer as any}>
               <AnimatedBulletPoints
                 points={[
@@ -547,207 +764,72 @@ const IndustriesPage = () => {
                   "Enhancing patient engagement via mobile apps and portals"
                 ]}
                 className="text-white/80"
-                bulletColor="bg-white"
+                bulletColor="bg-gradient-to-r from-purple-500 to-pink-500"
                 inView={animationsTriggered.healthcare}
               />
             </motion.div>
           </motion.div>
-          
+
           <motion.div
             variants={slideInRight as any}
             initial="hidden"
             animate={animationsTriggered.healthcare ? 'visible' : 'hidden'}
             className="relative order-2 lg:order-1"
           >
-            {/* Placeholder for healthcare image */}
-            <div className="relative w-80 h-80 sm:w-96 sm:h-96 md:w-[500px] md:h-[500px] mx-auto">
-              <div className="absolute inset-0 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={animationsTriggered.healthcare ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
-                  transition={{ delay: 0.5, duration: 0.8, type: "spring" }}
-                  className="w-full h-full"
-                >
-                  <img
-                    src="/assets/olga-guryanova-tMFeatBSS4s-unsplash.jpg"
-                    alt="Healthcare"
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                </motion.div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
 
-      {/* E-commerce Section */}
-      <section ref={ecommerceRef} className="order-2 min-h-screen flex items-center bg-[#010a14] text-white px-6 pt-24 md:pt-0 relative scroll-mt-28">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <motion.div
-            variants={slideInLeft as any}
-            initial="hidden"
-            animate={animationsTriggered.ecommerce ? 'visible' : 'hidden'}
-            className="relative order-2 lg:order-2"
-          >
-            {/* Placeholder for e-commerce mockup */}
+            {/* Healthcare Lottie animation */}
             <div className="relative w-80 h-80 sm:w-96 sm:h-96 md:w-[500px] md:h-[500px] mx-auto">
-              <div className="absolute inset-0 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={animationsTriggered.ecommerce ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
-                  transition={{ delay: 0.5, duration: 0.8, type: "spring" }}
-                  className="w-full h-full"
-                >
-                  <img
-                    src="/assets/pexels-pixabay-264502.jpg"
-                    alt="Retail Solutions"
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                </motion.div>
-              </div>
               <motion.div
-                className="absolute -top-4 -right-4 bg-[#010a14] text-white px-4 py-2 rounded-lg text-sm"
-                animate={animationsTriggered.ecommerce ? { x: [0, 10, 0], transition: { duration: 2, repeat: Infinity, repeatType: "reverse" } } : { x: 0 }}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={animationsTriggered.healthcare ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+                transition={{ delay: 0.5, duration: 0.8, type: "spring" }}
+                className="w-full h-full"
               >
-                <div className="text-white font-bold">SHOP</div>
+                {healthAnimationData && (
+                  <Lottie
+                    animationData={healthAnimationData}
+                    loop={true}
+                    autoplay={true}
+                    className="w-full h-full"
+                    style={{
+                      imageRendering: 'crisp-edges',
+                      backfaceVisibility: 'hidden',
+                      transform: 'translateZ(0)',
+                      willChange: 'transform'
+                    }}
+                  />
+                )}
               </motion.div>
             </div>
           </motion.div>
-          
-          <motion.div
-            variants={staggerContainer as any}
-            initial="hidden"
-            animate={animationsTriggered.ecommerce ? 'visible' : 'hidden'}
-            className="space-y-8 order-1 lg:order-1"
-          >
-            <motion.div variants={staggerContainer as any} className="space-y-6">
-              <AnimatedHeader
-                className="text-4xl lg:text-6xl font-bold leading-none"
-                inView={animationsTriggered.ecommerce}
-              >
-                RETAIL
-                <br />
-                SOLUTIONS
-              </AnimatedHeader>
-              <motion.div 
-                className="h-1 bg-[#010a14]"
-                initial={{ width: 0 }}
-                animate={animationsTriggered.ecommerce ? { width: "100%" } : { width: 0 }}
-                transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
-              />
-            </motion.div>
-            
-            <motion.p 
-              variants={paragraphVariants as any} 
-              initial="hidden"
-              animate={animationsTriggered.ecommerce ? "visible" : "hidden"}
-              className="text-lg text-white/90 max-w-md"
-            >
-              We specialize in comprehensive retail solutions that boost sales and elevate the customer experience.
-            </motion.p>
-            
-            <AnimatedBulletPoints
-              points={[
-                "Driving omnichannel retail strategies for better customer experiences",
-                "Leveraging data analytics to optimize inventory and personalization",
-                "Enhancing e-commerce platforms with fast, responsive interfaces",
-                "Enabling supply chain visibility and operational efficiency"
-              ]}
-              className="text-white/80"
-              bulletColor="bg-white"
-              inView={animationsTriggered.ecommerce}
-            />
-            
-            <motion.button
-              className="bg-white text-[#010a14] px-8 py-3 rounded font-medium"
-              initial={{ opacity: 0, y: 20, scale: 0.9 }}
-              animate={animationsTriggered.ecommerce ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.9 }}
-              transition={{ delay: 1.2, duration: 0.5, type: "spring", stiffness: 200 }}
-              onClick={() => router.push('/contact')}
-            >
-              Start project
-            </motion.button>
-          </motion.div>
         </div>
       </section>
 
-      {/* Education Section */}
-      <section ref={educationRef} className="order-1 min-h-screen flex items-center bg-white text-[#010a14] px-4 md:px-6 pt-24 md:pt-0 relative z-10 scroll-mt-28">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-          <motion.div
-            variants={staggerContainer as any}
-            initial="hidden"
-            animate={animationsTriggered.education ? 'visible' : 'hidden'}
-            className="space-y-6 order-1 lg:order-2"
+      {/* Call To Action Section */}
+      <section className="relative overflow-hidden py-24 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-center">
+        {/* Background image */}
+        <div
+          className="absolute inset-0 bg-center bg-cover opacity-70 pointer-events-none"
+          style={{ backgroundImage: "url('/assets/WebDev/buildwithus.png')" }}
+        />
+
+        {/* Content */}
+        <div className="relative z-10 container mx-auto px-6">
+          <h2 className="text-4xl lg:text-5xl font-bold mb-8">
+            Ready to revolutionize&nbsp;<span className="text-white">your sector?</span>
+          </h2>
+          <Link
+            href="/contact"
+            className="inline-block px-10 py-4 bg-white text-blue-700 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
           >
-            <motion.div variants={staggerContainer as any} className="space-y-6">
-              <AnimatedHeader
-                className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight"
-                inView={animationsTriggered.education}
-              >
-                FEDERAL GOVERNMENT
-                <br />
-                CONTRACTORS
-              </AnimatedHeader>
-              <motion.div 
-                className="h-1 bg-[#010a14]"
-                initial={{ width: 0 }}
-                animate={animationsTriggered.education ? { width: "100%" } : { width: 0 }}
-                transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
-              />
-            </motion.div>
-            
-            <motion.p 
-              variants={paragraphVariants as any} 
-              initial="hidden"
-              animate={animationsTriggered.education ? "visible" : "hidden"}
-              className="text-base md:text-lg text-[#010a14] max-w-2xl"
-            >
-              We specialize in delivering innovative digital solutions tailored specifically for federal and state government contractors.
-            </motion.p>
-            
-            <AnimatedBulletPoints
-              points={[
-                "Delivering secure, compliant technology for federal and state agencies",
-                "Supporting digital modernization initiatives across public services",
-                "Improving efficiency with workflow automation and cloud infrastructure",
-                "Partnering with government contractors to meet mission-critical needs"
-              ]}
-              className="text-[#010a14] text-sm md:text-base"
-              bulletColor="bg-[#010a14]"
-              inView={animationsTriggered.education}
-            />
-          </motion.div>
-          
-          <motion.div
-            variants={slideInRight as any}
-            initial="hidden"
-            animate={animationsTriggered.education ? 'visible' : 'hidden'}
-            className="relative order-2 lg:order-1"
-          >
-            {/* Placeholder for federal government image */}
-            <div className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-[350px] md:h-[350px] mx-auto">
-              <div className="absolute inset-0 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={animationsTriggered.education ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
-                  transition={{ delay: 0.5, duration: 0.8, type: "spring" }}
-                  className="w-full h-full flex items-center justify-center"
-                >
-                  <img
-                    src="/assets/federal-govt.webp"
-                    alt="Federal Government"
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                </motion.div>
-              </div>
-            </div>
-          </motion.div>
+            Get&nbsp;In&nbsp;Touch
+          </Link>
         </div>
       </section>
 
       {/* Footer is provided globally via RootLayout */}
     </div>
+
   );
 };
 
