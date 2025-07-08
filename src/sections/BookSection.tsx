@@ -228,7 +228,7 @@ export const BookSection = () => {
       className="min-h-screen py-0 sm:py-20 lg:py-28 bg-[#010a14] bg-center bg-no-repeat bg-cover book-tall-center"
       ref={sectionRef}
       style={{
-        backgroundImage: "url('/assets/Book/table.jpg')",
+        backgroundImage: "url('/assets/Book/table.png')",
       }}
     >
       <div className="container text-white">
