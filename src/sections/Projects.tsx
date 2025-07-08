@@ -5,7 +5,7 @@ import bytesTest6 from "../../public/portfolio/bytes-test-6.png";
 import Image from "next/image";
 import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg"
 import { SectionHeader } from "@/components/SectionHeader"
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 const portfolioProjects = [
   {
@@ -63,8 +63,29 @@ export const ProjectsSection = () => {
     }
   }, [index, slides]);
 
+  // Helper handlers for manual navigation
+  const nextSlide = useCallback(() => {
+    setIndex((prev) => prev + 1);
+  }, []);
+
+  const prevSlide = useCallback(() => {
+    if (index === 0) {
+      // Jump to last real slide then animate back
+      setWithTransition(false);
+      setIndex(slides.length - 2); // last real index
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => setWithTransition(true));
+      });
+    } else {
+      setIndex((prev) => prev - 1);
+    }
+  }, [index, slides]);
+
   return (
-    <section id="projects" className="pb-16 lg:py-24 items-center bg-[#010a14]">
+    <section
+      id="projects"
+      className="relative py-24 lg:py-32 items-center bg-[#010a14] bg-[url('/assets/portfolio_bg.jpg')] bg-cover bg-center bg-no-repeat"
+    >
       <div className="container text-white">
         <SectionHeader
           eyebrow="Real-world Results"
@@ -72,17 +93,59 @@ export const ProjectsSection = () => {
           description="See how we transformed concepts into engaging digital experience"
         />
 
-        <div className="mt-10 lg:mt-20 flex flex-col gap-10 lg:gap-16">
+        <div className="mt-8 lg:mt-12 flex flex-col gap-4 lg:gap-10">
           {/* Slider Row */}
-          <div className="w-full flex flex-row items-center justify-center overflow-hidden rounded-3xl shadow-lg">
+          {/* Use column layout on small screens, switch to row on md and above */}
+          <div className="relative w-full flex flex-col md:flex-row items-center justify-center overflow-hidden rounded-3xl shadow-lg">
+
+            {/* Prev Button */}
+            <button
+              aria-label="Previous slide"
+              onClick={prevSlide}
+              className="hidden sm:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-gray-900/40 hover:bg-gray-900/70 backdrop-blur rounded-full p-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-5 h-5 text-white"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M15.78 19.28a.75.75 0 0 1-1.06 0l-7-7a.75.75 0 0 1 0-1.06l7-7a.75.75 0 1 1 1.06 1.06L9.06 12l6.72 6.72a.75.75 0 0 1 0 1.06z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+
+            {/* Next Button */}
+            <button
+              aria-label="Next slide"
+              onClick={nextSlide}
+              className="hidden sm:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-gray-900/40 hover:bg-gray-900/70 backdrop-blur rounded-full p-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-5 h-5 text-white"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M8.22 4.72a.75.75 0 0 1 1.06 0l7 7a.75.75 0 0 1 0 1.06l-7 7a.75.75 0 1 1-1.06-1.06L14.94 12 8.22 5.28a.75.75 0 0 1 0-1.06z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+
             {/* Left Slider (Image) */}
-            <div className="w-3/5 overflow-hidden">
+            <div className="w-full md:w-3/5 overflow-hidden">
               <div
                 className="flex transition-transform duration-700 ease-in-out"
                 style={{ transform: `translateX(-${index * 100}%)`, transitionProperty: withTransition ? 'transform' : 'none' }}
               >
                 {slides.map((item, idx) => (
-                  <div key={idx} className="min-w-full pl-6">
+                  <div key={idx} className="min-w-full pl-0 md:pl-6">
                     <Image
                       src={item.img}
                       alt={item.title}
@@ -94,13 +157,13 @@ export const ProjectsSection = () => {
             </div>
 
             {/* Right Slider (Text) */}
-            <div className="w-2/5 overflow-hidden">
+            <div className="w-full md:w-2/5 overflow-hidden mt-4 md:mt-0">
               <div
                 className="flex transition-transform duration-700 ease-in-out"
                 style={{ transform: `translateX(-${index * 100}%)`, transitionProperty: withTransition ? 'transform' : 'none' }}
               >
                 {slides.map((item, idx) => (
-                  <div key={idx} className="min-w-full flex flex-col items-center lg:items-start justify-center p-6 lg:p-12 space-y-6">
+                  <div key={idx} className="min-w-full flex flex-col items-center lg:items-start justify-center p-4 md:p-6 lg:p-12 space-y-4 md:space-y-6">
                     <h3 className="text-3xl lg:text-5xl font-bold text-white text-center lg:text-left">
                       {item.title}
                     </h3>
