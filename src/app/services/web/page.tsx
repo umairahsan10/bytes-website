@@ -6,6 +6,7 @@ import { Header } from "@/sections/Navbar";
 import Link from "next/link";
 import SimplifiedMERNOrbital from "@/components/SimplifiedMERNOrbital";
 import AnimatedBeam from "@/components/AnimatedBeam";
+import FAQ from "@/components/FAQ";
 // @ts-ignore – lucide-react icons (ensure dependency installed in runtime)
 import { ChevronDown, Menu, X, Code, Zap, Users, Award, ArrowRight, Star, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Play, Smartphone, Monitor, Database, Cloud, Globe, Layers, BarChart, TrendingUp, LayoutDashboard, CreditCard, Plug, ShoppingCart } from 'lucide-react';
 
@@ -700,6 +701,9 @@ const WebDevelopmentLanding = () => {
           </div>
         </div>
       </section >
+
+      {/* FAQ Section */}
+      <FAQ />
 
       {/* Call To Action Section */}
       < section className="relative overflow-hidden py-24 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-center" >

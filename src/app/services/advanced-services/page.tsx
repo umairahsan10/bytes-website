@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Header } from '../../../sections/Navbar';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import FAQ from '@/components/FAQ-Advanced';
 
 // Types for external libraries
 declare global {
@@ -255,6 +256,11 @@ const AdvancedServicesPage: React.FC = () => {
             </motion.div>
           </div>
         </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="w-full flex flex-col items-center justify-center py-0">
+        <FAQ />
       </section>
 
       {/* Call to Action Section */}

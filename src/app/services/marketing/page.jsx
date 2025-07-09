@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Header } from '@/sections/Navbar';
+import FAQ from '@/components/FAQ-Marketing';
 
 const MarketingPage = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -374,6 +375,11 @@ const MarketingPage = () => {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="w-full flex flex-col items-center justify-center py-0">
+        <FAQ />
       </section>
 
       {/* Scroll Indicator */}
