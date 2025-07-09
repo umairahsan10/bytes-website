@@ -6,6 +6,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Header } from "@/sections/Navbar";
 import * as THREE from 'three';
+import FAQ from "@/components/FAQ-ByteSuite";
 import { useRouter } from 'next/navigation';
 
 
@@ -70,6 +71,8 @@ const ByteSuitePage: React.FC = () => {
         'Unified Inbox',
         'Calendar & Reminders',
         'Team Collaboration',
+        'End-to-End Encryption',
+        'Mobile Push Notifications',
       ],
     },
     {
@@ -92,6 +95,7 @@ const ByteSuitePage: React.FC = () => {
         'Branded Invoicing',
         'Appointment Scheduler',
         'Inventory Tracking',
+        'Accounting',
       ],
     },
   ] as const;
@@ -610,11 +614,12 @@ const ByteSuitePage: React.FC = () => {
                   >
                     <motion.span
                       className="absolute inset-0 bg-white/20"
+                      data-cta="true"
                       initial={{ x: "-100%" }}
                       whileHover={{ x: "100%" }}
                       transition={{ duration: 0.3 }}
                     />
-                    <span className="relative z-10">Book a free byte-suites demo</span>
+                    <span className="relative z-10">Book a free byte-suites consultation</span>
                   </motion.button>
                 </motion.div>
               </motion.div>
@@ -1344,6 +1349,7 @@ const ByteSuitePage: React.FC = () => {
           </div>
         </motion.section>
 
+
         {/* CTA Section */}
         <motion.section
           initial="hidden"
@@ -1364,13 +1370,14 @@ const ByteSuitePage: React.FC = () => {
             </motion.h2>
 
             <motion.p variants={fadeInUp} className="text-xl max-w-2xl mx-auto mt-6" style={{ color: PRIMARY_COLOR }}>
-              Join 10,000+ businesses already growing with ByteSuite CRM
+              Join 100+ businesses already growing with ByteSuite CRM
             </motion.p>
 
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-6 justify-center mt-8">
               <motion.button 
                 whileHover={{ scale: 1.05, backgroundColor: PRIMARY_COLOR, boxShadow: '0 20px 60px rgba(1, 10, 20, 0.4)' }} 
                 whileTap={{ scale: 0.95 }} 
+                data-cta="true"
                 onClick={() => router.push('/contact')}
                 className="px-8 py-3 font-black tracking-wide text-lg"
                 style={{ 
@@ -1378,7 +1385,7 @@ const ByteSuitePage: React.FC = () => {
                   color: SECONDARY_COLOR
                 }}
               >
-                Book a free byte-suites demo
+                Book a free byte-suites introduction
               </motion.button>
             </motion.div>
 
@@ -1527,8 +1534,16 @@ const ByteSuitePage: React.FC = () => {
                 style={{ color: SECONDARY_COLOR }}
                   variants={fadeInUp}
                 >
-                <p className="text-lg">Enterprise Contact: enterprise@bytesuite.com</p>
-                <p className="text-lg">Schedule ERP Consultation</p>
+                <p className="text-lg">Enterprise Contact: info@bytesplatform.com</p>
+                <motion.button
+                  onClick={() => router.push('/contact')}
+                  data-cta="true"
+                  className="px-8 py-3 bg-white text-[#010a14] font-semibold rounded-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg mt-2"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Schedule ERP Consultation
+                </motion.button>
               </motion.div>
             </motion.div>
           </div>
@@ -1557,13 +1572,22 @@ const ByteSuitePage: React.FC = () => {
             Enterprise-grade security | 99.9% uptime | GDPR compliant
           </p>
           <p className="text-sm mb-8" style={{ color: PRIMARY_COLOR }}>
-            Contact: hello@bytesuite.com | 1-800-BYTESUITE
+            Contact: info@bytesplatform.com | 833-323-0371 (Toll Free)
           </p>
-          <p className="text-sm" style={{ color: PRIMARY_COLOR }}>
-            Support: 24/7 live chat | help.bytesuite.com
-          </p>
+          <motion.button
+            onClick={() => router.push('/contact')}
+            data-cta="true"
+            className="px-8 py-3 bg-[#010a14] text-white font-semibold rounded-lg hover:bg-[#010a14]/90 transition-all duration-300 transform hover:scale-105 shadow-lg mb-6"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Schedule CRM Consultation
+          </motion.button>
         </div>
       </motion.footer>
+
+      {/* FAQ Section */}
+      <FAQ />
 
       <style jsx>{`
         .animate-float {
