@@ -184,8 +184,8 @@ function TextLine() {
   }, [letterCurves])
 
   const fullGeometries = useMemo(() => {
-    const purple     = new THREE.Color('#8b5cf6')      // purple-500
-    const pink       = new THREE.Color('#ec4899')      // pink-500
+    const purple     = new THREE.Color('#F6C324')     
+    const pink       = new THREE.Color('#F6C324')    
 
     return letterCurves.map(curve => {
       // High segment count for smooth reveal
@@ -344,7 +344,7 @@ function TextLine() {
             visible={false}
           >
             <sphereGeometry args={[tubeRadius * 1.5, 16, 16]} />
-            <meshBasicMaterial color="#ec4899" transparent opacity={0.85} />
+            <meshBasicMaterial color="#F6C324" transparent opacity={0.85} />
           </mesh>
         </React.Fragment>
       ))}

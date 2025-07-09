@@ -33,10 +33,11 @@ export default function TextFlip() {
       <style jsx>{`
         .text-flip-container {
           display: flex;
-          gap: 1rem;
+          flex-direction: column; /* Stack static and animated words vertically */
+          gap: 0.25rem; /* Reduce gap between the two lines */
           font-size: 2rem;
           font-weight: 600;
-          align-items: center;
+          align-items: center; /* Center align items horizontally */
         }
         
         .text-flip-static {
@@ -47,8 +48,8 @@ export default function TextFlip() {
           display: flex;
           flex-direction: column;
           overflow: hidden;
-          color: #60a5fa;
-          text-align: left;
+          color: #F6C324;
+          text-align: center; /* Center animated words */
         }
         
         .text-flip-word {
@@ -82,7 +83,7 @@ export default function TextFlip() {
         @media (max-width: 768px) {
           .text-flip-container {
             font-size: 1rem;
-            gap: 0.5rem;
+            gap: 0.25rem;
           }
           //for text flip words adjustments
           .text-flip-words {
@@ -94,7 +95,7 @@ export default function TextFlip() {
         @media (max-width: 480px) {
           .text-flip-container {
             font-size: 0.9rem;
-            gap: 0.25rem;
+            gap: 0.2rem;
           }
           
           .text-flip-words {

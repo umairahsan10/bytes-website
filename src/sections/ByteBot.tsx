@@ -236,7 +236,6 @@ const ByteBotsSection = () => {
               willChange: "opacity, transform",
             }}
           >
-            The Power of Artificial Intelligence
           </p>
         </div>
       </div>
