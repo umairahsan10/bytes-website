@@ -14,21 +14,25 @@ const FAQ: React.FC = () => {
   const faqItems: FAQItem[] = [
     {
       id: 'web-development-process',
-      question: 'What are advanced services, and who are they for?',
-      answer:'Our advanced services include cutting-edge technologies like AI, machine learning, and blockchain, aimed at businesses looking to innovate and stay ahead of the competition.' },
+      question: 'How does Bytebots work?',
+      answer: 'Bytebots uses AI and machine learning algorithms to automate tasks such as data entry, customer service, and process management, allowing your team to focus on higher-value activities.'
+    },
     {
       id: 'timeline',
-      question: 'How do you integrate AI into my business processes?',
-      answer: 'We can implement AI solutions to automate tasks, enhance decision-making, and improve customer experiences, tailored to your specific industry.'},
+      question: 'Is Bytebots customizable to my business needs?',
+      answer: 'Yes! Bytebots can be tailored to your specific requirements. Whether you need automation for customer support, sales, or internal processes, we offer customized solutions.'
+    },
     {
       id: 'cost',
-      question: 'Can I get custom solutions in advanced services?',
-      answer: 'Yes! We offer fully customized solutions based on your business needs, from software development to process automation.'},
+      question: 'Is Bytebots easy to integrate with existing systems?',
+      answer: 'Absolutely! Bytebots is designed to integrate seamlessly with most existing business software, including CRM systems, ERP platforms, and communication tools.'
+    },
     {
       id: 'technologies',
-      question: 'What industries benefit from advanced services?',
-      answer:'Industries like healthcare, finance, retail, and logistics can benefit greatly from advanced services like automation, AI, and data analytics.'},
-    
+      question: 'How do I get started with Bytebots?',
+      answer: 'Getting started is easy! Simply reach out to our sales team for a consultation, and we will guide you through the onboarding process, including setup and customization.'
+    },
+
   ];
 
   const toggleExpanded = (id: string) => {
@@ -93,10 +97,9 @@ const FAQ: React.FC = () => {
                       )}
                     </div>
                   </button>
-                  <div 
-                    className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                      isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                    }`}
+                  <div
+                    className={`transition-all duration-300 ease-in-out overflow-hidden ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                      }`}
                   >
                     <div className="px-6 pb-4 border-t border-white/20">
                       <p className="text-gray-200 leading-relaxed pt-4">

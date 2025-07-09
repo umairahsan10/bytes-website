@@ -14,33 +14,23 @@ const FAQ: React.FC = () => {
   const faqItems: FAQItem[] = [
     {
       id: 'web-development-process',
-      question: 'What is your web development process?',
-      answer: 'Our web development process follows a proven methodology: Discovery & Planning, Design & Prototyping, Development & Testing, Deployment & Launch, and Ongoing Support. We work closely with you at every stage to ensure your vision becomes reality.'
+      question: 'Why is web development important for my business?',
+      answer: 'It is crucial for any business to have a professional, responsive, and user-friendly website to engage customers and improve online visibility.'
     },
     {
       id: 'timeline',
-      question: 'How long does web development take?',
-      answer: 'Project timelines vary based on complexity. Simple websites take 2-4 weeks, e-commerce sites 6-12 weeks, and complex web applications 3-6 months. We provide detailed timelines during the planning phase and keep you updated throughout development.'
+      question: 'How long does it take to build a website?',
+      answer: 'The timeline depends on the complexity and features of the website. A standard website might take less than a week, while more complex projects could take longer.'
     },
     {
       id: 'cost',
-      question: 'How much does web development cost?',
-      answer: 'Our pricing is transparent and project-based. Simple websites start at $2,000, e-commerce sites from $5,000, and custom web applications from $15,000. We provide detailed quotes after understanding your specific requirements and goals.'
+      question: 'What types of websites can you create?',
+      answer: 'We create various types of websites, including business sites, e-commerce stores, blogs, portfolios, and more, tailored to your specific needs. We also create websites using platforms like WordPress, Shopify, and full-stack development, depending on your requirements.'
     },
     {
       id: 'technologies',
-      question: 'What technologies do you use?',
-      answer: 'We use modern, scalable technologies including React, Next.js, Node.js, Python, PHP, and various databases. For e-commerce, we specialize in Shopify and WooCommerce. We choose the best tech stack based on your project requirements and scalability needs.'
-    },
-    {
-      id: 'maintenance',
-      question: 'Do you provide ongoing maintenance?',
-      answer: 'Yes, we offer comprehensive maintenance packages including security updates, performance optimization, content updates, and technical support. We recommend ongoing maintenance to keep your website secure, fast, and up-to-date.'
-    },
-    {
-      id: 'seo-included',
-      question: 'Is SEO included in web development?',
-      answer: 'Yes, we build SEO-friendly websites from the ground up. This includes proper meta tags, structured data, fast loading times, mobile optimization, and clean code structure. We also offer additional SEO services for ongoing optimization.'
+      question: 'Will my website be mobile-friendly?',
+      answer: 'Absolutely! All of our websites are designed to be responsive, ensuring they work smoothly across all devices, including smartphones and tablets.'
     }
   ];
 
