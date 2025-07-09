@@ -27,9 +27,9 @@ const SEOGraphAnimation: React.FC = () => {
     // Animate graph bars first
     const bars = graphRef.current.querySelectorAll('.graph-bar');
     gsap.fromTo(bars,
-      { 
+      {
         scaleY: 0,
-        opacity: 0 
+        opacity: 0
       },
       {
         scaleY: 1,
@@ -71,7 +71,7 @@ const SEOGraphAnimation: React.FC = () => {
     //       const progress = self.progress;
     //       const translateX = progress * 800; // Move across full screen width
     //       const translateY = -progress * 350; // Move from bottom to top
-          
+
     //       line.style.transform = `translate(${translateX}px, ${translateY}px)`;
     //     }
     //   });
@@ -94,7 +94,7 @@ const SEOGraphAnimation: React.FC = () => {
         {/* Grid lines */}
         <defs>
           <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
-            <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#e5e7eb" strokeWidth="1" opacity="0.3"/>
+            <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#e5e7eb" strokeWidth="1" opacity="0.3" />
           </pattern>
           {/* Gradient for the line */}
           <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -103,9 +103,9 @@ const SEOGraphAnimation: React.FC = () => {
             <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.8" />
           </linearGradient>
         </defs>
-        
+
         <rect width="100%" height="100%" fill="url(#grid)" />
-        
+
         {/* Graph bars (competition) */}
         <rect className="graph-bar" x="50" y="300" width="40" height="80" fill="#f3f4f6" opacity="0.8" />
         <rect className="graph-bar" x="120" y="280" width="40" height="100" fill="#f3f4f6" opacity="0.8" />
@@ -114,7 +114,7 @@ const SEOGraphAnimation: React.FC = () => {
         <rect className="graph-bar" x="330" y="310" width="40" height="70" fill="#f3f4f6" opacity="0.8" />
         <rect className="graph-bar" x="400" y="270" width="40" height="110" fill="#f3f4f6" opacity="0.8" />
         <rect className="graph-bar" x="470" y="300" width="40" height="80" fill="#f3f4f6" opacity="0.8" />
-        
+
         {/* Growth line with gradient */}
         {/* <path
           ref={lineRef}
@@ -163,7 +163,7 @@ const SEOPage: React.FC = () => {
   useEffect(() => {
     // GSAP animations for text reveals
     const tl = gsap.timeline();
-    
+
     tl.from(".hero-title", {
       duration: 1.2,
       y: 100,
@@ -171,12 +171,12 @@ const SEOPage: React.FC = () => {
       ease: "power3.out",
       delay: 0.5
     })
-    .from(".hero-subtitle", {
-      duration: 1,
-      y: 50,
-      opacity: 0,
-      ease: "power2.out"
-    }, "-=0.5");
+      .from(".hero-subtitle", {
+        duration: 1,
+        y: 50,
+        opacity: 0,
+        ease: "power2.out"
+      }, "-=0.5");
 
     // Parallax effect for background elements
     // gsap.to(".floating-element", {
@@ -363,7 +363,7 @@ const SEOPage: React.FC = () => {
     {
       title: "Industry-Specific Keyword Research",
       description:
-        "Deep, data-driven keyword analysis tailored to your niche and buyer intent.",
+        "Local SEO to dominate your city or region, and National & global SEO strategies to scale your reach.",
       features: [
         "Competitor & SERP analysis",
         "High-value, long-tail terms",
@@ -371,7 +371,7 @@ const SEOPage: React.FC = () => {
       ],
     },
     {
-      title: "Technical SEO & Performance Cleanup",
+      title: "Technical SEO Audits & Performance Cleanup",
       description:
         "Eliminate crawl errors, boost Core Web Vitals and unlock site speed for higher rankings.",
       features: [
@@ -381,9 +381,9 @@ const SEOPage: React.FC = () => {
       ],
     },
     {
-      title: "On-Page & Off-Page Strategy",
+      title: "On-Page SEO & Off-Page SEO Strategies",
       description:
-        "From conversion-optimised meta copy to authoritative backlinks – we cover it all.",
+        "Conversion-optimized meta titles and descriptions that drive clicks",
       features: [
         "Content planning & optimisation",
         "Authority-building backlinks",
@@ -439,7 +439,7 @@ const SEOPage: React.FC = () => {
     },
     {
       title: "Ongoing SEO Management",
-      subtitle: "And Content Support",
+      subtitle: "Content Support & Backlink Building",
       description: [
         "Continuous SEO strategy optimization",
         "Regular content updates and maintenance",
@@ -477,77 +477,77 @@ const SEOPage: React.FC = () => {
           {/* Floating geometric shapes */}
           <motion.div
             className="absolute top-20 left-20 w-32 h-32 border border-[#010a14]/10 rotate-45"
-            animate={{ 
+            animate={{
               y: [0, -30, 0],
               rotate: [45, 50, 45],
               opacity: [0.1, 0.2, 0.1]
             }}
-            transition={{ 
-              duration: 8, 
-              repeat: Infinity, 
-              ease: "easeInOut" 
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut"
             }}
           />
           <motion.div
             className="absolute bottom-40 right-20 w-24 h-24 border border-[#010a14]/15 rounded-full"
-            animate={{ 
+            animate={{
               y: [0, 20, 0],
               scale: [1, 1.1, 1],
               opacity: [0.1, 0.15, 0.1]
             }}
-            transition={{ 
-              duration: 6, 
-              repeat: Infinity, 
+            transition={{
+              duration: 6,
+              repeat: Infinity,
               ease: "easeInOut",
               delay: 2
             }}
           />
           <motion.div
             className="absolute top-1/3 right-1/4 w-16 h-16 border border-[#010a14]/8 rotate-12"
-            animate={{ 
+            animate={{
               x: [0, 15, 0],
               rotate: [12, 15, 12],
               opacity: [0.08, 0.12, 0.08]
             }}
-            transition={{ 
-              duration: 7, 
-              repeat: Infinity, 
+            transition={{
+              duration: 7,
+              repeat: Infinity,
               ease: "easeInOut",
               delay: 1
             }}
           />
-          
+
           {/* Additional floating elements */}
           <motion.div
             className="absolute top-1/4 right-1/6 w-8 h-8 border border-[#010a14]/12 rounded-full"
-            animate={{ 
+            animate={{
               y: [0, -15, 0],
               x: [0, 10, 0],
               scale: [1, 1.2, 1],
               opacity: [0.08, 0.15, 0.08]
             }}
-            transition={{ 
-              duration: 5, 
-              repeat: Infinity, 
+            transition={{
+              duration: 5,
+              repeat: Infinity,
               ease: "easeInOut",
               delay: 0.5
             }}
           />
           <motion.div
             className="absolute bottom-1/3 left-1/6 w-12 h-12 border border-[#010a14]/10 rotate-30"
-            animate={{ 
+            animate={{
               y: [0, 25, 0],
               rotate: [30, 35, 30],
               opacity: [0.06, 0.12, 0.06]
             }}
-            transition={{ 
-              duration: 9, 
-              repeat: Infinity, 
+            transition={{
+              duration: 9,
+              repeat: Infinity,
               ease: "easeInOut",
               delay: 3
             }}
           />
-          
+
           {/* Subtle grid pattern */}
           <div className="absolute inset-0 opacity-5">
             <div className="w-full h-full" style={{
@@ -558,22 +558,22 @@ const SEOPage: React.FC = () => {
               backgroundSize: '50px 50px'
             }} />
           </div>
-          
+
           {/* Animated gradient overlay */}
           <motion.div
             className="absolute inset-0 bg-gradient-to-br from-transparent via-[#010a14]/5 to-transparent"
-            animate={{ 
+            animate={{
               opacity: [0.05, 0.1, 0.05],
               scale: [1, 1.1, 1]
             }}
-            transition={{ 
-              duration: 10, 
-              repeat: Infinity, 
-              ease: "easeInOut" 
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut"
             }}
           />
         </div>
-        
+
         {/* 4:3 Landscape Bar Graph Container */}
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-6xl">
           <div className="relative w-full" style={{ aspectRatio: '4/3' }}>
@@ -590,20 +590,20 @@ const SEOPage: React.FC = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/20 via-[#010a14]/15 to-[#010a14]/5" />
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-t from-[#010a14]/30 to-transparent"
-                    animate={{ 
+                    animate={{
                       y: [0, -20, 0],
                       opacity: [0.3, 0.6, 0.3]
                     }}
-                    transition={{ 
-                      duration: 3, 
-                      repeat: Infinity, 
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
                       ease: "easeInOut",
                       delay: 0.2
                     }}
                   />
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                 </motion.div>
-                
+
                 {/* Bar 2 */}
                 <motion.div
                   className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
@@ -614,20 +614,20 @@ const SEOPage: React.FC = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/25 via-[#010a14]/20 to-[#010a14]/10" />
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-t from-[#010a14]/35 to-transparent"
-                    animate={{ 
+                    animate={{
                       y: [0, -25, 0],
                       opacity: [0.4, 0.7, 0.4]
                     }}
-                    transition={{ 
-                      duration: 3.2, 
-                      repeat: Infinity, 
+                    transition={{
+                      duration: 3.2,
+                      repeat: Infinity,
                       ease: "easeInOut",
                       delay: 0.4
                     }}
                   />
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/25 to-transparent" />
                 </motion.div>
-                
+
                 {/* Bar 3 */}
                 <motion.div
                   className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
@@ -638,20 +638,20 @@ const SEOPage: React.FC = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/30 via-[#010a14]/25 to-[#010a14]/15" />
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-t from-[#010a14]/40 to-transparent"
-                    animate={{ 
+                    animate={{
                       y: [0, -30, 0],
                       opacity: [0.5, 0.8, 0.5]
                     }}
-                    transition={{ 
-                      duration: 3.4, 
-                      repeat: Infinity, 
+                    transition={{
+                      duration: 3.4,
+                      repeat: Infinity,
                       ease: "easeInOut",
                       delay: 0.6
                     }}
                   />
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
                 </motion.div>
-                
+
                 {/* Bar 4 */}
                 <motion.div
                   className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
@@ -662,20 +662,20 @@ const SEOPage: React.FC = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/35 via-[#010a14]/30 to-[#010a14]/20" />
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-t from-[#010a14]/45 to-transparent"
-                    animate={{ 
+                    animate={{
                       y: [0, -35, 0],
                       opacity: [0.6, 0.9, 0.6]
                     }}
-                    transition={{ 
-                      duration: 3.6, 
-                      repeat: Infinity, 
+                    transition={{
+                      duration: 3.6,
+                      repeat: Infinity,
                       ease: "easeInOut",
                       delay: 0.8
                     }}
                   />
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/35 to-transparent" />
                 </motion.div>
-                
+
                 {/* Bar 5 */}
                 <motion.div
                   className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
@@ -686,20 +686,20 @@ const SEOPage: React.FC = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/40 via-[#010a14]/35 to-[#010a14]/25" />
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-t from-[#010a14]/50 to-transparent"
-                    animate={{ 
+                    animate={{
                       y: [0, -40, 0],
                       opacity: [0.7, 1, 0.7]
                     }}
-                    transition={{ 
-                      duration: 3.8, 
-                      repeat: Infinity, 
+                    transition={{
+                      duration: 3.8,
+                      repeat: Infinity,
                       ease: "easeInOut",
                       delay: 1
                     }}
                   />
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent" />
                 </motion.div>
-                
+
                 {/* Bar 6 */}
                 <motion.div
                   className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
@@ -710,20 +710,20 @@ const SEOPage: React.FC = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/45 via-[#010a14]/40 to-[#010a14]/30" />
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-t from-[#010a14]/55 to-transparent"
-                    animate={{ 
+                    animate={{
                       y: [0, -35, 0],
                       opacity: [0.8, 1, 0.8]
                     }}
-                    transition={{ 
-                      duration: 4, 
-                      repeat: Infinity, 
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
                       ease: "easeInOut",
                       delay: 1.2
                     }}
                   />
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/45 to-transparent" />
                 </motion.div>
-                
+
                 {/* Bar 7 */}
                 <motion.div
                   className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
@@ -734,20 +734,20 @@ const SEOPage: React.FC = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/50 via-[#010a14]/45 to-[#010a14]/35" />
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-t from-[#010a14]/60 to-transparent"
-                    animate={{ 
+                    animate={{
                       y: [0, -45, 0],
                       opacity: [0.9, 1, 0.9]
                     }}
-                    transition={{ 
-                      duration: 4.2, 
-                      repeat: Infinity, 
+                    transition={{
+                      duration: 4.2,
+                      repeat: Infinity,
                       ease: "easeInOut",
                       delay: 1.4
                     }}
                   />
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent" />
                 </motion.div>
-                
+
                 {/* Bar 8 */}
                 <motion.div
                   className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
@@ -758,20 +758,20 @@ const SEOPage: React.FC = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/55 via-[#010a14]/50 to-[#010a14]/40" />
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-t from-[#010a14]/65 to-transparent"
-                    animate={{ 
+                    animate={{
                       y: [0, -40, 0],
                       opacity: [1, 1, 1]
                     }}
-                    transition={{ 
-                      duration: 4.4, 
-                      repeat: Infinity, 
+                    transition={{
+                      duration: 4.4,
+                      repeat: Infinity,
                       ease: "easeInOut",
                       delay: 1.6
                     }}
                   />
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/55 to-transparent" />
                 </motion.div>
-                
+
                 {/* Bar 9 */}
                 <motion.div
                   className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
@@ -782,20 +782,20 @@ const SEOPage: React.FC = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/60 via-[#010a14]/55 to-[#010a14]/45" />
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-t from-[#010a14]/70 to-transparent"
-                    animate={{ 
+                    animate={{
                       y: [0, -50, 0],
                       opacity: [1, 1, 1]
                     }}
-                    transition={{ 
-                      duration: 4.6, 
-                      repeat: Infinity, 
+                    transition={{
+                      duration: 4.6,
+                      repeat: Infinity,
                       ease: "easeInOut",
                       delay: 1.8
                     }}
                   />
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/60 to-transparent" />
                 </motion.div>
-                
+
                 {/* Bar 10 - Tallest */}
                 <motion.div
                   className="relative flex-1 rounded-t-sm sm:rounded-t-md md:rounded-t-lg overflow-hidden"
@@ -806,90 +806,90 @@ const SEOPage: React.FC = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#010a14]/65 via-[#010a14]/60 to-[#010a14]/50" />
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-t from-[#010a14]/75 to-transparent"
-                    animate={{ 
+                    animate={{
                       y: [0, -55, 0],
                       opacity: [1, 1, 1]
                     }}
-                    transition={{ 
-                      duration: 5, 
-                      repeat: Infinity, 
+                    transition={{
+                      duration: 5,
+                      repeat: Infinity,
                       ease: "easeInOut",
                       delay: 2
                     }}
                   />
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/65 to-transparent" />
-                              </motion.div>
-            </div>
+                </motion.div>
+              </div>
 
-            {/* Animated Line and Moving Arrowhead Overlay */}
-            <svg
-              width="100%"
-              height="100%"
-              viewBox="0 0 900 400"
-              className="w-full h-full absolute inset-0 pointer-events-none"
-              preserveAspectRatio="xMidYMid meet"
-            >
-              {/* Path for the animated line (flows above bars) */}
-              <motion.path
-                id="hero-curve"
-                d="M 50 380 Q 150 260 300 300 Q 450 340 600 240 Q 750 140 850 140"
-                stroke="#010a14"
-                strokeWidth="7"
-                strokeOpacity={0.3}
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: 1 }}
-                transition={{ duration: 1.5, delay: 2.2, ease: 'easeInOut' }}
-              />
-              {/* Animated arrowhead at the start, moving along the path */}
-              <motion.circle
-                r="16"
-                fill="#010a14"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 2.2 }}
-                style={{ originX: '50%', originY: '50%' }}
+              {/* Animated Line and Moving Arrowhead Overlay */}
+              <svg
+                width="100%"
+                height="100%"
+                viewBox="0 0 900 400"
+                className="w-full h-full absolute inset-0 pointer-events-none"
+                preserveAspectRatio="xMidYMid meet"
               >
-                <animateMotion
-                  dur="1.5s"
-                  begin="2.2s"
-                  fill="freeze"
-                  keyPoints="0;1"
-                  keyTimes="0;1"
-                  calcMode="linear"
-                  repeatCount="1"
-                  path="M 50 380 Q 150 260 300 300 Q 450 340 600 240 Q 750 140 850 140"
+                {/* Path for the animated line (flows above bars) */}
+                <motion.path
+                  id="hero-curve"
+                  d="M 50 380 Q 150 260 300 300 Q 450 340 600 240 Q 750 140 850 140"
+                  stroke="#010a14"
+                  strokeWidth="7"
+                  strokeOpacity={0.3}
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 1.5, delay: 2.2, ease: 'easeInOut' }}
                 />
-              </motion.circle>
-              {/* Glowing points at bar tops */}
-              {[
-                {x:50, y:380},    // Start
-                {x:140, y:310},  // Q1
-                {x:230, y:291},   // Q2
-                {x:318, y:304},  // Q3
-                {x:404, y:312},  // Q4
-                {x:495, y:292},   // Q5
-                {x:581, y:252},   // Q6
-                {x:670, y:197},   // Q7
-                {x:760, y:157},   // Q8
-                {x:850, y:140}     // End
-              ].map((pt, i) => (
+                {/* Animated arrowhead at the start, moving along the path */}
                 <motion.circle
-                  key={i}
-                  cx={pt.x} 
-                  cy={pt.y}
-                  r="8"
+                  r="16"
                   fill="#010a14"
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1.1 }}
-                  transition={{ delay: 2.2 + i * 0.18 }}
-                />
-              ))}
-            </svg>
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 2.2 }}
+                  style={{ originX: '50%', originY: '50%' }}
+                >
+                  <animateMotion
+                    dur="1.5s"
+                    begin="2.2s"
+                    fill="freeze"
+                    keyPoints="0;1"
+                    keyTimes="0;1"
+                    calcMode="linear"
+                    repeatCount="1"
+                    path="M 50 380 Q 150 260 300 300 Q 450 340 600 240 Q 750 140 850 140"
+                  />
+                </motion.circle>
+                {/* Glowing points at bar tops */}
+                {[
+                  { x: 50, y: 380 },    // Start
+                  { x: 140, y: 310 },  // Q1
+                  { x: 230, y: 291 },   // Q2
+                  { x: 318, y: 304 },  // Q3
+                  { x: 404, y: 312 },  // Q4
+                  { x: 495, y: 292 },   // Q5
+                  { x: 581, y: 252 },   // Q6
+                  { x: 670, y: 197 },   // Q7
+                  { x: 760, y: 157 },   // Q8
+                  { x: 850, y: 140 }     // End
+                ].map((pt, i) => (
+                  <motion.circle
+                    key={i}
+                    cx={pt.x}
+                    cy={pt.y}
+                    r="8"
+                    fill="#010a14"
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1.1 }}
+                    transition={{ delay: 2.2 + i * 0.18 }}
+                  />
+                ))}
+              </svg>
+            </div>
           </div>
-        </div>
         </div>
 
 
@@ -899,14 +899,14 @@ const SEOPage: React.FC = () => {
           {/* Data point 1 */}
           <motion.div
             className="absolute top-1/4 left-1/4 w-2 h-2 bg-[#010a14]/40 rounded-full"
-            animate={{ 
+            animate={{
               y: [0, -20, 0],
               opacity: [0.4, 0.8, 0.4],
               scale: [1, 1.2, 1]
             }}
-            transition={{ 
-              duration: 4, 
-              repeat: Infinity, 
+            transition={{
+              duration: 4,
+              repeat: Infinity,
               ease: "easeInOut",
               delay: 0.5
             }}
@@ -914,14 +914,14 @@ const SEOPage: React.FC = () => {
           {/* Data point 2 */}
           <motion.div
             className="absolute top-1/3 right-1/3 w-1.5 h-1.5 bg-[#010a14]/50 rounded-full"
-            animate={{ 
+            animate={{
               y: [0, -15, 0],
               opacity: [0.5, 0.9, 0.5],
               scale: [1, 1.3, 1]
             }}
-            transition={{ 
-              duration: 3.5, 
-              repeat: Infinity, 
+            transition={{
+              duration: 3.5,
+              repeat: Infinity,
               ease: "easeInOut",
               delay: 1.5
             }}
@@ -929,14 +929,14 @@ const SEOPage: React.FC = () => {
           {/* Data point 3 */}
           <motion.div
             className="absolute top-1/2 left-1/3 w-1 h-1 bg-[#010a14]/60 rounded-full"
-            animate={{ 
+            animate={{
               y: [0, -10, 0],
               opacity: [0.6, 1, 0.6],
               scale: [1, 1.4, 1]
             }}
-            transition={{ 
-              duration: 3, 
-              repeat: Infinity, 
+            transition={{
+              duration: 3,
+              repeat: Infinity,
               ease: "easeInOut",
               delay: 2.5
             }}
@@ -963,7 +963,7 @@ const SEOPage: React.FC = () => {
             </linearGradient>
           </defs>
         </svg>
-        
+
         {/* Hero Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-6 text-center text-black">
           {/* Stunning SEO Icon */}
@@ -977,54 +977,54 @@ const SEOPage: React.FC = () => {
               {/* Main Icon Container */}
               <motion.div
                 className="w-24 h-24 bg-gradient-to-br from-[#010a14] to-[#1a365d] rounded-2xl shadow-2xl flex items-center justify-center relative overflow-hidden"
-                animate={{ 
+                animate={{
                   rotate: [0, 5, -5, 0],
                   scale: [1, 1.05, 1]
                 }}
-                transition={{ 
-                  duration: 6, 
-                  repeat: Infinity, 
-                  ease: "easeInOut" 
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: "easeInOut"
                 }}
               >
                 {/* SEO Text */}
                 <span className="text-2xl font-bold text-white z-10 tracking-wider">SEO</span>
-                
+
                 {/* Animated Background Elements */}
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
                   animate={{ x: [-100, 100] }}
                   transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                 />
-                
+
                 {/* Corner Accents */}
                 <div className="absolute top-2 right-2 w-3 h-3 bg-white/30 rounded-full" />
                 <div className="absolute bottom-2 left-2 w-2 h-2 bg-white/20 rounded-full" />
               </motion.div>
-              
+
               {/* Floating Particles */}
               <motion.div
                 className="absolute -top-2 -right-2 w-2 h-2 bg-[#010a14] rounded-full"
-                animate={{ 
+                animate={{
                   y: [0, -10, 0],
                   opacity: [0.5, 1, 0.5]
                 }}
-                transition={{ 
-                  duration: 3, 
-                  repeat: Infinity, 
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
                   ease: "easeInOut",
                   delay: 0.5
                 }}
               />
               <motion.div
                 className="absolute -bottom-1 -left-1 w-1.5 h-1.5 bg-[#010a14] rounded-full"
-                animate={{ 
+                animate={{
                   y: [0, -8, 0],
                   opacity: [0.3, 0.8, 0.3]
                 }}
-                transition={{ 
-                  duration: 2.5, 
-                  repeat: Infinity, 
+                transition={{
+                  duration: 2.5,
+                  repeat: Infinity,
                   ease: "easeInOut",
                   delay: 1
                 }}
@@ -1032,30 +1032,30 @@ const SEOPage: React.FC = () => {
             </div>
           </motion.div>
 
-          <motion.h1 
+          <motion.h1
             className="hero-title text-5xl md:text-7xl font-bold mb-4 tracking-tight leading-tight pb-2 text-[#010a14] relative"
-            animate={{ 
+            animate={{
               y: [0, -8, 0],
             }}
-            transition={{ 
-              duration: 4, 
-              repeat: Infinity, 
-              ease: "easeInOut" 
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut"
             }}
           >
             Search Engine Optimization
           </motion.h1>
-          
+
           <div className="relative mb-6">
             {/* Light background for subtitle */}
             <div className="absolute inset-0 bg-white/15 backdrop-blur-[0.05px] rounded-xl -m-1 -p-1" />
-            <AnimatedWords text="If you're not ranking, you're bleeding revenue." immediate amount={0.1} className="hero-subtitle text-xl md:text-2xl text-[#010a14] max-w-3xl mx-auto leading-relaxed font-light tracking-wide relative z-10" />
+            <AnimatedWords text="If You're Not Ranking, You're Bleeding Revenue." immediate amount={0.1} className="hero-subtitle text-xl md:text-2xl text-[#010a14] max-w-3xl mx-auto leading-relaxed font-light tracking-wide relative z-10" />
           </div>
-          
+
           <div className="relative mb-8">
             {/* Light background for description */}
             <div className="absolute inset-0 bg-white/10 backdrop-blur-[0.05px] rounded-xl -m-1 -p-1" />
-            <AnimatedWords text="Transform your online presence. Dominate search rankings. Drive real results." immediate amount={0.1} className="text-lg md:text-xl text-[#010a14] max-w-4xl mx-auto leading-relaxed font-medium tracking-wide relative z-10" />
+            <AnimatedWords text="At Bytes Platform, we don’t just improve your SEO rankings — we drive laser-targeted organic traffic that converts into real business growth." immediate amount={0.1} className="text-lg md:text-xl text-[#010a14] max-w-4xl mx-auto leading-relaxed font-medium tracking-wide relative z-10" />
           </div>
         </div>
 
@@ -1075,7 +1075,7 @@ const SEOPage: React.FC = () => {
       <section ref={stackAreaRef} className="stack-area flex flex-col lg:flex-row relative w-full bg-[#010a14] text-white">
         {/* Left copy */}
         <div className="left flex flex-col items-center justify-center lg:sticky top-0 lg:h-screen w-full lg:basis-1/2 p-6">
-          <motion.h2 
+          <motion.h2
             className="title text-5xl font-bold leading-tight text-center md:text-left"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -1086,14 +1086,14 @@ const SEOPage: React.FC = () => {
             <br />
             <AnimatedWords text="Rank for What Matters" className="block bg-gradient-to-r from-blue-200 via-blue-25 to-white text-transparent bg-clip-text" />
           </motion.h2>
-          <motion.div 
+          <motion.div
             className="sub-title text-base mt-6 max-w-sm text-center md:text-left"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
             viewport={{ once: true }}
           >
-            <AnimatedWords text="Forget vanity metrics. We target the exact search terms your ideal customers are googling — and put your business front and center." className="inline text-blue-200" />
+            <AnimatedWords text="Every day, potential customers search Google for what you offer — but if you're not on Page 1 of search results, you're missing out on qualified leads, sales, and opportunities.If you're invisible online, you're losing clicks, customers, and cash to your competitors." className="inline text-blue-200" />
           </motion.div>
         </div>
 
@@ -1222,7 +1222,7 @@ const SEOPage: React.FC = () => {
                 {/* Service Content */}
                 <div className="p-8 pt-16">
                   {/* Title */}
-                  <motion.h3 
+                  <motion.h3
                     className="text-2xl font-bold text-[#010a14] mb-3 group-hover:text-[#1a365d] transition-colors duration-300"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
@@ -1233,7 +1233,7 @@ const SEOPage: React.FC = () => {
                   </motion.h3>
 
                   {/* Subtitle */}
-                  <motion.p 
+                  <motion.p
                     className="text-[#1a365d] font-semibold mb-6 text-lg bg-gradient-to-r from-[#010a14] to-[#1a365d] bg-clip-text text-transparent"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
@@ -1244,7 +1244,7 @@ const SEOPage: React.FC = () => {
                   </motion.p>
 
                   {/* Features List */}
-                  <motion.ul 
+                  <motion.ul
                     className="space-y-3"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
@@ -1265,13 +1265,13 @@ const SEOPage: React.FC = () => {
                       </motion.li>
                     ))}
                   </motion.ul>
-            </div>
+                </div>
 
                 {/* Hover Effect Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-br from-[#010a14]/0 to-[#1a365d]/0 group-hover:from-[#010a14]/5 group-hover:to-[#1a365d]/10 transition-all duration-500"></div>
               </motion.div>
-          ))}
-        </div>
+            ))}
+          </div>
 
           {/* CTA Section */}
           <motion.div
@@ -1305,10 +1305,10 @@ const SEOPage: React.FC = () => {
           >
             <motion.div variants={itemVariants} className="space-y-6">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center md:text-left px-2">
-                <span className="bg-gradient-to-r from-blue-200 via-blue-25 to-white bg-clip-text text-transparent">Your Competition Is Stealing Your Customers</span>
+                <span className="bg-gradient-to-r from-blue-200 via-blue-25 to-white bg-clip-text text-transparent">Your Competitors Are Stealing Your Customers</span>
               </h2>
-              <AnimatedWords text="Your competitors are showing up first — not because they're better, but because they're optimised. If your site isn't ranking for custom, high-converting keywords, you're sending leads straight to them." className="text-lg sm:text-xl leading-relaxed px-2 text-blue-200" />
-              <AnimatedWords text="Stop being invisible. Start dominating search." className="text-base sm:text-lg leading-relaxed px-2 text-blue-100" />
+              <AnimatedWords text="Your competitors are showing up first — not because they’re better, but because they’re optimized for search engines. If your website isn’t ranking for custom, high-converting keywords, you’re handing over your leads and sales to them. We help you take back your market share." className="text-lg sm:text-xl leading-relaxed px-2 text-blue-200" />
+              <AnimatedWords text="Stop being invisible. Start ranking and turning visitors into customers." className="text-base sm:text-lg leading-relaxed px-2 text-blue-100" />
               <motion.button
                 data-cta="true"
                 className="bg-gradient-to-r from-blue-200 via-blue-25 to-white text-[#010a14] px-10 py-4 rounded-xl font-semibold tracking-wide transition-all duration-300"
@@ -1316,11 +1316,11 @@ const SEOPage: React.FC = () => {
                 whileTap={{ scale: 0.95 }}
                 onClick={() => router.push('/contact')}
               >
-                Book a Free SEO Audit
+                Book Your Free SEO Audit
               </motion.button>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               variants={itemVariants}
               className="relative"
             >
@@ -1340,7 +1340,7 @@ const SEOPage: React.FC = () => {
                   />
                 </div>
               </motion.div>
-              
+
               {/* Decorative elements */}
               <div className="absolute -top-4 -right-4 w-20 h-20 border-2 border-blue-200/30 rounded-full" />
               <div className="absolute -bottom-6 -left-6 w-16 h-16 border border-blue-25/20 rotate-45" />
@@ -1373,8 +1373,8 @@ const SEOPage: React.FC = () => {
                 Let Google Bring You Business — On Autopilot.
               </span>
             </h2>
-            <p className="text-xl font-semibold text-[#1a365d] sm:text-lg text-gray-800 mb-5 max-w-3xl mx-auto px-4">
-              Talk to Our SEO Expert
+            <p className="text-xl font-semibold text-[#ffffff] sm:text-lg text-white mb-5 max-w-3xl mx-auto px-4">
+            Stop chasing customers. With SEO done right, your ideal clients will find you — every hour of every day. We make your website your best salesperson, working 24/7.
             </p>
             <div className="flex justify-center">
               <motion.button
