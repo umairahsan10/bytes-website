@@ -647,14 +647,14 @@ const WebDevelopmentLanding = () => {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Side - Image */}
             <div
-              className={`relative w-full aspect-square max-w-sm lg:max-w-md lg:-mt-8 xl:-mt-8 lg:scale-[1.1] xl:scale-[1.2] rounded-3xl overflow-hidden shadow-3xl transition-all duration-700 transform origin-center ${chooseVisible ? 'opacity-100 animate-float' : 'opacity-0 translate-y-8'}`}
+              className={`relative w-full aspect-square max-w-sm lg:max-w-md lg:-mt-8 xl:-mt-8 lg:scale-[1.1] xl:scale-[1.2] rounded-3xl overflow-hidden shadow-3xl transition-all duration-700 transform origin-center lg:ml-12 xl:ml-16 ${chooseVisible ? 'opacity-100 animate-float' : 'opacity-0 translate-y-8'}`}
             >
               <Image
                 src="/assets/newimages/whychoseus.png"
                 alt="Why choose our web development services"
                 fill
                 className="object-contain object-center"
-                sizes="(max-width: 1024px) 100vw, 50vw"
+                sizes="(max-width: 1024px) 50vw, 50vw"
                 priority
                 style={{
                   maskImage: 'linear-gradient(to bottom, white 75%, transparent)',
