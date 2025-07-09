@@ -8,6 +8,7 @@ import { Header } from "@/sections/Navbar";
 import * as THREE from 'three';
 import { useRouter } from 'next/navigation';
 
+
 // ---------------------------------------------------------------------------
 // Theme colours
 const PRIMARY_COLOR = '#010a14';   // Dark
@@ -19,11 +20,14 @@ const ByteSuitePage: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const router = useRouter();
 
+
   /* -------------------- Laptop Scroll Animation Setup -------------------- */
   const laptopContainerRef = useRef<HTMLDivElement>(null); // whole scrolling section
   const gridPinRef = useRef<HTMLDivElement>(null);         // pin the whole grid (all columns)
   const [currentLaptopScreen, setCurrentLaptopScreen] = useState(0);
   const [isMobileScreen, setIsMobileScreen] = useState(false);
+  const [benefitsVisible, setBenefitsVisible] = useState(false);
+  const [visibleBenefits, setVisibleBenefits] = useState<Set<number>>(new Set());
 
   const springConfig = { stiffness: 300, damping: 30, restDelta: 0.001 } as const;
   const autoProgress = useMotionValue(0); // will be driven by ScrollTrigger
@@ -39,7 +43,7 @@ const ByteSuitePage: React.FC = () => {
       id: 'lead',
       title: 'Smart Lead Management',
       description: 'Intelligent capture, qualification and nurture.',
-      image: '/assets/lead-management.jpg',
+      image: '/assets/lead-management.png',
       features: [
         'Intelligent Lead Capture',
         'AI-Powered Qualification',
@@ -50,7 +54,7 @@ const ByteSuitePage: React.FC = () => {
       id: 'bytebot',
       title: 'ByteBot AI Assistant',
       description: '24/7 support and sales intelligence.',
-      image: '/assets/bytebot-ai.jpg',
+      image: '/assets/bytebot-ai.png',
       features: [
         'Always-on Customer Support',
         'Real-time Sales Insights',
@@ -128,6 +132,37 @@ const ByteSuitePage: React.FC = () => {
     window.addEventListener('resize', updateScreen);
     return () => window.removeEventListener('resize', updateScreen);
   }, []);
+
+  // Observer for individual benefit sections
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const index = parseInt(entry.target.getAttribute('data-index') || '0');
+          setVisibleBenefits(prev => {
+            const newSet = new Set(prev);
+            if (entry.isIntersecting) {
+              newSet.add(index);
+            } else {
+              newSet.delete(index);
+            }
+            return newSet;
+          });
+        });
+      },
+      { threshold: 0.3 }
+    );
+    
+    // Observe all benefit sections
+    const benefitSections = document.querySelectorAll('.benefit-section');
+    benefitSections.forEach(section => {
+      observer.observe(section);
+    });
+    
+    return () => observer.disconnect();
+  }, []);
+
+
 
   /* -------------------- GSAP ScrollTrigger Pin & Progress -------------------- */
   useEffect(() => {
@@ -232,42 +267,42 @@ const ByteSuitePage: React.FC = () => {
     scene.add(lines);
 
     // Create floating orbs
-    const orbGeometry = new THREE.SphereGeometry(0.2, 32, 32);
-    const orbMaterial = new THREE.MeshBasicMaterial({
-      color: PRIMARY_COLOR,
-      transparent: true,
-      opacity: 0.5
-    });
+    // const orbGeometry = new THREE.SphereGeometry(0.2, 32, 32);
+    // const orbMaterial = new THREE.MeshBasicMaterial({
+    //   color: PRIMARY_COLOR,
+    //   transparent: true,
+    //   opacity: 0.5
+    // });
 
-    const orbs: THREE.Mesh[] = [];
-    for (let i = 0; i < 12; i++) {
-      const orb = new THREE.Mesh(orbGeometry, orbMaterial);
-      orb.position.set(
-        (Math.random() - 0.5) * 15,
-        (Math.random() - 0.5) * 15,
-        (Math.random() - 0.5) * 15
-      );
-      orbs.push(orb);
-      scene.add(orb);
-    }
+    // const orbs: THREE.Mesh[] = [];
+    // for (let i = 0; i < 12; i++) {
+    //   const orb = new THREE.Mesh(orbGeometry, orbMaterial);
+    //   orb.position.set(
+    //     (Math.random() - 0.5) * 15,
+    //     (Math.random() - 0.5) * 15,
+    //     (Math.random() - 0.5) * 15
+    //   );
+    //   orbs.push(orb);
+    //   scene.add(orb);
+    // }
 
     // Add some larger background orbs
-    const largeOrbGeometry = new THREE.SphereGeometry(1.2, 32, 32);
-    const largeOrbMaterial = new THREE.MeshBasicMaterial({
-      color: SECONDARY_COLOR,
-      transparent: true,
-      opacity: 0.15
-    });
+    // const largeOrbGeometry = new THREE.SphereGeometry(1.2, 32, 32);
+    // const largeOrbMaterial = new THREE.MeshBasicMaterial({
+    //   color: SECONDARY_COLOR,
+    //   transparent: true,
+    //   opacity: 0.15
+    // });
 
-    for (let i = 0; i < 4; i++) {
-      const largeOrb = new THREE.Mesh(largeOrbGeometry, largeOrbMaterial);
-      largeOrb.position.set(
-        (Math.random() - 0.5) * 25,
-        (Math.random() - 0.5) * 25,
-        (Math.random() - 0.5) * 25
-      );
-      scene.add(largeOrb);
-    }
+    // for (let i = 0; i < 4; i++) {
+    //   const largeOrb = new THREE.Mesh(largeOrbGeometry, largeOrbMaterial);
+    //   largeOrb.position.set(
+    //     (Math.random() - 0.5) * 25,
+    //     (Math.random() - 0.5) * 25,
+    //     (Math.random() - 0.5) * 25
+    //   );
+    //   scene.add(largeOrb);
+    // }
 
     camera.position.z = 6;
 
@@ -280,13 +315,13 @@ const ByteSuitePage: React.FC = () => {
       particlesMesh.rotation.y += 0.001;
 
       // Animate orbs
-      orbs.forEach((orb, index) => {
-        orb.position.y += Math.sin(Date.now() * 0.0008 + index) * 0.008;
-        orb.position.x += Math.cos(Date.now() * 0.0008 + index) * 0.008;
-        orb.rotation.x += 0.005;
-        orb.rotation.y += 0.005;
-        (orb.material as THREE.MeshBasicMaterial).opacity = 0.3 + Math.sin(Date.now() * 0.001 + index) * 0.2;
-      });
+      // orbs.forEach((orb, index) => {
+      //   orb.position.y += Math.sin(Date.now() * 0.0008 + index) * 0.008;
+      //   orb.position.x += Math.cos(Date.now() * 0.0008 + index) * 0.008;
+      //   orb.rotation.x += 0.005;
+      //   orb.rotation.y += 0.005;
+      //   (orb.material as THREE.MeshBasicMaterial).opacity = 0.3 + Math.sin(Date.now() * 0.001 + index) * 0.2;
+      // });
 
       renderer.render(scene, camera);
     };
@@ -372,8 +407,8 @@ const ByteSuitePage: React.FC = () => {
   } as const;
 
   const fadeInDown = {
-    hidden: { opacity: 0, y: -60 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
   } as const;
 
   const bounceIn = {
@@ -456,32 +491,6 @@ const ByteSuitePage: React.FC = () => {
             className="absolute inset-0 w-full h-full pointer-events-none"
             style={{ zIndex: 0 }}
           />
-
-          {/* Animated Background Elements */}
-          <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 2 }}>
-            <motion.div
-              className="absolute top-1/3 left-1/3 w-26 h-26 rounded-full blur-3xl"
-              style={{ backgroundColor: 'rgba(1, 10, 20, 0.05)' }}
-              animate={{
-                scale: [1, 1.1, 1],
-                opacity: [0.08, 0.16, 0.08],
-                x: [0, 40, 0],
-                y: [0, -20, 0],
-              }}
-              transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.div
-              className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full blur-3xl"
-              style={{ backgroundColor: 'rgba(255, 255, 255, 0.3)' }}
-              animate={{
-                scale: [1, 1.5, 1],
-                opacity: [0.1, 0.3, 0.1],
-                x: [0, -40, 0],
-                y: [0, 60, 0],
-              }}
-              transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-            />
-          </div>
 
           <div className="max-w-7xl mx-auto relative z-10" style={{ zIndex: 3 }}>
             {/* Two Column Layout */}
@@ -640,26 +649,6 @@ const ByteSuitePage: React.FC = () => {
                     }}
                   />
                 </motion.div>
-                
-                {/* Floating decorative elements around image */}
-                <motion.div
-                  animate={{ rotate: [0, 5, 0, -5, 0] }}
-                  transition={{ duration: 6, repeat: Infinity }}
-                  className="absolute -top-8 -right-8 w-16 h-16 transform rotate-45 rounded-lg"
-                  style={{ backgroundColor: PRIMARY_COLOR }}
-                />
-                <motion.div
-                  animate={{ rotate: [0, -10, 0, 10, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, delay: 1 }}
-                  className="absolute -bottom-10 -left-10 w-12 h-12 border-2 transform rotate-45"
-                  style={{ borderColor: PRIMARY_COLOR }}
-                />
-                <motion.div
-                  animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 3, repeat: Infinity, delay: 2 }}
-                  className="absolute top-1/2 -left-6 w-4 h-4 rounded-full"
-                  style={{ backgroundColor: PRIMARY_COLOR }}
-                />
               </motion.div>
             </div>
 
@@ -687,6 +676,7 @@ const ByteSuitePage: React.FC = () => {
 
         {/* Value Proposition Section (Dark Blue) */}
         <motion.section
+          id="benefits-section"
           initial="hidden"
           whileInView="visible"
           viewport={{ margin: '-100px' }}
@@ -695,7 +685,7 @@ const ByteSuitePage: React.FC = () => {
           style={{ backgroundColor: PRIMARY_COLOR }}
         >
           <div className="max-w-7xl mx-auto">
-            <motion.div variants={bounceIn} className="text-center mb-12">
+            <motion.div variants={fadeInDown} className="text-center mb-12">
               <motion.h2 
                 className="text-4xl lg:text-6xl font-black mb-6 bg-gradient-to-r from-[#ffffff] to-[#ffffff] bg-clip-text text-transparent"
                 variants={fadeInDown}
@@ -709,222 +699,126 @@ const ByteSuitePage: React.FC = () => {
               />
             </motion.div>
 
-            <div className="grid lg:grid-cols-3 gap-12">
+            <div className="space-y-20">
               {[
                 {
                   title: "AI-Powered Intelligence",
                   description: "ByteBot assistant handles customer queries and automates follow-ups 24/7",
+                  features: [
+                    "Intelligent Lead Capture",
+                    "AI-Powered Qualification", 
+                    "Custom Sales Pipelines",
+                  ],
+                  image: "/assets/ai-intelligence.png",
                   icon: (
-                    <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 0.3 }}
-                        d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2Z"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 0.4 }}
-                        d="M19 3V5C19 6.1 18.1 7 17 7H16L15 10H9L8 7H7C5.9 7 5 6.1 5 5V3C5 1.9 5.9 1 7 1H17C18.1 1 19 1.9 19 3Z"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 0.5 }}
-                        d="M12 10V22"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 0.6 }}
-                        d="M8 22H16"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.circle
-                        initial={{ scale: 0, opacity: 0 }}
-                        whileInView={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 0.4, delay: 0.7, type: "spring" }}
-                        cx="12"
-                        cy="14"
-                        r="2"
-                        fill={SECONDARY_COLOR}
-                      />
+                    <svg className="w-10 h-10 text-blue-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.5 2C9.5 2 9.5 4 9.5 6C9.5 8 7.5 10 5.5 10C3.5 10 1.5 8 1.5 6C1.5 4 3.5 2 5.5 2C7.5 2 9.5 4 9.5 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M22.5 6C22.5 6 20.5 8 18.5 8C16.5 8 14.5 6 14.5 4C14.5 2 16.5 0 18.5 0C20.5 0 22.5 2 22.5 4C22.5 6 20.5 8 18.5 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M9.5 18C9.5 18 9.5 20 9.5 22C9.5 24 7.5 26 5.5 26C3.5 26 1.5 24 1.5 22C1.5 20 3.5 18 5.5 18C7.5 18 9.5 20 9.5 22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M22.5 22C22.5 22 20.5 24 18.5 24C16.5 24 14.5 22 14.5 20C14.5 18 16.5 16 18.5 16C20.5 16 22.5 18 22.5 20C22.5 22 20.5 24 18.5 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M12 12L12 12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M12 12L12 12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                  ),
-                  image: "/assets/ai-intelligence.jpg"
+                  )
                 },
                 {
                   title: "Built-in Revenue Tools",
                   description: "Native billing, scheduling, and analytics - no third-party integrations needed",
+                  features: [
+                    "Branded Invoicing",
+                    "Appointment Scheduler",
+                    "Inventory Tracking",
+                  ],
+                  image: "/assets/revenue-tools.png",
                   icon: (
-                    <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, delay: 0.5 }}
-                        d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, delay: 0.7 }}
-                        d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3Z"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.rect
-                        initial={{ scale: 0, opacity: 0 }}
-                        whileInView={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 0.9, type: "spring" }}
-                        x="7"
-                        y="7"
-                        width="10"
-                        height="10"
-                        rx="2"
-                        fill={SECONDARY_COLOR}
-                        opacity="0.3"
-                      />
+                    <svg className="w-10 h-10 text-blue-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M9 17l6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                  ),
-                  image: "/assets/revenue-tools.jpg"
+                  )
                 },
                 {
                   title: "Conversion-Focused Design",
                   description: "Every feature designed to move prospects through your pipeline faster",
+                  features: [
+                    "Deal Flow Automation",
+                    "AI Sales Forecasting",
+                    "Custom Dashboards",
+                  ],
+                  image: "/assets/conversion-design.png",
                   icon: (
-                    <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <motion.circle
-                        initial={{ scale: 0, opacity: 0 }}
-                        whileInView={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 1.0, delay: 0.5, type: "spring" }}
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                      />
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, delay: 0.7 }}
-                        d="M12 6V12L16 14"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, delay: 0.9 }}
-                        d="M9 12L15 12"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, delay: 1.1 }}
-                        d="M12 9L12 15"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
+                    <svg className="w-10 h-10 text-blue-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                      <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke="currentColor" strokeWidth="2"/>
                     </svg>
-                  ),
-                  image: "/assets/conversion-design.jpg"
+                  )
                 }
               ].map((benefit, index) => (
-                <motion.div
+                <div
                   key={index}
-                  initial={{ opacity: 0, y: 100, scale: 0.8 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ margin: '-100px' }}
-                  transition={{ duration: 0.2, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.05, y: -10 }}
-                  className="p-8 rounded-lg border group"
-                  style={{ 
-                    background: `linear-gradient(to bottom, ${SECONDARY_COLOR} 0%, rgb(1, 10, 20) 100%)`,
-                    borderColor: SECONDARY_COLOR
-                  }}
+                  className="grid lg:grid-cols-2 gap-12 items-center benefit-section"
+                  data-index={index}
                 >
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ margin: '-100px' }}
-                    transition={{ duration: 0.6, delay: index * 0.2 + 0.2 }}
-                    className="mb-6 overflow-hidden rounded-lg"
-                  >
-                    <img
-                      src={benefit.image}
-                      alt={benefit.title}
-                      className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-300"
-                      onError={(e) => {
-                        e.currentTarget.src = `https://via.placeholder.com/500x350/010a14/ffffff?text=${benefit.title}`;
-                      }}
-                    />
-                  </motion.div>
-                  <div className="flex items-center space-x-3 mb-3">
-                  <motion.div 
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ margin: '-100px' }}
-                      transition={{ duration: 0.5, delay: index * 0.2 + 0.3 }}
-                      whileHover={{ 
-                        scale: 1.1,
-                        rotate: 5,
-                        transition: { duration: 0.2 }
-                      }}
-                  >
-                    {benefit.icon}
-                  </motion.div>
-                  <motion.h3 
-                      className="text-xl font-bold"
-                      style={{ color: SECONDARY_COLOR }}
-                    initial={{ opacity: 0, x: -50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ margin: '-100px' }}
-                      transition={{ duration: 0.5, delay: index * 0.2 + 0.4 }}
-                  >
-                    {benefit.title}
-                  </motion.h3>
+                  <div className={`transition-all duration-700 ${visibleBenefits.has(index) ? 'animate-slide-in-left' : 'opacity-0 -translate-x-10'}`}>
+                    <div className="space-y-6">
+                      <div className="flex items-start space-x-6">
+                        <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center flex-shrink-0">
+                          {benefit.icon}
+                        </div>
+                        <h3 className="text-3xl font-bold leading-snug" style={{ color: SECONDARY_COLOR }}>{benefit.title}</h3>
+                      </div>
+                      <p className="text-lg leading-relaxed" style={{ color: SECONDARY_COLOR }}>{benefit.description}</p>
+                      <ul className="space-y-3 text-base">
+                        {benefit.features.map((feature, featureIndex) => (
+                          <li key={featureIndex} className="flex items-start space-x-3 leading-relaxed">
+                            <span className="text-xl mt-1" style={{ color: SECONDARY_COLOR }}>✓</span>
+                            <span style={{ color: SECONDARY_COLOR }}>{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                  <motion.p 
-                    className="leading-relaxed text-sm"
-                    style={{ color: SECONDARY_COLOR }}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ margin: '-100px' }}
-                    transition={{ duration: 0.5, delay: index * 0.2 + 0.5 }}
-                  >
-                    {benefit.description}
-                  </motion.p>
-                </motion.div>
+                                    <div className={`flex items-center justify-center transition-all duration-700 ${visibleBenefits.has(index) ? 'animate-slide-in-right' : 'opacity-0 translate-x-10'}`}>
+                    {benefit.image === "/assets/conversion-design.png" ? (
+                      <motion.img
+                        src={benefit.image}
+                        alt={benefit.title}
+                        className="object-contain"
+                        style={{ maxWidth: '100%', maxHeight: '320px' }}
+                        animate={{ 
+                          rotate: [0, 360],
+                          y: [0, -10, 0]
+                        }}
+                        transition={{ 
+                          rotate: { 
+                            duration: 20, 
+                            repeat: Infinity, 
+                            ease: "linear" 
+                          },
+                          y: { 
+                            duration: 4, 
+                            repeat: Infinity, 
+                            ease: "easeInOut" 
+                          }
+                        }}
+                        onError={(e) => {
+                          e.currentTarget.src = `https://via.placeholder.com/500x350/010a14/ffffff?text=${benefit.title}`;
+                        }}
+                      />
+                    ) : (
+                      <img
+                        src={benefit.image}
+                        alt={benefit.title}
+                        className="object-contain animate-float"
+                        style={{ maxWidth: '100%', maxHeight: '320px' }}
+                        onError={(e) => {
+                          e.currentTarget.src = `https://via.placeholder.com/500x350/010a14/ffffff?text=${benefit.title}`;
+                        }}
+                      />
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
@@ -940,7 +834,7 @@ const ByteSuitePage: React.FC = () => {
           style={{ backgroundColor: SECONDARY_COLOR }}
         >
           <div className="max-w-7xl mx-auto">
-            <motion.div variants={bounceIn} className="text-center mb-12">
+            <motion.div variants={fadeInDown} className="text-center mb-12">
               <motion.h2 
                 className="text-4xl lg:text-6xl font-black mb-6 bg-gradient-to-r from-[#010a14] to-[#010a14] bg-clip-text text-transparent"
                 variants={fadeInDown}
@@ -1074,17 +968,24 @@ const ByteSuitePage: React.FC = () => {
           whileInView="visible"
           viewport={{ margin: '-100px' }}
           variants={containerVariants}
-          className="py-20 px-8"
+          className="py-16 px-8 lg:px-16 xl:px-24"
           style={{ backgroundColor: PRIMARY_COLOR }}
         >
-          <div className="max-w-7xl mx-auto">
-            <motion.div variants={bounceIn} className="text-center mb-12">
+          <div className="w-full max-w-7xl mx-auto">
+            <motion.div variants={fadeInDown} className="text-center mb-12">
               <motion.h2 
                 className="text-4xl lg:text-6xl font-black mb-6 bg-gradient-to-r from-[#ffffff] to-[#ffffff] bg-clip-text text-transparent"
                 variants={fadeInDown}
               >
                 Target Audience Benefits
               </motion.h2>
+              <motion.p 
+                className="text-xl lg:text-2xl max-w-4xl mx-auto mb-8"
+                style={{ color: SECONDARY_COLOR }}
+                variants={fadeInUp}
+              >
+                Discover how ByteSuite CRM transforms business operations
+              </motion.p>
               <motion.div 
                 className="w-16 h-1 mx-auto mb-6"
                 style={{ background: `linear-gradient(to bottom, ${SECONDARY_COLOR}, ${PRIMARY_COLOR})` }}
@@ -1092,322 +993,156 @@ const ByteSuitePage: React.FC = () => {
               />
             </motion.div>
 
-            <div className="grid lg:grid-cols-2 gap-12">
+            <div className="space-y-16">
               {[
                 {
-                  title: "For Consultants & Service Providers",
+                  title: "Consultants & Service Providers",
+                  subtitle: "Streamlined Professional Services",
+                  description: "Transform your consulting practice with integrated tools.",
                   benefits: [
-                    "Replace 5+ disconnected tools with one integrated system",
-                    "Automated client communication and project management",
-                    "Professional invoicing and recurring billing",
-                    "Client portal for transparent communication"
+                    "Unified platform replacing 5+ disconnected tools",
+                    "Automated client communication workflows",
+                    "Professional invoicing with recurring billing"
                   ],
-                  image: "/assets/consultants.jpg",
-                  icon: (
-                    <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, delay: 0.5 }}
-                        d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, delay: 0.7 }}
-                        d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, delay: 0.9 }}
-                        d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, delay: 1.1 }}
-                        d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89317 18.7122 8.75608 18.1676 9.45768C17.623 10.1593 16.8604 10.6597 16 10.88"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.circle
-                        initial={{ scale: 0, opacity: 0 }}
-                        whileInView={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 1.3, type: "spring" }}
-                        cx="9"
-                        cy="7"
-                        r="2"
-                        fill={SECONDARY_COLOR}
-                      />
-                    </svg>
-                  )
+                  image: "/assets/consultants.jpg"
                 },
                 {
-                  title: "For Sales Teams & Agencies",
+                  title: "Sales Teams & Agencies",
+                  subtitle: "AI-Powered Sales Excellence",
+                  description: "Elevate your sales performance with intelligent automation.",
                   benefits: [
-                    "AI assistant that never sleeps or misses a follow-up",
-                    "Team performance tracking and goal management",
-                    "Lead scoring and qualification automation",
-                    "Collaborative deal management"
+                    "24/7 AI assistant for continuous follow-ups",
+                    "Advanced team performance analytics",
+                    "Intelligent lead scoring and qualification"
                   ],
-                  image: "/assets/sales-teams.jpg",
-                  icon: (
-                    <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, delay: 0.5 }}
-                        d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, delay: 0.7 }}
-                        d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, delay: 0.9 }}
-                        d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, delay: 1.1 }}
-                        d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89317 18.7122 8.75608 18.1676 9.45768C17.623 10.1593 16.8604 10.6597 16 10.88"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.rect
-                        initial={{ scale: 0, opacity: 0 }}
-                        whileInView={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 1.3, type: "spring" }}
-                        x="7"
-                        y="7"
-                        width="4"
-                        height="4"
-                        rx="1"
-                        fill={SECONDARY_COLOR}
-                        opacity="0.3"
-                      />
-                    </svg>
-                  )
+                  image: "/assets/sales-teams.png"
                 },
                 {
-                  title: "For Small-Medium Businesses",
+                  title: "Small-Medium Businesses",
+                  subtitle: "Enterprise Features, Simplified",
+                  description: "Access powerful business tools designed for growth.",
                   benefits: [
-                    "Enterprise-level features without enterprise complexity",
-                    "Scales from startup to growing business",
-                    "Beautiful, intuitive interface that teams actually use",
-                    "Affordable pricing that grows with you"
+                    "Enterprise-level capabilities without complexity",
+                    "Scalable architecture from startup to growth",
+                    "Intuitive interface for rapid team adoption"
                   ],
-                  image: "/assets/smb.jpg",
-                  icon: (
-                    <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, delay: 0.5 }}
-                        d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, delay: 0.7 }}
-                        d="M9 22V12H15V22"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, delay: 0.9 }}
-                        d="M12 6L12 12"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.circle
-                        initial={{ scale: 0, opacity: 0 }}
-                        whileInView={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 1.1, type: "spring" }}
-                        cx="12"
-                        cy="8"
-                        r="1"
-                        fill={SECONDARY_COLOR}
-                      />
-                    </svg>
-                  )
+                  image: "/assets/smb.png"
                 },
                 {
-                  title: "For E-commerce & Retail",
+                  title: "E-commerce & Retail",
+                  subtitle: "Complete Customer Lifecycle Management",
+                  description: "Manage the entire customer journey from initial contact.",
                   benefits: [
-                    "Customer lifecycle management from prospect to repeat buyer",
-                    "Inventory integration with sales tracking",
-                    "Automated customer support and order management",
-                    "Purchase behavior analytics and recommendations"
+                    "End-to-end customer lifecycle management",
+                    "Real-time inventory and sales integration",
+                    "Automated customer support systems"
                   ],
-                  image: "/assets/ecommerce.jpg",
-                  icon: (
-                    <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, delay: 0.5 }}
-                        d="M6 2L3 6V20C3 20.5304 3.21071 21.0391 3.58579 21.4142C3.96086 21.7893 4.46957 22 5 22H19C19.5304 22 20.0391 21.7893 20.4142 21.4142C20.7893 21.0391 21 20.5304 21 20V6L18 2H6Z"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, delay: 0.7 }}
-                        d="M3 6H21"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, delay: 0.9 }}
-                        d="M16 10C16 11.0609 15.5786 12.0783 14.8284 12.8284C14.0783 13.5786 13.0609 14 12 14C10.9391 14 9.92172 13.5786 9.17157 12.8284C8.42143 12.0783 8 11.0609 8 10"
-                        stroke={SECONDARY_COLOR}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <motion.circle
-                        initial={{ scale: 0, opacity: 0 }}
-                        whileInView={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 1.1, type: "spring" }}
-                        cx="12"
-                        cy="10"
-                        r="1"
-                        fill={SECONDARY_COLOR}
-                      />
-                    </svg>
-                  )
+                  image: "/assets/ecommerce.png"
                 }
               ].map((audience, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 100, scale: 0.8 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ margin: '-100px' }}
-                  transition={{ duration: 0.2, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.05, y: -10 }}
-                  className="p-8 rounded-lg border group"
-                  style={{ 
-                    background: `linear-gradient(to bottom, ${SECONDARY_COLOR} 0%, rgb(1, 10, 20) 100%)`,
-                    borderColor: SECONDARY_COLOR
-                  }}
+                  className="grid lg:grid-cols-3 gap-12 items-center"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ margin: '-200px' }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
                 >
                   <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
+                    className={`lg:col-span-2 space-y-6 ${index % 2 === 1 ? 'lg:order-2' : ''}`}
+                    initial={{ opacity: 0, x: index % 2 === 1 ? 30 : -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 + 0.1 }}
+                  >
+                    <div className="space-y-4">
+                  <motion.h3 
+                        className="text-3xl lg:text-4xl font-bold"
+                      style={{ color: SECONDARY_COLOR }}
+                        initial={{ opacity: 0, y: 15 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: index * 0.1 + 0.2 }}
+                  >
+                    {audience.title}
+                  </motion.h3>
+                      <motion.h4 
+                        className="text-xl lg:text-2xl font-semibold"
+                        style={{ color: SECONDARY_COLOR }}
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: index * 0.1 + 0.3 }}
+                      >
+                        {audience.subtitle}
+                      </motion.h4>
+                      <motion.p 
+                        className="text-lg lg:text-xl leading-relaxed"
+                        style={{ color: SECONDARY_COLOR }}
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: index * 0.1 + 0.4 }}
+                      >
+                        {audience.description}
+                      </motion.p>
+                  </div>
+                    
+                    <div className="space-y-4">
+                      <motion.h5 
+                        className="text-lg lg:text-xl font-semibold"
+                        style={{ color: SECONDARY_COLOR }}
+                        initial={{ opacity: 0, y: 8 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: index * 0.1 + 0.5 }}
+                      >
+                        Key Benefits:
+                      </motion.h5>
+                      <ul className="space-y-3">
+                        {audience.benefits.map((benefit, benefitIndex) => (
+                      <motion.li 
+                        key={benefitIndex} 
+                        className="flex items-start space-x-3"
+                            initial={{ opacity: 0, x: -15 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.1 + 0.6 + benefitIndex * 0.05 }}
+                      >
+                        <motion.span 
+                              className="text-xl mt-1"
+                          style={{ color: SECONDARY_COLOR }}
+                          initial={{ opacity: 0, scale: 0.5 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                              transition={{ duration: 0.2, delay: index * 0.1 + 0.7 + benefitIndex * 0.05 }}
+                        >
+                              ✓
+                        </motion.span>
+                            <span className="text-base lg:text-lg leading-relaxed" style={{ color: SECONDARY_COLOR }}>
+                              {benefit}
+                            </span>
+                      </motion.li>
+                    ))}
+                  </ul>
+                    </div>
+                  </motion.div>
+                  
+                  <motion.div 
+                    className={`flex items-center justify-center ${index % 2 === 1 ? 'lg:order-1' : ''}`}
+                    initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ margin: '-100px' }}
-                    transition={{ duration: 0.6, delay: index * 0.2 + 0.2 }}
-                    className="mb-6 overflow-hidden rounded-lg"
+                    transition={{ duration: 0.4, delay: index * 0.1 + 0.2 }}
+                    whileHover={{ scale: 1.02 }}
                   >
                     <img
                       src={audience.image}
                       alt={audience.title}
-                      className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-300"
+                      className="w-full h-80 object-cover rounded-lg"
+                      style={{ 
+                        maxWidth: '600px',
+                        minWidth: '400px'
+                      }}
+                      onLoad={() => console.log('Image loaded successfully:', audience.image)}
                       onError={(e) => {
-                        e.currentTarget.src = `https://via.placeholder.com/500x350/010a14/ffffff?text=${audience.title}`;
+                        console.error('Image failed to load:', audience.image);
+                        e.currentTarget.src = `https://via.placeholder.com/500x320/010a14/ffffff?text=${audience.title}`;
                       }}
                     />
                   </motion.div>
-                  <div className="flex items-center space-x-3 mb-3">
-                    <motion.div 
-                      initial={{ opacity: 0, scale: 0.5 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ margin: '-100px' }}
-                      transition={{ duration: 0.5, delay: index * 0.2 + 0.3 }}
-                      whileHover={{ 
-                        scale: 1.1,
-                        rotate: 5,
-                        transition: { duration: 0.2 }
-                      }}
-                    >
-                      {audience.icon}
-                  </motion.div>
-                  <motion.h3 
-                      className="text-xl font-bold"
-                      style={{ color: SECONDARY_COLOR }}
-                      initial={{ opacity: 0, x: -50 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ margin: '-100px' }}
-                      transition={{ duration: 0.5, delay: index * 0.2 + 0.4 }}
-                  >
-                    {audience.title}
-                  </motion.h3>
-                  </div>
-                  <ul className="space-y-2">
-                    {audience.benefits.slice(0, 2).map((benefit, benefitIndex) => (
-                      <motion.li 
-                        key={benefitIndex} 
-                        className="flex items-start space-x-3"
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true, margin: '-100px' }}
-                        transition={{ delay: index * 0.1 + benefitIndex * 0.1 + 0.4 }}
-                      >
-                        <motion.span 
-                          className="text-lg"
-                          style={{ color: SECONDARY_COLOR }}
-                          initial={{ opacity: 0, scale: 0.5 }}
-                          whileInView={{ opacity: 1, scale: 1 }}
-                          viewport={{ once: true, margin: '-100px' }}
-                          transition={{ duration: 0.4, delay: index * 0.1 + benefitIndex * 0.1 + 0.5 }}
-                        >
-                          •
-                        </motion.span>
-                        <span className="text-sm leading-relaxed" style={{ color: SECONDARY_COLOR }}>{benefit}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
                 </motion.div>
               ))}
             </div>
@@ -1424,7 +1159,7 @@ const ByteSuitePage: React.FC = () => {
           style={{ backgroundColor: SECONDARY_COLOR }}
         >
           <div className="max-w-7xl mx-auto">
-            <motion.div variants={bounceIn} className="text-center mb-12">
+            <motion.div variants={fadeInDown} className="text-center mb-12">
               <motion.h2 
                 className="text-4xl lg:text-6xl font-black mb-6 bg-gradient-to-r from-[#010a14] to-[#010a14] bg-clip-text text-transparent"
                 variants={fadeInDown}
@@ -1443,17 +1178,17 @@ const ByteSuitePage: React.FC = () => {
                 {
                   title: "API-First Architecture",
                   description: "Seamlessly integrates with existing tools and websites. Custom integrations and workflow automation.",
-                  image: "/assets/api-architecture.jpg"
+                  image: "/assets/api-architecture.png"
                 },
                 {
                   title: "Security & Reliability",
                   description: "Enterprise-grade security and data protection. Role-based access control and 99.9% uptime guarantee.",
-                  image: "/assets/security.jpg"
+                  image: "/assets/security.png"
                 },
                 {
                   title: "User Experience",
                   description: "Clean, modern interface designed for daily use. Mobile-responsive with minimal learning curve.",
-                  image: "/assets/user-experience.jpg"
+                  image: "/assets/user-experience.png"
                 }
               ].map((advantage, index) => (
                 <motion.div
@@ -1521,7 +1256,7 @@ const ByteSuitePage: React.FC = () => {
           style={{ backgroundColor: PRIMARY_COLOR }}
         >
           <div className="max-w-7xl mx-auto">
-            <motion.div variants={bounceIn} className="text-center mb-12">
+            <motion.div variants={fadeInDown} className="text-center mb-12">
               <motion.h2 
                 className="text-4xl lg:text-6xl font-black mb-6 bg-gradient-to-r from-[#ffffff] to-[#ffffff] bg-clip-text text-transparent"
                 variants={fadeInDown}
@@ -1540,7 +1275,7 @@ const ByteSuitePage: React.FC = () => {
                 <motion.h3 
                   className="text-3xl font-bold mb-6"
                   style={{ color: SECONDARY_COLOR }}
-                  variants={bounceIn}
+                  variants={fadeInDown}
                 >
                   Getting Started
                 </motion.h3>
@@ -1561,7 +1296,7 @@ const ByteSuitePage: React.FC = () => {
                       <motion.span 
                         className="text-xl"
                         style={{ color: SECONDARY_COLOR }}
-                        variants={bounceIn}
+                        variants={fadeInDown}
                       >
                         ✓
                       </motion.span>
@@ -1575,7 +1310,7 @@ const ByteSuitePage: React.FC = () => {
                 <motion.h3 
                   className="text-3xl font-bold mb-6"
                   style={{ color: SECONDARY_COLOR }}
-                  variants={bounceIn}
+                  variants={fadeInDown}
                 >
                   Ongoing Support
                 </motion.h3>
@@ -1596,7 +1331,7 @@ const ByteSuitePage: React.FC = () => {
                       <motion.span 
                         className="text-xl"
                         style={{ color: SECONDARY_COLOR }}
-                        variants={bounceIn}
+                        variants={fadeInDown}
                       >
                         ✓
                       </motion.span>
@@ -1618,12 +1353,10 @@ const ByteSuitePage: React.FC = () => {
           className="py-20 px-8 text-center"
           style={{ backgroundColor: SECONDARY_COLOR }}
         >
-          <motion.div variants={bounceIn} className="max-w-7xl mx-auto">
+          <motion.div variants={fadeInDown} className="max-w-7xl mx-auto">
             <motion.h2 
               className="text-5xl lg:text-7xl font-black" 
-              initial={{ scale: 0.5, opacity: 0 }} 
-              whileInView={{ scale: 1, opacity: 1 }} 
-              transition={{ duration: 0.5, type: "spring", stiffness: 200 }}
+              variants={fadeInDown}
               style={{ color: PRIMARY_COLOR }}
             >
               Ready to Transform Your
@@ -1666,7 +1399,7 @@ const ByteSuitePage: React.FC = () => {
           style={{ backgroundColor: PRIMARY_COLOR }}
         >
           <div className="max-w-7xl mx-auto">
-            <motion.div variants={bounceIn} className="text-center mb-12">
+            <motion.div variants={fadeInDown} className="text-center mb-12">
               <motion.h2 
                 className="text-4xl lg:text-6xl font-black mb-6 bg-gradient-to-r from-[#ffffff] to-[#ffffff] bg-clip-text text-transparent"
                 variants={fadeInDown}
@@ -1675,7 +1408,7 @@ const ByteSuitePage: React.FC = () => {
               </motion.h2>
               <motion.h3 
                 className="text-xl lg:text-2xl font-bold mb-6 bg-gradient-to-r from-[#ffffff] to-[#ffffff] bg-clip-text text-transparent"
-                variants={bounceIn}
+                variants={fadeInDown}
               >
                 Looking for Complete Business Management?
               </motion.h3>
@@ -1721,7 +1454,7 @@ const ByteSuitePage: React.FC = () => {
                     <motion.h3 
                       className="text-3xl lg:text-4xl font-bold"
                       style={{ color: SECONDARY_COLOR }}
-                      variants={bounceIn}
+                      variants={fadeInDown}
                     >
                       {section.title}
                     </motion.h3>
@@ -1737,7 +1470,7 @@ const ByteSuitePage: React.FC = () => {
                         <motion.span 
                             className="text-xl"
                             style={{ color: SECONDARY_COLOR }}
-                          variants={bounceIn}
+                          variants={fadeInDown}
                         >
                             ✓
                         </motion.span>
@@ -1785,7 +1518,7 @@ const ByteSuitePage: React.FC = () => {
                 <motion.h4 
                 className="text-2xl font-bold mb-4"
                 style={{ color: SECONDARY_COLOR }}
-                  variants={bounceIn}
+                  variants={fadeInDown}
                 >
                   Ready to Explore ERP?
                 </motion.h4>
@@ -1831,6 +1564,51 @@ const ByteSuitePage: React.FC = () => {
           </p>
         </div>
       </motion.footer>
+
+      <style jsx>{`
+        .animate-float {
+          animation: float 3s ease-in-out infinite;
+        }
+        
+        .animate-slide-in-left {
+          animation: slideInLeft 0.8s ease-out;
+        }
+        
+        .animate-slide-in-right {
+          animation: slideInRight 0.8s ease-out;
+        }
+        
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
+        }
+        
+        @keyframes slideInLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-50px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes slideInRight {
+          from {
+            opacity: 0;
+            transform: translateX(50px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+      `}</style>
     </div>
   );
 };
