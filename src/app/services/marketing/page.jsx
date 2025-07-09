@@ -1,32 +1,80 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { Header } from '@/sections/Navbar';
 import FAQ from '@/components/FAQ-Marketing';
+import LottieAnimation from '@/components/LottieAnimation';
+
+// Enhanced helper component for staggered word reveal with smoother animations
+const AnimatedParagraph = ({ text, className = "" }) => {
+  const container = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+        delayChildren: 0.1
+      }
+    },
+  };
+  const item = {
+    hidden: {
+      y: "100%",
+      opacity: 0,
+      rotateX: -90
+    },
+    visible: {
+      y: 0,
+      opacity: 1,
+      rotateX: 0,
+      transition: {
+        duration: 0.8,
+        ease: [0.25, 0.46, 0.45, 0.94],
+        type: "spring",
+        stiffness: 100,
+        damping: 12
+      }
+    },
+  };
+
+  return (
+    <motion.p
+      className={className}
+      variants={container}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ amount: 0.3, once: true }}
+      style={{ overflow: "hidden", display: "inline-block" }}
+    >
+      {text.split(" ").map((word, i) => (
+        <motion.span
+          key={i}
+          variants={item}
+          style={{
+            display: "inline-block",
+            marginRight: "0.25rem",
+            transformOrigin: "bottom"
+          }}
+        >
+          {word}
+        </motion.span>
+      ))}
+    </motion.p>
+  );
+};
 
 const MarketingPage = () => {
-  const [scrollY, setScrollY] = useState(0);
-  const [seoVisible, setSeoVisible] = useState(false);
-  const [smmVisible, setSmmVisible] = useState(false);
   const [seoNumbersAnimated, setSeoNumbersAnimated] = useState(false);
   const [smmNumbersAnimated, setSmmNumbersAnimated] = useState(false);
-  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
-
-  // Page loading overlay state
-  const [isPageLoading, setIsPageLoading] = useState(true);
+  const [ppcAnimationData, setPpcAnimationData] = useState(null);
+  const [reelsAnimationData, setReelsAnimationData] = useState(null);
+  const [campaignAnimationData, setCampaignAnimationData] = useState(null);
+  const [planAnimationData, setPlanAnimationData] = useState(null);
 
   const seoStatsRef = useRef([]);
   const smmStatsRef = useRef([]);
-  const isScrolling = useRef(false);
-
-  const photoItems = [
-    { src: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop", alt: "Marketing Analytics", position: "top-left" },
-    { src: "https://images.unsplash.com/photo-1553413077-190dd305871c?w=400&h=300&fit=crop", alt: "SEO Strategy", position: "top-center" },
-    { src: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=300&fit=crop", alt: "Social Media", position: "top-right" },
-    { src: "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=400&h=300&fit=crop", alt: "Content Marketing", position: "bottom-left" },
-    { src: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop", alt: "Data Analysis", position: "bottom-center" },
-    { src: "https://images.unsplash.com/photo-1562577309-4932fdd64cd1?w=400&h=300&fit=crop", alt: "Digital Marketing", position: "bottom-right" }
-  ];
 
   const seoStats = [
     { target: 850, label: "% Average ROAS" },
@@ -45,13 +93,16 @@ const MarketingPage = () => {
       if (!ref) return;
 
       const target = targets[index];
-      const duration = 2000;
+      const duration = 2500;
       const start = performance.now();
+
+      ref.textContent = 0;
 
       const updateNumber = (currentTime) => {
         const elapsed = currentTime - start;
         const progress = Math.min(elapsed / duration, 1);
-        const easeOut = 1 - Math.pow(1 - progress, 3);
+        // Smoother easing function
+        const easeOut = 1 - Math.pow(1 - progress, 4);
         const current = Math.floor(easeOut * target);
 
         ref.textContent = current;
@@ -66,107 +117,38 @@ const MarketingPage = () => {
       requestAnimationFrame(updateNumber);
     });
 
-    setAnimated(true);
+    setAnimated && setAnimated(true);
   }, []);
 
-  const getTransform = useCallback((position, scrollProgress) => {
-    let translateX = 0;
-    let translateY = 0;
-    let rotate = 0;
-    let scale = 1;
-
-    const intensity = 800;
-
-    switch (position) {
-      case 'top-left':
-        translateX = -scrollProgress * intensity;
-        translateY = -scrollProgress * (intensity * 0.6);
-        rotate = -scrollProgress * 90;
-        scale = 1 - scrollProgress * 0.4;
-        break;
-      case 'top-center':
-        translateY = -scrollProgress * intensity;
-        rotate = scrollProgress * 180;
-        scale = 1 - scrollProgress * 0.3;
-        break;
-      case 'top-right':
-        translateX = scrollProgress * intensity;
-        translateY = -scrollProgress * (intensity * 0.6);
-        rotate = scrollProgress * 90;
-        scale = 1 - scrollProgress * 0.4;
-        break;
-      case 'bottom-left':
-        translateX = -scrollProgress * intensity;
-        translateY = scrollProgress * (intensity * 0.6);
-        rotate = scrollProgress * 135;
-        scale = 1 - scrollProgress * 0.4;
-        break;
-      case 'bottom-center':
-        translateY = scrollProgress * intensity;
-        rotate = -scrollProgress * 180;
-        scale = 1 - scrollProgress * 0.3;
-        break;
-      case 'bottom-right':
-        translateX = scrollProgress * intensity;
-        translateY = scrollProgress * (intensity * 0.6);
-        rotate = -scrollProgress * 135;
-        scale = 1 - scrollProgress * 0.4;
-        break;
-      default:
-        break;
-    }
-
-    return { translateX, translateY, rotate, scale };
-  }, []);
-
-  const updateScrollState = useCallback((currentScrollY) => {
-    const windowHeight = window.innerHeight;
-
-    setScrollY(currentScrollY);
-    setShowScrollIndicator(currentScrollY <= 100);
-
-    // Show SMM section (second section)
-    if (currentScrollY > windowHeight * 0.1) {
-      setSmmVisible(true);
-      if (!smmNumbersAnimated) {
-        setTimeout(() => {
-          animateNumbers(smmStatsRef, smmStats.map(s => s.target), setSmmNumbersAnimated);
-        }, 300);
-      }
-    }
-
-    // Show PPC section (third section)
-    if (currentScrollY > windowHeight * 1.05) {
-      setSeoVisible(true);
-      if (!seoNumbersAnimated) {
-        setTimeout(() => {
-          animateNumbers(seoStatsRef, seoStats.map(s => s.target), setSeoNumbersAnimated);
-        }, 300);
-      }
-    }
-  }, [animateNumbers, seoNumbersAnimated, smmNumbersAnimated, smmStats, seoStats]);
-
-  const handleScroll = useCallback(() => {
-    requestAnimationFrame(() => updateScrollState(window.scrollY));
-  }, [updateScrollState]);
-
+  // Observe SMM stats visibility
   useEffect(() => {
-    // Force initial scroll state calculation
-    updateScrollState(window.scrollY || 0);
+    if (smmNumbersAnimated) return;
 
-    // Add scroll listener
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        animateNumbers(smmStatsRef, smmStats.map(s => s.target), setSmmNumbersAnimated);
+        observer.disconnect();
+      }
+    }, { threshold: 0.3 });
 
-    // Force a recheck after component mount
-    const timeout = setTimeout(() => {
-      updateScrollState(window.scrollY || 0);
-    }, 50);
+    smmStatsRef.current.forEach(el => { if (el) observer.observe(el); });
+    return () => observer.disconnect();
+  }, [animateNumbers, smmStats, smmNumbersAnimated]);
 
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      clearTimeout(timeout);
-    };
-  }, [handleScroll, updateScrollState]);
+  // Observe PPC stats visibility
+  useEffect(() => {
+    if (seoNumbersAnimated) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        animateNumbers(seoStatsRef, seoStats.map(s => s.target), setSeoNumbersAnimated);
+        observer.disconnect();
+      }
+    }, { threshold: 0.3 });
+
+    seoStatsRef.current.forEach(el => { if (el) observer.observe(el); });
+    return () => observer.disconnect();
+  }, [animateNumbers, seoStats, seoNumbersAnimated]);
 
   // Ensure page starts at top on initial load/refresh
   useEffect(() => {
@@ -175,222 +157,640 @@ const MarketingPage = () => {
     }
   }, []);
 
-  const scrollProgress = typeof window !== 'undefined' ? Math.min(scrollY / (window.innerHeight || 1), 1) : 0;
-  const titleScale = 1 + scrollProgress * 2;
-  const titleOpacity = Math.max(1 - scrollProgress * 1.5, 0);
+  // Enhanced animation variants
+  const fadeInUp = {
+    hidden: {
+      opacity: 0,
+      y: 60,
+      scale: 0.95
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.8,
+        ease: [0.25, 0.46, 0.45, 0.94],
+        type: "spring",
+        stiffness: 100,
+        damping: 15
+      }
+    }
+  };
+
+  const slideInLeft = {
+    hidden: {
+      opacity: 0,
+      x: -100,
+      scale: 0.95
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      scale: 1,
+      transition: {
+        duration: 0.8,
+        ease: [0.25, 0.46, 0.45, 0.94],
+        type: "spring",
+        stiffness: 100,
+        damping: 15
+      }
+    }
+  };
+
+  const slideInRight = {
+    hidden: {
+      opacity: 0,
+      x: 100,
+      scale: 0.95
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      scale: 1,
+      transition: {
+        duration: 0.8,
+        ease: [0.25, 0.46, 0.45, 0.94],
+        type: "spring",
+        stiffness: 100,
+        damping: 15
+      }
+    }
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetch('/assets/Marketing/animations/ppc.json')
+      .then(res => res.json())
+      .then(setPpcAnimationData)
+      .catch(console.error);
+  }, []);
+
+  // Load Reels animation for Custom Posts section
+  useEffect(() => {
+    fetch('/assets/marketing/animations/reels.json')
+      .then(res => res.json())
+      .then(setReelsAnimationData)
+      .catch(console.error);
+  }, []);
+
+  // Load Campaign Leaders animation
+  useEffect(() => {
+    fetch('/assets/Marketing/animations/campaign.json')
+      .then(res => res.json())
+      .then(setCampaignAnimationData)
+      .catch(console.error);
+  }, []);
+
+  // Load Strategic Planning animation
+  useEffect(() => {
+    fetch('/assets/Marketing/animations/plan.json')
+      .then(res => res.json())
+      .then(setPlanAnimationData)
+      .catch(console.error);
+  }, []);
 
   return (
-    <div className="font-sans bg-gray-100 overflow-x-hidden" style={{ scrollBehavior: 'auto' }}>
+    <div className="font-sans bg-[#010a14] overflow-x-hidden" style={{ scrollBehavior: 'smooth' }}>
       {/* Header Navigation */}
       <div className="fixed top-0 left-0 w-full z-50">
         <Header />
       </div>
-      
-      {/* Section 1: Hero Gallery */}
-      <section className="h-screen relative flex items-center justify-center pt-6 sm:pt-20 overflow-hidden bg-gray-50">
-        {/* Professional animated background pattern */}
-        <div className="absolute inset-0 overflow-hidden">
-          <svg 
-            className="absolute inset-0 w-full h-full opacity-[0.02]" 
-            style={{
-              animation: 'float 20s ease-in-out infinite',
+
+      {/* Marketing Hero Section - Enhanced Responsive */}
+      <motion.section
+        className="relative flex flex-col lg:flex-row items-center justify-center lg:justify-between bg-gradient-to-r from-black via-blue-900 to-black px-4 sm:px-6 md:px-8 lg:px-16 xl:px-20 min-h-screen pt-20 pb-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
+      >
+        {/* Right-side fade overlay */}
+        <div className="pointer-events-none absolute right-0 top-0 h-full w-16 sm:w-24 md:w-32 lg:w-40 xl:w-56 bg-gradient-to-l from-[#010a14] to-transparent" />
+
+        {/* Text Content */}
+        <motion.div
+          className="relative z-10 text-center lg:text-left w-full lg:w-1/2 xl:w-2/5 order-2 lg:order-1 mt-8 lg:mt-0"
+          variants={slideInLeft}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.h1
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold tracking-tight mb-4 sm:mb-6 md:mb-8 leading-tight"
+            initial={{ opacity: 0, y: 100, rotateX: -90 }}
+            animate={{ opacity: 1, y: 0, rotateX: 0 }}
+            transition={{
+              duration: 1.2,
+              ease: [0.25, 0.46, 0.45, 0.94],
+              type: "spring",
+              stiffness: 100,
+              damping: 15
             }}
           >
-            <defs>
-              <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
-                <path d="M 60 0 L 0 0 0 60" fill="none" stroke="currentColor" strokeWidth="1"/>
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grid)" />
-          </svg>
-          
-          {/* Subtle geometric shapes */}
-          <div className="absolute top-20 left-20 w-32 h-32 border border-gray-300/20 rotate-45 animate-spin" style={{ animationDuration: '30s' }}></div>
-          <div className="absolute bottom-32 right-32 w-24 h-24 border border-gray-300/20 rotate-12 animate-pulse" style={{ animationDuration: '4s' }}></div>
-          <div className="absolute top-1/2 left-10 w-16 h-16 border border-gray-300/20 rounded-full animate-bounce" style={{ animationDuration: '6s' }}></div>
-          
-          {/* Floating lines */}
-          <div 
-            className="absolute top-40 right-20 w-64 h-px bg-gradient-to-r from-transparent via-gray-300/30 to-transparent"
-            style={{
-              animation: 'slideHorizontal 15s ease-in-out infinite',
-              transform: 'rotate(15deg)'
-            }}
-          ></div>
-          <div 
-            className="absolute bottom-40 left-32 w-48 h-px bg-gradient-to-r from-transparent via-gray-300/30 to-transparent"
-            style={{
-              animation: 'slideHorizontal 12s ease-in-out infinite reverse',
-              transform: 'rotate(-10deg)'
-            }}
-          ></div>
-        </div>
+            <span className="bg-gradient-to-r from-[#E1E3E2] to-purple-600 bg-clip-text text-transparent block">
+              DIGITAL<br />MARKETING
+            </span>
+          </motion.h1>
 
-        <div className="relative w-full h-screen flex items-center justify-center">
-          {/* Responsive photo grid */}
-          <div
-            className="relative w-full max-w-[95%] h-[60vh] grid grid-cols-2 grid-rows-2 gap-4 items-center justify-items-center sm:w-4/5 sm:h-[70vh] sm:grid-cols-3 sm:grid-rows-3 sm:gap-6 md:w-11/12 md:h-3/5 md:gap-8"
+          <AnimatedParagraph
+            text="Unlock your brand's full potential with data-driven marketing expertise."
+            className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-white leading-relaxed max-w-2xl mx-auto lg:mx-0"
+          />
+        </motion.div>
+
+        {/* Image Content */}
+        <motion.div
+          className="relative w-full lg:w-1/2 xl:w-3/5 h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[500px] flex items-center justify-center overflow-visible order-1 lg:order-2"
+          variants={slideInRight}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div
+            animate={{ y: [0, -15, 0] }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: 'easeInOut',
+              repeatType: "reverse"
+            }}
+            className="relative w-full h-full"
           >
-            {photoItems.map((item, index) => {
-              const transform = getTransform(item.position, scrollProgress);
-              const opacity = Math.max(1 - scrollProgress * 1.1, 0);
+            <Image
+              src="/assets/Marketing/market(2).png"
+              alt="Marketing Illustration"
+              fill
+              className="object-contain object-center"
+              priority
+            />
+          </motion.div>
+        </motion.div>
+      </motion.section>
 
-              return (
-                <div
+      {/* Section 2: SMM - Enhanced Responsive */}
+      <motion.section
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.2, once: true }}
+        className="min-h-screen relative flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-16 xl:px-20 bg-[#010a14] text-white py-16 lg:py-20"
+      >
+        <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
+          {/* Image */}
+          <motion.div
+            variants={slideInLeft}
+            className="w-full lg:w-2/5 max-w-sm lg:max-w-md aspect-square rounded-full overflow-hidden relative z-10 shadow-2xl"
+          >
+            <div className="absolute -top-2 -right-2 left-2 bottom-2 sm:-top-4 sm:-right-4 sm:left-4 sm:bottom-4 border-2 sm:border-4 border-purple-400 -z-10 rounded-full"></div>
+            <img
+              src="/assets/Marketing/smm.png"
+              alt="Social Media Marketing"
+              className="w-full h-full object-cover"
+            />
+          </motion.div>
+
+          {/* Content */}
+          <motion.div
+            variants={slideInRight}
+            className="flex-1 w-full text-center lg:text-left"
+          >
+            <motion.h2
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-blue-800 via-white to-blue-800 bg-clip-text text-transparent leading-tight mb-4 sm:mb-6"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 0.8,
+                ease: [0.25, 0.46, 0.45, 0.94],
+                delay: 0.3
+              }}
+            >
+              Social Media<br />Marketing
+            </motion.h2>
+
+            <motion.div
+              className="text-sm sm:text-base md:text-lg text-gray-300 leading-relaxed space-y-3 sm:space-y-4 mb-6 sm:mb-8"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 0.8,
+                ease: [0.25, 0.46, 0.45, 0.94],
+                delay: 0.5
+              }}
+            >
+              <p>
+                If you're not marketing like it's 2025, you're already behind. Modern marketing demands a strategic blend of data, creativity, and flawless execution — not just eye-catching visuals or scattered ad boosts.
+              </p>
+              <p>
+                Creating viral content and building engaged communities across all major social platforms. Expert in influencer partnerships, paid social campaigns, and brand storytelling that converts followers into customers while fostering lasting brand loyalty.
+              </p>
+
+              <motion.ul
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="list-disc ml-4 sm:ml-6 space-y-1 sm:space-y-2 text-sm sm:text-base md:text-lg"
+              >
+                {[
+                  'Custom Posts Tailored To Your Brand',
+                  'High-Impact Reels & Short-Form Videos',
+                  'Strategic Planning Crafted By Industry Experts'
+                ].map((text, idx) => (
+                  <motion.li
+                    key={idx}
+                    variants={fadeInUp}
+                    className="leading-relaxed"
+                  >
+                    {text}
+                  </motion.li>
+                ))}
+              </motion.ul>
+            </motion.div>
+
+            {/* Stats */}
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="flex flex-wrap justify-center lg:justify-start gap-4 sm:gap-6 md:gap-8 lg:gap-10 mt-6"
+            >
+              {smmStats.map((stat, index) => (
+                <motion.div
                   key={index}
-                  className="w-full h-full sm:w-80 sm:h-60 rounded-lg overflow-hidden shadow-lg transform-gpu hover:shadow-2xl transition-shadow duration-300"
-                  style={{
-                    transform: `translate3d(${transform.translateX}px, ${transform.translateY}px, 0) rotate(${transform.rotate}deg) scale(${transform.scale})`,
-                    opacity: opacity,
-                    willChange: 'transform, opacity',
-                    transition: 'none'
-                  }}
+                  variants={fadeInUp}
+                  className="text-center lg:text-left flex-1 min-w-[100px] sm:min-w-[120px]"
                 >
-                  <img
-                    src={item.src}
-                    alt={item.alt}
-                    className="w-full h-full object-cover"
-                    loading="eager"
-                  />
-                </div>
-              );
-            })}
-            {/* Spacer – only needed for ≥ sm when grid is 3×3 */}
-            <div className="hidden sm:block row-start-2 col-span-3" />
-          </div>
+                  <span
+                    ref={el => smmStatsRef.current[index] = el}
+                    className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold block bg-gradient-to-r from-blue-800 via-white to-blue-800 bg-clip-text text-transparent"
+                  >
+                    0
+                  </span>
+                  <div className="text-xs sm:text-sm md:text-base text-gray-600 mt-1 sm:mt-2 leading-tight">{stat.label}</div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </motion.div>
+        </div>
+      </motion.section>
 
-          <h1
-            className="absolute text-[12vw] sm:text-[10vw] md:text-7xl font-bold text-gray-800 tracking-widest text-center z-10 top-1/2 left-1/2 p-4 sm:p-6 md:p-10 bg-white/60 backdrop-blur-sm border border-white/30 rounded-2xl transform-gpu shadow-2xl"
-            style={{
-              transform: `translate3d(-50%, -50%, 0) scale(${titleScale})`,
-              opacity: titleOpacity,
-              willChange: 'transform, opacity',
-              transition: 'none'
-            }}
+      {/* SMM Sub-Section: Custom Posts & Reels - Enhanced Responsive */}
+      <motion.section
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.2, once: true }}
+        className="min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-16 xl:px-20 bg-white text-[#010a14] py-16 lg:py-20"
+      >
+        <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center gap-8 lg:gap-16">
+          {/* Content */}
+          <motion.div
+            variants={slideInLeft}
+            className="flex-1 w-full max-w-2xl text-center md:text-left order-2 md:order-1"
           >
-            MARKETING
-          </h1>
-        </div>
-
-        {/* Custom animations */}
-        <style jsx>{`
-          @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(0.5deg); }
-          }
-          
-          @keyframes slideHorizontal {
-            0%, 100% { transform: translateX(-100px) rotate(15deg); opacity: 0; }
-            50% { transform: translateX(100px) rotate(15deg); opacity: 1; }
-          }
-        `}</style>
-      </section>
-
-      {/* Section 2: SMM - Image Left, Text Right */}
-      <section className={`min-h-screen relative flex items-center justify-between px-16 md:px-8 bg-gradient-to-br from-gray-50 to-gray-100 transition-all duration-1000 ease-out flex-col lg:flex-row lg:text-left md:py-10 lg:justify-between ${smmVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-        <div className={`w-full lg:w-2/5 md:w-4/5 max-w-lg aspect-square rounded-full overflow-hidden relative z-10 shadow-2xl transition-all duration-1200 ease-out mb-8 lg:mb-0 ${smmVisible ? 'translate-x-0 scale-100 opacity-100 rotate-0' : '-translate-x-32 scale-90 opacity-0 -rotate-6'}`}>
-          <div className="absolute -top-4 -right-4 left-4 bottom-4 border-4 border-purple-400 -z-10 rounded-full"></div>
-          <img
-            src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=400&h=500&fit=crop"
-            alt="Social Media Expert"
-            className="w-full h-full object-cover"
-          />
-        </div>
-
-        <div className={`flex-1 w-full lg:pl-16 md:pl-0 md:mt-10 transition-all duration-1000 delay-200 ease-out ${smmVisible ? 'translate-x-0 opacity-100' : 'translate-x-24 opacity-0'}`}>
-          <h2 className={`text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-purple-600 leading-tight mb-10 transition-all duration-1200 delay-300 ease-out ${smmVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-            Social Media<br />Marketing
-          </h2>
-          <div className={`text-lg sm:text-xl md:text-2xl text-gray-600 leading-relaxed space-y-6 mb-12 transition-all duration-1000 delay-500 ease-out ${smmVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}> 
-            <p>
-              If you're not marketing like it's 2025, you're already behind. Modern marketing isn't just about posting attractive visuals or boosting random ads. It's about strategy, data, creativity and flawless execution — all working in sync.
+            <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent mb-4 sm:mb-6">
+              Custom Posts & Reels
+            </h3>
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-[#010a14] leading-relaxed mb-6">
+              Elevate your brand story with thumb-stopping visuals engineered for every platform's algorithm. From carousel posts that spark conversations to high-energy reels that hit the explore page, our design lab crafts social assets that convert scrollers into loyal fans.
             </p>
-            <p>
-              Creating viral content and building engaged communities across all major social platforms. Expert in influencer partnerships, paid social campaigns, and brand storytelling that converts followers into customers while fostering lasting brand loyalty.
-            </p>
-          </div>
-          <div className={`flex gap-4 sm:gap-8 md:gap-12 lg:gap-16 mt-10 justify-start transition-all duration-1000 delay-700 ease-out ${smmVisible ? 'translate-y-0 opacity-100' : 'translate-y-16 opacity-0'}`}>
-            {smmStats.map((stat, index) => (
-              <div key={index} className="text-left flex-1 min-w-0">
-                <span
-                  ref={el => smmStatsRef.current[index] = el}
-                  className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-purple-600 block"
+            <motion.ul
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="list-disc ml-4 sm:ml-6 space-y-1 sm:space-y-2 text-sm sm:text-base md:text-lg"
+            >
+              {[
+                'Platform-native formats (IG, TikTok, YT Shorts)',
+                'Brand-aligned motion graphics & edits',
+                'Caption frameworks that fuel engagement'
+              ].map((item, idx) => (
+                <motion.li
+                  key={item}
+                  variants={fadeInUp}
+                  className="leading-relaxed"
                 >
-                  0
-                </span>
-                <div className="text-sm sm:text-base md:text-lg text-gray-600 mt-2 leading-tight">{stat.label}</div>
-              </div>
-            ))}
-          </div>
+                  {item}
+                </motion.li>
+              ))}
+            </motion.ul>
+          </motion.div>
+          {/* Animation - Full Container Coverage */}
+          <motion.div
+            variants={slideInRight}
+            className="relative flex-1 order-1 md:order-2 max-w-md w-full aspect-square flex items-center justify-center"
+          >
+            {reelsAnimationData && (
+              <LottieAnimation
+                animationData={reelsAnimationData}
+                loop
+                autoplay
+                className="w-full h-full object-contain"
+              />
+            )}
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Section 3: SEO - Image Left, Text Right */}
-      <section className={`min-h-screen relative flex items-center justify-between px-16 md:px-8 bg-gradient-to-bl from-gray-100 to-gray-200 transition-all duration-1000 ease-out flex-col lg:flex-row-reverse lg:text-left md:py-10 lg:justify-between mt-12 sm:mt-16 md:mt-0 ${seoVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-        <div className={`w-full lg:w-2/5 md:w-4/5 max-w-lg aspect-square rounded-full overflow-hidden relative z-10 shadow-2xl transition-all duration-1200 ease-out mb-8 lg:mb-0 ${seoVisible ? 'translate-x-0 opacity-100 scale-100 rotate-0' : 'translate-x-32 opacity-0 scale-90 rotate-6'}`}> 
-          <div className="absolute -top-4 -left-4 right-4 bottom-4 border-4 border-purple-400 -z-10 rounded-full"></div>
-          <img
-            src="https://images.unsplash.com/photo-1553413077-190dd305871c?w=400&h=500&fit=crop"
-            alt="PPC Analytics"
-            className="w-full h-full object-cover"
-          />
-        </div>
-
-        <div className={`flex-1 w-full lg:pr-16 md:pl-0 md:mt-10 transition-all duration-1000 delay-200 ease-out ${seoVisible ? 'translate-x-0 opacity-100' : '-translate-x-24 opacity-0'}`}>
-          <h2 className={`text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-purple-600 leading-tight mb-10 transition-all duration-1200 delay-300 ease-out ${seoVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-            Pay&nbsp;Per<br />Click&nbsp;(PPC)
-          </h2>
-          <div className={`text-lg sm:text-xl md:text-2xl text-gray-600 leading-relaxed space-y-6 mb-12 transition-all duration-1000 delay-500 ease-out ${seoVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
-            <p>
-              We don't just run ads — we build data-backed campaigns that drive measurable ROI. From Google and Bing to LinkedIn and YouTube, our specialists optimise every click for maximum conversions.
+      {/* SMM Sub-Section: Strategic Planning - Enhanced Responsive */}
+      <motion.section
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.2, once: true }}
+        className="min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-16 xl:px-20 bg-[#010a14] text-white py-16 lg:py-20"
+      >
+        <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row-reverse items-center gap-8 lg:gap-16">
+          {/* Content */}
+          <motion.div
+            variants={slideInRight}
+            className="flex-1 w-full max-w-2xl text-center md:text-left order-2 md:order-2"
+          >
+            <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-800 via-white to-blue-600 bg-clip-text text-transparent mb-4 sm:mb-6">
+              Strategic Planning by Experts
+            </h3>
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed mb-6">
+              Our senior strategists map every campaign to audience insights and market trends, stacking data-backed tactics into an agile roadmap. Weekly sprints, KPI dashboards, and A/B testing cycles keep growth compounding month after month.
             </p>
+            <motion.ul
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="list-disc ml-4 sm:ml-6 space-y-1 sm:space-y-2 text-sm sm:text-base md:text-lg"
+            >
+              {[
+                '360° Social Audits & Competitive Analysis',
+                'Quarterly content calendars with agile pivots',
+                'Real-time reporting & optimisation loops'
+              ].map((text, idx) => (
+                <motion.li
+                  key={text}
+                  variants={fadeInUp}
+                  className="leading-relaxed"
+                >
+                  {text}
+                </motion.li>
+              ))}
+            </motion.ul>
+          </motion.div>
 
-            <ul className="list-disc ml-6 space-y-2 text-lg sm:text-xl md:text-2xl">
+          {/* Strategic Planning Animation */}
+          <motion.div
+            variants={slideInLeft}
+            className="relative flex-1 order-1 md:order-1 w-full max-w-md aspect-square flex items-center justify-center"
+          >
+            {planAnimationData && (
+              <LottieAnimation
+                animationData={planAnimationData}
+                loop
+                autoplay
+                className="w-full h-full object-contain"
+              />
+            )}
+          </motion.div>
+        </div>
+      </motion.section>
+
+      {/* PPC Main Section - Enhanced Responsive */}
+      <motion.section
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.2, once: true }}
+        className="min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-16 xl:px-20 bg-white text-[#010a14] py-16 lg:py-20"
+      >
+        <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row-reverse items-center gap-8 lg:gap-16">
+          {/* Image (PPC Analytics Animation) */}
+          <motion.div
+            variants={slideInRight}
+            className="relative w-full lg:w-2/5 max-w-sm lg:max-w-md aspect-square order-1 lg:order-2 flex items-center justify-center"
+          >
+            {ppcAnimationData && (
+              <LottieAnimation
+                animationData={ppcAnimationData}
+                loop
+                autoplay
+                className="w-full h-full object-contain"
+              />
+            )}
+          </motion.div>
+
+          {/* Content */}
+          <motion.div
+            variants={slideInLeft}
+            className="flex-1 w-full text-center lg:text-left order-2 lg:order-1"
+          >
+            <motion.h2
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent leading-tight mb-4 sm:mb-6"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 0.8,
+                ease: [0.25, 0.46, 0.45, 0.94],
+                delay: 0.3
+              }}
+            >
+              Pay&nbsp;Per<br />Click&nbsp;(PPC)
+            </motion.h2>
+
+            <motion.div
+              className="text-sm sm:text-base md:text-lg text-[#010a14] leading-relaxed space-y-3 sm:space-y-4 mb-6 sm:mb-8"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 0.8,
+                ease: [0.25, 0.46, 0.45, 0.94],
+                delay: 0.5
+              }}
+            >
+              <p>
+                We don't just run ads — we build data-backed campaigns that drive measurable ROI. From Google and Bing to LinkedIn and YouTube, our specialists optimise every click for maximum conversions.
+              </p>
+            </motion.div>
+
+            <motion.ul
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="list-disc ml-4 sm:ml-6 space-y-1 sm:space-y-2 text-sm sm:text-base md:text-lg mb-6 sm:mb-8"
+            >
               {[
                 'Smart Targeting',
                 'High-Converting Copy & Creatives',
                 'Full-Funnel Tracking (GA4, GTM, Pixel)',
                 'Scalable Growth Across Top Ad Platforms'
               ].map((text, idx) => (
-                <li
-                  key={idx}
-                  className={`${seoVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'} transition-all duration-700 ease-out`}
+                <motion.li
+                  key={text}
+                  variants={fadeInUp}
+                  className="leading-relaxed"
                 >
                   {text}
-                </li>
+                </motion.li>
               ))}
-            </ul>
-          </div>
-          <div className={`flex gap-2 sm:gap-4 md:gap-6 lg:gap-8 mt-10 justify-start transition-all duration-1000 delay-700 ease-out w-full ${seoVisible ? 'translate-y-0 opacity-100' : 'translate-y-16 opacity-0'}`}>
-            {seoStats.map((stat, index) => (
-              <div key={index} className="text-left flex-1 min-w-0">
-                <span
-                  ref={el => seoStatsRef.current[index] = el}
-                  className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-purple-600 block leading-none"
+            </motion.ul>
+
+            {/* PPC Stats */}
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="flex flex-wrap justify-center lg:justify-start gap-4 sm:gap-6 md:gap-8 lg:gap-10 mt-6"
+            >
+              {seoStats.map((stat, index) => (
+                <motion.div
+                  key={index}
+                  variants={fadeInUp}
+                  className="text-center lg:text-left flex-1 min-w-[100px] sm:min-w-[120px]"
                 >
-                  0
-                </span>
-                <span className="text-gray-600 text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-wider block mt-1 sm:mt-2 leading-tight">{stat.label}</span>
-              </div>
-            ))}
-          </div>
+                  <span
+                    ref={el => seoStatsRef.current[index] = el}
+                    className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold block bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent"
+                  >
+                    0
+                  </span>
+                  <div className="text-xs sm:text-sm md:text-base text-gray-600 mt-1 sm:mt-2 leading-tight">{stat.label}</div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
+
+      {/* PPC Sub-Section: Professional Management - Enhanced Responsive */}
+      <motion.section
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.2, once: true }}
+        className="min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-16 xl:px-20 bg-[#0d0d20] text-white py-16 lg:py-20"
+      >
+        <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center gap-8 lg:gap-16">
+          {/* Content */}
+          <motion.div
+            variants={slideInLeft}
+            className="flex-1 w-full max-w-2xl text-center md:text-left order-2 md:order-1"
+          >
+            <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-800 via-white to-blue-800 bg-clip-text text-transparent mb-4 sm:mb-6">
+              Professional PPC Management
+            </h3>
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed mb-6">
+              Certified PPC experts fine-tune bids, keywords, and ad copy in real time to squeeze every drop of value from your budget—delivering consistent, profitable growth across search and display networks.
+            </p>
+            <motion.ul
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="list-disc ml-4 sm:ml-6 space-y-1 sm:space-y-2 text-sm sm:text-base md:text-lg"
+            >
+              {[
+                'Google & Microsoft Ads Certified Team',
+                'Advanced Bid & Budget Automation',
+                '24/7 Ad & Keyword Optimisation'
+              ].map((text, idx) => (
+                <motion.li
+                  key={text}
+                  variants={fadeInUp}
+                  className="leading-relaxed"
+                >
+                  {text}
+                </motion.li>
+              ))}
+            </motion.ul>
+          </motion.div>
+
+          {/* Image */}
+          <motion.div
+            variants={slideInRight}
+            className="flex-1 order-1 md:order-2 w-full max-w-md aspect-square rounded-3xl overflow-hidden shadow-2xl"
+          >
+            <img src="/assets/Marketing/PPC_Management.png" alt="Professional PPC" className="w-full h-full object-cover" />
+          </motion.div>
+        </div>
+      </motion.section>
+
+      {/* PPC Sub-Section: Campaign Leaders - Enhanced Responsive */}
+      <motion.section
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.2, once: true }}
+        className="min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-16 xl:px-20 bg-white text-[#010a14] py-16 lg:py-20"
+      >
+        <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row-reverse items-center gap-8 lg:gap-16">
+          {/* Content */}
+          <motion.div
+            variants={slideInRight}
+            className="flex-1 w-full max-w-2xl text-center md:text-left order-2 md:order-2"
+          >
+            <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent mb-4 sm:mb-6">
+              Campaign Leaders
+            </h3>
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-[#010a14] leading-relaxed mb-6">
+              Dedicated account strategists act as your personal growth officers, uniting creative, data science, and media buying teams to steer campaigns toward record-breaking ROAS and sustained scaling.
+            </p>
+            <motion.ul
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="list-disc ml-4 sm:ml-6 space-y-1 sm:space-y-2 text-sm sm:text-base md:text-lg"
+            >
+              {[
+                'Quarterly OKR & ROAS Alignment',
+                'Cross-channel Creative Leadership',
+                'Growth Roadmaps & Stakeholder Workshops'
+              ].map((text, idx) => (
+                <motion.li
+                  key={text}
+                  variants={fadeInUp}
+                  className="leading-relaxed"
+                >
+                  {text}
+                </motion.li>
+              ))}
+            </motion.ul>
+          </motion.div>
+
+          {/* Campaign Animation */}
+          <motion.div
+            variants={slideInLeft}
+            className="relative flex-1 order-1 md:order-1 w-full max-w-md aspect-square flex items-center justify-center"
+          >
+            {campaignAnimationData && (
+              <LottieAnimation
+                animationData={campaignAnimationData}
+                loop
+                autoplay
+                className="w-full h-full object-contain"
+              />
+            )}
+          </motion.div>
+        </div>
+      </motion.section>
 
       {/* FAQ Section */}
       <section className="w-full flex flex-col items-center justify-center py-0">
         <FAQ />
       </section>
-
-      {/* Scroll Indicator */}
-      <div className={`fixed bottom-8 left-1/2 transform -translate-x-1/2 text-gray-600 text-xs transition-opacity duration-500 animate-bounce ${showScrollIndicator ? 'opacity-100' : 'opacity-0'}`}>
-        <div className="flex flex-col items-center">
-          <span className="mb-2">Scroll to explore</span>
-          <div className="w-1 h-8 border border-gray-400 rounded-full relative">
-            <div className="w-1 h-2 bg-gray-600 rounded-full absolute top-1 animate-pulse"></div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
