@@ -1042,14 +1042,14 @@ const ByteSuitePage: React.FC = () => {
               ].map((audience, index) => (
                 <motion.div
                   key={index}
-                  className="grid lg:grid-cols-3 gap-12 items-center"
+                  className="grid lg:grid-cols-2 gap-12 items-center"
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ margin: '-200px' }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                 >
                   <motion.div
-                    className={`lg:col-span-2 space-y-6 ${index % 2 === 1 ? 'lg:order-2' : ''}`}
+                    className={`space-y-6 ${index % 2 === 1 ? 'lg:order-2' : ''}`}
                     initial={{ opacity: 0, x: index % 2 === 1 ? 30 : -30 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.4, delay: index * 0.1 + 0.1 }}
