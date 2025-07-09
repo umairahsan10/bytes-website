@@ -238,7 +238,7 @@ const MarketingPage = () => {
 
   // Load Reels animation for Custom Posts section
   useEffect(() => {
-    fetch('/assets/marketing/animations/reels.json')
+    fetch('/assets/Marketing/animations/reels.json')
       .then(res => res.json())
       .then(setReelsAnimationData)
       .catch(console.error);
@@ -269,7 +269,7 @@ const MarketingPage = () => {
 
       {/* Marketing Hero Section - Enhanced Responsive */}
       <motion.section
-        className="relative flex flex-col lg:flex-row items-center justify-center lg:justify-between bg-gradient-to-r from-black via-blue-900 to-black px-4 sm:px-6 md:px-8 lg:px-16 xl:px-20 min-h-screen pt-20 pb-10"
+        className="relative flex flex-col lg:flex-row items-center justify-center lg:justify-between bg-gradient-to-r from-black via-[#010a14] to-black px-4 sm:px-6 md:px-8 lg:px-16 xl:px-20 min-h-screen pt-20 pb-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
@@ -314,16 +314,7 @@ const MarketingPage = () => {
           initial="hidden"
           animate="visible"
         >
-          <motion.div
-            animate={{ y: [0, -15, 0] }}
-            transition={{
-              duration: 6,
-              repeat: Infinity,
-              ease: 'easeInOut',
-              repeatType: "reverse"
-            }}
-            className="relative w-full h-full"
-          >
+          <div className="relative w-full h-full">
             <Image
               src="/assets/Marketing/market(2).png"
               alt="Marketing Illustration"
@@ -331,7 +322,9 @@ const MarketingPage = () => {
               className="object-contain object-center"
               priority
             />
-          </motion.div>
+            {/* Fade overlay */}
+            <div className="pointer-events-none absolute top-0 right-0 h-full w-1/3 bg-gradient-to-l from-[#010a14] to-transparent z-10" />
+          </div>
         </motion.div>
       </motion.section>
 
