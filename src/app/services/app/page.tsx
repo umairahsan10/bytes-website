@@ -188,7 +188,8 @@ const AppDevelopmentPage = () => {
           </motion.h1>
 
           <AnimatedParagraph
-            text="Transform your ideas into powerful mobile experiences with cutting-edge development expertise."
+            text="At Bytes Platform, we specialize in delivering mobile app development services that transform your ideas into powerful mobile experiences. Our team is dedicated to creating intuitive, user-friendly applications tailored to meet your business needs."
+            // text="Transform your ideas into powerful mobile experiences with cutting-edge development expertise."
             className="text-base sm:text-lg md:text-xl lg:text-2xl text-white leading-relaxed max-w-2xl"
           />
         </div>
@@ -565,22 +566,13 @@ const AppDevelopmentPage = () => {
               <h2 className="text-xl sm:text-2xl lg:text-4xl font-bold leading-tight">
                 The Future <span className="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">Is&nbsp;Mobile</span>
               </h2>
-              <AnimatedParagraph
-                text="Mobile apps aren't a luxury anymore — they're the frontline of customer experience. From start-ups to enterprises, every brand is racing to become an icon on the home screen."
-                className="text-sm md:text-base text-gray-700 leading-relaxed"
-              />
-              <AnimatedParagraph
-                text="At Bytes Platform, we don't just code apps — we engineer mobile products that engage, retain, and scale."
-                className="text-sm md:text-base text-gray-700 leading-relaxed"
-              />
-
-              <ul className="space-y-1">
+              <ul className="space-y-4">
                 {[
-                  "Apple App Store Listed Developer", // <-- replace / verify real credentials
-                  "Google Play Certified Publisher",   // <-- replace / verify real credentials
-                  "Pixel-perfect UI/UX prototypes in Figma",
-                  "End-to-end ownership — frontend, backend & cloud",
-                  "Post-launch support & version management"
+                  { title: "Apple App Store Listed Developer", description: "We are recognized developers on the App Store, ensuring compliance with their guidelines." },
+                  { title: "Google Play Certified Publisher", description: "Our certification as a publisher on Google Play guarantees adherence to their standards." },
+                  { title: "Pixel-Perfect UI/UX Prototypes", description: "We use Figma to design high-fidelity prototypes that reflect the final user experience." },
+                  { title: "End-to-End Ownership", description: "From frontend to backend and cloud services, we handle every aspect of your app development." },
+                  { title: "Post-Launch Support & Version Management", description: "We provide ongoing support and manage updates to keep your app current and functional." }
                 ].map((item, idx) => (
                   <motion.li
                     key={idx}
@@ -591,7 +583,9 @@ const AppDevelopmentPage = () => {
                     transition={{ duration: 0.6, delay: idx * 0.1 }}
                   >
                     <div className="w-2 h-2 mt-2 mr-4 rounded-full bg-purple-600"></div>
-                    <span className="text-sm md:text-base text-gray-800">{item}</span>
+                    <span className="text-sm md:text-base text-gray-800">
+                      <strong>{item.title}:</strong> {item.description}
+                    </span>
                   </motion.li>
                 ))}
               </ul>
@@ -664,42 +658,48 @@ const AppDevelopmentPage = () => {
               {[
                 {
                   title: "Native iOS Development",
-                  description: "Swift and SwiftUI applications optimized for Apple's ecosystem with seamless integration and performance.",
+                  description:"Utilizing Swift and SwiftUI, we develop applications optimized for Apple's ecosystem, ensuring seamless integration and performance.",
+                  // description: "Swift and SwiftUI applications optimized for Apple's ecosystem with seamless integration and performance.",
                   detailedDescription: "Build powerful iOS applications using Swift and SwiftUI that take full advantage of Apple's ecosystem. Our native development approach ensures optimal performance, seamless integration with iOS features like Face ID, Touch ID, and Apple Pay, and adherence to Apple's Human Interface Guidelines. We leverage Core Data for local storage, integrate with CloudKit for synchronization, and implement advanced features like ARKit for augmented reality experiences.",
                   gradient: "from-blue-500 to-cyan-500",
                   features: ["Swift & SwiftUI", "Core Data Integration", "CloudKit Sync", "ARKit Support", "Apple Pay Integration", "TestFlight Beta Testing"]
                 },
                 {
                   title: "Native Android Development",
-                  description: "Kotlin and Java applications leveraging Android's full capabilities for optimal user experience.",
+                  description:"Our team leverages Kotlin and Java to build applications that fully utilize Android's capabilities, providing an optimal user experience.",
+                  // description: "Kotlin and Java applications leveraging Android's full capabilities for optimal user experience.",
                   detailedDescription: "Create robust Android applications using Kotlin and Java that harness the full power of the Android platform. Our development process includes Material Design implementation, integration with Google services, efficient memory management, and optimization for various screen sizes and Android versions. We implement advanced features like background processing, push notifications, and seamless integration with Google Play Services.",
                   gradient: "from-green-500 to-emerald-500",
                   features: ["Kotlin & Java", "Material Design", "Google Play Services", "Room Database", "WorkManager", "Firebase Integration"]
                 },
                 {
                   title: "Cross-Platform Solutions",
-                  description: "React Native and Flutter apps that run efficiently on both iOS and Android with shared codebase.",
+                  description: "We employ frameworks like React Native and Flutter to create applications that run efficiently on both iOS and Android, sharing a common codebase.",
+                  // description: "React Native and Flutter apps that run efficiently on both iOS and Android with shared codebase.",
                   detailedDescription: "Develop cost-effective cross-platform applications using React Native and Flutter that deliver native-like performance on both iOS and Android. Our approach maximizes code reuse while maintaining platform-specific optimizations. We implement custom native modules when needed, ensure consistent UI/UX across platforms, and provide comprehensive testing on both operating systems.",
                   gradient: "from-purple-500 to-pink-500",
                   features: ["React Native", "Flutter", "Shared Codebase", "Platform Optimization", "Custom Native Modules", "Cross-Platform Testing"]
                 },
                 {
                   title: "UI/UX Design",
-                  description: "Intuitive and engaging mobile interfaces designed with user-centered approach and modern aesthetics.",
+                  description: "Our designers focus on creating intuitive and engaging mobile interfaces, employing a user-centered approach and modern aesthetics.",
+                  // description: "Intuitive and engaging mobile interfaces designed with user-centered approach and modern aesthetics.",
                   detailedDescription: "Design beautiful and functional mobile interfaces that prioritize user experience and accessibility. Our design process includes user research, wireframing, prototyping, and usability testing. We create design systems that ensure consistency across your app, implement smooth animations and transitions, and optimize for various screen sizes and accessibility requirements.",
                   gradient: "from-orange-500 to-red-500",
                   features: ["User Research", "Wireframing & Prototyping", "Design Systems", "Accessibility", "Animation Design", "Usability Testing"]
                 },
                 {
                   title: "Backend Integration",
-                  description: "Robust API development and third-party service integration for seamless data synchronization.",
+                  description: "We offer robust API development and third-party service integration to ensure seamless data synchronization across your application.",
+                  // description: "Robust API development and third-party service integration for seamless data synchronization.",
                   detailedDescription: "Build and integrate powerful backend systems that support your mobile application's functionality. Our backend development includes RESTful API design, GraphQL implementation, real-time data synchronization, secure authentication systems, and integration with third-party services. We ensure scalable architecture, efficient caching strategies, and comprehensive error handling.",
                   gradient: "from-indigo-500 to-blue-500",
                   features: ["RESTful APIs", "GraphQL", "Real-time Sync", "Authentication", "Third-party Integration", "Scalable Architecture"]
                 },
                 {
                   title: "App Store Deployment",
-                  description: "Complete deployment process including store optimization, testing, and post-launch support.",
+                  description: "From store optimization to testing and post-launch support, we manage the complete deployment process to ensure your app reaches its audience effectively.",
+                  // description: "Complete deployment process including store optimization, testing, and post-launch support.",
                   detailedDescription: "Navigate the complete app store deployment process with our expert guidance. We handle app store optimization (ASO), create compelling store listings with screenshots and descriptions, manage the submission process for both Apple App Store and Google Play Store, implement analytics tracking, and provide ongoing support for updates and maintenance.",
                   gradient: "from-teal-500 to-green-500",
                   features: ["App Store Optimization", "Store Listings", "Submission Management", "Analytics Integration", "Update Management", "Post-launch Support"]
@@ -786,21 +786,22 @@ const AppDevelopmentPage = () => {
                 </motion.span>
               </motion.h2>
               <AnimatedParagraph
-                text="We leverage the latest technologies and frameworks to build robust, scalable, and high-performance mobile applications."
+              text="We utilize the latest technologies and frameworks to build robust, scalable, and high-performance mobile applications:"
+                // text="We leverage the latest technologies and frameworks to build robust, scalable, and high-performance mobile applications."
                 className="text-xl text-gray-600 max-w-3xl mx-auto"
               />
             </motion.div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { name: "React Native", category: "Cross-Platform", icon: "/assets/react-native-icon.png", color: "from-blue-500 to-cyan-500" },
-                { name: "Flutter", category: "Cross-Platform", icon: "/assets/flutter-icon.png", color: "from-blue-600 to-blue-800" },
-                { name: "Swift/SwiftUI", category: "iOS Native", icon: "/assets/swift-icon.png", color: "from-orange-500 to-red-500" },
-                { name: "Kotlin/Java", category: "Android Native", icon: "/assets/kotlin-icon.png", color: "from-purple-600 to-purple-800" },
-                { name: "Node.js", category: "Backend", icon: "/assets/nodejs-icon.png", color: "from-green-500 to-green-700" },
-                { name: "Firebase", category: "Backend", icon: "/assets/firebase-icon.png", color: "from-orange-400 to-yellow-500" },
-                { name: "MongoDB", category: "Database", icon: "/assets/mongodb-icon.png", color: "from-green-600 to-green-800" },
-                { name: "AWS/Azure", category: "Cloud", icon: "/assets/aws-icon.png", color: "from-orange-600 to-red-600" }
+                { name: "React Native", category: "For cross-platform development", icon: "/assets/react-native-icon.png", color: "from-blue-500 to-cyan-500" },
+                { name: "Flutter", category: "Another cross-platform framework for efficient app development", icon: "/assets/flutter-icon.png", color: "from-blue-600 to-blue-800" },
+                { name: "Swift/SwiftUI", category: "For native iOS applications", icon: "/assets/swift-icon.png", color: "from-orange-500 to-red-500" },
+                { name: "Kotlin/Java", category: "For native Android applications", icon: "/assets/kotlin-icon.png", color: "from-purple-600 to-purple-800" },
+                { name: "Node.js", category: "For backend development", icon: "/assets/nodejs-icon.png", color: "from-green-500 to-green-700" },
+                { name: "Firebase", category: "For backend services", icon: "/assets/firebase-icon.png", color: "from-orange-400 to-yellow-500" },
+                { name: "MongoDB", category: "For database management", icon: "/assets/mongodb-icon.png", color: "from-green-600 to-green-800" },
+                { name: "AWS/Azure", category: "For cloud services", icon: "/assets/aws-icon.png", color: "from-orange-600 to-red-600" }
               ].map((tech, index) => (
                 <motion.div
                   key={index}
@@ -882,15 +883,17 @@ const AppDevelopmentPage = () => {
             transition={{ duration: 0.8 }}
           >
             <h2 className="text-5xl md:text-6xl font-bold mb-8">
-              Ready to Build Your
+              Ready to Elevate Your
               <br />
               <span className="bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
-                Next App?
+                Mobile Presence?
               </span>
             </h2>
 
             <AnimatedParagraph
-              text="Transform your ideas into powerful mobile experiences. Let's discuss your project and bring your vision to life."
+            text="In today's digital landscape, your mobile application isn't just a tool—it's a vital extension of your brand. We don't just develop apps; we craft custom mobile apps that are tailored to your unique business needs. If you're seeking mobile development service in USA, our team is equipped to bring your vision to life."
+            // text="In today's digital landscape, your mobile application isn't just a tool—it's a vital extension of your brand and a direct line to your customers. We don't just develop apps; we craft custom mobile apps that are tailored to your unique business needs. Whether you're seeking an android app development company or a mobile development company in the USA, our team is equipped to bring your vision to life."
+              // text="Transform your ideas into powerful mobile experiences. Let's discuss your project and bring your vision to life."
               className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto"
             />
 
