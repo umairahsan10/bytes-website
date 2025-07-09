@@ -30,6 +30,7 @@ const ByteBotLanding: React.FC = () => {
   const pageRef = useRef<HTMLDivElement>(null);
   const vantaRef = useRef<any>(null);
   const [integrationAnimationData, setIntegrationAnimationData] = React.useState<any>(null);
+  const [conversionAnimationData, setConversionAnimationData] = React.useState<any>(null);
   const [vantaScriptsLoaded, setVantaScriptsLoaded] = React.useState(false);
 
   // Load Vanta scripts once
@@ -91,9 +92,15 @@ const ByteBotLanding: React.FC = () => {
     // Load animation data
     const loadAnimationData = async () => {
       try {
-        const response = await fetch('/assets/newimages/Animation - 1751994926313.json');
-        const data = await response.json();
-        setIntegrationAnimationData(data);
+        // Load integration animation
+        const integrationResponse = await fetch('/assets/newimages/Animation - 1752082488879.json');
+        const integrationData = await integrationResponse.json();
+        setIntegrationAnimationData(integrationData);
+
+        // Load conversion animation
+        const conversionResponse = await fetch('/assets/newimages/Animation - 1752084319586.json');
+        const conversionData = await conversionResponse.json();
+        setConversionAnimationData(conversionData);
       } catch (error) {
         console.error('Failed to load animation data:', error);
       }
@@ -239,7 +246,7 @@ const ByteBotLanding: React.FC = () => {
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 80px 0;
+          padding: 120px 0; /* or more */
         }
         
         .action-card {
@@ -887,8 +894,8 @@ const ByteBotLanding: React.FC = () => {
           }
           
           .content-section {
-            padding: 40px 0 !important;
-            min-height: auto !important;
+            padding: 180px 0 !important; /* or more for mobile */
+            min-height: 100vh !important;
           }
           
           .content-section h2 {
@@ -942,17 +949,17 @@ const ByteBotLanding: React.FC = () => {
         {/* centered content */}
         <div className="relative z-10 px-6 max-w-4xl">
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 leading-tight">
-            <span className="bubble-text gradient-text">Byte Bot</span>
+            <span className="bubble-text gradient-text">Byte Bots</span>
           </h1>
-          <p className="text-2xl md:text-4xl text-white/90 mb-4 font-light bubble-text">The Future of Conversation</p>
-          <p className="text-lg md:text-2xl text-cyan-300 mb-8 font-medium bubble-text">Powered by Real Business Intelligence</p>
+          <p className="text-2xl md:text-4xl text-cyan-500/90 mb-4 font-light bubble-text">The Future of Conversation with the Power of AI</p>
+          <p className="text-lg md:text-2xl text-cyan-300 mb-8 font-medium bubble-text">Powered by Real Business Artificial Intelligence</p>
 
           <Link
             href="/contact"
             data-cta="true"
             className="inline-block bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-full shadow-lg transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-cyan-300"
           >
-            Book a free&nbsp;Byte-Bot&nbsp;demo
+            Book a Free&nbsp;Byte-Bots&nbsp;Consultation
           </Link>
         </div>
       </section>
@@ -1015,23 +1022,15 @@ const ByteBotLanding: React.FC = () => {
                 </div>
 
                 <div className="w-full lg:w-1/2 mobile-full-width flex justify-center items-center">
-                  {integrationAnimationData ? (
-                    <div className="section-image h-[440px] flex items-center justify-center -mt-8">
-                      <LottieAnimation
-                        animationData={integrationAnimationData}
-                        loop={true}
-                        autoplay={true}
-                        style={{ width: '140%', height: '140%' }}
-                        className="object-contain"
-                      />
-                    </div>
-                  ) : (
-                    <img
-                      src="/assets/newimages/humanandrobo.png"
-                      alt="Integration Dashboard"
-                      className="section-image object-cover h-[400px]"
+                  <div className="section-image h-[440px] flex items-center justify-center -mt-8">
+                    <LottieAnimation
+                      animationData={integrationAnimationData}
+                      loop={true}
+                      autoplay={true}
+                      style={{ width: '140%', height: '140%' }}
+                      className="object-contain"
                     />
-                  )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -1040,7 +1039,7 @@ const ByteBotLanding: React.FC = () => {
           {/* Section 2: Conversion Engine */}
           <div className="content-section">
             <div className="container mx-auto px-6">
-              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-start gap-6 md:gap-8 lg:gap-12">
+              <div className="flex flex-col lg:flex-row items-center lg:items-center justify-center gap-6 md:gap-8 lg:gap-12">
                 <div className="w-full lg:w-1/2 lg:pr-12 mobile-full-width">
                   <h2 className="text-5xl font-bold text-gray-900 mb-6">
                     <span className="bubble-text gradient-text">Conversion</span>{' '}
@@ -1086,19 +1085,27 @@ const ByteBotLanding: React.FC = () => {
                       </div>
                       A/B tested conversation paths
                     </li>
+                    <li className="flex items-center bubble-text">
+                      <div className="w-6 h-6 bg-orange-500 rounded-full mr-4 flex items-center justify-center">
+                        <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838l-2.727 1.17 1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
+                        </svg>
+                      </div>
+                      Programmed with Real Sales Training
+                    </li>
                   </ul>
                 </div>
 
-                <div className="w-full lg:w-1/2 mobile-full-width flex justify-start items-center relative">
-                  <div className="robot-container" style={{ transform: 'scale(1.3) translateX(-50px)' }}>
-                    <img
-                      src="/assets/newimages/laserrobo.png"
-                      alt="Conversion Analytics"
-                      className="robot-image"
+                <div className="w-full lg:w-1/2 mobile-full-width flex justify-center items-center">
+
+                  <div className="section-image h-[440px] flex items-center justify-center -mt-8">
+                    <LottieAnimation
+                      animationData={conversionAnimationData}
+                      loop={true}
+                      autoplay={true}
+                      style={{ width: '90%', height: '90%' }}
+                      className="object-contain"
                     />
-                    <div className="laser-beam laser-left"></div>
-                    <div className="laser-beam laser-right"></div>
-                    <div className="laser-glow"></div>
                   </div>
                 </div>
               </div>
