@@ -214,29 +214,30 @@ const WebDevelopmentLanding = () => {
     });
   };
 
+
   const webDevServices = [
     {
       icon: Globe,
       title: "Frontend Development",
-      desc: "Modern, responsive websites using React, Vue.js, and Angular with cutting-edge design principles",
+      desc: "Utilizing modern frameworks like React, Vue.js, and Angular to create responsive and user-friendly interfaces.",
       technologies: ["React", "Vue.js", "Angular", "TypeScript"]
     },
     {
       icon: Database,
       title: "Backend Development",
-      desc: "Scalable server-side solutions with robust APIs, databases, and cloud integration",
+      desc: "Implementing scalable server-side solutions with robust APIs, databases, and cloud integration.",
       technologies: ["Node.js", "Python", "PHP", "MongoDB"]
     },
     {
       icon: Smartphone,
       title: "Mobile-First Design",
-      desc: "Responsive web applications that work flawlessly across all devices and screen sizes",
+      desc: "Ensuring responsive web applications that work flawlessly across all devices and screen sizes",
       technologies: ["PWA", "Responsive", "Mobile UI", "Cross-platform"]
     },
     {
       icon: Cloud,
       title: "Full-Stack Solutions",
-      desc: "End-to-end web development from concept to deployment with modern DevOps practices",
+      desc: "Providing end-to-end web development from concept to deployment with modern DevOps practices.",
       technologies: ["MEAN", "MERN", "JAMstack", "Serverless"]
     }
   ] as const;
@@ -323,15 +324,14 @@ const WebDevelopmentLanding = () => {
       <section id="home" className="min-h-screen bg-blue-200 flex items-center relative overflow-hidden pt-16 lg:pt-24">
         <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10">
           {/* Left Side - Text */}
-          <div className="space-y-8 animate-fade-in-up text-center lg:text-left flex flex-col justify-center h-full min-h-[350px]">
-            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold leading-tight break-words">
-              <span className="text-gray-900 lg:text-6xl">Web Development</span>
+          <div className="space-y-6 animate-fade-in-up text-center lg:text-left flex flex-col justify-center h-full min-h-[350px]">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold leading-tight break-words">
+              <span className="text-gray-900 lg:text-5xl">Professional Web Development Services</span>
               <br />
-              <span className="bg-gradient-to-r from-blue-700 to-blue-900 bg-clip-text text-transparent">Excellence.</span>
+              <span className="bg-gradient-to-r from-blue-700 to-blue-900 bg-clip-text text-transparent lg:text-4xl">That Drive Business Growth</span>
             </h1>
             <p className="text-xl text-gray-600 leading-relaxed max-w-lg">
-            Build Smart. Launch Fast. Look Unforgettable.
-            Your website isn’t just a page — it’s your digital handshake, your sales engine, and your brand’s best representative. At Bytes Platform, we build high-performing, scalable websites that don't just look premium — they convert.
+            At Bytes Platform, we specialize in delivering professional web development services tailored to meet the unique needs of each client.Combinig creativity with cutting edge technology to build custom solutions
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/contact" data-cta="true" className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold hover:from-blue-700 hover:to-blue-800 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-center">
@@ -356,16 +356,15 @@ const WebDevelopmentLanding = () => {
           <ChevronDown className="w-8 h-8 text-blue-600" />
         </div>
       </section>
-
       {/* Web Development Services Section */}
       <section id="services" className="py-20 bg-gradient-to-r from-blue-50 to-white" ref={servicesRef}>
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-              Web Development <span className="text-blue-600">Services</span>
+            Comprehensive Web Development <span className="text-blue-600">Services</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Comprehensive web development solutions using cutting-edge technologies and industry best practices. We build fast, secure, and scalable web applications tailored to your business needs.
+            We offer a full spectrum of web development services, including:
             </p>
           </div>
 
@@ -427,7 +426,7 @@ const WebDevelopmentLanding = () => {
               Our <span className="text-blue-600">Technology Stack</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We leverage the latest technologies and frameworks to build robust, scalable web applications that meet modern standards.
+              We leverage the latest technologies and frameworks to build robust, scalable web applications that meet modern standards:
             </p>
           </div>
 
@@ -452,7 +451,6 @@ const WebDevelopmentLanding = () => {
           </div>
         </div>
       </section>
-
       {/* CMS Solutions Section */}
       <section className="py-20 bg-gradient-to-r from-blue-50 to-white" ref={shopifyRef}>
         <div className="container mx-auto px-6">
@@ -474,7 +472,7 @@ const WebDevelopmentLanding = () => {
                     <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center flex-shrink-0">
                       <ShoppingCart className="w-8 h-8 text-blue-600" />
                     </div>
-                    <h3 className="text-2xl font-bold leading-snug">We build Shopify stores</h3>
+                    <h3 className="text-2xl font-bold leading-snug mt-4">We build Shopify stores</h3>
                   </div>
                   <p className="text-gray-600 mb-4">High-conversion Shopify storefronts with custom apps, payment gateways and ERP integrations.</p>
                   <ul className="list-disc ml-6 space-y-2 text-gray-600">
@@ -533,7 +531,7 @@ const WebDevelopmentLanding = () => {
                     <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center flex-shrink-0">
                       <Globe className="w-8 h-8 text-blue-600" />
                     </div>
-                    <h3 className="text-2xl font-bold leading-snug">We build WordPress sites</h3>
+                    <h3 className="text-2xl font-bold leading-snug mt-4">We build WordPress sites</h3>
                   </div>
                   <p className="text-gray-600 mb-4">Custom themes, plugins, and scalable WordPress solutions optimised for performance and SEO.</p>
                   <ul className="list-disc ml-6 space-y-2 text-gray-600">
@@ -554,7 +552,7 @@ const WebDevelopmentLanding = () => {
                     <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center flex-shrink-0">
                       <Code className="w-8 h-8 text-blue-600" />
                     </div>
-                    <h3 className="text-2xl font-bold leading-snug">We build MERN Stack sites</h3>
+                    <h3 className="text-2xl font-bold leading-snug mt-4">We build MERN Stack sites</h3>
                   </div>
                   <p className="text-gray-600 mb-4">Robust full-stack JavaScript applications built with MongoDB, Express, React and Node.js.</p>
                   <ul className="list-disc ml-6 space-y-2 text-gray-600">
@@ -562,7 +560,6 @@ const WebDevelopmentLanding = () => {
                     <li>Scalable microservices architecture</li>
                     <li>Real-time features with WebSockets</li>
                     <li>Cloud deployment & CI/CD pipelines</li>
-                    <li>Custom admin panel</li>
                   </ul>
                 </div>
               </div>
@@ -674,26 +671,25 @@ const WebDevelopmentLanding = () => {
               <p className="text-lg text-gray-600 leading-relaxed">
                 We combine technical expertise with creative problem-solving to deliver web solutions that not only meet your requirements but exceed your expectations.
               </p>
-
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
                   <div className="w-4 h-4 bg-blue-600 rounded-full flex-shrink-0 mt-1"></div>
                   <div>
-                    <h4 className="font-semibold text-base mb-1">Modern Architecture</h4>
-                    <p className="text-gray-600 text-sm">Built with scalable, maintainable code using industry best practices and modern frameworks.</p>
+                    <h4 className="font-semibold text-base mb-1">Expertise Across Technologies</h4>
+                    <p className="text-gray-600 text-sm">From React and Node.js to WordPress and Shopify, we leverage the latest technologies to build scalable and secure solutions.</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
                   <div className="w-4 h-4 bg-blue-600 rounded-full flex-shrink-0 mt-1"></div>
                   <div>
-                    <h4 className="font-semibold text-base mb-1">Performance Optimized</h4>
-                    <p className="text-gray-600 text-sm">Lightning-fast loading times and optimized performance across all devices and browsers.</p>
+                    <h4 className="font-semibold text-base mb-1">Tailored Solutions</h4>
+                    <p className="text-gray-600 text-sm">We understand that every business is unique. Our solutions are customized to meet your specific needs and goals.</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
                   <div className="w-4 h-4 bg-blue-600 rounded-full flex-shrink-0 mt-1"></div>
                   <div>
-                    <h4 className="font-semibold text-base mb-1">Security First</h4>
+                    <h4 className="font-semibold text-base mb-1">End-to-End Services:</h4>
                     <p className="text-gray-600 text-sm">Robust security measures and best practices to protect your application and user data.</p>
                   </div>
                 </div>
@@ -701,7 +697,7 @@ const WebDevelopmentLanding = () => {
                   <div className="w-4 h-4 bg-blue-600 rounded-full flex-shrink-0 mt-1"></div>
                   <div>
                     <h4 className="font-semibold text-base mb-1">Ongoing Support</h4>
-                    <p className="text-gray-600 text-sm">Comprehensive maintenance, updates, and technical support to keep your application running smoothly.</p>
+                    <p className="text-gray-600 text-sm">From initial consultation to ongoing support, we provide comprehensive services to ensure your digital success.</p>
                   </div>
                 </div>
               </div>
@@ -714,7 +710,7 @@ const WebDevelopmentLanding = () => {
       <FAQ />
 
       {/* Call To Action Section */}
-      <section className="relative overflow-hidden py-24 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-center">
+      <section className="relative overflow-hidden py-20 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-center">
         {/* Background image */}
         <div
           className="absolute inset-0 bg-center bg-cover opacity-70 pointer-events-none"
@@ -723,15 +719,18 @@ const WebDevelopmentLanding = () => {
 
         {/* Content */}
         <div className="relative z-10 container mx-auto px-6">
-          <h2 className="text-4xl lg:text-5xl font-bold mb-8">
-            Ready to&nbsp;<span className="text-white">build with us?</span>
+          <h2 className="text-4xl lg:text-5xl font-bold mb-2">
+            Ready to <span className="text-white">Transform Your Digital Presence?</span>
           </h2>
+          <p className="text-lg text-white-600 leading-relaxed mb-4">
+          We don't just build websites; we create professional websites that empower your business to thrive in the digital age. If you're looking for web development services in the USA, our team is here to bring your vision to life.
+          </p>
           <Link
             href="/contact"
             data-cta="true"
             className="inline-block px-10 py-4 bg-white text-blue-700 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
           >
-            Build&nbsp;With&nbsp;Us
+            Build With Us
           </Link>
         </div>
       </section >
