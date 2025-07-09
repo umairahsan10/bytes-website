@@ -333,7 +333,7 @@ const WebDevelopmentLanding = () => {
             <p className="text-xl text-gray-600 leading-relaxed max-w-lg">
             At Bytes Platform, we specialize in delivering professional web development services tailored to meet the unique needs of each client.Combinig creativity with cutting edge technology to build custom solutions
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4"> 
               <Link href="/contact" data-cta="true" className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold hover:from-blue-700 hover:to-blue-800 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-center">
                 Start Your Project
               </Link>
@@ -647,7 +647,7 @@ const WebDevelopmentLanding = () => {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Side - Image */}
             <div
-              className={`relative w-full aspect-square max-w-md lg:-mt-12 xl:-mt-12 lg:max-w-none lg:scale-[1.3] xl:scale-[1.4] rounded-3xl overflow-hidden shadow-3xl transition-all duration-700 transform origin-center ${chooseVisible ? 'opacity-100 animate-float' : 'opacity-0 translate-y-8'}`}
+              className={`relative w-full aspect-square max-w-sm lg:max-w-md lg:-mt-8 xl:-mt-8 lg:scale-[1.1] xl:scale-[1.2] rounded-3xl overflow-hidden shadow-3xl transition-all duration-700 transform origin-center ${chooseVisible ? 'opacity-100 animate-float' : 'opacity-0 translate-y-8'}`}
             >
               <Image
                 src="/assets/newimages/whychoseus.png"
@@ -691,13 +691,6 @@ const WebDevelopmentLanding = () => {
                   <div>
                     <h4 className="font-semibold text-base mb-1">End-to-End Services:</h4>
                     <p className="text-gray-600 text-sm">Robust security measures and best practices to protect your application and user data.</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-4 h-4 bg-blue-600 rounded-full flex-shrink-0 mt-1"></div>
-                  <div>
-                    <h4 className="font-semibold text-base mb-1">Ongoing Support</h4>
-                    <p className="text-gray-600 text-sm">From initial consultation to ongoing support, we provide comprehensive services to ensure your digital success.</p>
                   </div>
                 </div>
               </div>
