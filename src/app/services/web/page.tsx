@@ -13,7 +13,7 @@ import { ChevronDown, Menu, X, Code, Zap, Users, Award, ArrowRight, Star, Mail, 
 const WebDevelopmentLanding = () => {
   const [scrollY, setScrollY] = useState(0);
   const [counters, setCounters] = useState({
-    projects: 0,
+    website: 0,
     clients: 0,
     lines: 0,
     years: 0
@@ -195,7 +195,7 @@ const WebDevelopmentLanding = () => {
 
   const animateCounters = () => {
     const duration = 2000;
-    const targets = { projects: 99, clients: 99, lines: 10000, years: 4 } as const;
+    const targets = { website: 150, clients: 300, lines: 20000, years: 2 } as const;
     type TargetKey = keyof typeof targets;
 
     (Object.keys(targets) as TargetKey[]).forEach((key) => {
@@ -330,7 +330,8 @@ const WebDevelopmentLanding = () => {
               <span className="bg-gradient-to-r from-blue-700 to-blue-900 bg-clip-text text-transparent">Excellence.</span>
             </h1>
             <p className="text-xl text-gray-600 leading-relaxed max-w-lg">
-              Custom web applications built with modern technologies. From responsive websites to complex web platforms, we deliver scalable solutions that drive your business forward.
+            Build Smart. Launch Fast. Look Unforgettable.
+            Your website isn’t just a page — it’s your digital handshake, your sales engine, and your brand’s best representative. At Bytes Platform, we build high-performing, scalable websites that don't just look premium — they convert.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/contact" data-cta="true" className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold hover:from-blue-700 hover:to-blue-800 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-center">
@@ -399,8 +400,8 @@ const WebDevelopmentLanding = () => {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             <div className="space-y-2">
-              <div className="text-4xl lg:text-5xl font-bold">{counters.projects}+</div>
-              <div className="text-blue-200">Products Developed</div>
+              <div className="text-4xl lg:text-5xl font-bold">{counters.website}+</div>
+              <div className="text-blue-200">Websites</div>
             </div>
             <div className="space-y-2">
               <div className="text-4xl lg:text-5xl font-bold">{counters.clients}+</div>
@@ -561,6 +562,7 @@ const WebDevelopmentLanding = () => {
                     <li>Scalable microservices architecture</li>
                     <li>Real-time features with WebSockets</li>
                     <li>Cloud deployment & CI/CD pipelines</li>
+                    <li>Custom admin panel</li>
                   </ul>
                 </div>
               </div>
@@ -573,7 +575,7 @@ const WebDevelopmentLanding = () => {
       </section >
 
       {/* Add-ons Section */}
-      < section className="py-20" ref={addOnsRef} >
+      <section className="py-20" ref={addOnsRef} >
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold mb-6">
@@ -612,7 +614,7 @@ const WebDevelopmentLanding = () => {
       </section >
 
       {/* Development Process Section */}
-      < section className="py-20 bg-gradient-to-r from-blue-50 to-white" ref={processRef} >
+      <section className="py-20 bg-gradient-to-r from-blue-50 to-white" ref={processRef} >
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold mb-6">
@@ -643,18 +645,24 @@ const WebDevelopmentLanding = () => {
       </section >
 
       {/* Why Choose Us Section */}
-      < section className="py-20" ref={chooseRef} >
+      <section className="py-20" ref={chooseRef}>
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Side - Image */}
-            <div className={`relative aspect-square rounded-3xl overflow-hidden shadow-3xl transition-all duration-500 ${chooseVisible ? 'animate-slide-in-right' : 'opacity-0'}`}>
+            <div
+              className={`relative w-full aspect-square max-w-md lg:-mt-12 xl:-mt-12 lg:max-w-none lg:scale-[1.3] xl:scale-[1.4] rounded-3xl overflow-hidden shadow-3xl transition-all duration-700 transform origin-center ${chooseVisible ? 'opacity-100 animate-float' : 'opacity-0 translate-y-8'}`}
+            >
               <Image
                 src="/assets/newimages/whychoseus.png"
                 alt="Why choose our web development services"
                 fill
-                className="object-cover"
+                className="object-contain object-center"
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 priority
+                style={{
+                  maskImage: 'linear-gradient(to bottom, white 75%, transparent)',
+                  WebkitMaskImage: 'linear-gradient(to bottom, white 75%, transparent)'
+                }}
               />
             </div>
 
@@ -706,9 +714,9 @@ const WebDevelopmentLanding = () => {
       <FAQ />
 
       {/* Call To Action Section */}
-      < section className="relative overflow-hidden py-24 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-center" >
+      <section className="relative overflow-hidden py-24 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-center">
         {/* Background image */}
-        < div
+        <div
           className="absolute inset-0 bg-center bg-cover opacity-70 pointer-events-none"
           style={{ backgroundImage: "url('/assets/WebDev/buildwithus.png')" }}
         />

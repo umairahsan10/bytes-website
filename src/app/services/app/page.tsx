@@ -118,14 +118,14 @@ const AppDevelopmentPage = () => {
       id: "messaging",
       title: "Smart Messaging",
       description: "Built-in communication features that keep your users connected and engaged.",
-      image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=300&h=600&fit=crop&crop=center",
+      image: "/assets/appdev/chat-image.png",
       features: ["Real-time chat", "Push notifications", "Media sharing"]
     },
     {
       id: "profile",
       title: "User Profiles",
       description: "Personalized user experiences with comprehensive profile management and customization options.",
-      image: "https://images.unsplash.com/photo-1535303311164-664fc9ec6532?w=300&h=600&fit=crop&crop=center",
+      image: "/assets/appdev/user-profile.jpg",
       features: ["Profile customization", "Privacy controls", "Social integration"]
     }
   ];
@@ -309,14 +309,14 @@ const AppDevelopmentPage = () => {
                   </div>
 
                   {/* Screen content with step-by-step sliding */}
-                  <div className="absolute top-[22px] sm:top-[26px] md:top-[28px] left-[22px] sm:left-[26px] md:left-[28px] w-[156px] sm:w-[188px] md:w-[204px] h-[338px] sm:h-[406px] md:h-[442px] rounded-[30px] sm:rounded-[34px] md:rounded-[38px] overflow-hidden bg-gray-50">
+                  <div className="absolute top-0 sm:top-[6px] md:top-[10px] left-[12px] sm:left-[16px] md:left-[12px] w-[180px] sm:w-[210px] md:w-[236px] h-[400px] sm:h-[470px] md:h-[520px] rounded-[30px] sm:rounded-[34px] md:rounded-[38px] overflow-hidden bg-gray-50">
                     <motion.div
                       className="relative w-full h-full"
                       style={{
                         y: useTransform(
                           screenProgress,
                           [0.1, 0.2, 0.2, 0.35, 0.35, 0.5, 0.5, 0.7, 0.7, 1],
-                          [0, 0, -442, -442, -884, -884, -1326, -1326, -1326, -1326]
+                          [0, 0, -520, -520, -1040, -1040, -1560, -1560, -1560, -1560]
                         )
                       }}
                     >
@@ -324,13 +324,13 @@ const AppDevelopmentPage = () => {
                         <div
                           key={screen.id}
                           className="absolute top-0 left-0 w-full h-full"
-                          style={{ top: `${index * 442}px` }}
+                          style={{ top: `${index * 520}px` }}
                         >
                           <Image
                             src={screen.image}
                             alt={screen.title}
                             fill
-                            className="object-cover"
+                            className={`object-cover ${screen.id === 'profile' ? 'transform scale-110 translate-x-4' : ''}`}
                             sizes="(max-width: 640px) 156px, (max-width: 768px) 188px, 204px"
                           />
 

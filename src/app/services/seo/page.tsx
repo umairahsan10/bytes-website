@@ -427,7 +427,7 @@ const SEOPage: React.FC = () => {
       ]
     },
     {
-      title: "Weekly Reporting",
+      title: "Weekly Reporting ⭐",
       subtitle: "With Real Growth Metrics",
       description: [
         "Detailed keyword ranking tracking",
@@ -1082,7 +1082,7 @@ const SEOPage: React.FC = () => {
             transition={{ duration: 1, ease: "easeOut" }}
             viewport={{ once: true }}
           >
-            <AnimatedWords text="We Help You" className="block bg-gradient-to-r via-blue-200 via-blue-25 to-white text-transparent bg-clip-text" />
+            <AnimatedWords text="We  Help  You" className="block bg-gradient-to-r via-blue-200 via-blue-25 to-white text-transparent bg-clip-text" />
             <br />
             <AnimatedWords text="Rank for What Matters" className="block bg-gradient-to-r from-blue-200 via-blue-25 to-white text-transparent bg-clip-text" />
           </motion.h2>
@@ -1355,18 +1355,25 @@ const SEOPage: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-8 bg-white text-black">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+      <section
+        className="relative py-20 text-black bg-center bg-cover bg-no-repeat"
+        style={{ backgroundImage: "url('/assets/seo-handshake.png')" }}
+      >
+        {/* Overlay to ensure text readability */}
+        <div className="absolute inset-0 bg-white/30" />
+        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#010a14] mb-3">
-            Let Google Bring You Business —<span className="bg-gradient-to-r from-[#010a14] via-[#1a365d] to-[#010a14] bg-clip-text text-transparent">On Autopilot.</span>
+            <h2 className="text-4xl md:text-5xl font-bold mb-3">
+              <span className="bg-gradient-to-r from-[#0a1c37] via-[#11254b] to-[#17326b] bg-clip-text text-transparent drop-shadow-md">
+                Let Google Bring You Business — On Autopilot.
+              </span>
             </h2>
-            <p className="text-xl text-[#1a365d] sm:text-lg text-gray-800 mb-5 max-w-3xl mx-auto px-4">
+            <p className="text-xl font-semibold text-[#1a365d] sm:text-lg text-gray-800 mb-5 max-w-3xl mx-auto px-4">
               Talk to Our SEO Expert
             </p>
             <div className="flex justify-center">
