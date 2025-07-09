@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Header } from '@/sections/Navbar';
-import FAQ from '@/components/FAQ';
+import FAQ from '@/components/FAQ-Marketing';
 
 const MarketingPage = () => {
   const [scrollY, setScrollY] = useState(0);

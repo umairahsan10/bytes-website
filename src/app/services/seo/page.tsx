@@ -8,7 +8,7 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 import { Header } from '@/sections/Navbar';
 import { useRouter } from 'next/navigation';
-import FAQ from '@/components/FAQ';
+import FAQ from '@/components/FAQ-SEO';
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {

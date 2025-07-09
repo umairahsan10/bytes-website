@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import { Header } from '@/sections/Navbar';
 import { useRouter } from 'next/navigation';
-import FAQ from '@/components/FAQ';
+import FAQ from '@/components/FAQ-App';
 
 // Helper component for word-by-word reveal
 const AnimatedParagraph = ({ text, className = "" }: { text: string; className?: string }) => {

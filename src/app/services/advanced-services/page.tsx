@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Header } from '../../../sections/Navbar';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import FAQ from '@/components/FAQ';
+import FAQ from '@/components/FAQ-Advanced';
 
 // Types for external libraries
 declare global {
