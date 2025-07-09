@@ -1163,7 +1163,7 @@ export default function AboutPage() {
               initial="hidden"
               whileInView="visible"
               exit="exit"
-              viewport={{ once: false, margin: "-50px" }}
+              viewport={{ once: false,amount: 0 }}
             >
               The Bytes Advantage
             </motion.h2>
@@ -1324,7 +1324,7 @@ export default function AboutPage() {
               initial="hidden"
               whileInView="visible"
               exit="exit"
-              viewport={{ once: false, margin: "-50px" }}
+              viewport={{ once: false, amount: 0 }}
             >
               Integration Ecosystem
             </motion.h2>
@@ -1343,7 +1343,7 @@ export default function AboutPage() {
                   whileHover={{ y: -10 }}
                 >
                   <h4 className="font-semibold text-[#010a14] mb-3 text-lg">Business Intelligence</h4>
-                  <p className="text-[#010a14]">CRM systems, Analytics platforms, Sales tracking, Performance dashboards</p>
+                  <p className="text-[#010a14]">CRM systems, Analytics platforms, Sales tracking, Performance dashboards.<br/>Empower your business with actionable insights and data-driven decision making for sustainable growth.</p>
                 </motion.div>
                 
                 <motion.div 
@@ -1353,11 +1353,11 @@ export default function AboutPage() {
                   transition={{ delay: 0.1 }}
                 >
                   <h4 className="font-semibold text-[#010a14] mb-3 text-lg">AI & Automation</h4>
-                  <p className="text-[#010a14]">Custom chatbots, Workflow automation, Predictive algorithms</p>
+                  <p className="text-[#010a14]">Workflow automation, Predictive algorithms.<br/>Streamline operations and boost productivity with intelligent automation tailored to your unique needs.</p>
                 </motion.div>
               </div>
               
-              <div className="w-full space-y-6">
+              <div className="w-full space-y-4">
                 <motion.div 
                   className="bg-white border border-blue-100 rounded-2xl p-6 transition-all duration-500 hover:scale-105 hover:rotate-1"
                   variants={slideInRight}
@@ -1376,11 +1376,20 @@ export default function AboutPage() {
                   <h4 className="font-semibold text-[#010a14] mb-3 text-lg">Marketing Stack</h4>
                   <p className="text-[#010a14]">Email automation, Social integration, Campaign management</p>
                 </motion.div>
+                
+                <motion.div 
+                  className="bg-white border border-blue-100 rounded-2xl p-6 transition-all duration-500 hover:scale-105 hover:rotate-1"
+                  variants={slideInRight}
+                  whileHover={{ y: -10 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <h4 className="font-semibold text-[#010a14] mb-3 text-lg">Custom Chatbots</h4>
+                  <p className="text-[#010a14]">Conversational AI solutions tailored for your business needs.</p>
+                </motion.div>
               </div>
             </motion.div>
           </div>
         </div>
-
         {/* Support & Growth - Full Width Banner */}
         <div className="w-full py-24 sm:py-32 relative overflow-hidden bg-[#010a14] text-white">
           <div className="absolute inset-0">
@@ -1413,29 +1422,22 @@ export default function AboutPage() {
           </div>
           
           <div className="container mx-auto px-4 max-w-5xl relative z-10">
-            <motion.div 
-              className="text-center space-y-8"
+            <motion.div
+              className="text-center space-y-8 bg-white/90 rounded-3xl py-16 px-4 shadow-lg"
               variants={fadeInUp}
               initial="hidden"
               whileInView="visible"
-              exit="exit"
               viewport={{ once: false, margin: "-100px" }}
             >
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-[#010a14]">
-                Ready to Elevate Your
-                <br />
-                <span className="text-xl sm:text-2xl md:text-3xl font-bold">
-                  Digital Presence?
-                </span>
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-black bg-gradient-to-r from-[#010a14] via-blue-800 to-[#010a14] bg-clip-text text-transparent">
+                Ready to Build the Future?
               </h2>
-              
               <motion.p 
-                className="text-base sm:text-lg text-gray-700 mb-8 max-w-2xl mx-auto leading-relaxed"
+                className="text-lg sm:text-xl md:text-2xl text-[#18181b] max-w-3xl mx-auto leading-relaxed"
                 variants={fadeInUp}
               >
-                Transform your ideas into impactful solutions. Contact our team and let's bring your vision to life.
+                Transform your vision into reality. Scale your impact. Dominate your market.
               </motion.p>
-              
               <motion.div 
                 className="flex flex-wrap justify-center gap-6 sm:gap-8 mt-12"
                 variants={staggerContainer}
@@ -1444,13 +1446,13 @@ export default function AboutPage() {
               >
                 {[
                   { label: '24/7 Support', icon: (
-                    <svg className="w-5 h-5 text-[#010a14]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636A9 9 0 105.636 18.364 9 9 0 0018.364 5.636z" /></svg>) },
+                    <svg className="w-8 h-8" fill="none" stroke="#222" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M18.364 5.636A9 9 0 105.636 18.364 9 9 0 0018.364 5.636z" /></svg>) },
                   { label: 'Auto Updates', icon: (
-                    <svg className="w-5 h-5 text-[#010a14]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v6h6M20 20v-6h-6M5 19l4-4M19 5l-4 4" /></svg>) },
+                    <svg className="w-8 h-8" fill="none" stroke="#222" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 4v6h6M20 20v-6h-6M5 19l4-4M19 5l-4 4" /></svg>) },
                   { label: 'Performance Monitoring', icon: (
-                    <svg className="w-5 h-5 text-[#010a14]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3v18h18M16 3v18M8 9h8M8 15h8" /></svg>) },
+                    <svg className="w-8 h-8" fill="none" stroke="#222" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 3v18h18M16 3v18M8 9h8M8 15h8" /></svg>) },
                   { label: 'Growth Analytics', icon: (
-                    <svg className="w-5 h-5 text-[#010a14]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 17l6-6 4 4 8-8" /></svg>) }
+                    <svg className="w-8 h-8" fill="none" stroke="#222" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 17l6-6 4 4 8-8" /></svg>) }
                 ].map((item, index) => (
                   <motion.div 
                     key={item.label}
@@ -1458,86 +1460,10 @@ export default function AboutPage() {
                     variants={scaleIn}
                     whileHover={{ scale: 1.1, y: -5 }}
                   >
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-3 mx-auto backdrop-blur-sm border border-white/20">
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white/60 rounded-2xl flex items-center justify-center mb-3 mx-auto backdrop-blur-2xl border border-gray-200">
                       {item.icon}
                     </div>
-                    <p className="text-[#010a14] text-sm uppercase tracking-wider">{item.label}</p>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Final CTA - Explosive */}
-        <div className="w-full py-24 sm:py-32 relative overflow-hidden bg-[#010a14] text-white">
-          <div className="absolute inset-0">
-            <motion.div 
-              className="absolute inset-0 bg-[#010a14]"
-              animate={{ 
-                backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"]
-              }}
-              transition={{ 
-                duration: 20, 
-                repeat: Infinity, 
-                ease: "linear" 
-              }}
-              style={{ backgroundSize: "400% 400%" }}
-            />
-          </div>
-          
-          <div className="container mx-auto px-4 max-w-6xl relative z-10">
-            <motion.div 
-              className="text-center space-y-12"
-              variants={fadeInUp}
-              initial="hidden"
-              whileInView="visible"
-              exit="exit"
-              viewport={{ once: false, margin: "-100px" }}
-            >
-              <motion.h2 
-                className="text-4xl sm:text-6xl md:text-8xl font-black text-white"
-              >
-                Ready to Build the Future?
-              </motion.h2>
-              
-              <motion.p 
-                className="text-lg sm:text-xl md:text-2xl text-white max-w-4xl mx-auto leading-relaxed"
-              >
-                Transform your vision into reality. Scale your impact. Dominate your market.
-              </motion.p>
-              
-              <motion.div 
-                className="flex justify-center"
-                variants={scaleIn}
-              >
-                <motion.div 
-                  className="w-64 h-2 bg-gradient-to-r from-blue-400 via-white to-blue-400 rounded-full"
-                />
-              </motion.div>
-              
-              <motion.div 
-                className="mt-16 bg-white rounded-3xl p-8 grid grid-cols-2 md:grid-cols-4 gap-8"
-                variants={staggerContainer}
-                initial="hidden"
-                whileInView="visible"
-              >
-                {[
-                  { number: 500, suffix:"+", label: "Projects Delivered" },
-                  { number: 99.9, suffix:"%", label: "Uptime Guarantee" },
-                  { number: 24, suffix:"/7", label: "Support Available" },
-                  { number: 3, suffix:"x", label: "Faster Deployment" }
-                ].map((stat, index) => (
-                  <motion.div 
-                    key={stat.label}
-                    className="text-center"
-                    variants={rotateIn}
-                    whileHover={{ scale: 1.1, rotateY: 15 }}
-                  >
-                    <div className="text-4xl md:text-5xl font-bold text-[#010a14] mb-2">
-                      <CountUp end={stat.number} duration={3} suffix={stat.suffix} />
-                    </div>
-                    <p className="text-[#010a14] text-sm uppercase tracking-wider">{stat.label}</p>
+                    <p className="text-[#18181b] text-sm uppercase tracking-wider">{item.label}</p>
                   </motion.div>
                 ))}
               </motion.div>
@@ -1566,26 +1492,25 @@ export default function AboutPage() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-8">
-            Ready to Elevate Your
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2">
+            Let Google Drive Your Business 
             <br />
-            <span className="text-4xl sm:text-5xl md:text-6xl font-bold">
-              Digital Presence?
+            <span className="text-3xl sm:text-4xl md:text-5xl font-bold">
+              Growth—Effortlessly
             </span>
           </h2>
 
           <motion.p
-            className="text-base sm:text-lg text-gray-700 mb-8 max-w-2xl mx-auto"
+            className="text-base sm:text-lg text-gray-700 mb-2 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Transform your ideas into impactful solutions. Contact our team and let's bring your vision to life.
+            Contact our team and let's bring your vision to life.
           </motion.p>
-
           <motion.button
             data-cta="true"
-            className="bg-gradient-to-r from-gray-600 to-gray-600 hover:from-gray-700 hover:to-gray-700 px-8 py-3 rounded-full text-lg font-semibold text-white transition-all duration-300"
+            className="bg-gradient-to-r from-gray-700 to-gray-900 hover:from-gray-900 hover:to-gray-700 px-8 py-3 rounded-full text-lg font-semibold text-white transition-all duration-300 mt-8"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => router.push('/contact')}
