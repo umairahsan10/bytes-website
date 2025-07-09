@@ -14,33 +14,24 @@ const FAQ: React.FC = () => {
   const faqItems: FAQItem[] = [
     {
       id: 'web-development-process',
-      question: 'What is your web development process?',
-      answer: 'Our web development process follows a proven methodology: Discovery & Planning, Design & Prototyping, Development & Testing, Deployment & Launch, and Ongoing Support. We work closely with you at every stage to ensure your vision becomes reality.'
+      question: 'How long will it take to see results from SEO?',
+      answer: 'SEO is a long-term strategy. Typically, it takes 3-6 months to see significant improvements, though initial results can appear within a few weeks. Weekly reporting'
     },
     {
       id: 'timeline',
-      question: 'How long does web development take?',
-      answer: 'Project timelines vary based on complexity. Simple websites take 2-4 weeks, e-commerce sites 6-12 weeks, and complex web applications 3-6 months. We provide detailed timelines during the planning phase and keep you updated throughout development.'
+      question: 'Do I need to do anything to my website for SEO?',
+      answer: 'We conduct a thorough website audit and optimize on-page elements such as content, keywords, and structure. You may need to make some updates, but we handle the technical aspects.'
+    
     },
     {
       id: 'cost',
-      question: 'How much does web development cost?',
-      answer: 'Our pricing is transparent and project-based. Simple websites start at $2,000, e-commerce sites from $5,000, and custom web applications from $15,000. We provide detailed quotes after understanding your specific requirements and goals.'
+      question: 'Do you offer local SEO services?',
+      answer: 'Yes! We offer local SEO strategies to help your business rank better in local searches and attract customers in your geographical area.'
     },
     {
       id: 'technologies',
-      question: 'What technologies do you use?',
-      answer: 'We use modern, scalable technologies including React, Next.js, Node.js, Python, PHP, and various databases. For e-commerce, we specialize in Shopify and WooCommerce. We choose the best tech stack based on your project requirements and scalability needs.'
-    },
-    {
-      id: 'maintenance',
-      question: 'Do you provide ongoing maintenance?',
-      answer: 'Yes, we offer comprehensive maintenance packages including security updates, performance optimization, content updates, and technical support. We recommend ongoing maintenance to keep your website secure, fast, and up-to-date.'
-    },
-    {
-      id: 'seo-included',
-      question: 'Is SEO included in web development?',
-      answer: 'Yes, we build SEO-friendly websites from the ground up. This includes proper meta tags, structured data, fast loading times, mobile optimization, and clean code structure. We also offer additional SEO services for ongoing optimization.'
+      question: 'Will SEO work for any type of business?',
+      answer: 'SEO can benefit businesses of all sizes and industries, from local brick-and-mortar stores to e-commerce platforms and service providers.'  
     }
   ];
 
