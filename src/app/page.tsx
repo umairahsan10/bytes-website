@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { Header } from "@/sections/Navbar";
 import HeroSection from "@/sections/Hero";
 import ByteBotsSection from "@/sections/ByteBot";
+import ServiceHead from "@/sections/serviceHead";
 import { ProjectsSection } from "@/sections/Projects";
 import { TapeSection } from "@/sections/Tape";
 import { TestimonialsSection } from "@/sections/Testimonials";
@@ -34,12 +35,13 @@ export default function Home() {
       {[
         <HeroSection key="hero" />,
         <ByteBotsSection key="bytebots" />,
+        <ServiceHead key="servicehead" />,
         <CardsSection key="cards" />,
         <LineAnimationSection key="line" />,
         <NumbersSection key="numbers" />,
         <ProjectsSection key="projects" />,
-        <BrandsSection key="brands" />,
         <BookSection key="book" />,
+        <BrandsSection key="brands" />,
         <ContactSection key="contact" />,
         // <TapeSection key="tape" />, // Uncomment if needed
         // <TestimonialsSection key="testimonials" />,
