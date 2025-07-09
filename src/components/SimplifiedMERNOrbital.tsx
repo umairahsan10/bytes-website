@@ -27,7 +27,7 @@ const SimplifiedMERNOrbital = () => {
 
   const Planet = ({ children, distance, duration, delay = 0, glow = '' }: { 
     children: React.ReactNode; 
-    distance: number; 
+    distance: number;
     duration: number; 
     delay?: number; 
     glow?: string; 
@@ -87,4 +87,4 @@ const SimplifiedMERNOrbital = () => {
   );
 };
 
-export default SimplifiedMERNOrbital; 
+export default React.memo(SimplifiedMERNOrbital); 
