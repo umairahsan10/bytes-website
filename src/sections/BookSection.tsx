@@ -20,6 +20,7 @@ export const BookSection = () => {
   const [page] = useAtom(pageAtom);
   const [userInteracted] = useAtom(userInteractedAtom);
   const [isTouch, setIsTouch] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [showRipple, setShowRipple] = useState(false);
   const [scrollFlipDone, setScrollFlipDone] = useState(false);
   const [scrollReady, setScrollReady] = useState(false);
@@ -35,6 +36,14 @@ export const BookSection = () => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setIsTouch(window.matchMedia('(pointer: coarse)').matches);
+      setIsMobile(window.innerWidth < 768); // 768px is typical mobile breakpoint
+      
+      const handleResize = () => {
+        setIsMobile(window.innerWidth < 768);
+      };
+      
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
     }
   }, []);
 
@@ -228,15 +237,22 @@ export const BookSection = () => {
       className="min-h-screen py-0 sm:py-20 lg:py-28 bg-[#010a14] bg-center bg-no-repeat bg-cover book-tall-center"
       ref={sectionRef}
       style={{
-        backgroundImage: "url('/assets/Book/table.png')",
+        backgroundImage: isMobile 
+          ? "url('/assets/Book/mobile_bg.png')"
+          : "url('/assets/Book/desktop_bg.png')",
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
       }}
     >
-      <div className="container text-white">
+      <div className="flex flex-col items-center justify-center w-full px-4 text-white">
         <SectionHeader
-          eyebrow="Interactive Book"
+          eyebrow=""
           title="Explore Our Blogs"
         />
-        <div className="-mt-30 h-[600px] relative" ref={bookAreaRef}>
+        <div
+          className="relative flex items-center justify-center w-full h-[600px] max-w-full mx-auto sm:w-full sm:h-[600px] w-[95vw] h-[60vw] max-h-[70vh]"
+          ref={bookAreaRef}
+        >
           <Canvas
             camera={{
               position: [0, 0, 4],
@@ -305,7 +321,7 @@ export const BookSection = () => {
           )}
         </div>
         {/* View more blogs button */}
-        <div className="-mt-15 flex justify-center relative z-20 pointer-events-auto">
+        <div className="flex justify-center relative z-20 pointer-events-auto w-full mt-8">
           <Link
             href="/blogs/page/1"
             className="inline-block rounded-full bg-gradient-to-r from-pink-500 to-purple-600 px-8 py-3 text-base font-semibold text-white shadow-lg transform transition-all duration-200 hover:scale-105 hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
@@ -316,4 +332,4 @@ export const BookSection = () => {
       </div>
     </div>
   );
-}; 
+};

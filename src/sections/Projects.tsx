@@ -11,31 +11,27 @@ const portfolioProjects = [
   {
     img: bytesTest2,
     url: "https://bytes-test-2.com",
-    title: "Bytes Test 2",
-    description: "Protecting what matters with cutting-edge digital craftsmanship.",
+    title: "Bytes Test Domain 2",
   },
   {
     img: bytesTest3,
     url: "https://bytes-test-3.com",
-    title: "Bytes Test 3",
-    description: "Next-gen SaaS platform built for lightning-fast growth.",
+    title: "Bytes Test Domain 3",
   },
   {
     img: bytesTest5,
     url: "https://bytes-test-5.com",
-    title: "Bytes Test 5",
-    description: "Streamlined e-commerce experience that converts visitors into buyers.",
+    title: "Bytes Test Domain 5",
   },
   {
     img: bytesTest6,
     url: "https://bytes-test-6.com",
-    title: "Bytes Test 6",
-    description: "Immersive 3D web showcase pushing the limits of WebGL & Three.js.",
+    title: "Bytes Test Domain 6",
   },
 ];
 
 export const ProjectsSection = () => {
-  const slides = [...portfolioProjects, portfolioProjects[0]]; // clone first for seamless loop
+  const slides = [...portfolioProjects, portfolioProjects[0]]; 
   const [index, setIndex] = useState(0);
   const [withTransition, setWithTransition] = useState(true);
 
@@ -84,13 +80,13 @@ export const ProjectsSection = () => {
   return (
     <section
       id="projects"
-      className="relative py-24 lg:py-32 items-center bg-[#010a14] bg-[url('/assets/portfolio_bg.jpg')] bg-cover bg-center bg-no-repeat"
+      className="relative py-24 lg:py-32 items-center bg-[#010a14] bg-[url('/assets/portfolio_bg.png')] bg-cover bg-center bg-no-repeat"
     >
-      <div className="container text-white">
+      <div className="w-full max-w-7xl mx-auto px-4 text-white">
         <SectionHeader
-          eyebrow="Real-world Results"
-          title="Featured Projects"
-          description="See how we transformed concepts into engaging digital experience"
+          eyebrow="Real Projects in Progress"
+          title="The Staging Room"
+          description="Our portfolio isn’t static — it’s active, evolving, and built in the open. Every link you see here points to a real website in development, hosted on a test domain for client review."
         />
 
         <div className="mt-8 lg:mt-12 flex flex-col gap-4 lg:gap-10">
@@ -139,7 +135,7 @@ export const ProjectsSection = () => {
             </button>
 
             {/* Left Slider (Image) */}
-            <div className="w-full md:w-3/5 overflow-hidden">
+            <div className="w-full md:w-6/10 overflow-hidden">
               <div
                 className="flex transition-transform duration-700 ease-in-out"
                 style={{ transform: `translateX(-${index * 100}%)`, transitionProperty: withTransition ? 'transform' : 'none' }}
@@ -157,7 +153,7 @@ export const ProjectsSection = () => {
             </div>
 
             {/* Right Slider (Text) */}
-            <div className="w-full md:w-2/5 overflow-hidden -mt-16 md:mt-0">
+            <div className="w-full md:w-3/10 overflow-hidden -mt-16 md:mt-0">
               <div
                 className="flex transition-transform duration-700 ease-in-out"
                 style={{ transform: `translateX(-${index * 100}%)`, transitionProperty: withTransition ? 'transform' : 'none' }}
@@ -167,9 +163,6 @@ export const ProjectsSection = () => {
                     <h3 className="text-3xl lg:text-5xl font-bold text-white text-center lg:text-left">
                       {item.title}
                     </h3>
-                    <p className="text-lg lg:text-xl text-gray-300 max-w-xl text-center lg:text-left">
-                      {item.description}
-                    </p>
                     <a
                       href={item.url}
                       target="_blank"
@@ -184,6 +177,24 @@ export const ProjectsSection = () => {
               </div>
             </div>
           </div>
+
+          {/* Info line about domain and live work */}
+          <p className="text-xl text-center text-sm text-white">
+            You might come across a domain that may point to a different project than the preview image. That’s because we work live, with full transparency.
+          </p>
+        </div>
+
+        {/* CTA to full portfolio */}
+        <div className="mt-16 flex flex-col items-center text-center gap-6">
+          <h4 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">
+            Want to see our full portfolio of completed projects?
+          </h4>
+          <a
+            href="/contact"
+            className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold shadow-lg bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-600 text-white hover:from-purple-600 hover:via-fuchsia-500 hover:to-pink-500 hover:scale-110 transition-all duration-300"
+          >
+            Reach Out&nbsp;&raquo;
+          </a>
         </div>
       </div>
     </section>

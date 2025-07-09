@@ -27,15 +27,15 @@ const brands = [
 export const BrandsSection = () => {
   return (
     <section className="py-16 bg-white">
-      <div className="container text-[#010a14]">
+      <div className="container mx-auto text-[#010a14] flex flex-col items-center text-center">
         <SectionHeader
-          eyebrow="Trusted Partnerships"
+          eyebrow="2+ Years Of Continuous Success"
           title="Our Past Clients"
           description="Innovators, visionaries, and industry leaders we've been proud to work with."
         />
 
         {/* Horizontal scrolling logos */}
-        <div className="mt-6 lg:mt-10 flex overflow-x-clip [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] py-4 -my-4">
+        <div className="mt-6 lg:mt-10 flex justify-center overflow-x-clip [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] py-4 -my-4 w-full">
           <div className="flex gap-8 pr-8 flex-none brands-scroll">
             {[...new Array(2)].fill(0).map((_, idx) => (
               <Fragment key={idx}>
@@ -62,8 +62,7 @@ export const BrandsSection = () => {
         </div>
 
         <p className="mt-4 text-md text-center text-gray-500 italic">
-          These logos represent brands we've worked with — our past clients — not
-          our partners.
+          These logos represent brands we've worked with — our past clients.
         </p>
       </div>
     </section>

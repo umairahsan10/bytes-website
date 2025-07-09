@@ -1,6 +1,9 @@
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 
+// Module-level flag to track if the count-up animation already completed.
+let hasAnimatedNumbers = false;
+
 export const NumbersSection = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
@@ -50,47 +53,35 @@ export const NumbersSection = () => {
   };
 
   const CountUp = ({ target, suffix }: { target: number; suffix?: string }) => {
-    const [count, setCount] = useState(0);
-    const ref = useRef<HTMLSpanElement | null>(null);
-    const startedRef = useRef(false);
+    const [count, setCount] = useState(() => (hasAnimatedNumbers ? target : 0));
 
     useEffect(() => {
-      const el = ref.current;
-      if (!el) return;
+      // If animation has already been completed earlier, just ensure final value is shown
+      if (hasAnimatedNumbers) {
+        setCount(target);
+        return;
+      }
 
-      const observer = new IntersectionObserver(
-        (entries, obs) => {
-          const [entry] = entries;
-          if (entry.isIntersecting && !startedRef.current) {
-            startedRef.current = true;
-            obs.unobserve(entry.target); // Stop observing after first trigger
+      const duration = 2000; // ms
+      const startTime = performance.now();
 
-            const duration = 2000; // ms
-            const startTime = performance.now();
-
-            const animate = (currentTime: number) => {
-              const progress = Math.min((currentTime - startTime) / duration, 1);
-              const currentVal = Math.floor(progress * target);
-              setCount(currentVal);
-              if (progress < 1) {
-                requestAnimationFrame(animate);
-              }
-            };
-
-            requestAnimationFrame(animate);
-          }
-        },
-        { threshold: 0.4 }
-      );
-
-      observer.observe(el);
-      return () => {
-        observer.disconnect();
+      const animate = (currentTime: number) => {
+        const progress = Math.min((currentTime - startTime) / duration, 1);
+        const currentVal = Math.floor(progress * target);
+        setCount(currentVal);
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          // Mark as done so it never animates again during this page lifetime
+          hasAnimatedNumbers = true;
+        }
       };
+
+      requestAnimationFrame(animate);
     }, [target]);
 
     return (
-      <span ref={ref}>
+      <span>
         {formatNumber(count)}
         {suffix}
       </span>
@@ -107,7 +98,7 @@ export const NumbersSection = () => {
       {/* Overlay to improve text readability */}
       <div className="absolute inset-0 bg-black/40" />
 
-      <div className="relative flex-1 container mx-auto px-4 flex flex-col lg:flex-row items-center justify-between gap-10">
+      <div className="relative container mx-auto px-4 flex flex-col lg:flex-row items-center gap-10 lg:justify-between">
         {/* Headline & CTA */}
         <div className="max-w-2xl text-white flex flex-col items-center lg:items-start text-center lg:text-left">
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
@@ -209,7 +200,7 @@ export const NumbersSection = () => {
       </div>
 
       {/* Stats Row */}
-      <div className="relative container mx-auto px-4 py-6 md:py-8 grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-0 text-center">
+      <div className="relative container mx-auto px-2 py-6 md:py-8 grid grid-cols-3 gap-4 md:gap-0 text-center">
         {stats.map(({ target, suffix, label, color }, idx) => (
           <div
             key={idx}
@@ -217,7 +208,7 @@ export const NumbersSection = () => {
               idx !== stats.length - 1 ? "md:border-r md:border-gray-600/40" : ""
             } px-4 md:px-8`}
           >
-            <span className={`text-4xl sm:text-5xl lg:text-6xl font-extrabold ${color}`}>
+            <span className={`text-3xl sm:text-4xl lg:text-6xl font-extrabold ${color}`}>
               <CountUp target={target} suffix={suffix} />
             </span>
             <span className="mt-2 text-sm sm:text-base text-gray-200 max-w-[10rem] md:max-w-none">

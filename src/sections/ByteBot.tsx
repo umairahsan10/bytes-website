@@ -44,110 +44,202 @@ const ByteBotsSection = () => {
   const redefiningRef = useRef<HTMLHeadingElement>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
 
+  // Cache initial positions to avoid recalculating
+  const [isReady, setIsReady] = useState(false);
+  const initialPositionsRef = useRef<{
+    originalX: number;
+    originalY: number;
+    targetX: number;
+    targetY: number;
+    containerTop: number;
+    firstSectionHeight: number;
+    firstSectionTop: number;
+  } | null>(null);
+
+  const calculateInitialPositions = () => {
+    if (
+      !headingRef.current ||
+      !targetRef.current ||
+      !containerRef.current ||
+      !firstSectionRef.current
+    ) return null;
+
+    // Reset any existing transforms to get accurate measurements
+    headingRef.current.style.position = "";
+    headingRef.current.style.left = "";
+    headingRef.current.style.top = "";
+    headingRef.current.style.transform = "";
+    headingRef.current.style.transformOrigin = "";
+    headingRef.current.style.zIndex = "";
+    headingRef.current.style.pointerEvents = "";
+    headingRef.current.style.willChange = "";
+
+    const scrollY = window.scrollY;
+    
+    // Get container position
+    const containerRect = containerRef.current.getBoundingClientRect();
+    const containerTop = containerRect.top + scrollY;
+    
+    // Get first section dimensions
+    const firstSectionRect = firstSectionRef.current.getBoundingClientRect();
+    const firstSectionHeight = firstSectionRect.height;
+    const firstSectionTop = containerTop;
+    
+    // Get target position
+    const targetRect = targetRef.current.getBoundingClientRect();
+    const targetX = targetRect.left;
+    const targetY = targetRect.top + scrollY;
+    
+    // Get original heading position (centered in first section)
+    const originalRect = headingRef.current.getBoundingClientRect();
+    const originalX = (window.innerWidth - originalRect.width) / 2;
+    const originalY = firstSectionTop + (firstSectionHeight - originalRect.height) / 2;
+    
+    return {
+      originalX,
+      originalY,
+      targetX,
+      targetY,
+      containerTop,
+      firstSectionHeight,
+      firstSectionTop
+    };
+  };
+
   useEffect(() => {
+    const updateInitialPositions = () => {
+      const positions = calculateInitialPositions();
+      if (positions) {
+        initialPositionsRef.current = positions;
+        setIsReady(true);
+      }
+    };
+
+    // Multiple attempts to ensure we get stable measurements
+    const timer1 = setTimeout(updateInitialPositions, 100);
+    const timer2 = setTimeout(updateInitialPositions, 200);
+    const timer3 = setTimeout(updateInitialPositions, 300);
+    
+    // Recalculate on window resize
+    const handleResize = () => {
+      setIsReady(false);
+      setTimeout(updateInitialPositions, 100);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isReady || !initialPositionsRef.current) return;
+
     const handleScroll = () => {
       if (
         !headingRef.current ||
         !introducingRef.current ||
         !subheadingRef.current ||
-        !targetRef.current ||
-        !containerRef.current ||
-        !firstSectionRef.current ||
         !redefiningRef.current ||
-        !aboutRef.current
-      )
-        return;
+        !aboutRef.current ||
+        !initialPositionsRef.current
+      ) return;
 
       const scrollY = window.scrollY;
+      const {
+        originalX,
+        originalY,
+        targetX,
+        targetY,
+        containerTop,
+        firstSectionHeight,
+        firstSectionTop
+      } = initialPositionsRef.current;
 
-      // Get the container's position relative to the document
-      const containerRect = containerRef.current.getBoundingClientRect();
-      const containerTop = containerRect.top + scrollY;
+      // Calculate trigger points
+      const triggerPoint = firstSectionTop + firstSectionHeight * 0.1;
+      const animationDistance = firstSectionHeight * 0.8;
 
-      // Get first section dimensions
-      const firstSectionRect = firstSectionRef.current.getBoundingClientRect();
-      const firstSectionHeight = firstSectionRect.height;
-      const firstSectionTop = containerTop;
+      // Check if we're in the component area
+      const componentBottom = containerTop + containerRef.current!.offsetHeight;
+      const isInComponentArea = scrollY >= firstSectionTop && scrollY <= componentBottom;
 
-      // Calculate trigger points relative to this component
-      const triggerPoint = firstSectionTop + firstSectionHeight * 0.1; // Start when 30% through first section
-      const animationDistance = firstSectionHeight * 0.8; // Animation duration
+      // Handle "Introducing" fade out before animation starts
+      const preAnimationDistance = firstSectionHeight * 0.05; // 5% of section height before trigger
+      const introducingTrigger = triggerPoint - preAnimationDistance;
+      
+      if (scrollY > introducingTrigger && scrollY <= triggerPoint) {
+        // Fade out "Introducing" just before main animation starts
+        const introducingProgress = (scrollY - introducingTrigger) / preAnimationDistance;
+        introducingRef.current.style.opacity = `${1 - introducingProgress}`;
+        introducingRef.current.style.transform = `translateY(${introducingProgress * 30}px)`;
+        introducingRef.current.style.transition = "none";
+      } else if (scrollY <= introducingTrigger) {
+        // Reset introducing text when scrolling back up
+        introducingRef.current.style.opacity = "";
+        introducingRef.current.style.transform = "";
+        introducingRef.current.style.transition = "";
+      }
 
-      // Only animate if we're scrolling within this component's area
-      const componentBottom = containerTop + containerRef.current.offsetHeight;
-      const isInComponentArea =
-        scrollY >= firstSectionTop && scrollY <= componentBottom;
-
+      // Only start main animation if we're past the trigger point AND in component area
       if (scrollY > triggerPoint && isInComponentArea) {
-        const progress = Math.min(
-          1,
-          (scrollY - triggerPoint) / animationDistance
-        );
-        // Two-phase animation
-        const subheadingPhase = Math.min(1, progress / 0); // 0 to 1 in first 10%
-        const redefiningPhase = Math.max(0, (progress - 0.3) / 0.7); // 0 to 1 from 30% to 100%
-        // Introducing: fade out quickly at the very beginning of the animation
-        const introducingPhase = Math.min(1, progress / 0.2); // complete within first 20%
-        introducingRef.current.style.opacity = `${1 - introducingPhase}`;
-        introducingRef.current.style.transform = `translateY(${introducingPhase * 30}px)`;
-        introducingRef.current.style.transition = "opacity 0.4s, transform 0.4s";
-        // Subheading: fade out and slide down in first 30%
+        const progress = Math.min(1, (scrollY - triggerPoint) / animationDistance);
+        
+        // Improved phase calculations with smoother transitions
+        const subheadingPhase = Math.min(1, progress / 0.25); // Complete within first 25%
+        const redefiningPhase = Math.max(0, (progress - 0.3) / 0.7); // Start at 30%, complete at 100%
+
+        // Ensure introducing text stays hidden during main animation
+        introducingRef.current.style.opacity = "0";
+        introducingRef.current.style.transform = "translateY(30px)";
+        introducingRef.current.style.transition = "none";
+
+        // Animate subheading
         subheadingRef.current.style.opacity = `${1 - subheadingPhase}`;
-        subheadingRef.current.style.transform = `translateY(${
-          subheadingPhase * 40
-        }px)`;
-        subheadingRef.current.style.transition = "opacity 0.4s, transform 0.4s";
-        // Redefining: fade in and slide from further left, only after subheading is gone
+        subheadingRef.current.style.transform = `translateY(${subheadingPhase * 40}px)`;
+        subheadingRef.current.style.transition = "none"; // Remove transitions during animation
+
+        // Animate redefining section
         redefiningRef.current.style.opacity = `${redefiningPhase}`;
-        redefiningRef.current.style.transform = `translateX(${
-          (1 - redefiningPhase) * -120
-        }px)`;
-        redefiningRef.current.style.transition = "opacity 0.4s, transform 0.4s";
+        redefiningRef.current.style.transform = `translateX(${(1 - redefiningPhase) * -120}px)`;
+        redefiningRef.current.style.transition = "none"; // Remove transitions during animation
 
-        // About section slides in with same phase
+        // Animate about section
         aboutRef.current.style.opacity = `${redefiningPhase}`;
-        aboutRef.current.style.transform = `translateX(${
-          (1 - redefiningPhase) * -120
-        }px)`;
-        aboutRef.current.style.transition = "opacity 0.4s, transform 0.4s";
+        aboutRef.current.style.transform = `translateX(${(1 - redefiningPhase) * -120}px)`;
+        aboutRef.current.style.transition = "none"; // Remove transitions during animation
 
-        // Get target position relative to the document
-        const targetRect = targetRef.current.getBoundingClientRect();
-        const targetX = targetRect.left;
-        const targetY = targetRect.top + scrollY;
-
-        // Get original heading position (centered in first section)
-        const originalRect = headingRef.current.getBoundingClientRect();
-        const originalX = (window.innerWidth - originalRect.width) / 2;
-        const originalY =
-          firstSectionTop + (firstSectionHeight - originalRect.height) / 2;
-
-        // Calculate current position
+        // Calculate heading position with stable interpolation
         const currentX = originalX + (targetX - originalX) * progress;
         const currentY = originalY + (targetY - originalY) * progress;
         const currentScale = 1 - 0.5 * progress;
 
-        // Apply fixed positioning during animation
+        // Apply positioning with improved stability
         headingRef.current.style.position = "fixed";
-        headingRef.current.style.left = `${currentX}px`;
-        headingRef.current.style.top = `${currentY - scrollY}px`;
+        headingRef.current.style.left = `${Math.round(currentX)}px`;
+        headingRef.current.style.top = `${Math.round(currentY - scrollY)}px`;
         headingRef.current.style.transform = `scale(${currentScale})`;
         headingRef.current.style.transformOrigin = "left top";
         headingRef.current.style.zIndex = "1000";
         headingRef.current.style.pointerEvents = "none";
+        headingRef.current.style.willChange = "transform, left, top";
 
-        // When animation is complete, switch to absolute positioning within container
+        // Finalize position when animation completes
         if (progress >= 1) {
           const landingOffset = 16;
           headingRef.current.style.position = "absolute";
-          headingRef.current.style.top = `${
-            targetY - containerTop + landingOffset
-          }px`;
-          headingRef.current.style.left = `${targetX}px`;
+          headingRef.current.style.top = `${Math.round(targetY - containerTop + landingOffset)}px`;
+          headingRef.current.style.left = `${Math.round(targetX)}px`;
           headingRef.current.style.transform = "scale(0.5)";
           headingRef.current.style.zIndex = "10";
+          headingRef.current.style.willChange = "auto";
         }
-      } else if (scrollY <= triggerPoint || !isInComponentArea) {
+      } else if (scrollY <= triggerPoint) {
+        // Reset all styles when before animation starts
         headingRef.current.style.position = "";
         headingRef.current.style.left = "";
         headingRef.current.style.top = "";
@@ -155,22 +247,25 @@ const ByteBotsSection = () => {
         headingRef.current.style.transformOrigin = "";
         headingRef.current.style.zIndex = "";
         headingRef.current.style.pointerEvents = "";
-        introducingRef.current.style.opacity = "";
-        introducingRef.current.style.transform = "";
-        introducingRef.current.style.transition = "";
+        headingRef.current.style.willChange = "";
+        
+        // Don't reset introducing text here - it's handled above
+        
         subheadingRef.current.style.opacity = "";
         subheadingRef.current.style.transform = "";
         subheadingRef.current.style.transition = "";
+        
         redefiningRef.current.style.opacity = "0";
         redefiningRef.current.style.transform = "translateX(-120px)";
         redefiningRef.current.style.transition = "";
+        
         aboutRef.current.style.opacity = "0";
         aboutRef.current.style.transform = "translateX(-120px)";
         aboutRef.current.style.transition = "";
       }
     };
 
-    // Use throttled scroll for better performance
+    // Optimized scroll handler with requestAnimationFrame
     let ticking = false;
     const scrollListener = () => {
       if (!ticking) {
@@ -182,23 +277,19 @@ const ByteBotsSection = () => {
       }
     };
 
-    window.addEventListener("scroll", scrollListener);
-    window.addEventListener("resize", scrollListener); // Handle window resize
-
-    // Initial call after a short delay to ensure all elements are positioned
-    setTimeout(handleScroll, 100);
+    window.addEventListener("scroll", scrollListener, { passive: true });
+    
+    // Initial call only after positions are ready
+    setTimeout(handleScroll, 50);
 
     return () => {
       window.removeEventListener("scroll", scrollListener);
-      window.removeEventListener("resize", scrollListener);
     };
-  }, []);
+  }, [isReady]);
 
   return (
     <div
-      ref={(node) => {
-        containerRef.current = node;
-      }}
+      ref={containerRef}
       className="bg-gray-50 relative"
       style={{ isolation: "isolate" }}
     >
@@ -222,6 +313,7 @@ const ByteBotsSection = () => {
           <h1
             ref={headingRef}
             className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-4 sm:mb-6"
+            style={{ willChange: "transform, left, top" }}
           >
             <span className="bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
               Byte Bots
@@ -260,8 +352,12 @@ const ByteBotsSection = () => {
               {/* Redefining impact heading with fade/slide in */}
               <h3
                 ref={redefiningRef}
-                style={{ opacity: 0, transform: "translateX(-120px)" }}
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight transition-all duration-400"
+                style={{ 
+                  opacity: 0, 
+                  transform: "translateX(-120px)",
+                  willChange: "opacity, transform"
+                }}
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight"
               >
                 <span className="text-black">Powered </span>
                 <span className="text-black">by </span>
@@ -283,7 +379,15 @@ const ByteBotsSection = () => {
             </div>
 
             {/* Right side */}
-            <div ref={aboutRef} className="space-y-6 sm:space-y-8" style={{opacity:0, transform:'translateX(-120px)'}}>
+            <div 
+              ref={aboutRef} 
+              className="space-y-6 sm:space-y-8" 
+              style={{
+                opacity: 0, 
+                transform: 'translateX(-120px)',
+                willChange: "opacity, transform"
+              }}
+            >
               <div>
                 <h4 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
                   About Byte Bot
