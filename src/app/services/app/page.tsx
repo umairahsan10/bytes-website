@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import { Header } from '@/sections/Navbar';
 import { useRouter } from 'next/navigation';
+import FAQ from '@/components/FAQ';
 
 // Helper component for word-by-word reveal
 const AnimatedParagraph = ({ text, className = "" }: { text: string; className?: string }) => {
@@ -853,6 +854,11 @@ const AppDevelopmentPage = () => {
               ))}
             </div>
           </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="w-full flex flex-col items-center justify-center py-0">
+          <FAQ />
         </section>
 
         {/* Call-to-Action Section */}

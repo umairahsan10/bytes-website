@@ -8,6 +8,7 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 import { Header } from '@/sections/Navbar';
 import { useRouter } from 'next/navigation';
+import FAQ from '@/components/FAQ';
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
@@ -1346,6 +1347,11 @@ const SEOPage: React.FC = () => {
             </motion.div>
           </motion.div>
         </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="w-full flex flex-col items-center justify-center py-0">
+        <FAQ />
       </section>
 
       {/* CTA Section */}
