@@ -1020,13 +1020,7 @@ const ByteSuitePage: React.FC = () => {
               />
             </motion.div>
 
-            <motion.div 
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={containerVariants}
-              className="space-y-6 sm:space-y-8 md:space-y-12 lg:space-y-16"
-            >
+            <div className="space-y-6 sm:space-y-8 md:space-y-12 lg:space-y-16">
               {[
                 {
                   title: "Consultants & Service Providers",
@@ -1075,20 +1069,26 @@ const ByteSuitePage: React.FC = () => {
               ].map((audience, index) => (
                 <motion.div
                   key={index}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={itemVariants}
                   className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8 lg:gap-12 items-center mb-20 sm:mb-12 md:mb-16"
-
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                 >
                   <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={index % 2 === 0 ? slideInFromLeft : slideInFromRight}
                     className={`space-y-2 sm:space-y-4 md:space-y-6 ${index % 2 === 1 ? 'lg:order-2' : ''} text-center lg:text-left`}
-
                     transition={{ duration: 0.4, delay: index * 0.1 + 0.1 }}
                   >
                     <div className="space-y-1 sm:space-y-2 md:space-y-3">
                       <motion.h3 
                         className="text-base sm:text-lg md:text-2xl lg:text-3xl font-bold"
                         style={{ color: SECONDARY_COLOR }}
-
+                        variants={fadeInUp}
                         transition={{ duration: 0.3, delay: index * 0.1 + 0.2 }}
                       >
                         {audience.title}
@@ -1096,7 +1096,7 @@ const ByteSuitePage: React.FC = () => {
                       <motion.h4 
                         className="text-xs sm:text-base md:text-lg lg:text-xl font-semibold"
                         style={{ color: SECONDARY_COLOR }}
-
+                        variants={fadeInUp}
                         transition={{ duration: 0.3, delay: index * 0.1 + 0.3 }}
                       >
                         {audience.subtitle}
@@ -1104,7 +1104,7 @@ const ByteSuitePage: React.FC = () => {
                       <motion.p 
                         className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl leading-relaxed"
                         style={{ color: SECONDARY_COLOR }}
-
+                        variants={fadeInUp}
                         transition={{ duration: 0.3, delay: index * 0.1 + 0.4 }}
                       >
                         {audience.description}
@@ -1114,7 +1114,7 @@ const ByteSuitePage: React.FC = () => {
                       <motion.h5 
                         className="text-xs sm:text-base md:text-lg lg:text-xl font-semibold"
                         style={{ color: SECONDARY_COLOR }}
-
+                        variants={fadeInUp}
                         transition={{ duration: 0.3, delay: index * 0.1 + 0.5 }}
                       >
                         Key Benefits:
@@ -1124,20 +1124,24 @@ const ByteSuitePage: React.FC = () => {
                           <motion.li 
                             key={benefitIndex} 
                             className="flex items-center justify-center space-x-1 sm:space-x-2 md:space-x-3 text-center lg:justify-start lg:text-left"
-
+                            variants={fadeInUp}
                             transition={{ delay: index * 0.1 + 0.6 + benefitIndex * 0.05 }}
                           >
                             <motion.span 
                               className="text-base sm:text-lg md:text-xl mt-1 flex-shrink-0"
                               style={{ color: SECONDARY_COLOR }}
-
+                              variants={fadeInUp}
                               transition={{ duration: 0.2, delay: index * 0.1 + 0.7 + benefitIndex * 0.05 }}
                             >
                               ✓
                             </motion.span>
-                            <span className="text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed" style={{ color: SECONDARY_COLOR }}>
+                            <motion.span 
+                              className="text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed" 
+                              style={{ color: SECONDARY_COLOR }}
+                              variants={fadeInUp}
+                            >
                               {benefit}
-                            </span>
+                            </motion.span>
                           </motion.li>
                         ))}
                       </ul>
@@ -1145,16 +1149,20 @@ const ByteSuitePage: React.FC = () => {
                   </motion.div>
                   
                   <motion.div 
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={index % 2 === 0 ? slideInFromRight : slideInFromLeft}
                     className={`flex items-center justify-center ${index % 2 === 1 ? 'lg:order-1' : ''}`}
-
                     transition={{ duration: 0.4, delay: index * 0.1 + 0.2 }}
                     whileHover={{ scale: 1.02 }}
                   >
-                    <img
+                    <motion.img
                       src={audience.image}
                       alt={audience.title}
                       className="w-full h-auto max-h-40 sm:max-h-56 md:max-h-64 lg:max-h-80 object-contain"
                       style={{ maxWidth: '100%', minWidth: 'auto' }}
+                      variants={imageVariants}
                       onLoad={() => console.log('Image loaded successfully:', audience.image)}
                       onError={(e) => {
                         console.error('Image failed to load:', audience.image);
@@ -1167,7 +1175,7 @@ const ByteSuitePage: React.FC = () => {
                   </motion.div>
                 </motion.div>
               ))}
-            </motion.div>
+            </div>
           </div>
         </motion.section>
 
