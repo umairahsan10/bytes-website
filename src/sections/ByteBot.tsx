@@ -221,11 +221,11 @@ const ByteBotsSection = () => {
         // Change heading color to white as animation nears end (target the span inside h1)
         const headingSpan = headingRef.current.querySelector('span');
         if (headingSpan) {
-          if (progress > 0.9) {
-            headingSpan.classList.remove('bg-gradient-to-r', 'from-pink-500', 'to-purple-600', 'bg-clip-text', 'text-transparent');
+          if (progress > 0.7) {
+            headingSpan.classList.remove('text-[#01084E]');
             headingSpan.classList.add('text-white');
           } else {
-            headingSpan.classList.add('bg-gradient-to-r', 'from-pink-500', 'to-purple-600', 'bg-clip-text', 'text-transparent');
+            headingSpan.classList.add('text-[#01084E]');
             headingSpan.classList.remove('text-white');
           }
         }
@@ -327,7 +327,7 @@ const ByteBotsSection = () => {
             className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-4 sm:mb-6"
             style={{ willChange: "transform, left, top" }}
           >
-            <span className="bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
+            <span className="text-[#01084E]">
               Byte Bots
             </span>
           </h1>
@@ -342,10 +342,19 @@ const ByteBotsSection = () => {
           >
           </p>
         </div>
+        {/* Fade overlay for background image */}
+        <div
+          className="pointer-events-none absolute bottom-0 left-0 w-full h-12 lg:h-16"
+          style={{
+            background: "linear-gradient(to bottom, #ffffff 0%, #01084E 100%)",
+            zIndex: 1,
+          }}
+          aria-hidden="true"
+        />
       </div>
 
       {/* Transition Space */}
-      <div className="h-8"></div>
+      <div className="h-8 bg-[#01084E]"></div>
 
       {/* Second Section */}
       <div 
@@ -375,6 +384,13 @@ const ByteBotsSection = () => {
                 </div>
               </div>
 
+              {/* Next-Gen Chatbots block */}
+              <div className="mb-8 leading-tight lg:ml-2">
+                <span className="text-white font-bold text-2xl sm:text-2xl">Next-Gen </span>
+                <span className="font-bold text-2xl sm:text-2xl text-[#00ece2]">Chatbots</span>
+                <div className="text-white text-lg sm:text-base font-semibold leading-tight">Human-like minds</div>
+              </div>
+
               {/* Redefining impact heading with fade/slide in */}
               <h3
                 ref={redefiningRef}
@@ -383,22 +399,14 @@ const ByteBotsSection = () => {
                   transform: "translateX(-120px)",
                   willChange: "opacity, transform"
                 }}
-                className="text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight"
+                className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl mb-6 sm:mb-8 leading-tight lg:ml-2"
               >
-                <span className="text-white">Powered </span>
-                <span className="text-white">by </span>
-                <span className="text-[#00ece2]">Real{" "}</span>
-                <br/>
-                <span className="text-white">Business{" "}</span>
-                <CycleText className="text-[#00ece2]" />
+                <span className="text-white">THE FUTURE OF</span><br/>
+                <span className="text-[#00ece2]">COMMUNICATION</span><br/>
+                <span className="text-white">IS NOW</span><br/>
+                <span className="text-[#00ece2]">POWERED BY </span>
+                <span className="text-white font-bold">AI</span><br/>
               </h3>
-
-              {/* Next-Gen Chatbots block */}
-              <div className="mb-12">
-                <span className="text-white font-bold text-2xl sm:text-2xl">Next-Gen </span>
-                <span className="font-bold text-2xl sm:text-2xl text-[#00ece2]">Chatbots</span>
-                <div className="text-white text-lg sm:text-base font-semibold leading-tight">Human-like minds</div>
-              </div>
 
               <Link
                 href="/products/byte-bots"
