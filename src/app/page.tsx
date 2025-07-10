@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import Lenis from "lenis";
 import { Header } from "@/sections/Navbar";
 import HeroSection from "@/sections/Hero";
 import ByteBotsSection from "@/sections/ByteBot";
@@ -16,8 +17,34 @@ import { LineAnimationSection } from "@/sections/LineAnimationSection";
 import { BrandsSection } from "@/sections/brands";
 import { NumbersSection } from "@/sections/numbers";
 
-
 export default function Home() {
+  // Global Lenis configuration for entire website
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      wheelMultiplier: 0.3, // Reduced from 1 - limits mouse scroll speed
+      touchMultiplier: 0.8, // Reduced from 2 - limits touch scroll speed
+      infinite: false,
+    });
+
+    // Expose Lenis instance globally so other components can access it
+    if (typeof window !== 'undefined') {
+      (window as any).lenis = lenis;
+    }
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
+
   // Ensure page always starts at the very top on initial load / refresh
   useEffect(() => {
     if (typeof window !== 'undefined') {

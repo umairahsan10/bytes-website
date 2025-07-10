@@ -10,7 +10,12 @@ import { useAtom } from "jotai";
 import { pageAtom, userInteractedAtom } from "@/components/BookSlider/state";
 import Link from "next/link";
 import "./bookSection.css";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 // import { useBookScroll } from "@/components/BookSlider/useBookScroll";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export const BookSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -57,20 +62,27 @@ export const BookSection = () => {
     return rect.top >= 0 && rect.bottom <= window.innerHeight;
   };
 
-  // Engage scroll lock only when the book area itself is ~fully visible (≥80%).
-  // This avoids sudden auto-scrolling and lets the user arrive naturally.
+  // Configurable intersection threshold - adjust this value to find the sweet spot
+  const INTERSECTION_THRESHOLD = 0.80; // Try: 0.8, 0.85, 0.9, 0.95
+
+  // Engage scroll lock with configurable threshold to prevent skipping
   useEffect(() => {
     if (!bookAreaRef.current || scrollFlipDone) return;
+
+    let hasTriggered = false;
 
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
-        if (entry.intersectionRatio >= 0.8 && !scrollLockActive) {
+        
+        // Trigger when section reaches the configurable threshold
+        if (entry.intersectionRatio >= INTERSECTION_THRESHOLD && !scrollLockActive && !hasTriggered) {
+          hasTriggered = true;
           setScrollLockActive(true);
           observer.disconnect();
         }
       },
-      { threshold: Array.from({ length: 17 }, (_, i) => i * 0.05) } // 0,0.05,...0.8
+      { threshold: [INTERSECTION_THRESHOLD - 0.05, INTERSECTION_THRESHOLD, INTERSECTION_THRESHOLD + 0.05] }
     );
 
     observer.observe(bookAreaRef.current);
@@ -105,48 +117,13 @@ export const BookSection = () => {
     }
   }, [userInteracted]);
 
-  // Global scroll lock: prevent all wheel / touchmove/ key-scroll while active
-  useEffect(() => {
-    if (!scrollLockActive) return;
-
-    const preventDefault = (e: Event) => e.preventDefault();
-    const preventForKeys = (e: KeyboardEvent) => {
-      const keys = [' ', 'PageDown', 'PageUp', 'ArrowDown', 'ArrowUp', 'Home', 'End'];
-      if (keys.includes(e.key)) {
-        e.preventDefault();
-      }
-    };
-
-    const originalBodyOverflow = document.body.style.overflow;
-    const originalHtmlOverflow = document.documentElement.style.overflow;
-
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
-
-    window.addEventListener('wheel', preventDefault, { passive: false });
-    window.addEventListener('touchmove', preventDefault, { passive: false });
-    window.addEventListener('keydown', preventForKeys, { passive: false });
-
-    return () => {
-      window.removeEventListener('wheel', preventDefault as any);
-      window.removeEventListener('touchmove', preventDefault as any);
-      window.removeEventListener('keydown', preventForKeys as any);
-
-      document.body.style.overflow = originalBodyOverflow;
-      document.documentElement.style.overflow = originalHtmlOverflow;
-    };
-  }, [scrollLockActive]);
+  // GSAP ScrollTrigger handles smooth pinning - no need for aggressive scroll prevention
 
   // Allow a single wheel scroll to flip from page 1 ➜ 2 after auto flip
   useEffect(() => {
     if (scrollFlipDone) return;
 
     const handleWheel = (e: WheelEvent) => {
-      // If scroll is locked, always prevent default site scrolling
-      if (scrollLockActive) {
-        e.preventDefault();
-      }
-
       // We only want to flip when we're on page 1 and ready
       if (page !== 1 || scrollFlipDone || !scrollReady) return;
 
@@ -167,21 +144,14 @@ export const BookSection = () => {
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      // Prevent site scroll while locked
-      if (scrollLockActive) {
-        e.preventDefault();
-      }
-
       if (page !== 1 || scrollFlipDone) return;
       const startY = touchStartYRef.current;
       if (startY === null) return;
 
-      // Prevent page scroll
-      e.preventDefault();
-
       const deltaY = startY - e.touches[0].clientY; // positive when swiping up
       if (!scrollReady) return;
       if (Math.abs(deltaY) > 40) {
+        e.preventDefault();
         setPage(2);
         setScrollFlipDone(true);
         if (unlockTimerRef.current) clearTimeout(unlockTimerRef.current);
@@ -201,7 +171,7 @@ export const BookSection = () => {
       window.removeEventListener('touchmove', handleTouchMove as any);
       // Do NOT clear unlockTimerRef here; it must complete to release scroll lock
     };
-  }, [page, scrollFlipDone, scrollReady, scrollLockActive, setPage]);
+  }, [page, scrollFlipDone, scrollReady, setPage]);
 
   // Pause Lenis smooth scrolling while the lock is active (important because Lenis bypasses overflow hidden)
   useEffect(() => {
@@ -215,19 +185,21 @@ export const BookSection = () => {
     }
   }, [scrollLockActive]);
 
-  // Ensure the book area is centered after lock engages (after lenis stop)
+  // Ensure the book area is centered when lock engages (smoother approach)
   useEffect(() => {
     if (!scrollLockActive) return;
-    // slight timeout to allow lenis.stop() to finish flush
+    
+    // Smooth centering with a small delay
     const id = setTimeout(() => {
       if (isTouch) {
         // On mobile, reveal the heading and avoid showing next section blank space
         sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       } else {
-        // Desktop: keep book nicely centred
-        bookAreaRef.current?.scrollIntoView({ behavior: 'auto', block: 'center' });
+        // Desktop: center the book smoothly
+        bookAreaRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
-    }, 50);
+    }, 100); // Small delay for smoother transition
+    
     return () => clearTimeout(id);
   }, [scrollLockActive, isTouch]);
 
@@ -312,7 +284,7 @@ export const BookSection = () => {
                       }
                     : {
                         top: '45%',
-                        left: '63%',
+                        left: '57%',
                       }),
                   transform: 'translate(-50%, -50%)',
                 }}
