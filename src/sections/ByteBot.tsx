@@ -383,19 +383,20 @@ const ByteBotsSection = () => {
                   transform: "translateX(-120px)",
                   willChange: "opacity, transform"
                 }}
-                className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight"
+                className="text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight"
               >
                 <span className="text-white">Powered </span>
                 <span className="text-white">by </span>
                 <span className="text-[#00ece2]">Real{" "}</span>
+                <br/>
                 <span className="text-white">Business{" "}</span>
                 <CycleText className="text-[#00ece2]" />
               </h3>
 
               {/* Next-Gen Chatbots block */}
               <div className="mb-12">
-                <span className="text-white font-bold text-3xl sm:text-2xl">Next-Gen </span>
-                <span className="font-bold text-3xl sm:text-2xl text-[#00ece2]">Chatbots</span>
+                <span className="text-white font-bold text-2xl sm:text-2xl">Next-Gen </span>
+                <span className="font-bold text-2xl sm:text-2xl text-[#00ece2]">Chatbots</span>
                 <div className="text-white text-lg sm:text-base font-semibold leading-tight">Human-like minds</div>
               </div>
 
