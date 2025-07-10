@@ -8,12 +8,12 @@ import { useRouter } from 'next/navigation';
 import FAQ from '@/components/FAQ-App';
 
 // Helper component for word-by-word reveal
-const AnimatedParagraph = ({ text, className = "" }: { text: string; className?: string }) => {
+const AnimatedParagraph = ({ text, className = "", speed = 0.03 }: { text: string; className?: string; speed?: number }) => {
   const wordContainer = {
     hidden: { opacity: 1 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.08 }
+      transition: { staggerChildren: speed }
     }
   };
 
@@ -843,7 +843,8 @@ const AppDevelopmentPage = () => {
             text="In today's digital landscape, your mobile application isn't just a tool—it's a vital extension of your brand. We don't just develop apps; we craft custom mobile apps that are tailored to your unique business needs. If you're seeking mobile development service in USA, our team is equipped to bring your vision to life."
             // text="In today's digital landscape, your mobile application isn't just a tool—it's a vital extension of your brand and a direct line to your customers. We don't just develop apps; we craft custom mobile apps that are tailored to your unique business needs. Whether you're seeking an android app development company or a mobile development company in the USA, our team is equipped to bring your vision to life."
               // text="Transform your ideas into powerful mobile experiences. Let's discuss your project and bring your vision to life."
-              className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto"
+              className="text-xl text-gray-700 mb-12 max-w-2xl mx-auto"
+              speed={0.03}
             />
 
             <motion.button

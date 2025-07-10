@@ -265,7 +265,7 @@ const WebDevelopmentLanding = () => {
     { icon: CreditCard, title: "Payment Gateways" },
     { icon: Mail, title: "Newsletter Systems" },
     { icon: Plug, title: "API Integration" },
-    { icon: Plug, title: "Third-party Software Integration" }
+    { icon: Plug, title: "Third-party Software" }
   ];
 
   const developmentProcess = [
@@ -471,7 +471,7 @@ const WebDevelopmentLanding = () => {
               <div className={`transition-all duration-700 ${shopifyVisible ? 'animate-fade-in opacity-100' : 'opacity-100'}`}>
                 <div className="p-6 sm:p-8 bg-white rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300">
                   <div className="flex flex-col sm:flex-row sm:items-start space-y-4 sm:space-y-0 sm:space-x-4 md:space-x-6 mb-4">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0">
                       <ShoppingCart className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-blue-600" />
                     </div>
                     <div className="text-center sm:text-left">
@@ -535,7 +535,7 @@ const WebDevelopmentLanding = () => {
               <div className={`transition-all duration-700 order-1 lg:order-2 ${wpVisible ? 'animate-fade-in opacity-100' : 'opacity-0'}`}>
                 <div className="p-6 sm:p-8 bg-white rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300">
                   <div className="flex flex-col sm:flex-row sm:items-start space-y-4 sm:space-y-0 sm:space-x-4 md:space-x-6 mb-4">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0">
                       <Globe className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-blue-600" />
                     </div>
                     <div className="text-center sm:text-left">
@@ -558,7 +558,7 @@ const WebDevelopmentLanding = () => {
               <div className={`transition-all duration-700 ${mernVisible ? 'animate-fade-in opacity-100' : 'opacity-0'}`}>
                 <div className="p-6 sm:p-8 bg-white rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300">
                   <div className="flex flex-col sm:flex-row sm:items-start space-y-4 sm:space-y-0 sm:space-x-4 md:space-x-6 mb-4">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0">
                       <Code className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-blue-600" />
                     </div>
                     <div className="text-center sm:text-left">
