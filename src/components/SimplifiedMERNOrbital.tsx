@@ -57,7 +57,7 @@ const SimplifiedMERNOrbital = () => {
   );
 
   return (
-    <div className="flex items-center justify-center relative">
+    <div className="flex items-center justify-center relative scale-75 lg:scale-90">
       {/* Orbital container */}
       <div className="relative w-[400px] h-[400px]">
         {/* Single orbital ring */}
