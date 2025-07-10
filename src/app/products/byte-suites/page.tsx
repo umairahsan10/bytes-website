@@ -115,19 +115,12 @@ const ByteSuitePage: React.FC = () => {
       else if (progress < 0.8) computed = 3;
       else computed = 4;
 
-      let newScreen = computed;
-
-      // On mobile, allow transition by only one step at a time
-      if (isMobileScreen && Math.abs(computed - currentLaptopScreen) > 1) {
-        newScreen = computed > currentLaptopScreen ? currentLaptopScreen + 1 : currentLaptopScreen - 1;
-      }
-
-      if (newScreen !== currentLaptopScreen) {
-        setCurrentLaptopScreen(newScreen);
+      if (computed !== currentLaptopScreen) {
+        setCurrentLaptopScreen(computed);
       }
     });
     return () => unsubscribe();
-  }, [laptopScreenProgress, currentLaptopScreen, isMobileScreen]);
+  }, [laptopScreenProgress, currentLaptopScreen]);
 
   // Detect mobile screen size
   useEffect(() => {
@@ -202,6 +195,7 @@ const ByteSuitePage: React.FC = () => {
   // Three.js setup
   useEffect(() => {
     if (!canvasRef.current) return;
+    if (window.innerWidth < 768) return; // Skip Three.js on mobile
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -212,11 +206,11 @@ const ByteSuitePage: React.FC = () => {
     });
 
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(1); // instead of devicePixelRatio
 
     // Create animated particles
     const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 1500;
+    const particlesCount = 750; // instead of 1500
     const posArray = new Float32Array(particlesCount * 3);
 
     for (let i = 0; i < particlesCount * 3; i++) {
@@ -638,8 +632,8 @@ const ByteSuitePage: React.FC = () => {
                     rotate: [0, 1, 0, -1, 0]
                   }}
                   transition={{ 
-                    y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-                    rotate: { duration: 6, repeat: Infinity, ease: "easeInOut" }
+                    y: { duration: 1 },
+                    rotate: { duration: 3 }
                   }}
                 >
                   <img
@@ -686,7 +680,7 @@ const ByteSuitePage: React.FC = () => {
           whileInView="visible"
           viewport={{ margin: '-100px' }}
           variants={containerVariants}
-          className="py-20 px-8"
+          className="py-20 px-8 text-center lg:text-left"
           style={{ backgroundColor: PRIMARY_COLOR }}
         >
           <div className="max-w-7xl mx-auto">
@@ -765,7 +759,7 @@ const ByteSuitePage: React.FC = () => {
                   className="grid lg:grid-cols-2 gap-12 items-center benefit-section"
                   data-index={index}
                 >
-                  <div className={`transition-all duration-700 ${visibleBenefits.has(index) ? 'animate-slide-in-left' : 'opacity-0 -translate-x-10'}`}>
+                  <div className={`transition-all duration-700 ${visibleBenefits.has(index) ? 'animate-slide-in-left' : 'opacity-0 -translate-x-10'} text-center lg:text-left`}>
                     <div className="space-y-6">
                       <div className="flex items-start space-x-6">
                         <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center flex-shrink-0">
@@ -774,9 +768,9 @@ const ByteSuitePage: React.FC = () => {
                         <h3 className="text-3xl font-bold leading-snug" style={{ color: SECONDARY_COLOR }}>{benefit.title}</h3>
                       </div>
                       <p className="text-lg leading-relaxed" style={{ color: SECONDARY_COLOR }}>{benefit.description}</p>
-                      <ul className="space-y-3 text-base">
+                      <ul className="space-y-3 text-base flex flex-col justify-center items-center text-center lg:items-start lg:text-left">
                         {benefit.features.map((feature, featureIndex) => (
-                          <li key={featureIndex} className="flex items-start space-x-3 leading-relaxed">
+                          <li key={featureIndex} className="flex items-center justify-center space-x-3 leading-relaxed text-center lg:justify-start lg:text-left">
                             <span className="text-xl mt-1" style={{ color: SECONDARY_COLOR }}>✓</span>
                             <span style={{ color: SECONDARY_COLOR }}>{feature}</span>
                           </li>
@@ -973,32 +967,32 @@ const ByteSuitePage: React.FC = () => {
           whileInView="visible"
           viewport={{ margin: '-100px', once: true }}
           variants={containerVariants}
-          className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 xl:px-16"
+          className="py-8 sm:py-12 lg:py-16 px-2 sm:px-4 lg:px-8 xl:px-16"
           style={{ backgroundColor: PRIMARY_COLOR }}
         >
           <div className="w-full max-w-7xl mx-auto">
-            <motion.div variants={fadeInDown} className="text-center mb-8 sm:mb-12">
+            <motion.div variants={fadeInDown} className="text-center mb-6 sm:mb-8 md:mb-12">
               <motion.h2 
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-4 sm:mb-6 bg-gradient-to-r from-[#ffffff] to-[#ffffff] bg-clip-text text-transparent"
+                className="text-xl sm:text-2xl md:text-3xl lg:text-5xl xl:text-6xl font-black mb-2 sm:mb-4 md:mb-6 bg-gradient-to-r from-[#ffffff] to-[#ffffff] bg-clip-text text-transparent"
                 variants={fadeInDown}
               >
                 Target Audience Benefits
               </motion.h2>
               <motion.p 
-                className="text-base sm:text-lg md:text-xl lg:text-2xl max-w-4xl mx-auto mb-6 sm:mb-8 px-4"
+                className="text-xs sm:text-sm md:text-lg lg:text-2xl max-w-4xl mx-auto mb-3 sm:mb-4 md:mb-6 px-2 sm:px-4"
                 style={{ color: SECONDARY_COLOR }}
                 variants={fadeInUp}
               >
                 Discover how ByteSuite CRM transforms business operations
               </motion.p>
               <motion.div 
-                className="w-12 sm:w-16 h-1 mx-auto mb-4 sm:mb-6"
+                className="w-8 sm:w-12 md:w-16 h-1 mx-auto mb-2 sm:mb-4 md:mb-6"
                 style={{ background: `linear-gradient(to bottom, ${SECONDARY_COLOR}, ${PRIMARY_COLOR})` }}
                 variants={slideInFromLeft}
               />
             </motion.div>
 
-            <div className="space-y-8 sm:space-y-12 lg:space-y-16">
+            <div className="space-y-6 sm:space-y-8 md:space-y-12 lg:space-y-16">
               {[
                 {
                   title: "Consultants & Service Providers",
@@ -1047,32 +1041,32 @@ const ByteSuitePage: React.FC = () => {
               ].map((audience, index) => (
                 <motion.div
                   key={index}
-                  className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center"
+                  className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8 lg:gap-12 items-center mb-20 sm:mb-12 md:mb-16"
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ margin: '-200px', once: true }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                 >
                   <motion.div
-                    className={`space-y-4 sm:space-y-6 ${index % 2 === 1 ? 'lg:order-2' : ''}`}
+                    className={`space-y-2 sm:space-y-4 md:space-y-6 ${index % 2 === 1 ? 'lg:order-2' : ''} text-center lg:text-left`}
                     initial={{ opacity: 0, x: index % 2 === 1 ? 30 : -30 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: index * 0.1 + 0.1 }}
                   >
-                    <div className="space-y-3 sm:space-y-4">
-                  <motion.h3 
-                        className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold"
-                      style={{ color: SECONDARY_COLOR }}
+                    <div className="space-y-1 sm:space-y-2 md:space-y-3">
+                      <motion.h3 
+                        className="text-base sm:text-lg md:text-2xl lg:text-3xl font-bold"
+                        style={{ color: SECONDARY_COLOR }}
                         initial={{ opacity: 0, y: 15 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.3, delay: index * 0.1 + 0.2 }}
-                  >
-                    {audience.title}
-                  </motion.h3>
+                      >
+                        {audience.title}
+                      </motion.h3>
                       <motion.h4 
-                        className="text-lg sm:text-xl lg:text-2xl font-semibold"
+                        className="text-xs sm:text-base md:text-lg lg:text-xl font-semibold"
                         style={{ color: SECONDARY_COLOR }}
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -1082,7 +1076,7 @@ const ByteSuitePage: React.FC = () => {
                         {audience.subtitle}
                       </motion.h4>
                       <motion.p 
-                        className="text-sm sm:text-base lg:text-lg xl:text-xl leading-relaxed"
+                        className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl leading-relaxed"
                         style={{ color: SECONDARY_COLOR }}
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -1091,11 +1085,10 @@ const ByteSuitePage: React.FC = () => {
                       >
                         {audience.description}
                       </motion.p>
-                  </div>
-                    
-                    <div className="space-y-3 sm:space-y-4">
+                    </div>
+                    <div className="space-y-1 sm:space-y-2 md:space-y-3">
                       <motion.h5 
-                        className="text-base sm:text-lg lg:text-xl font-semibold"
+                        className="text-xs sm:text-base md:text-lg lg:text-xl font-semibold"
                         style={{ color: SECONDARY_COLOR }}
                         initial={{ opacity: 0, y: 8 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -1104,38 +1097,38 @@ const ByteSuitePage: React.FC = () => {
                       >
                         Key Benefits:
                       </motion.h5>
-                      <ul className="space-y-2 sm:space-y-3">
+                      <ul className="space-y-1 sm:space-y-2 md:space-y-3 flex flex-col justify-center items-center text-center lg:items-start lg:text-left">
                         {audience.benefits.map((benefit, benefitIndex) => (
-                      <motion.li 
-                        key={benefitIndex} 
-                        className="flex items-start space-x-2 sm:space-x-3"
+                          <motion.li 
+                            key={benefitIndex} 
+                            className="flex items-center justify-center space-x-1 sm:space-x-2 md:space-x-3 text-center lg:justify-start lg:text-left"
                             initial={{ opacity: 0, x: -15 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                            whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 + 0.6 + benefitIndex * 0.05 }}
-                      >
-                        <motion.span 
-                              className="text-lg sm:text-xl mt-1 flex-shrink-0"
-                          style={{ color: SECONDARY_COLOR }}
-                          initial={{ opacity: 0, scale: 0.5 }}
-                          whileInView={{ opacity: 1, scale: 1 }}
+                          >
+                            <motion.span 
+                              className="text-base sm:text-lg md:text-xl mt-1 flex-shrink-0"
+                              style={{ color: SECONDARY_COLOR }}
+                              initial={{ opacity: 0, scale: 0.5 }}
+                              whileInView={{ opacity: 1, scale: 1 }}
                               viewport={{ once: true }}
                               transition={{ duration: 0.2, delay: index * 0.1 + 0.7 + benefitIndex * 0.05 }}
-                        >
+                            >
                               ✓
-                        </motion.span>
-                            <span className="text-sm sm:text-base lg:text-lg leading-relaxed" style={{ color: SECONDARY_COLOR }}>
+                            </motion.span>
+                            <span className="text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed" style={{ color: SECONDARY_COLOR }}>
                               {benefit}
                             </span>
-                      </motion.li>
-                    ))}
-                  </ul>
+                          </motion.li>
+                        ))}
+                      </ul>
                     </div>
                   </motion.div>
                   
                   <motion.div 
                     className={`flex items-center justify-center ${index % 2 === 1 ? 'lg:order-1' : ''}`}
-                    initial={{ opacity: 0, scale: 0.9 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: index * 0.1 + 0.2 }}
@@ -1144,15 +1137,15 @@ const ByteSuitePage: React.FC = () => {
                     <img
                       src={audience.image}
                       alt={audience.title}
-                      className="w-full h-48 sm:h-64 md:h-72 lg:h-80 object-cover rounded-lg shadow-lg"
-                      style={{ 
-                        maxWidth: '100%',
-                        minWidth: 'auto'
-                      }}
+                      className="w-full h-auto max-h-40 sm:max-h-56 md:max-h-64 lg:max-h-80 object-contain"
+                      style={{ maxWidth: '100%', minWidth: 'auto' }}
                       onLoad={() => console.log('Image loaded successfully:', audience.image)}
                       onError={(e) => {
                         console.error('Image failed to load:', audience.image);
-                        e.currentTarget.src = `https://via.placeholder.com/500x320/010a14/ffffff?text=${audience.title}`;
+                        // Remove placeholder for sales-teams.png specifically
+                        if (audience.image !== "/assets/sales-teams.png") {
+                          e.currentTarget.src = `https://via.placeholder.com/500x320/010a14/ffffff?text=${audience.title}`;
+                        }
                       }}
                     />
                   </motion.div>
@@ -1265,7 +1258,7 @@ const ByteSuitePage: React.FC = () => {
           whileInView="visible"
           viewport={{ margin: '-100px' }}
           variants={containerVariants}
-          className="py-20 px-8"
+          className="py-20 px-8 text-center lg:text-left"
           style={{ backgroundColor: PRIMARY_COLOR }}
         >
           <div className="max-w-7xl mx-auto">
@@ -1284,7 +1277,7 @@ const ByteSuitePage: React.FC = () => {
             </motion.div>
 
             <div className="grid lg:grid-cols-2 gap-16">
-              <motion.div variants={slideInFromLeft}>
+              <motion.div variants={slideInFromLeft} className="text-center lg:text-left">
                 <motion.h3 
                   className="text-3xl font-bold mb-6"
                   style={{ color: SECONDARY_COLOR }}
@@ -1319,7 +1312,7 @@ const ByteSuitePage: React.FC = () => {
                 </div>
               </motion.div>
 
-              <motion.div variants={slideInFromRight}>
+              <motion.div variants={slideInFromRight} className="text-center lg:text-left">
                 <motion.h3 
                   className="text-3xl font-bold mb-6"
                   style={{ color: SECONDARY_COLOR }}
