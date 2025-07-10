@@ -78,33 +78,37 @@ export const ProjectsSection = () => {
   }, [index, slides]);
 
   return (
-    <section
-      id="projects"
-      className="relative py-24 lg:py-32 items-center bg-[#010a14] bg-[url('/assets/portfolio_bg.png')] bg-cover bg-center bg-no-repeat"
-    >
-      <div className="w-full max-w-7xl mx-auto px-4 text-white">
-        <SectionHeader
-          eyebrow="Real Projects in Progress"
-          title="The Staging Room"
-          description="Our portfolio isn’t static — it’s active, evolving, and built in the open. Every link you see here points to a real website in development, hosted on a test domain for client review."
-        />
+          <section
+        id="projects"
+        className="relative py-20 sm:py-12 md:py-16 lg:py-8 items-center bg-[#010a14] bg-[url('/assets/portfolio_bg.png')] bg-cover bg-center bg-no-repeat"
+      >
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-6 text-white">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-4xl font-serif text-center mb-3 sm:mb-4 md:mb-6 lg:mb-4">The Staging Room</h2>
+          <div className="flex justify-center text-center mt-2 mb-3 sm:mb-4 md:mb-6 lg:mb-3">
+              <p className={`text-lg sm:text-xl md:text-xl lg:text-lg uppercase font-bold tracking-widest bg-clip-text text-transparent text-center bg-gradient-to-r from-[#0476b5] to-[#ffffff] px-4 sm:mb-2 md:mb-4 lg:mb-2`}>
+                  Real Projects in Progress
+              </p>
+          </div>
+          <p className="text-center text-sm sm:text-base md:text-lg lg:text-base text-white-500 mb-1 sm:mb-8 md:mb-10 lg:mb-6 px-4 sm:px-8 md:px-12 lg:px-8">
+            Our portfolio isn't static — it's active, evolving, and built in the open. Every link you see here points to a real website in development, hosted on a test domain for client review.
+          </p>
 
-        <div className="mt-8 lg:mt-12 flex flex-col gap-4 lg:gap-10">
-          {/* Slider Row */}
-          {/* Use column layout on small screens, switch to row on md and above */}
-          <div className="relative w-full flex flex-col md:flex-row items-center justify-center overflow-hidden rounded-3xl shadow-lg">
+        <div className="lg:mt-2 flex flex-col gap-4 sm:gap-6 md:gap-8 lg:gap-6 scale-90 sm:scale-95 lg:scale-90">
+            {/* Slider Row */}
+            {/* Use column layout on small screens, switch to row on md and above */}
+            <div className="relative w-full flex flex-col md:flex-row items-center justify-center overflow-hidden rounded-2xl sm:rounded-3xl md:rounded-3xl shadow-lg mx-2 sm:mx-4 md:mx-6 lg:mx-2">
 
             {/* Prev Button */}
             <button
               aria-label="Previous slide"
               onClick={prevSlide}
-              className="flex absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-gray-900/40 hover:bg-gray-900/70 backdrop-blur rounded-full p-2"
+              className="flex absolute left-2 sm:left-4 md:left-6 top-1/2 -translate-y-1/2 z-10 bg-gray-900/40 hover:bg-gray-900/70 backdrop-blur rounded-full p-2 sm:p-3 md:p-4"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="w-5 h-5 text-white"
+                className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white"
               >
                 <path
                   fillRule="evenodd"
@@ -159,8 +163,8 @@ export const ProjectsSection = () => {
                 style={{ transform: `translateX(-${index * 100}%)`, transitionProperty: withTransition ? 'transform' : 'none' }}
               >
                 {slides.map((item, idx) => (
-                  <div key={idx} className="min-w-full flex flex-col items-center lg:items-start justify-center p-4 md:p-6 lg:p-12 space-y-4 md:space-y-6">
-                    <h3 className="text-3xl lg:text-5xl font-bold text-white text-center lg:text-left">
+                  <div key={idx} className="min-w-full flex flex-col items-center lg:items-start justify-center p-4 md:p-6 lg:p-8 space-y-4 md:space-y-6 lg:space-y-4">
+                    <h3 className="text-3xl lg:text-4xl font-bold text-white text-center lg:text-left">
                       {item.title}
                     </h3>
                     <a
@@ -178,24 +182,24 @@ export const ProjectsSection = () => {
             </div>
           </div>
 
-          {/* Info line about domain and live work */}
-          <p className="text-xl text-center text-sm text-white">
-            You might come across a domain that may point to a different project than the preview image. That’s because we work live, with full transparency.
-          </p>
-        </div>
+                      {/* Info line about domain and live work */}
+            <p className="text-center text-sm sm:text-base md:text-lg lg:text-base text-white-500 sm:px-6 md:px-8 lg:px-6 mt-4 md:mt-6 lg:mt-4">
+            Some domain links may point to a different project than the preview image, thats because our domains are under constant change.
+            </p>
+          </div>
 
-        {/* CTA to full portfolio */}
-        <div className="mt-16 flex flex-col items-center text-center gap-6">
-          <h4 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">
-            Want to see our full portfolio of completed projects?
-          </h4>
-          <a
-            href="/contact"
-            className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold shadow-lg bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-600 text-white hover:from-purple-600 hover:via-fuchsia-500 hover:to-pink-500 hover:scale-110 transition-all duration-300"
-          >
-            Reach Out&nbsp;&raquo;
-          </a>
-        </div>
+          {/* CTA to full portfolio */}
+          <div className="mt-2 sm:mt-8 md:mt-12 lg:mt-8 flex flex-col items-center text-center gap-3 sm:gap-4 lg:gap-3 px-4 sm:px-6 lg:px-6">
+            <h4 className="text-xl sm:text-xl md:text-2xl lg:text-xl font-semibold">
+              Want to see our full portfolio of completed projects?
+            </h4>
+            <a
+              href="/contact"
+              className="inline-flex items-center gap-2 px-8 py-2 md:py-3 lg:py-2 mt-4 md:mt-4 lg:mt-2 rounded-full font-semibold shadow-lg bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-600 text-white hover:from-purple-600 hover:via-fuchsia-500 hover:to-pink-500 hover:scale-110 transition-all duration-300"
+            >
+              Reach Out&nbsp;&raquo;
+            </a>
+          </div>
       </div>
     </section>
   );
