@@ -7,6 +7,8 @@ import Link from "next/link";
 import SimplifiedMERNOrbital from "@/components/SimplifiedMERNOrbital";
 import AnimatedBeam from "@/components/AnimatedBeam";
 import FAQ from "@/components/FAQ";
+import Lottie from "lottie-react";
+import Shopping from "../../../../public/assets/WebDev/animations/Shopping.json";
 // @ts-ignore – lucide-react icons (ensure dependency installed in runtime)
 import { ChevronDown, Menu, X, Code, Zap, Users, Award, ArrowRight, Star, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Play, Smartphone, Monitor, Database, Cloud, Globe, Layers, BarChart, TrendingUp, LayoutDashboard, CreditCard, Plug, ShoppingCart } from 'lucide-react';
 
@@ -331,9 +333,9 @@ const WebDevelopmentLanding = () => {
               <span className="bg-gradient-to-r from-blue-700 to-blue-900 bg-clip-text text-transparent lg:text-4xl">That Drive Business Growth</span>
             </h1>
             <p className="text-xl text-gray-600 leading-relaxed max-w-lg">
-            At Bytes Platform, we specialize in delivering professional web development services tailored to meet the unique needs of each client.Combinig creativity with cutting edge technology to build custom solutions
+              At Bytes Platform, we specialize in delivering professional web development services tailored to meet the unique needs of each client.Combinig creativity with cutting edge technology to build custom solutions
             </p>
-            <div className="flex flex-col sm:flex-row gap-4"> 
+            <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/contact" data-cta="true" className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold hover:from-blue-700 hover:to-blue-800 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-center">
                 Start Your Project
               </Link>
@@ -361,10 +363,10 @@ const WebDevelopmentLanding = () => {
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-            Comprehensive Web Development <span className="text-blue-600">Services</span>
+              Comprehensive Web Development <span className="text-blue-600">Services</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            We offer a full spectrum of web development services, including:
+              We offer a full spectrum of web development services, including:
             </p>
           </div>
 
@@ -452,30 +454,32 @@ const WebDevelopmentLanding = () => {
         </div>
       </section>
       {/* CMS Solutions Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-50 to-white" ref={shopifyRef}>
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
+      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-r from-blue-50 to-white" ref={shopifyRef}>
+        <div className="max-w-screen-xl mx-auto px-6 sm:px-12 lg:px-20 py-12 space-y-16 sm:space-y-20">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
               CMS & E-commerce <span className="text-blue-600">Solutions</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
               From content-driven websites to thriving online stores, we craft WordPress and Shopify experiences that grow with your business.
             </p>
           </div>
-
-          <div className="space-y-20">
+          <br />
+          <div className="space-y-16 sm:space-y-20">
             {/* Shopify Section */}
-            <div className="grid lg:grid-cols-2 gap-12 items-center" ref={shopifyRef}>
-              <div className={`transition-all duration-700 ${shopifyVisible ? 'animate-slide-in-left' : 'opacity-0 -translate-x-10'}`}>
-                <div className="p-8 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300">
-                  <div className="flex items-start space-x-6 mb-4">
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center flex-shrink-0">
-                      <ShoppingCart className="w-8 h-8 text-blue-600" />
+            <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center" ref={shopifyRef}>
+              <div className={`transition-all duration-700 ${shopifyVisible ? 'animate-fade-in opacity-100' : 'opacity-100'}`}>
+                <div className="p-6 sm:p-8 bg-white rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="flex flex-col sm:flex-row sm:items-start space-y-4 sm:space-y-0 sm:space-x-4 md:space-x-6 mb-4">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0">
+                      <ShoppingCart className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-blue-600" />
                     </div>
-                    <h3 className="text-2xl font-bold leading-snug mt-4">We build Shopify stores</h3>
+                    <div className="text-center sm:text-left">
+                      <h3 className="text-xl sm:text-2xl font-bold leading-snug sm:mt-2 md:mt-4">We build Shopify stores</h3>
+                    </div>
                   </div>
-                  <p className="text-gray-600 mb-4">High-conversion Shopify storefronts with custom apps, payment gateways and ERP integrations.</p>
-                  <ul className="list-disc ml-6 space-y-2 text-gray-600">
+                  <p className="text-gray-600 mb-4 text-sm sm:text-base">High-conversion Shopify storefronts with custom apps, payment gateways and ERP integrations.</p>
+                  <ul className="list-disc ml-4 sm:ml-6 space-y-1 sm:space-y-2 text-gray-600 text-sm sm:text-base">
                     <li>Custom Liquid templates & sections</li>
                     <li>App & payment-gateway integrations</li>
                     <li>Optimised checkout flows</li>
@@ -483,23 +487,26 @@ const WebDevelopmentLanding = () => {
                   </ul>
                 </div>
               </div>
-              <div className={`flex items-center justify-center transition-all duration-700 ${shopifyVisible ? 'animate-slide-in-right' : 'opacity-0 translate-x-10'}`}>
-                <img
-                  src="\assets\newimages\shopify-nobg.png"
-                  alt="Shopify store preview"
-                  className="object-contain animate-float"
-                  style={{ maxWidth: '100%', maxHeight: '320px' }}
-                />
+              <div className="flex items-center justify-center">
+                <div className="w-full max-w-xs sm:max-w-sm md:max-w-md">
+                  <Lottie
+                    animationData={Shopping}
+                    className="w-full h-auto object-contain"
+                    style={{ maxHeight: '280px' }}
+                    loop={true}
+                    autoplay={true}
+                  />
+                </div>
               </div>
             </div>
-
+            
             {/* WordPress Section */}
-            <div className="grid lg:grid-cols-2 gap-12 items-center" ref={wpRef}>
-              <div className={`flex items-center justify-center transition-all duration-700 order-2 lg:order-1 ${wpVisible ? 'animate-slide-in-left' : 'opacity-0 -translate-x-10'}`} style={{ transitionDelay: '300ms' }}>
-                <div className="w-full h-80 rounded-2xl overflow-hidden">
+            <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center" ref={wpRef}>
+              <div className={`flex items-center justify-center transition-all duration-700 order-2 lg:order-1 ${wpVisible ? 'animate-fade-in opacity-100' : 'opacity-0'}`} style={{ transitionDelay: '200ms' }}>
+                <div className="w-full h-64 sm:h-72 md:h-80 rounded-xl sm:rounded-2xl overflow-hidden">
                   <AnimatedBeam>
-                    <div className="flex min-h-80 w-full flex-col items-center justify-center text-xl text-white md:text-3xl">
-                      <div className="max-w-lg rounded-xl bg-opacity-10 p-4 text-center font-light backdrop-blur-sm">
+                    <div className="flex min-h-full w-full flex-col items-center justify-center text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-white p-4">
+                      <div className="max-w-xs sm:max-w-sm md:max-w-lg rounded-xl bg-opacity-10 p-3 sm:p-4 text-center font-light backdrop-blur-sm">
                         Look at the{' '}
                         <span className="line-through">
                           themes
@@ -514,27 +521,29 @@ const WebDevelopmentLanding = () => {
                         </span>
                         {' '}
                         <strong>
-                         transform 
+                          transform
                         </strong>
-                        
+
                         {' '}just
-                      
+
                         {' '}for you!
                       </div>
                     </div>
                   </AnimatedBeam>
                 </div>
               </div>
-              <div className={`transition-all duration-700 order-1 lg:order-2 ${wpVisible ? 'animate-slide-in-right' : 'opacity-0 translate-x-10'}`} style={{ transitionDelay: '300ms' }}>
-                <div className="p-8 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300">
-                  <div className="flex items-start space-x-6 mb-4">
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center flex-shrink-0">
-                      <Globe className="w-8 h-8 text-blue-600" />
+              <div className={`transition-all duration-700 order-1 lg:order-2 ${wpVisible ? 'animate-fade-in opacity-100' : 'opacity-0'}`}>
+                <div className="p-6 sm:p-8 bg-white rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="flex flex-col sm:flex-row sm:items-start space-y-4 sm:space-y-0 sm:space-x-4 md:space-x-6 mb-4">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0">
+                      <Globe className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-blue-600" />
                     </div>
-                    <h3 className="text-2xl font-bold leading-snug mt-4">We build WordPress sites</h3>
+                    <div className="text-center sm:text-left">
+                      <h3 className="text-xl sm:text-2xl font-bold leading-snug sm:mt-2 md:mt-4">We build WordPress sites</h3>
+                    </div>
                   </div>
-                  <p className="text-gray-600 mb-4">Custom themes, plugins, and scalable WordPress solutions optimised for performance and SEO.</p>
-                  <ul className="list-disc ml-6 space-y-2 text-gray-600">
+                  <p className="text-gray-600 mb-4 text-sm sm:text-base">Custom themes, plugins, and scalable WordPress solutions optimised for performance and SEO.</p>
+                  <ul className="list-disc ml-4 sm:ml-6 space-y-1 sm:space-y-2 text-gray-600 text-sm sm:text-base">
                     <li>Pixel-perfect custom themes</li>
                     <li>WooCommerce storefronts</li>
                     <li>Headless WordPress integrations</li>
@@ -543,19 +552,21 @@ const WebDevelopmentLanding = () => {
                 </div>
               </div>
             </div>
-
+        
             {/* MERN Section */}
-            <div className="grid lg:grid-cols-2 gap-12 items-center" ref={mernRef}>
-              <div className={`transition-all duration-700 ${mernVisible ? 'animate-slide-in-left' : 'opacity-0 -translate-x-10'}`} style={{ transitionDelay: '150ms' }}>
-                <div className="p-8 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300">
-                  <div className="flex items-start space-x-6 mb-4">
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center flex-shrink-0">
-                      <Code className="w-8 h-8 text-blue-600" />
+            <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center" ref={mernRef}>
+              <div className={`transition-all duration-700 ${mernVisible ? 'animate-fade-in opacity-100' : 'opacity-0'}`}>
+                <div className="p-6 sm:p-8 bg-white rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="flex flex-col sm:flex-row sm:items-start space-y-4 sm:space-y-0 sm:space-x-4 md:space-x-6 mb-4">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0">
+                      <Code className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-blue-600" />
                     </div>
-                    <h3 className="text-2xl font-bold leading-snug mt-4">We build MERN Stack sites</h3>
+                    <div className="text-center sm:text-left">
+                      <h3 className="text-xl sm:text-2xl font-bold leading-snug sm:mt-2 md:mt-4">We build MERN Stack sites</h3>
+                    </div>
                   </div>
-                  <p className="text-gray-600 mb-4">Robust full-stack JavaScript applications built with MongoDB, Express, React and Node.js.</p>
-                  <ul className="list-disc ml-6 space-y-2 text-gray-600">
+                  <p className="text-gray-600 mb-4 text-sm sm:text-base">Robust full-stack JavaScript applications built with MongoDB, Express, React and Node.js.</p>
+                  <ul className="list-disc ml-4 sm:ml-6 space-y-1 sm:space-y-2 text-gray-600 text-sm sm:text-base">
                     <li>REST & GraphQL API development</li>
                     <li>Scalable microservices architecture</li>
                     <li>Real-time features with WebSockets</li>
@@ -563,8 +574,10 @@ const WebDevelopmentLanding = () => {
                   </ul>
                 </div>
               </div>
-              <div className={`flex items-center justify-center transition-all duration-700 ${mernVisible ? 'animate-slide-in-right' : 'opacity-0 translate-x-10'}`} style={{ transitionDelay: '150ms' }}>
-                <SimplifiedMERNOrbital />
+              <div className={`flex items-center justify-center transition-all duration-700 ${mernVisible ? 'animate-fade-in opacity-100' : 'opacity-0'}`} style={{ transitionDelay: '200ms' }}>
+                <div className="w-full max-w-xs sm:max-w-sm md:max-w-md">
+                  <SimplifiedMERNOrbital />
+                </div>
               </div>
             </div>
           </div>
@@ -612,17 +625,16 @@ const WebDevelopmentLanding = () => {
 
       {/* Development Process Section */}
       <section className="py-20 bg-gradient-to-r from-blue-50 to-white" ref={processRef} >
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-              <span className="text-gray-900">Our</span> <span className="text-blue-600">Development&nbsp;Process</span>
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10 sm:mb-16">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-6">
+              <span className="text-gray-900">Our</span> <span className="text-blue-600 block">Development Process</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-base sm:text-xl text-gray-600 max-w-3xl mx-auto">
               We follow a proven development methodology that ensures quality, transparency, and timely delivery of your web project.
             </p>
           </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {developmentProcess.map((process, index) => (
               <div
                 key={index}
@@ -716,7 +728,7 @@ const WebDevelopmentLanding = () => {
             Ready to <span className="text-white">Transform Your Digital Presence?</span>
           </h2>
           <p className="text-lg text-white-600 leading-relaxed mb-4">
-          We don't just build websites; we create professional websites that empower your business to thrive in the digital age. If you're looking for web development services in the USA, our team is here to bring your vision to life.
+            We don't just build websites; we create professional websites that empower your business to thrive in the digital age. If you're looking for web development services in the USA, our team is here to bring your vision to life.
           </p>
           <Link
             href="/contact"
@@ -731,35 +743,32 @@ const WebDevelopmentLanding = () => {
       {/* Modal Overlay */}
       {
         selectedService && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={closeServiceModal}>
-            <div
-              className={`w-[70vw] max-w-[70vw] bg-white rounded-3xl shadow-2xl p-10 relative overflow-y-auto max-h-[80vh] transform transition-all duration-300 ${serviceClosing ? 'animate-zoom-out' : 'animate-zoom-in'}`}
-              onClick={(e) => e.stopPropagation()}
-            >
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-2 sm:p-4" onClick={closeServiceModal}>
+            <div className={`w-full max-w-xs sm:max-w-[70vw] bg-white rounded-3xl shadow-2xl p-4 sm:p-10 relative overflow-y-auto max-h-[90vh] sm:max-h-[80vh] transform transition-all duration-300 ${serviceClosing ? 'animate-zoom-out' : 'animate-zoom-in'}`} onClick={(e) => e.stopPropagation()}>
               <button
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+                className="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-400 hover:text-gray-600"
                 onClick={closeServiceModal}
               >
                 <X className="w-6 h-6" />
               </button>
-              <div className="flex items-start space-x-6 mb-6">
-                <div className="flex-shrink-0 w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center">
-                  <selectedService.icon className="w-10 h-10 text-blue-600" />
+              <div className="flex items-start space-x-3 sm:space-x-6 mb-4">
+                <div className="flex-shrink-0 w-10 h-10 sm:w-20 sm:h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center">
+                  <selectedService.icon className="w-6 h-6 sm:w-10 sm:h-10 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="text-3xl font-bold mb-2">{selectedService.title}</h3>
-                  <p className="text-gray-600 text-lg leading-relaxed">{selectedService.desc}</p>
+                  <h3 className="text-lg sm:text-3xl font-bold mb-2">{selectedService.title}</h3>
+                  <p className="text-gray-600 text-sm sm:text-lg leading-relaxed">{selectedService.desc}</p>
                 </div>
               </div>
-              <h4 className="font-semibold text-lg mb-3">Key Technologies</h4>
-              <div className="flex flex-wrap gap-3 mb-6">
+              <h4 className="font-semibold text-base sm:text-lg mb-2 sm:mb-3">Key Technologies</h4>
+              <div className="flex flex-wrap gap-2 mb-4">
                 {selectedService.technologies.map((tech, idx) => (
-                  <span key={idx} className="px-4 py-1 bg-blue-100 text-blue-600 rounded-full font-medium text-sm">
+                  <span key={idx} className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full font-medium text-xs sm:text-sm">
                     {tech}
                   </span>
                 ))}
               </div>
-              <p className="text-gray-600">Get in touch to learn how our {selectedService.title.toLowerCase()} expertise can accelerate your project.</p>
+              <p className="text-gray-600 text-xs sm:text-base">Get in touch to learn how our {selectedService.title.toLowerCase()} expertise can accelerate your project.</p>
             </div>
           </div>
         )
@@ -768,19 +777,19 @@ const WebDevelopmentLanding = () => {
       {/* Process Modal */}
       {
         selectedProcess && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={closeProcessModal}>
-            <div className={`w-[60vw] max-w-[60vw] bg-white rounded-3xl shadow-2xl p-10 relative transform transition-all duration-300 ${processClosing ? 'animate-zoom-out' : 'animate-zoom-in'}`} onClick={e => e.stopPropagation()}>
-              <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-600" onClick={closeProcessModal}>
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-2 sm:p-4" onClick={closeProcessModal}>
+            <div className={`w-full max-w-xs sm:max-w-[60vw] bg-white rounded-3xl shadow-2xl p-4 sm:p-10 relative transform transition-all duration-300 overflow-y-auto max-h-[90vh] sm:max-h-[80vh] ${processClosing ? 'animate-zoom-out' : 'animate-zoom-in'}`} onClick={e => e.stopPropagation()}>
+              <button className="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-400 hover:text-gray-600" onClick={closeProcessModal}>
                 <X className="w-6 h-6" />
               </button>
-              <div className="flex items-center space-x-6 mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center font-bold text-blue-600 text-xl">
+              <div className="flex items-center space-x-3 sm:space-x-6 mb-4">
+                <div className="w-10 h-10 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center font-bold text-blue-600 text-lg sm:text-xl">
                   {selectedProcess.step}
                 </div>
-                <h3 className="text-3xl font-bold">{selectedProcess.title}</h3>
+                <h3 className="text-lg sm:text-3xl font-bold">{selectedProcess.title}</h3>
               </div>
-              <p className="text-gray-600 text-lg leading-relaxed mb-4">{selectedProcess.desc}</p>
-              <ul className="list-disc ml-6 space-y-2 text-gray-600">
+              <p className="text-gray-600 text-sm sm:text-lg leading-relaxed mb-3 sm:mb-4">{selectedProcess.desc}</p>
+              <ul className="list-disc ml-4 space-y-1 text-gray-600 text-sm sm:text-base">
                 {selectedProcess.details.map((d, idx) => (
                   <li key={idx}>{d}</li>
                 ))}
