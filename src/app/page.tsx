@@ -18,13 +18,16 @@ import { BrandsSection } from "@/sections/brands";
 import { NumbersSection } from "@/sections/numbers";
 
 export default function Home() {
-  // Global Lenis configuration for entire website
+  // Global Lenis configuration with mobile-specific values
   useEffect(() => {
+    // Detect mobile device
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+    
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      wheelMultiplier: 0.3, // Reduced from 1 - limits mouse scroll speed
-      touchMultiplier: 0.8, // Reduced from 2 - limits touch scroll speed
+      wheelMultiplier: isMobile ? 0.5 : 0.3, // Lower for mobile, higher for desktop
+      touchMultiplier: isMobile ? 1 : 0.8, // Lower for mobile, higher for desktop
       infinite: false,
     });
 
