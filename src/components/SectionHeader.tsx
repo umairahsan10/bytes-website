@@ -2,17 +2,19 @@ export const SectionHeader = ({
     title,
     eyebrow,
     description,
+    eyebrowClassName,
 }: {
     title: string;
     eyebrow: string;
     description?: React.ReactNode;
+    eyebrowClassName?: string;
 }) => {
     return (
         // code from project.tsx projectSection function after conainer has done
         
         <>
         <div className="flex justify-center text-center">
-            <p className="text-xl uppercase font-bold tracking-widest bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent text-center">
+            <p className={`text-xl uppercase font-bold tracking-widest bg-clip-text text-transparent text-center ${eyebrowClassName ?? 'bg-gradient-to-r from-pink-500 to-purple-600'}`}>
                 {eyebrow}
             </p>
         </div>

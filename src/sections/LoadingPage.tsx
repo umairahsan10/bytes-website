@@ -13,89 +13,93 @@ export const LoadingPage: React.FC<LoadingPageProps> = ({ onLoadComplete }) => {
   const completedRef = useRef(false);
   // Percentage progress state (0 - 100)
   const [progress, setProgress] = useState(0);
+  // Whether we have revealed the progress bar yet (after the SVG animation finishes)
+  const [showProgress, setShowProgress] = useState(false);
 
   // We intentionally set up our timers *every* time the component mounts.
   // In React 18 Strict Mode (development), the component mounts, unmounts, and mounts again.
   // By guarding the completion logic with `completedRef`, we guarantee that we only run `onLoadComplete` once
   // while still allowing each mount to set up its own timers.
   useEffect(() => {
+    const SVG_ANIMATION_DURATION = 3000; // 3 s to match new logo animation duration
     document.body.style.overflow = 'hidden';
 
-    // ---------- Progress updater ----------
-    // We update the progress roughly once every ~25 ms so that the counter appears smooth.
-    // While the loader is active we increment from 0 → 99, reserving the final jump to 100
-    // for when the loading sequence actually completes.
-    let internalProgress = 0;
-    const PROGRESS_INTERVAL = 25; // ms
+    // We will declare timer refs so they can be cleared in cleanup
+    let progressTimer: ReturnType<typeof setInterval> | undefined;
+    let fallbackTimeout: ReturnType<typeof setTimeout> | undefined;
+    let svgDelayTimeout: ReturnType<typeof setTimeout> | undefined;
 
-    const progressTimer = setInterval(() => {
-      // Only advance while we are still loading (not yet marked complete)
-      if (!completedRef.current && internalProgress < 99) {
-        internalProgress += 1;
-        setProgress(internalProgress);
+    // ---------- Function that kicks off the progress bar stage ----------
+    const startProgressStage = () => {
+      setShowProgress(true);
+
+      // ---------- Progress updater ----------
+      let internalProgress = 0;
+      const PROGRESS_INTERVAL = 25; // ms
+
+      progressTimer = setInterval(() => {
+        if (!completedRef.current && internalProgress < 99) {
+          internalProgress += 1;
+          setProgress(internalProgress);
+        }
+      }, PROGRESS_INTERVAL);
+
+      const MINIMUM_DISPLAY_TIME = 2500; // 2.5 seconds minimum *after* progress stage starts
+      const FADE_OUT_DURATION = 800; // 0.8 seconds fade out
+
+      const completeLoading = () => {
+        if (completedRef.current) return;
+
+        if (progressTimer) clearInterval(progressTimer);
+        setProgress(100);
+
+        const VISUAL_COMPLETE_DELAY = 150; // ms so users see full bar
+
+        setTimeout(() => {
+          gsap.to('.loading-page', {
+            opacity: 0,
+            duration: FADE_OUT_DURATION / 1000,
+            ease: 'power2.inOut',
+            onComplete: () => {
+              gsap.set('.loading-page', { display: 'none' });
+              document.body.style.overflow = 'auto';
+              onLoadComplete();
+            },
+          });
+        }, VISUAL_COMPLETE_DELAY);
+
+        completedRef.current = true;
+      };
+
+      const startTime = Date.now();
+
+      const finishAfterMinimum = () => {
+        const elapsed = Date.now() - startTime;
+        const remaining = Math.max(0, MINIMUM_DISPLAY_TIME - elapsed);
+        setTimeout(completeLoading, remaining);
+      };
+
+      if (document.readyState === 'complete') {
+        finishAfterMinimum();
+      } else {
+        window.addEventListener('load', finishAfterMinimum, { once: true });
       }
-    }, PROGRESS_INTERVAL);
 
-    gsap.set(".loading-page", {
-      opacity: 1,
-      display: "flex"
-    });
-
-    const MINIMUM_DISPLAY_TIME = 2500; // 2.5 seconds minimum display time
-    const FADE_OUT_DURATION = 800; // 0.8 seconds fade out
-
-    const completeLoading = () => {
-      if (completedRef.current) return; // Ensure we only finish once
-
-      // Stop the incremental timer and show full bar
-      clearInterval(progressTimer);
-      setProgress(100);
-
-      // Briefly keep the fully-filled bar visible before fading out
-      const VISUAL_COMPLETE_DELAY = 150; // ms
-
-      // Defer the fade-out animation slightly so the user can see completion
-      setTimeout(() => {
-        gsap.to(".loading-page", {
-          opacity: 0,
-          duration: FADE_OUT_DURATION / 1000,
-          ease: "power2.inOut",
-          onComplete: () => {
-            gsap.set(".loading-page", { display: "none" });
-            document.body.style.overflow = 'auto';
-            onLoadComplete();
-          }
-        });
-      }, VISUAL_COMPLETE_DELAY);
-
-      // Mark as completed (after we have already cleared the timer & scheduled fade)
-      completedRef.current = true;
+      // Fallback in case onload never fires
+      fallbackTimeout = setTimeout(completeLoading, 12000);
     };
 
-    const startTime = Date.now();
+    // ---------- Initial setup: ensure overlay visible and schedule progress stage ----------
+    gsap.set('.loading-page', { opacity: 1, display: 'flex' });
 
-    // Helper to ensure the loader stays for at least MINIMUM_DISPLAY_TIME
-    const finishAfterMinimum = () => {
-      const elapsed = Date.now() - startTime;
-      const remaining = Math.max(0, MINIMUM_DISPLAY_TIME - elapsed);
-      setTimeout(completeLoading, remaining);
-    };
+    // Wait for the SVG stroke animation to finish before starting the progress bar
+    svgDelayTimeout = setTimeout(startProgressStage, SVG_ANIMATION_DURATION);
 
-    // If the page has already fully loaded (e.g., on route change) we just respect the minimum time.
-    if (document.readyState === 'complete') {
-      finishAfterMinimum();
-    } else {
-      // Wait for the window load event which fires when all resources (images, fonts...) are done loading.
-      window.addEventListener('load', finishAfterMinimum, { once: true });
-    }
-
-    // Fallback: ensure we never wait longer than 12 s in total.
-    const fallbackTimeout = setTimeout(completeLoading, 12000);
-
+    // ---------- Cleanup ----------
     return () => {
-      clearTimeout(fallbackTimeout);
-      clearInterval(progressTimer);
-      window.removeEventListener('load', finishAfterMinimum);
+      if (progressTimer) clearInterval(progressTimer);
+      if (fallbackTimeout) clearTimeout(fallbackTimeout);
+      if (svgDelayTimeout) clearTimeout(svgDelayTimeout);
       document.body.style.overflow = 'auto';
     };
   }, [onLoadComplete]);
@@ -132,6 +136,7 @@ export const LoadingPage: React.FC<LoadingPageProps> = ({ onLoadComplete }) => {
         </text>
 
         {/* Progress bar */}
+        {showProgress && (
         <g className="progress-bar-group">
           {/* Outline */}
           <rect
@@ -154,6 +159,7 @@ export const LoadingPage: React.FC<LoadingPageProps> = ({ onLoadComplete }) => {
             ry={BAR_HEIGHT / 2}
           />
         </g>
+        )}
       </svg>
     </div>
   );

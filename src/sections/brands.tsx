@@ -32,6 +32,7 @@ export const BrandsSection = () => {
           eyebrow="2+ Years Of Continuous Success"
           title="Our Past Clients"
           description="Innovators, visionaries, and industry leaders we've been proud to work with."
+          eyebrowClassName="bg-gradient-to-r from-[#1a59a7] to-[#031c38]"
         />
 
         {/* Horizontal scrolling logos */}
@@ -62,7 +63,7 @@ export const BrandsSection = () => {
         </div>
 
         <p className="mt-4 text-md text-center text-gray-500 italic">
-          These logos represent brands we've worked with — our past clients.
+          These logos represent brands we've worked with, our past clients.
         </p>
       </div>
     </section>
