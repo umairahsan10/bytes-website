@@ -64,7 +64,6 @@ html {
 /* Remove overflow-x: hidden from body - this was breaking sticky positioning */
 body {
   max-width: 100%;
-  /* DON'T set overflow-x: hidden here - it breaks sticky positioning */
 
   /* Global background */
   background: #010A14;
