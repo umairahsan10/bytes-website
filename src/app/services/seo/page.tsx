@@ -206,7 +206,7 @@ const SEOPage: React.FC = () => {
       let angle = 0;
       cards.forEach((card, index) => {
         if (card.classList.contains("away")) {
-          card.style.transform = `translateY(-120vh) rotate(-48deg)`;
+          card.style.transform = `translateY(-150vh) rotate(-48deg)`;
         } else {
           card.style.transform = `rotate(${angle}deg)`;
           angle -= 10;
@@ -1082,9 +1082,9 @@ const SEOPage: React.FC = () => {
             transition={{ duration: 1, ease: "easeOut" }}
             viewport={{ once: true }}
           >
-            <AnimatedWords text="We  Help  You" className="block bg-gradient-to-r via-blue-200 via-blue-25 to-white text-transparent bg-clip-text" />
+            <AnimatedWords text="We  Help  You" className="block bg-gradient-to-r from-blue-500 via-blue-25 to-white text-transparent bg-clip-text" />
             <br />
-            <AnimatedWords text="Rank for What Matters" className="block bg-gradient-to-r from-blue-200 via-blue-25 to-white text-transparent bg-clip-text" />
+            <AnimatedWords text="Rank for What Matters" className="block bg-gradient-to-r from-blue-500 via-blue-25 to-white text-transparent bg-clip-text" />
           </motion.h2>
           <motion.div
             className="sub-title text-base mt-6 max-w-sm text-center md:text-left"
@@ -1096,26 +1096,30 @@ const SEOPage: React.FC = () => {
             <AnimatedWords text="Every day, potential customers search Google for what you offer — but if you're not on Page 1 of search results, you're missing out on qualified leads, sales, and opportunities.If you're invisible online, you're losing clicks, customers, and cash to your competitors." className="inline text-blue-200" />
           </motion.div>
         </div>
-
+        
         {/* Right stacked cards */}
         <div className="right w-full lg:basis-1/2 lg:h-screen lg:sticky top-0">
-          {services.slice(0, 4).map((service, idx) => (
-            <div
-              key={idx}
-              className="card"
-              style={{
-                background: 'linear-gradient(135deg, #010a14 0%, #1a365d 50%, #010a14 100%)',
-                boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
-              }}
-            >
-              <div className="sub text-xl font-semibold mb-3 text-blue-200">
-                {service.title}
+          <div className="sp-cards flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center">
+            {services.slice(0, 4).map((service, idx) => (
+              <div
+                key={idx}
+                className="card"
+                style={{
+                  background: 'linear-gradient(135deg, #010a14 0%, #1a365d 50%, #010a14 100%)',
+                  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
+                }}
+              >
+                <div className="sub text-xl font-semibold mb-3 text-blue-200">
+                  {service.title}
+                </div>
+                <div className="content text-3xl font-bold leading-tight text-blue-100 flex-1 flex items-center">
+                  {service.description}
+                </div>
               </div>
-              <div className="content text-3xl font-bold leading-tight text-blue-100 flex-1 flex items-center">
-                {service.description}
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
 
         {/* Inline styles to replicate original demo */}
@@ -1144,6 +1148,37 @@ const SEOPage: React.FC = () => {
             flex-direction: column;
             justify-content: flex-start;
           }
+          
+          /* Responsive card sizing for wider screens when cards are away (at bottom) */
+          @media (min-width: 1440px) {
+            .stack-area .card.away {
+              width: 300px;
+              height: 300px;
+              top: calc(50% - 150px);
+              left: calc(50% - 150px);
+              padding: 30px;
+            }
+          }
+          
+          @media (min-width: 1920px) {
+            .stack-area .card.away {
+              width: 280px;
+              height: 280px;
+              top: calc(50% - 140px);
+              left: calc(50% - 140px);
+              padding: 25px;
+            }
+          }
+          
+          @media (min-width: 2560px) {
+            .stack-area .card.away {
+              width: 250px;
+              height: 250px;
+              top: calc(50% - 125px);
+              left: calc(50% - 125px);
+              padding: 20px;
+            }
+          }
           .stack-area .card .content {
             flex: 1;
             display: flex;
@@ -1151,8 +1186,78 @@ const SEOPage: React.FC = () => {
             justify-content: flex-start;
             text-align: left;
           }
+          
+          /* Responsive text scaling for wider screens when cards are away */
+          @media (min-width: 1440px) {
+            .stack-area .card.away .sub {
+              font-size: 18px !important;
+            }
+            .stack-area .card.away .content {
+              font-size: 26px !important;
+            }
+          }
+          
+          @media (min-width: 1920px) {
+            .stack-area .card.away .sub {
+              font-size: 16px !important;
+            }
+            .stack-area .card.away .content {
+              font-size: 24px !important;
+            }
+          }
+          
+          @media (min-width: 2560px) {
+            .stack-area .card.away .sub {
+              font-size: 14px !important;
+            }
+            .stack-area .card.away .content {
+              font-size: 22px !important;
+            }
+          }
           .stack-area .away {
             transform-origin: bottom left;
+          }
+          
+          /* Responsive styles for sp-cards div */
+          .sp-cards {
+            width: 100%;
+            height: 100%;
+          }
+          
+          @media (max-width: 1023px) {
+            .sp-cards {
+              transform: scale(0.6);
+              margin-top: 80px;
+            }
+          }
+          
+          @media (max-width: 767px) {
+            .sp-cards {
+              transform: scale(0.8);
+              margin-top: 200px;
+            }
+          }
+          
+          @media (max-width: 480px) {
+            .sp-cards {
+              transform: scale(0.9);
+              margin-top: 130px;
+            }
+          }
+          
+          @media (max-width: 375px) {
+            .sp-cards {
+              transform: scale(0.6);
+              margin-top: 120px;
+              padding-bottom: -200px;
+              margin-bottom: -300px;
+            }
+          }
+          
+          @media (max-width: 320px) {
+            .sp-cards {
+              transform: scale(0.5);
+            }
           }
           @media (max-width: 1023px) {
             .stack-area .card {
@@ -1161,6 +1266,19 @@ const SEOPage: React.FC = () => {
               top: calc(60% - 175px);
               left: calc(50% - 175px);
               padding: 35px;
+            }
+            .stack-area .card.away {
+              width: 300px;
+              height: 300px;
+              top: calc(60% - 150px);
+              left: calc(50% - 150px);
+              padding: 30px;
+            }
+            .stack-area .card.away .sub {
+              font-size: 18px !important;
+            }
+            .stack-area .card.away .content {
+              font-size: 26px !important;
             }
           }
           @media (max-width: 767px) {
@@ -1171,6 +1289,19 @@ const SEOPage: React.FC = () => {
               left: calc(50% - 175px);
               padding: 35px;
             }
+            .stack-area .card.away {
+              width: 280px;
+              height: 280px;
+              top: calc(65% - 140px);
+              left: calc(50% - 140px);
+              padding: 25px;
+            }
+            .stack-area .card.away .sub {
+              font-size: 16px !important;
+            }
+            .stack-area .card.away .content {
+              font-size: 24px !important;
+            }
           }
           @media (max-width: 480px) {
             .stack-area .card {
@@ -1179,6 +1310,19 @@ const SEOPage: React.FC = () => {
               top: calc(70% - 175px);
               left: calc(50% - 175px);
               padding: 35px;
+            }
+            .stack-area .card.away {
+              width: 250px;
+              height: 250px;
+              top: calc(70% - 125px);
+              left: calc(50% - 125px);
+              padding: 20px;
+            }
+            .stack-area .card.away .sub {
+              font-size: 14px !important;
+            }
+            .stack-area .card.away .content {
+              font-size: 22px !important;
             }
           }
         `}</style>
