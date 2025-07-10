@@ -518,22 +518,7 @@ const AppDevelopmentPage = () => {
           </div>
 
           {/* Scroll indicator */}
-          <motion.div
-            className="absolute bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 text-center"
-            whileInView={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, ease: "easeInOut" }}
-            viewport={{ once: false }}
-          >
-            <div className="text-xs sm:text-sm text-gray-500 mb-2 font-medium">Scroll to explore</div>
-            <div className="w-1 h-6 sm:h-8 bg-gray-300 rounded-full mx-auto relative">
-              <motion.div
-                className="w-1 h-2 sm:h-3 bg-gray-800 rounded-full absolute top-0"
-                whileInView={{ y: [0, 16, 0] }}
-                transition={{ duration: 2, ease: "easeInOut" }}
-                viewport={{ once: false }}
-              />
-            </div>
-          </motion.div>
+          {/* Removed as per request */}
         </div>
       </div>
 
@@ -633,21 +618,10 @@ const AppDevelopmentPage = () => {
             </motion.h2>
 
             <div className="features-grid grid md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
-              {/* Background overlay for selected card */}
-              {selectedFeature !== null && (
-                <motion.div
-                  className="absolute inset-0 bg-black/20 backdrop-blur-sm z-40"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                />
-              )}
-
               {[
                 {
                   title: "Native iOS Development",
                   description:"Utilizing Swift and SwiftUI, we develop applications optimized for Apple's ecosystem, ensuring seamless integration and performance.",
-                  // description: "Swift and SwiftUI applications optimized for Apple's ecosystem with seamless integration and performance.",
                   detailedDescription: "Build powerful iOS applications using Swift and SwiftUI that take full advantage of Apple's ecosystem. Our native development approach ensures optimal performance, seamless integration with iOS features like Face ID, Touch ID, and Apple Pay, and adherence to Apple's Human Interface Guidelines. We leverage Core Data for local storage, integrate with CloudKit for synchronization, and implement advanced features like ARKit for augmented reality experiences.",
                   gradient: "from-blue-500 to-cyan-500",
                   features: ["Swift & SwiftUI", "Core Data Integration", "CloudKit Sync", "ARKit Support", "Apple Pay Integration", "TestFlight Beta Testing"]
@@ -655,7 +629,6 @@ const AppDevelopmentPage = () => {
                 {
                   title: "Native Android Development",
                   description:"Our team leverages Kotlin and Java to build applications that fully utilize Android's capabilities, providing an optimal user experience.",
-                  // description: "Kotlin and Java applications leveraging Android's full capabilities for optimal user experience.",
                   detailedDescription: "Create robust Android applications using Kotlin and Java that harness the full power of the Android platform. Our development process includes Material Design implementation, integration with Google services, efficient memory management, and optimization for various screen sizes and Android versions. We implement advanced features like background processing, push notifications, and seamless integration with Google Play Services.",
                   gradient: "from-green-500 to-emerald-500",
                   features: ["Kotlin & Java", "Material Design", "Google Play Services", "Room Database", "WorkManager", "Firebase Integration"]
@@ -663,7 +636,6 @@ const AppDevelopmentPage = () => {
                 {
                   title: "Cross-Platform Solutions",
                   description: "We employ frameworks like React Native and Flutter to create applications that run efficiently on both iOS and Android, sharing a common codebase.",
-                  // description: "React Native and Flutter apps that run efficiently on both iOS and Android with shared codebase.",
                   detailedDescription: "Develop cost-effective cross-platform applications using React Native and Flutter that deliver native-like performance on both iOS and Android. Our approach maximizes code reuse while maintaining platform-specific optimizations. We implement custom native modules when needed, ensure consistent UI/UX across platforms, and provide comprehensive testing on both operating systems.",
                   gradient: "from-purple-500 to-pink-500",
                   features: ["React Native", "Flutter", "Shared Codebase", "Platform Optimization", "Custom Native Modules", "Cross-Platform Testing"]
@@ -671,7 +643,6 @@ const AppDevelopmentPage = () => {
                 {
                   title: "UI/UX Design",
                   description: "Our designers focus on creating intuitive and engaging mobile interfaces, employing a user-centered approach and modern aesthetics.",
-                  // description: "Intuitive and engaging mobile interfaces designed with user-centered approach and modern aesthetics.",
                   detailedDescription: "Design beautiful and functional mobile interfaces that prioritize user experience and accessibility. Our design process includes user research, wireframing, prototyping, and usability testing. We create design systems that ensure consistency across your app, implement smooth animations and transitions, and optimize for various screen sizes and accessibility requirements.",
                   gradient: "from-orange-500 to-red-500",
                   features: ["User Research", "Wireframing & Prototyping", "Design Systems", "Accessibility", "Animation Design", "Usability Testing"]
@@ -679,7 +650,6 @@ const AppDevelopmentPage = () => {
                 {
                   title: "Backend Integration",
                   description: "We offer robust API development and third-party service integration to ensure seamless data synchronization across your application.",
-                  // description: "Robust API development and third-party service integration for seamless data synchronization.",
                   detailedDescription: "Build and integrate powerful backend systems that support your mobile application's functionality. Our backend development includes RESTful API design, GraphQL implementation, real-time data synchronization, secure authentication systems, and integration with third-party services. We ensure scalable architecture, efficient caching strategies, and comprehensive error handling.",
                   gradient: "from-indigo-500 to-blue-500",
                   features: ["RESTful APIs", "GraphQL", "Real-time Sync", "Authentication", "Third-party Integration", "Scalable Architecture"]
@@ -687,7 +657,6 @@ const AppDevelopmentPage = () => {
                 {
                   title: "App Store Deployment",
                   description: "From store optimization to testing and post-launch support, we manage the complete deployment process to ensure your app reaches its audience effectively.",
-                  // description: "Complete deployment process including store optimization, testing, and post-launch support.",
                   detailedDescription: "Navigate the complete app store deployment process with our expert guidance. We handle app store optimization (ASO), create compelling store listings with screenshots and descriptions, manage the submission process for both Apple App Store and Google Play Store, implement analytics tracking, and provide ongoing support for updates and maintenance.",
                   gradient: "from-teal-500 to-green-500",
                   features: ["App Store Optimization", "Store Listings", "Submission Management", "Analytics Integration", "Update Management", "Post-launch Support"]
@@ -695,12 +664,9 @@ const AppDevelopmentPage = () => {
               ].map((feature, index) => (
                 <motion.div
                   key={index}
-                  className={`feature-card group relative bg-white rounded-2xl border transition-all duration-300 shadow-sm cursor-pointer ${selectedFeature === index
-                      ? 'border-purple-400 shadow-2xl z-50'
-                      : selectedFeature !== null
-                        ? 'border-purple-100 opacity-30'
-                        : 'border-purple-100 hover:border-purple-300'
-                    }`}
+                  className={
+                    `feature-card group relative bg-white rounded-2xl border transition-all duration-300 shadow-sm cursor-pointer border-purple-100 hover:border-purple-300`
+                  }
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: false }}
@@ -710,25 +676,20 @@ const AppDevelopmentPage = () => {
                     ease: [0.25, 0.1, 0.25, 1] as const
                   }}
                   whileHover={{
-                    scale: selectedFeature === index ? 1.02 : (selectedFeature !== null ? 1 : 1.02),
-                    z: selectedFeature === index ? 50 : (selectedFeature !== null ? 1 : 10)
+                    scale: 1.1
                   }}
                   style={{
                     transformOrigin: 'center center'
                   }}
-                  onClick={() => setSelectedFeature(selectedFeature === index ? null : index)}
                 >
-                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} rounded-2xl transition-opacity duration-300 ${selectedFeature === index ? 'opacity-20' : 'opacity-0 group-hover:opacity-10'
-                    }`} />
+                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} rounded-2xl transition-opacity duration-300 opacity-0 group-hover:opacity-10`} />
 
                   <div className="relative z-10 p-8">
                     <div
-                      className={`bg-gradient-to-br ${feature.gradient} rounded-xl mb-6 flex items-center justify-center ${selectedFeature === index ? 'w-20 h-20' : 'w-16 h-16'
-                        } transition-all duration-300`}
+                      className={`bg-gradient-to-br ${feature.gradient} rounded-xl mb-6 flex items-center justify-center w-16 h-16 transition-all duration-300`}
                     >
                       <div
-                        className={`bg-white/20 rounded-lg ${selectedFeature === index ? 'w-10 h-10' : 'w-8 h-8'
-                          } transition-all duration-300`}
+                        className={`bg-white/20 rounded-lg w-8 h-8 transition-all duration-300`}
                       />
                     </div>
 
