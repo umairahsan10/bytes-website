@@ -67,29 +67,66 @@ export const BookSection = () => {
 
   // Engage scroll lock with configurable threshold to prevent skipping
   useEffect(() => {
-    if (!bookAreaRef.current || scrollFlipDone) return;
+    if (scrollFlipDone) return;
 
+    let observer: IntersectionObserver | null = null;
     let hasTriggered = false;
+    let retryCount = 0;
+    const maxRetries = 10;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        
-        // Trigger when section reaches the configurable threshold
-        if (entry.intersectionRatio >= INTERSECTION_THRESHOLD && !scrollLockActive && !hasTriggered) {
-          hasTriggered = true;
-          setScrollLockActive(true);
-          observer.disconnect();
+    // Ensure ref is ready and DOM is settled with multiple fallbacks
+    const setupObserver = () => {
+      if (!bookAreaRef.current) {
+        retryCount++;
+        if (retryCount < maxRetries) {
+          // Try multiple approaches for first load
+          setTimeout(setupObserver, 50); // Try after 50ms
+          requestAnimationFrame(setupObserver); // Also try on next frame
         }
-      },
-      { threshold: [INTERSECTION_THRESHOLD - 0.05, INTERSECTION_THRESHOLD, INTERSECTION_THRESHOLD + 0.05] }
-    );
+        return;
+      }
 
-    observer.observe(bookAreaRef.current);
+      // Check if element is actually in DOM and has dimensions
+      const rect = bookAreaRef.current.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) {
+        retryCount++;
+        if (retryCount < maxRetries) {
+          setTimeout(setupObserver, 100);
+          return;
+        }
+      }
+
+      observer = new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0];
+          
+          // Trigger when section reaches the configurable threshold
+          if (entry.intersectionRatio >= INTERSECTION_THRESHOLD && !scrollLockActive && !hasTriggered) {
+            hasTriggered = true;
+            setScrollLockActive(true);
+            if (observer) observer.disconnect();
+          }
+        },
+        { threshold: [INTERSECTION_THRESHOLD - 0.05, INTERSECTION_THRESHOLD, INTERSECTION_THRESHOLD + 0.05] }
+      );
+
+      observer.observe(bookAreaRef.current);
+    };
+
+    // Start setup with multiple timing approaches
+    setupObserver();
+    
+    // Additional fallback for first load
+    const fallbackTimer = setTimeout(() => {
+      if (!hasTriggered && !observer) {
+        setupObserver();
+      }
+    }, 200);
 
     return () => {
-      observer.disconnect();
+      if (observer) observer.disconnect();
       if (autoFlipTimerRef.current) clearTimeout(autoFlipTimerRef.current);
+      clearTimeout(fallbackTimer);
     };
   }, [scrollLockActive, scrollFlipDone]);
 
