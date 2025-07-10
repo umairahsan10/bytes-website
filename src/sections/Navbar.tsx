@@ -192,6 +192,70 @@ const Header: React.FC<HeaderProps> = ({
     return () => observer.disconnect();
   }, [transparentNav]);
 
+  // Disable page scroll when the menu is open
+  useEffect(() => {
+    // Functions & vars used by both lock and unlock
+    const preventDefault = (e: Event) => e.preventDefault();
+    const preventForKeys = (e: KeyboardEvent) => {
+      const keys = [' ', 'PageDown', 'PageUp', 'ArrowDown', 'ArrowUp', 'Home', 'End'];
+      if (keys.includes(e.key)) {
+        e.preventDefault();
+      }
+    };
+
+    const lenis = typeof window !== 'undefined' ? (window as any).lenis : null;
+
+    if (isOpen) {
+      // Save the current overflow values so we can restore them later
+      const originalBodyOverflow = document.body.style.overflow;
+      const originalHtmlOverflow = document.documentElement.style.overflow;
+
+      // Store them on the element dataset to retrieve on cleanup
+      document.body.dataset.prevOverflow = originalBodyOverflow;
+      document.documentElement.dataset.prevOverflow = originalHtmlOverflow;
+
+      // Prevent the background from scrolling entirely
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+
+      window.addEventListener('wheel', preventDefault, { passive: false });
+      window.addEventListener('touchmove', preventDefault, { passive: false });
+      window.addEventListener('keydown', preventForKeys, { passive: false });
+
+      if (lenis && typeof lenis.stop === 'function') {
+        lenis.stop();
+      }
+    } else {
+      // Restore overflow values from dataset (if we previously saved them)
+      const prevBodyOverflow = document.body.dataset.prevOverflow ?? '';
+      const prevHtmlOverflow = document.documentElement.dataset.prevOverflow ?? '';
+
+      document.body.style.overflow = prevBodyOverflow;
+      document.documentElement.style.overflow = prevHtmlOverflow;
+
+      window.removeEventListener('wheel', preventDefault as any);
+      window.removeEventListener('touchmove', preventDefault as any);
+      window.removeEventListener('keydown', preventForKeys as any);
+
+      if (lenis && typeof lenis.start === 'function') {
+        lenis.start();
+      }
+    }
+
+    // Cleanup when component unmounts
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      window.removeEventListener('wheel', preventDefault as any);
+      window.removeEventListener('touchmove', preventDefault as any);
+      window.removeEventListener('keydown', preventForKeys as any);
+
+      if (lenis && typeof lenis.start === 'function') {
+        lenis.start();
+      }
+    };
+  }, [isOpen]);
+
   // Open menu animation - TOP TO BOTTOM
   const openMenu = () => {
     // Menu opens from top to bottom
