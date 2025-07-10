@@ -111,7 +111,7 @@ export const NumbersSection = () => {
 
           <a
             href="/contact"
-            className="inline-flex items-center mt-10 px-10 py-3 text-white font-semibold rounded-full shadow-lg bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-600 hover:from-purple-600 hover:via-fuchsia-500 hover:to-pink-500 hover:scale-105 transition-all duration-300 mx-auto lg:mx-0"
+            className="inline-flex items-center mt-10 px-10 py-3 text-white font-semibold rounded-full shadow-lg bg-[#0476B5] hover:bg-[#03269a] hover:scale-105 transition-all duration-300 mx-auto lg:mx-0"
           >
             Get in Touch &raquo;
           </a>

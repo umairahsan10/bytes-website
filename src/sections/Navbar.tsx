@@ -192,6 +192,30 @@ const Header: React.FC<HeaderProps> = ({
     return () => observer.disconnect();
   }, [transparentNav]);
 
+  // Disable page scroll when the menu overlay is open
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    if (isOpen) {
+      // Prevent background scrolling on both body and root elements
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+      // Optional: prevent touch scrolling on mobile devices
+      document.body.style.touchAction = 'none';
+    } else {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      document.body.style.touchAction = '';
+    }
+
+    // Cleanup in case the component unmounts while menu is open
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      document.body.style.touchAction = '';
+    };
+  }, [isOpen]);
+
   // Open menu animation - TOP TO BOTTOM
   const openMenu = () => {
     // Menu opens from top to bottom

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef } from "react";
 
 export default function TextFlip() {
-  const words = useMemo(() => [ "crm", "AI", "website", " seo", "apps", "marketing", "chatbots"], []);
+  const words = useMemo(() => [ "crm", "AI", "websites", " seo", "apps", "marketing", "chatbots", "crm"], []);
 
   const tallestRef = useRef<HTMLDivElement>(null);
 
