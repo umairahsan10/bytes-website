@@ -100,8 +100,8 @@ export const NumbersSection = () => {
 
       <div className="relative container mx-auto px-4 flex flex-col lg:flex-row items-center gap-10 lg:justify-between">
         {/* Headline & CTA */}
-        <div className="max-w-2xl text-white flex flex-col items-center lg:items-start text-center lg:text-left">
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
+        <div className="w-full max-w-lg text-white flex flex-col items-center lg:items-start text-center lg:text-left px-2">
+          <h2 className="break-words text-2xl sm:text-3xl lg:text-5xl xl:text-6xl font-extrabold leading-snug sm:leading-tight">
             Advancing Success{' '}
             <br className="hidden sm:block" />
             With Technology For{' '}
