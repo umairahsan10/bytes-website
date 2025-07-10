@@ -100,8 +100,8 @@ export const LoadingPage: React.FC<LoadingPageProps> = ({ onLoadComplete }) => {
     };
   }, [onLoadComplete]);
 
-  const BAR_WIDTH = 400;
-  const BAR_HEIGHT = 12;
+  const BAR_WIDTH = 220;
+  const BAR_HEIGHT = 35;
   const barX = (800 - BAR_WIDTH) / 2; // Center horizontally within viewBox
   const barY = 320; // Roughly 80% of the 400-unit height
 

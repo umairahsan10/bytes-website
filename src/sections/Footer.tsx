@@ -12,8 +12,8 @@ const quickLinks = [
 ];
 
 const productsLinks = [
-  { title: 'Byte Bot', href: '/products/bytebots' },
-  { title: 'Byte Suite', href: '/products/bytesuite' },
+  { title: 'Byte Bots', href: '/products/byte-bots' },
+  { title: 'Byte Suites', href: '/products/byte-suites' },
 ];
 
 const servicesLinks = [

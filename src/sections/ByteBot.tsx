@@ -218,6 +218,18 @@ const ByteBotsSection = () => {
         const currentY = originalY + (targetY - originalY) * progress;
         const currentScale = 1 - 0.5 * progress;
 
+        // Change heading color to white as animation nears end (target the span inside h1)
+        const headingSpan = headingRef.current.querySelector('span');
+        if (headingSpan) {
+          if (progress > 0.9) {
+            headingSpan.classList.remove('bg-gradient-to-r', 'from-pink-500', 'to-purple-600', 'bg-clip-text', 'text-transparent');
+            headingSpan.classList.add('text-white');
+          } else {
+            headingSpan.classList.add('bg-gradient-to-r', 'from-pink-500', 'to-purple-600', 'bg-clip-text', 'text-transparent');
+            headingSpan.classList.remove('text-white');
+          }
+        }
+
         // Apply positioning with improved stability
         headingRef.current.style.position = "fixed";
         headingRef.current.style.left = `${Math.round(currentX)}px`;
@@ -336,7 +348,21 @@ const ByteBotsSection = () => {
       <div className="h-8"></div>
 
       {/* Second Section */}
-      <div className="py-12 sm:py-20 px-4 sm:px-8 relative">
+      <div 
+        className="h-[90vh] py-12 sm:py-20 px-4 sm:px-8 relative bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url('/assets/bytes-bot/botm_bg.png')`,
+        }}
+      >
+        <style>{`
+          @media (min-width: 640px) {
+            .bg-desktop-bot {
+              background-image: url('/assets/bytes-bot/bot_bg.png') !important;
+            }
+          }
+        `}</style>
+        {/* Add a class to switch background on desktop */}
+        <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat bg-desktop-bot pointer-events-none" style={{ zIndex: 0 }} aria-hidden="true"></div>
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-start">
             {/* Left side */}
@@ -357,22 +383,25 @@ const ByteBotsSection = () => {
                   transform: "translateX(-120px)",
                   willChange: "opacity, transform"
                 }}
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight"
+                className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight"
               >
-                <span className="text-black">Powered </span>
-                <span className="text-black">by </span>
-                <span className="bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
-                  Real{" "}
-                </span>
-                <span className="bg-gradient-to-r from-blue-500 to-teal-500 bg-clip-text text-transparent">
-                  Business{" "}
-                </span>
-                <CycleText className="bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent" />
+                <span className="text-white">Powered </span>
+                <span className="text-white">by </span>
+                <span className="text-[#00ece2]">Real{" "}</span>
+                <span className="text-white">Business{" "}</span>
+                <CycleText className="text-[#00ece2]" />
               </h3>
+
+              {/* Next-Gen Chatbots block */}
+              <div className="mb-12">
+                <span className="text-white font-bold text-3xl sm:text-2xl">Next-Gen </span>
+                <span className="font-bold text-3xl sm:text-2xl text-[#00ece2]">Chatbots</span>
+                <div className="text-white text-lg sm:text-base font-semibold leading-tight">Human-like minds</div>
+              </div>
 
               <Link
                 href="/products/byte-bots"
-                className="cursor-pointer text-white font-semibold px-6 py-3 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-purple-600 hover:to-pink-500 transform transition-transform duration-300 hover:scale-110 mb-6 sm:mb-8 text-sm sm:text-base inline-block"
+                className="cursor-pointer text-white font-semibold px-6 py-3 rounded-full bg-[#00ece2] hover:bg-[#00ece2]/80 mt-6" 
               >
                 EXPLORE MORE
               </Link>
@@ -390,20 +419,20 @@ const ByteBotsSection = () => {
             >
               <div>
                 <h4 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
-                  About Byte Bot
+                  
                 </h4>
                 <ul className="list-disc pl-5 text-gray-600 leading-relaxed text-sm sm:text-base space-y-2">
                   <li>
-                    <span className="font-semibold">Seamless Integration:</span> Byte Bot connects effortlessly with tools like Salesforce, HubSpot, Slack, and WhatsApp, fitting into your existing workflows.
+                    <span className="font-semibold"/>
                   </li>
                   <li>
-                    <span className="font-semibold">Conversion Powerhouse:</span> Drives outcomes with automated lead qualification, dynamic CTAs, and follow-ups via email or WhatsApp.
+                    <span className="font-semibold"/>
                   </li>
                   <li>
-                    <span className="font-semibold">Data-Driven Insights:</span> Offers real-time dashboards, predictive sales forecasts, and SKU/region performance analytics.
+                    <span className="font-semibold"/>
                   </li>
                   <li>
-                    <span className="font-semibold">Continuous Learning:</span> Adapts tone and vocabulary to your audience, enhancing engagement with contextual memory.
+                    <span className="font-semibold"/>
                   </li>
                 </ul>
               </div>
