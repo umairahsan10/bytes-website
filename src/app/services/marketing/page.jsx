@@ -302,7 +302,7 @@ const MarketingPage = () => {
           </motion.h1>
 
           <AnimatedParagraph
-            text="Unlock your brand's full potential with data-driven marketing expertise."
+            text="At Bytes Platform, we specialize in social media marketing services that are designed to help businesses grow. By combining cutting-edge strategies we ensure that our marketing efforts drive results."
             className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-white leading-relaxed max-w-2xl mx-auto lg:mx-0"
           />
         </motion.div>
@@ -381,23 +381,21 @@ const MarketingPage = () => {
               }}
             >
               <p>
-                If you're not marketing like it's 2025, you're already behind. Modern marketing demands a strategic blend of data, creativity, and flawless execution — not just eye-catching visuals or scattered ad boosts.
+              In the ever-evolving digital landscape, effective social media marketing is more than just about posting attractive content. It’s about building a connection with your audience and establishing a strong brand. Our team focuses on creating highly engaging content that resonates with your target audience. From eye-catching visuals to thought-provoking posts, we aim to create content that attracts attention and builds lasting impact.  
               </p>
-              <p>
-                Creating viral content and building engaged communities across all major social platforms. Expert in influencer partnerships, paid social campaigns, and brand storytelling that converts followers into customers while fostering lasting brand loyalty.
-              </p>
+              
 
               <motion.ul
                 variants={staggerContainer}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="list-disc ml-4 sm:ml-6 space-y-1 sm:space-y-2 text-sm sm:text-base md:text-lg"
+                className="flex flex-col items-center text-center list-disc list-inside space-y-1 sm:space-y-2 text-sm sm:text-base md:text-lg md:items-start md:text-left md:list-outside md:ml-6"
               >
                 {[
-                  'Custom Posts Tailored To Your Brand',
+                  'Custom Posts Tailored to Your Brand',
                   'High-Impact Reels & Short-Form Videos',
-                  'Strategic Planning Crafted By Industry Experts'
+                  'Strategic Planning by Industry Experts'
                 ].map((text, idx) => (
                   <motion.li
                     key={idx}
@@ -453,22 +451,22 @@ const MarketingPage = () => {
             className="flex-1 w-full max-w-2xl text-center md:text-left order-2 md:order-1"
           >
             <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent mb-4 sm:mb-6">
-              Custom Posts & Reels
+            Custom Posts & Reels
             </h3>
             <p className="text-sm sm:text-base md:text-lg lg:text-xl text-[#010a14] leading-relaxed mb-6">
-              Elevate your brand story with thumb-stopping visuals engineered for every platform's algorithm. From carousel posts that spark conversations to high-energy reels that hit the explore page, our design lab crafts social assets that convert scrollers into loyal fans.
+            Our team specializes in creating viral content and building brand loyalty through social media campaigns. We work with businesses of all sizes to produce tailored posts, engaging stories, and high-conversion videos designed for every platform's algorithm.
             </p>
             <motion.ul
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="list-disc ml-4 sm:ml-6 space-y-1 sm:space-y-2 text-sm sm:text-base md:text-lg"
+              className="flex flex-col items-center text-center list-disc list-inside space-y-1 sm:space-y-2 text-sm sm:text-base md:text-lg md:items-start md:text-left md:list-outside md:ml-6"
             >
               {[
-                'Platform-native formats (IG, TikTok, YT Shorts)',
-                'Brand-aligned motion graphics & edits',
-                'Caption frameworks that fuel engagement'
+                'Platform-Native Formats',
+                'Brand-Aligned Motion Graphics & Edits',
+                'Optimized Caption Frameworks'
               ].map((item, idx) => (
                 <motion.li
                   key={item}
@@ -512,22 +510,22 @@ const MarketingPage = () => {
             className="flex-1 w-full max-w-2xl text-center md:text-left order-2 md:order-2"
           >
             <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-800 via-white to-blue-600 bg-clip-text text-transparent mb-4 sm:mb-6">
-              Strategic Planning by Experts
+            Strategic Social Media Management Planning
             </h3>
             <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed mb-6">
-              Our senior strategists map every campaign to audience insights and market trends, stacking data-backed tactics into an agile roadmap. Weekly sprints, KPI dashboards, and A/B testing cycles keep growth compounding month after month.
+              Our senior strategists map every campaign to audience insights and market trends. With a focus on scalability, we create roadmaps that evolve alongside your business.
             </p>
             <motion.ul
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="list-disc ml-4 sm:ml-6 space-y-1 sm:space-y-2 text-sm sm:text-base md:text-lg"
+              className="flex flex-col items-center text-center list-disc list-inside space-y-1 sm:space-y-2 text-sm sm:text-base md:text-lg md:items-start md:text-left md:list-outside md:ml-6"
             >
               {[
                 '360° Social Audits & Competitive Analysis',
-                'Quarterly content calendars with agile pivots',
-                'Real-time reporting & optimisation loops'
+                'Quarterly Content Calendars with Agile Pivots',
+                'Real-Time Reporting and Optimization Loops'
               ].map((text, idx) => (
                 <motion.li
                   key={text}
@@ -597,7 +595,7 @@ const MarketingPage = () => {
                 delay: 0.3
               }}
             >
-              Pay&nbsp;Per<br />Click&nbsp;(PPC)
+              Pay-Per-Click (PPC) Advertising
             </motion.h2>
 
             <motion.div
@@ -612,7 +610,7 @@ const MarketingPage = () => {
               }}
             >
               <p>
-                We don't just run ads — we build data-backed campaigns that drive measurable ROI. From Google and Bing to LinkedIn and YouTube, our specialists optimise every click for maximum conversions.
+                Our PPC services go beyond just running ads—we build smart, scalable campaigns designed to deliver measurable ROI. From Google and Bing to LinkedIn and YouTube, our team ensures every click delivers results.
               </p>
             </motion.div>
 
@@ -621,13 +619,13 @@ const MarketingPage = () => {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="list-disc ml-4 sm:ml-6 space-y-1 sm:space-y-2 text-sm sm:text-base md:text-lg mb-6 sm:mb-8"
+              className="flex flex-col items-center text-center list-disc list-inside space-y-1 sm:space-y-2 text-sm sm:text-base md:text-lg md:items-start md:text-left md:list-outside md:ml-6 mb-6 sm:mb-8"
             >
               {[
-                'Smart Targeting',
-                'High-Converting Copy & Creatives',
-                'Full-Funnel Tracking (GA4, GTM, Pixel)',
-                'Scalable Growth Across Top Ad Platforms'
+                'Smart Targeting ensures your ads reach the right audience.',
+                'Engaging ad content designed to maximize conversions.',
+                'Full-Funnel Tracking (GA4, GTM, Pixel).'
+                
               ].map((text, idx) => (
                 <motion.li
                   key={text}
@@ -682,22 +680,22 @@ const MarketingPage = () => {
             className="flex-1 w-full max-w-2xl text-center md:text-left order-2 md:order-1"
           >
             <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-800 via-white to-blue-800 bg-clip-text text-transparent mb-4 sm:mb-6">
-              Professional PPC Management
+              Professional PPC Management for Sustainable Growth
             </h3>
             <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed mb-6">
-              Certified PPC experts fine-tune bids, keywords, and ad copy in real time to squeeze every drop of value from your budget—delivering consistent, profitable growth across search and display networks.
+              With a certified team of PPC experts, we fine-tune bids, keywords, and ad copy in real-time, ensuring you get the most out of every marketing dollar.
             </p>
             <motion.ul
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="list-disc ml-4 sm:ml-6 space-y-1 sm:space-y-2 text-sm sm:text-base md:text-lg"
+              className="flex flex-col items-center text-center list-disc list-inside space-y-1 sm:space-y-2 text-sm sm:text-base md:text-lg md:items-start md:text-left md:list-outside md:ml-6"
             >
               {[
-                'Google & Microsoft Ads Certified Team',
+                'Certified Google & Microsoft Ads Team',
                 'Advanced Bid & Budget Automation',
-                '24/7 Ad & Keyword Optimisation'
+                '24/7 Ad & Keyword Optimization'
               ].map((text, idx) => (
                 <motion.li
                   key={text}
@@ -735,22 +733,22 @@ const MarketingPage = () => {
             className="flex-1 w-full max-w-2xl text-center md:text-left order-2 md:order-2"
           >
             <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent mb-4 sm:mb-6">
-              Campaign Leaders
+            Scalable Growth Across Multiple Platforms
             </h3>
             <p className="text-sm sm:text-base md:text-lg lg:text-xl text-[#010a14] leading-relaxed mb-6">
-              Dedicated account strategists act as your personal growth officers, uniting creative, data science, and media buying teams to steer campaigns toward record-breaking ROAS and sustained scaling.
+              Whether you're just starting or scaling your business, we ensure your message reaches the right audience across multiple platforms. Our campaigns are designed to grow with you, driving consistent results across Facebook, Instagram, Google, and LinkedIn.
             </p>
             <motion.ul
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="list-disc ml-4 sm:ml-6 space-y-1 sm:space-y-2 text-sm sm:text-base md:text-lg"
+              className="flex flex-col items-center text-center list-disc list-inside space-y-1 sm:space-y-2 text-sm sm:text-base md:text-lg md:items-start md:text-left md:list-outside md:ml-6"
             >
               {[
-                'Quarterly OKR & ROAS Alignment',
-                'Cross-channel Creative Leadership',
-                'Growth Roadmaps & Stakeholder Workshops'
+                'Growth Roadmaps & Stakeholder Workshops',
+                'Cross-Channel Creative Leadership',
+                'Quarterly OKR & ROAS Alignment'                
               ].map((text, idx) => (
                 <motion.li
                   key={text}
