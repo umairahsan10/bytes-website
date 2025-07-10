@@ -971,34 +971,34 @@ const ByteSuitePage: React.FC = () => {
         <motion.section
           initial="hidden"
           whileInView="visible"
-          viewport={{ margin: '-100px' }}
+          viewport={{ margin: '-100px', once: true }}
           variants={containerVariants}
-          className="py-16 px-8 lg:px-16 xl:px-24"
+          className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 xl:px-16"
           style={{ backgroundColor: PRIMARY_COLOR }}
         >
           <div className="w-full max-w-7xl mx-auto">
-            <motion.div variants={fadeInDown} className="text-center mb-12">
+            <motion.div variants={fadeInDown} className="text-center mb-8 sm:mb-12">
               <motion.h2 
-                className="text-4xl lg:text-6xl font-black mb-6 bg-gradient-to-r from-[#ffffff] to-[#ffffff] bg-clip-text text-transparent"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-4 sm:mb-6 bg-gradient-to-r from-[#ffffff] to-[#ffffff] bg-clip-text text-transparent"
                 variants={fadeInDown}
               >
                 Target Audience Benefits
               </motion.h2>
               <motion.p 
-                className="text-xl lg:text-2xl max-w-4xl mx-auto mb-8"
+                className="text-base sm:text-lg md:text-xl lg:text-2xl max-w-4xl mx-auto mb-6 sm:mb-8 px-4"
                 style={{ color: SECONDARY_COLOR }}
                 variants={fadeInUp}
               >
                 Discover how ByteSuite CRM transforms business operations
               </motion.p>
               <motion.div 
-                className="w-16 h-1 mx-auto mb-6"
+                className="w-12 sm:w-16 h-1 mx-auto mb-4 sm:mb-6"
                 style={{ background: `linear-gradient(to bottom, ${SECONDARY_COLOR}, ${PRIMARY_COLOR})` }}
                 variants={slideInFromLeft}
               />
             </motion.div>
 
-            <div className="space-y-16">
+            <div className="space-y-8 sm:space-y-12 lg:space-y-16">
               {[
                 {
                   title: "Consultants & Service Providers",
@@ -1047,77 +1047,84 @@ const ByteSuitePage: React.FC = () => {
               ].map((audience, index) => (
                 <motion.div
                   key={index}
-                  className="grid lg:grid-cols-2 gap-12 items-center"
+                  className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center"
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ margin: '-200px' }}
+                  viewport={{ margin: '-200px', once: true }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                 >
                   <motion.div
-                    className={`space-y-6 ${index % 2 === 1 ? 'lg:order-2' : ''}`}
+                    className={`space-y-4 sm:space-y-6 ${index % 2 === 1 ? 'lg:order-2' : ''}`}
                     initial={{ opacity: 0, x: index % 2 === 1 ? 30 : -30 }}
                     whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: index * 0.1 + 0.1 }}
                   >
-                    <div className="space-y-4">
+                    <div className="space-y-3 sm:space-y-4">
                   <motion.h3 
-                        className="text-3xl lg:text-4xl font-bold"
+                        className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold"
                       style={{ color: SECONDARY_COLOR }}
                         initial={{ opacity: 0, y: 15 }}
                         whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
                         transition={{ duration: 0.3, delay: index * 0.1 + 0.2 }}
                   >
                     {audience.title}
                   </motion.h3>
                       <motion.h4 
-                        className="text-xl lg:text-2xl font-semibold"
+                        className="text-lg sm:text-xl lg:text-2xl font-semibold"
                         style={{ color: SECONDARY_COLOR }}
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
                         transition={{ duration: 0.3, delay: index * 0.1 + 0.3 }}
                       >
                         {audience.subtitle}
                       </motion.h4>
                       <motion.p 
-                        className="text-lg lg:text-xl leading-relaxed"
+                        className="text-sm sm:text-base lg:text-lg xl:text-xl leading-relaxed"
                         style={{ color: SECONDARY_COLOR }}
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
                         transition={{ duration: 0.3, delay: index * 0.1 + 0.4 }}
                       >
                         {audience.description}
                       </motion.p>
                   </div>
                     
-                    <div className="space-y-4">
+                    <div className="space-y-3 sm:space-y-4">
                       <motion.h5 
-                        className="text-lg lg:text-xl font-semibold"
+                        className="text-base sm:text-lg lg:text-xl font-semibold"
                         style={{ color: SECONDARY_COLOR }}
                         initial={{ opacity: 0, y: 8 }}
                         whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
                         transition={{ duration: 0.3, delay: index * 0.1 + 0.5 }}
                       >
                         Key Benefits:
                       </motion.h5>
-                      <ul className="space-y-3">
+                      <ul className="space-y-2 sm:space-y-3">
                         {audience.benefits.map((benefit, benefitIndex) => (
                       <motion.li 
                         key={benefitIndex} 
-                        className="flex items-start space-x-3"
+                        className="flex items-start space-x-2 sm:space-x-3"
                             initial={{ opacity: 0, x: -15 }}
                         whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
                             transition={{ delay: index * 0.1 + 0.6 + benefitIndex * 0.05 }}
                       >
                         <motion.span 
-                              className="text-xl mt-1"
+                              className="text-lg sm:text-xl mt-1 flex-shrink-0"
                           style={{ color: SECONDARY_COLOR }}
                           initial={{ opacity: 0, scale: 0.5 }}
                           whileInView={{ opacity: 1, scale: 1 }}
+                              viewport={{ once: true }}
                               transition={{ duration: 0.2, delay: index * 0.1 + 0.7 + benefitIndex * 0.05 }}
                         >
                               ✓
                         </motion.span>
-                            <span className="text-base lg:text-lg leading-relaxed" style={{ color: SECONDARY_COLOR }}>
+                            <span className="text-sm sm:text-base lg:text-lg leading-relaxed" style={{ color: SECONDARY_COLOR }}>
                               {benefit}
                             </span>
                       </motion.li>
@@ -1130,16 +1137,17 @@ const ByteSuitePage: React.FC = () => {
                     className={`flex items-center justify-center ${index % 2 === 1 ? 'lg:order-1' : ''}`}
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: index * 0.1 + 0.2 }}
                     whileHover={{ scale: 1.02 }}
                   >
                     <img
                       src={audience.image}
                       alt={audience.title}
-                      className="w-full h-80 object-cover rounded-lg"
+                      className="w-full h-48 sm:h-64 md:h-72 lg:h-80 object-cover rounded-lg shadow-lg"
                       style={{ 
-                        maxWidth: '600px',
-                        minWidth: '400px'
+                        maxWidth: '100%',
+                        minWidth: 'auto'
                       }}
                       onLoad={() => console.log('Image loaded successfully:', audience.image)}
                       onError={(e) => {
