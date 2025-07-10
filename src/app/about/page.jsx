@@ -800,6 +800,8 @@ export default function AboutPage() {
   const heroRef = useRef(null);
   const overlayRef = useRef(null);
   const [canInteract, setCanInteract] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+  const [videoLoading, setVideoLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -1054,6 +1056,156 @@ export default function AboutPage() {
               
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Video Section */}
+      <section className="relative w-full py-20 bg-[#010a14] overflow-hidden">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <motion.div
+            className="text-center space-y-8 mb-16"
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            exit="exit"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              Discover Our Story
+            </h2>
+            <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+              Watch how we transform ideas into powerful digital solutions that drive growth and innovation.
+            </p>
+          </motion.div>
+
+          <motion.div
+            className="relative w-full max-w-5xl mx-auto"
+            variants={scaleIn}
+            initial="hidden"
+            whileInView="visible"
+            exit="exit"
+            viewport={{ once: false, margin: "-100px" }}
+          >
+            {/* Video Container with Gradient Border */}
+            <div className="relative group">
+              {/* Gradient Border Effect */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
+              
+              {/* Video Container */}
+              <div className="relative bg-black rounded-2xl overflow-hidden shadow-2xl">
+                <video
+                  className="w-full h-auto rounded-2xl"
+                  controls
+                  poster="/assets/aboutUs/hero.jpg"
+                  preload="metadata"
+                  onError={(e) => {
+                    console.error('Video error:', e);
+                    setVideoError(true);
+                    setVideoLoading(false);
+                  }}
+                  onLoadStart={() => {
+                    console.log('Video loading started');
+                    setVideoLoading(true);
+                    setVideoError(false);
+                  }}
+                  onCanPlay={() => {
+                    console.log('Video can play');
+                    setVideoLoading(false);
+                  }}
+                  onLoadedData={() => {
+                    console.log('Video data loaded');
+                    setVideoLoading(false);
+                  }}
+                >
+                  <source src="/Videos/test-video.mp4" type="video/mp4" />
+                  <source src="/videos/test-video.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                
+                {/* Loading Overlay */}
+                {videoLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-2xl">
+                    <div className="text-white text-center">
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+                      <p>Loading video...</p>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Error Overlay */}
+                {videoError && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-2xl">
+                    <div className="text-white text-center p-6">
+                      <svg className="w-16 h-16 mx-auto mb-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                      </svg>
+                      <p className="text-lg font-semibold mb-2">Video Unavailable</p>
+                      <p className="text-sm text-gray-300 mb-4">The video could not be loaded. Please try refreshing the page.</p>
+                  <p className="text-xs text-gray-400">If the problem persists, the video file might be too large (23MB). Consider compressing it to under 10MB for better compatibility.</p>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Play Button Overlay */}
+                <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <motion.div
+                    className="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center shadow-lg"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <svg className="w-8 h-8 text-black ml-1" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </motion.div>
+                </div>
+              </div>
+            </div>
+
+            {/* Floating Elements */}
+            <motion.div
+              className="absolute -top-4 -left-4 w-8 h-8 bg-blue-400 rounded-full opacity-60"
+              animate={{ y: [-10, 10, -10] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div
+              className="absolute -bottom-4 -right-4 w-6 h-6 bg-cyan-400 rounded-full opacity-60"
+              animate={{ y: [10, -10, 10] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            />
+            <motion.div
+              className="absolute top-1/2 -right-8 w-4 h-4 bg-purple-400 rounded-full opacity-60"
+              animate={{ scale: [1, 1.5, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+            />
+          </motion.div>
+
+          {/* Video Description */}
+          <motion.div
+            className="mt-12 text-center space-y-4"
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            exit="exit"
+            viewport={{ once: false, margin: "-100px" }}
+          >
+            <p className="text-gray-400 text-sm md:text-base max-w-2xl mx-auto">
+              From concept to deployment, see how our team collaborates to deliver exceptional digital experiences that exceed expectations and drive measurable results.
+            </p>
+            <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-500">
+              <span className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                High-Quality Production
+              </span>
+              <span className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
+                Professional Team
+              </span>
+              <span className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                Innovative Solutions
+              </span>
+            </div>
+          </motion.div>
         </div>
       </section>
 

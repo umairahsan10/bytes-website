@@ -34,6 +34,7 @@ const config: Config = {
         'slide-in-left': "slide-in-left 1s ease-out forwards",
         'slide-in-right': "slide-in-right 1s ease-out forwards",
         "flip-words": "flip-words 8s infinite",
+        "tilt": "tilt 10s infinite linear",
       },
       keyframes: {
         // 'ping-large': {
@@ -77,6 +78,17 @@ const config: Config = {
           "85%" : { transform: "translateY(-600%)" },
           "92%" : { transform: "translateY(-712%)" },
           "100%" : { transform: "translateY(-700%)" },
+        },
+        "tilt": {
+          "0%, 50%, 100%": {
+            transform: "rotate(0deg)",
+          },
+          "25%": {
+            transform: "rotate(0.5deg)",
+          },
+          "75%": {
+            transform: "rotate(-0.5deg)",
+          },
         },
       },
       spacing: {
