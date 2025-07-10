@@ -9,39 +9,7 @@ import { useRouter } from 'next/navigation';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Custom hook to initialize Lenis
-const useLenis = () => {
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      direction: 'vertical',
-      gestureDirection: 'vertical',
-      smooth: true,
-      mouseMultiplier: 1,
-      smoothTouch: false,
-      touchMultiplier: 2,
-      infinite: false,
-    });
-
-    // Expose Lenis instance globally so other components (e.g., Header)
-    // can programmatically initiate smooth scroll animations.
-    if (typeof window !== 'undefined') {
-      window.lenis = lenis;
-    }
-
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-
-    return () => {
-      lenis.destroy();
-    };
-  }, []);
-};
+// Lenis is now initialized globally in the main page
 
 // Helper function to detect mobile
 const isMobile = () => {
@@ -56,8 +24,7 @@ export default function Home() {
   const [isMobileDevice, setIsMobileDevice] = useState(false);
   const router = useRouter();
 
-  // Initialize Lenis
-  useLenis();
+  // Lenis is now initialized globally in the main page
 
   // Check if mobile on mount and resize
   useEffect(() => {
