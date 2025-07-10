@@ -510,6 +510,13 @@
       top: calc(100% - 2rem); /* move 4rem down compared to Services */
     }
 
+    /* Services dropdown – ensure full visibility & tapability on mobile */
+    .services-dropdown .dropdown-menu {
+      top: calc(100% - 4rem) !important;    /* lift it upward slightly for better balance */
+      right: 0 !important;                  /* align its right edge with the menu-link (mirrors Products) */
+      left: auto !important;                /* reset left positioning */
+    }
+    
     .dropdown-menu.open {
       max-height: 300px;
       transform: translateY(0) scale(1);
