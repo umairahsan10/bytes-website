@@ -232,6 +232,33 @@ export const BookSection = () => {
     };
   }, [page, scrollFlipDone, scrollReady, setPage]);
 
+  // NEW: Unlock scroll lock when the user reaches page 2 (or beyond) via ANY interaction (e.g. clicks)
+  useEffect(() => {
+    // Only run while the lock is still active and the second flip hasn't been registered yet
+    if (!scrollLockActive || scrollFlipDone) return;
+
+    // If the current page index indicates the second sheet (page >= 2), trigger unlock sequence
+    if (page >= 2) {
+      setScrollFlipDone(true);
+
+      if (unlockTimerRef.current) clearTimeout(unlockTimerRef.current);
+      unlockTimerRef.current = setTimeout(() => {
+        setScrollLockActive(false);
+
+        // Force Lenis restart for mobile / touch devices to ensure scrolling resumes
+        const lenis = typeof window !== 'undefined' ? (window as any).lenis : null;
+        if (lenis && isTouch) {
+          setTimeout(() => {
+            if (lenis) {
+              lenis.start();
+              lenis.raf(performance.now());
+            }
+          }, 50);
+        }
+      }, 900); // matches flip animation duration
+    }
+  }, [page, scrollLockActive, scrollFlipDone, isTouch]);
+
   // Enhanced Lenis management with fallback for mobile
   useEffect(() => {
     const lenis = typeof window !== 'undefined' ? (window as any).lenis : null;
