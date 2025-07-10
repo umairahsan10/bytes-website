@@ -1234,12 +1234,12 @@ const ByteBotLanding: React.FC = () => {
                 </div>
 
                 <div className="w-full lg:w-1/2 mobile-full-width flex justify-center items-center perspective-1000">
-                  <div className="relative">
+                  <div className="relative mt-12">  {/* Added mt-12 for margin-top */}
                     {/* Glow effect behind the image */}
                     <div className="absolute inset-0 w-96 h-96 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-full blur-3xl opacity-30 animate-pulse"></div>
 
                     {/* Main rotating container */}
-                    <div className="relative w-96 h-96 animate-rotate-3d">
+                    <div className="relative w-80 h-80 animate-rotate-3d">
                       {/* Inner glow ring */}
                       <div className="absolute inset-0 w-full h-full rounded-full bg-gradient-to-r from-cyan-400/20 via-blue-500/20 to-purple-600/20 border-2 border-cyan-400/30 animate-pulse"></div>
 
@@ -1248,7 +1248,7 @@ const ByteBotLanding: React.FC = () => {
                         <img
                           src="/assets/newimages/snake.png"
                           alt="AI Learning System"
-                          className="w-80 h-80 object-contain drop-shadow-2xl filter brightness-110 contrast-110"
+                          className="w-65 h-65 object-contain drop-shadow-2xl filter brightness-110 contrast-110"
                         />
                       </div>
 
@@ -1287,13 +1287,13 @@ const ByteBotLanding: React.FC = () => {
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="relative z-10 max-w-2xl px-6">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Ready to transform your conversations?</h2>
-          <p className="text-lg md:text-xl text-gray-200 mb-8">Book a free Byte-Bot demo and see how AI can power your business.</p>
+          <p className="text-lg md:text-xl text-gray-200 mb-8">Book a free Byte-Bots Consultation and see how AI can power your business.</p>
           <Link
             href="/contact"
             data-cta="true"
             className="inline-block bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-full shadow-lg transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-cyan-300"
           >
-            Book a Demo
+            Book Your Consultation Now
           </Link>
         </div>
       </section>
