@@ -135,6 +135,17 @@ export const BookSection = () => {
       if (unlockTimerRef.current) clearTimeout(unlockTimerRef.current);
       unlockTimerRef.current = setTimeout(() => {
         setScrollLockActive(false);
+        
+        // Force Lenis restart for mobile devices
+        const lenis = typeof window !== 'undefined' ? (window as any).lenis : null;
+        if (lenis && isTouch) {
+          setTimeout(() => {
+            if (lenis) {
+              lenis.start();
+              lenis.raf(performance.now());
+            }
+          }, 50);
+        }
       }, 900);
     };
 
@@ -157,6 +168,17 @@ export const BookSection = () => {
         if (unlockTimerRef.current) clearTimeout(unlockTimerRef.current);
         unlockTimerRef.current = setTimeout(() => {
           setScrollLockActive(false);
+          
+          // Force Lenis restart for mobile devices
+          const lenis = typeof window !== 'undefined' ? (window as any).lenis : null;
+          if (lenis && isTouch) {
+            setTimeout(() => {
+              if (lenis) {
+                lenis.start();
+                lenis.raf(performance.now());
+              }
+            }, 50);
+          }
         }, 900);
       }
     };
@@ -173,7 +195,7 @@ export const BookSection = () => {
     };
   }, [page, scrollFlipDone, scrollReady, setPage]);
 
-  // Pause Lenis smooth scrolling while the lock is active (important because Lenis bypasses overflow hidden)
+  // Enhanced Lenis management with fallback for mobile
   useEffect(() => {
     const lenis = typeof window !== 'undefined' ? (window as any).lenis : null;
     if (!lenis) return;
@@ -181,9 +203,29 @@ export const BookSection = () => {
     if (scrollLockActive) {
       lenis.stop();
     } else {
+      // Enhanced restart with fallback for mobile
       lenis.start();
+      
+      // Fallback restart for mobile devices
+      if (isTouch) {
+        // Additional restart after a short delay for mobile
+        setTimeout(() => {
+          if (lenis && !scrollLockActive) {
+            lenis.start();
+          }
+        }, 100);
+        
+        // Force restart after longer delay if still stuck
+        setTimeout(() => {
+          if (lenis && !scrollLockActive) {
+            lenis.start();
+            // Force a scroll update to ensure Lenis is responsive
+            lenis.raf(performance.now());
+          }
+        }, 500);
+      }
     }
-  }, [scrollLockActive]);
+  }, [scrollLockActive, isTouch]);
 
   // Ensure the book area is centered when lock engages (smoother approach)
   useEffect(() => {
