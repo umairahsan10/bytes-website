@@ -811,6 +811,11 @@ export default function AboutPage() {
       smooth: true,
     });
 
+    // Expose Lenis globally so other components (e.g., Navbar) can control it
+    if (typeof window !== 'undefined') {
+      window.lenis = lenis;
+    }
+
     function raf(time) {
       lenis.raf(time);
       requestAnimationFrame(raf);
