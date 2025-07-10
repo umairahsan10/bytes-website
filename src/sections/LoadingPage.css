@@ -60,7 +60,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background:rgb(3, 1, 31);
+  background: #000; /* pure black */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -98,13 +98,16 @@
 
 /* Progress bar styling */
 .progress-bar-bg {
-  fill: transparent;
-  stroke: white;
-  stroke-width: 2;
+  fill: #2B2B2B !important; /* dark gray */
+  stroke: none !important;
+  rx: 0 !important;
+  ry: 0 !important;
 }
 
 .progress-bar-fill {
-  fill: white;
+  fill: #fff !important; /* white */
+  rx: 0 !important;
+  ry: 0 !important;
 }
 
 @media (max-width: 768px) {
