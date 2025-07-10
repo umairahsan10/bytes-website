@@ -87,6 +87,7 @@ const AppDevelopmentPage = () => {
   const phoneContainerRef = useRef<HTMLDivElement>(null);
   const [scrollThreshold, setScrollThreshold] = useState(0);
   const [hasCompletedAllScreens, setHasCompletedAllScreens] = useState(false);
+  const lastScreenUpdateRef = useRef<number>(0);
 
   // Feature cards state
   const [selectedFeature, setSelectedFeature] = useState<number | null>(null);
@@ -96,7 +97,7 @@ const AppDevelopmentPage = () => {
     offset: ["start start", "end start"]
   });
 
-  const springConfig = { stiffness: 80, damping: 25, restDelta: 0.001 };
+  const springConfig = { stiffness: 60, damping: 30, restDelta: 0.001 };
   const screenProgress = useSpring(phoneScrollProgress, springConfig);
 
   const appScreens = [
@@ -130,7 +131,7 @@ const AppDevelopmentPage = () => {
     }
   ];
 
-  // Enhanced scroll tracking with threshold + extended 4th screen time
+  // Enhanced scroll tracking with smoother transitions and better handling of rapid scrolling
   useEffect(() => {
     const unsubscribe = phoneScrollProgress.onChange((progress) => {
       // Mark section complete after reaching 0.7
@@ -140,18 +141,24 @@ const AppDevelopmentPage = () => {
 
       setScrollThreshold(progress);
 
+      // Smoother screen transitions with overlapping zones to prevent flickering
       let newScreen;
-      if (progress < 0.2) {
+      if (progress < 0.15) {
         newScreen = 0;        // first screen
-      } else if (progress < 0.35) {
+      } else if (progress < 0.3) {
         newScreen = 1;        // second screen
-      } else if (progress < 0.5) {
+      } else if (progress < 0.45) {
         newScreen = 2;        // third screen
-      } else {
+      } else if (progress < 0.6) {
         newScreen = 3;        // fourth screen
+      } else {
+        newScreen = 3;        // stay on fourth screen
       }
 
-      if (newScreen !== currentScreen) {
+      // Debounce rapid screen changes to prevent flickering during fast scrolling
+      const now = Date.now();
+      if (newScreen !== currentScreen && (now - lastScreenUpdateRef.current) > 100) {
+        lastScreenUpdateRef.current = now;
         setCurrentScreen(newScreen);
       }
     });
@@ -297,7 +304,7 @@ const AppDevelopmentPage = () => {
                 }}
               >
                 {/* Static phone frame */}
-                <div className="relative w-[200px] sm:w-[240px] md:w-[260px] h-[406px] sm:h-[488px] md:h-[530px] mx-auto">
+                <div className="relative w-[140px] xs:w-[160px] sm:w-[200px] md:w-[240px] lg:w-[260px] h-[280px] xs:h-[300px] sm:h-[406px] md:h-[488px] lg:h-[530px] mx-auto">
                   {/* iPhone 14 frame */}
                   <div className="absolute inset-0 z-20">
                     <Image
@@ -310,13 +317,13 @@ const AppDevelopmentPage = () => {
                   </div>
 
                   {/* Screen content with step-by-step sliding */}
-                  <div className="absolute top-0 sm:top-[6px] md:top-[10px] left-[12px] sm:left-[16px] md:left-[12px] w-[180px] sm:w-[210px] md:w-[236px] h-[400px] sm:h-[470px] md:h-[520px] rounded-[30px] sm:rounded-[34px] md:rounded-[38px] overflow-hidden bg-gray-50">
+                  <div className="absolute top-0 xs:top-[4px] sm:top-[6px] md:top-[10px] left-[8px] xs:left-[10px] sm:left-[16px] md:left-[12px] w-[124px] xs:w-[140px] sm:w-[180px] md:w-[210px] lg:w-[236px] h-[280px] xs:h-[310px] sm:h-[400px] md:h-[470px] lg:h-[520px] rounded-[18px] xs:rounded-[22px] sm:rounded-[30px] md:rounded-[34px] lg:rounded-[38px] overflow-hidden bg-gray-50">
                     <motion.div
                       className="relative w-full h-full"
                       style={{
                         y: useTransform(
                           screenProgress,
-                          [0.1, 0.2, 0.2, 0.35, 0.35, 0.5, 0.5, 0.7, 0.7, 1],
+                          [0.1, 0.15, 0.15, 0.3, 0.3, 0.45, 0.45, 0.6, 0.6, 1],
                           [0, 0, -520, -520, -1040, -1040, -1560, -1560, -1560, -1560]
                         )
                       }}
@@ -331,30 +338,11 @@ const AppDevelopmentPage = () => {
                             src={screen.image}
                             alt={screen.title}
                             fill
-                            className={`object-cover ${screen.id === 'profile' ? 'transform scale-110 translate-x-4' : ''}`}
-                            sizes="(max-width: 640px) 156px, (max-width: 768px) 188px, 204px"
+                            className={`object-cover ${screen.id === 'profile' ? 'transform scale-110 translate-x-2 xs:translate-x-3 sm:translate-x-4' : ''}`}
+                            sizes="(max-width: 400px) 100px, (max-width: 640px) 124px, (max-width: 768px) 140px, 188px, 204px"
                           />
 
-                          {/* Screen overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent">
-                            <div className="absolute bottom-3 left-3 right-3">
-                              <div className="bg-white/90 backdrop-blur-sm rounded-lg p-2">
-                                <h3 className="text-xs font-semibold text-gray-800 mb-1">
-                                  {screen.title}
-                                </h3>
-                                <div className="flex space-x-1">
-                                  {[1, 2, 3, 4].map((i) => (
-                                    <div
-                                      key={i}
-                                      className={`h-1 rounded-full ${i <= index + 1 ? 'bg-purple-500' : 'bg-gray-300'
-                                        }`}
-                                      style={{ width: `${12 + Math.random() * 18}px` }}
-                                    />
-                                  ))}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+                          {/* Screen overlay removed as per request */}
                         </div>
                       ))}
                     </motion.div>
@@ -415,7 +403,7 @@ const AppDevelopmentPage = () => {
                     style={{
                       y: useTransform(
                         screenProgress,
-                        [0.1, 0.2, 0.2, 0.35, 0.35, 0.5, 0.5, 0.7, 0.7, 1],
+                        [0.1, 0.15, 0.15, 0.3, 0.3, 0.45, 0.45, 0.6, 0.6, 1],
                         [0, 0, -60, -60, -120, -120, -180, -180, -180, -180]
                       )
                     }}
@@ -477,7 +465,7 @@ const AppDevelopmentPage = () => {
                   style={{
                     y: useTransform(
                       screenProgress,
-                      [0.1, 0.2, 0.2, 0.35, 0.35, 0.5, 0.5, 0.7, 0.7, 1],
+                      [0.1, 0.15, 0.15, 0.3, 0.3, 0.45, 0.45, 0.6, 0.6, 1],
                       [0, 0, -400, -400, -800, -800, -1200, -1200, -1200, -1200]
                     )
                   }}
