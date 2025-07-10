@@ -59,7 +59,7 @@ export const Footer = () => {
             ))}
           </ul>
           <div className="pt-5">
-            <h4 className="text-xl font-semibold mb-4">Blogs</h4>
+            <Link href="/blogs/page/1" className="text-xl font-semibold mb-4 hover:text-white transition block">Blogs</Link>
           </div>
         </div>
 
