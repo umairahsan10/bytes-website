@@ -6,22 +6,22 @@ interface Page {
 }
 
 const pictures = [
-  "DSC00680",
-  "DSC00933",
-  "DSC00966",
-  "DSC00983",
-  "DSC01011",
-  "DSC01040",
-  "DSC01064",
-  "DSC01071",
-  "DSC01103",
-  "DSC01145",
-  "DSC01420",
-  "DSC01461",
-  "DSC01489",
-  "DSC02031",
-  "DSC02064",
-  "DSC02069",
+  "title1",
+  "page1",
+  "title2",
+  "page2",
+  "title3",
+  "page3",
+  "title4",
+  "page4",
+  "title5",
+  "page5",
+  "title6",
+  "page6",
+  "title7",
+  "page7",
+  "title8",
+  "page8",
 ];
 
 // Initialize page state to 0 (closed book)

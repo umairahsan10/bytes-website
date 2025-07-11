@@ -31,7 +31,7 @@ const portfolioProjects = [
 ];
 
 export const ProjectsSection = () => {
-  const slides = [...portfolioProjects, portfolioProjects[0]]; 
+  const slides = [...portfolioProjects, portfolioProjects[0]];
   const [index, setIndex] = useState(0);
   const [withTransition, setWithTransition] = useState(true);
 
@@ -60,9 +60,23 @@ export const ProjectsSection = () => {
   }, [index, slides]);
 
   // Helper handlers for manual navigation
+  // Replace your current nextSlide function with this:
   const nextSlide = useCallback(() => {
-    setIndex((prev) => prev + 1);
-  }, []);
+    if (index === slides.length - 2) { // Last real slide
+      // Go to cloned slide first
+      setIndex(slides.length - 1);
+      // Then jump back to first slide after transition
+      setTimeout(() => {
+        setWithTransition(false);
+        setIndex(0);
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => setWithTransition(true));
+        });
+      }, 700);
+    } else {
+      setIndex((prev) => prev + 1);
+    }
+  }, [index, slides]);
 
   const prevSlide = useCallback(() => {
     if (index === 0) {
@@ -78,25 +92,25 @@ export const ProjectsSection = () => {
   }, [index, slides]);
 
   return (
-          <section
-        id="projects"
-        className="relative py-20 sm:py-12 md:py-16 lg:py-8 items-center bg-[#010a14] bg-[url('/assets/portfolio_bg.png')] bg-cover bg-center bg-no-repeat"
-      >
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-6 text-white">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-4xl font-serif text-center mb-3 sm:mb-4 md:mb-6 lg:mb-4">The Staging Room</h2>
-          <div className="flex justify-center text-center mt-2 mb-3 sm:mb-4 md:mb-6 lg:mb-3">
-              <p className={`text-lg sm:text-xl md:text-xl lg:text-lg uppercase font-bold tracking-widest bg-clip-text text-transparent text-center bg-gradient-to-r from-[#0476b5] to-[#ffffff] px-4 sm:mb-2 md:mb-4 lg:mb-2`}>
-                  Real Projects in Progress
-              </p>
-          </div>
-          <p className="text-center text-sm sm:text-base md:text-lg lg:text-base text-white-500 mb-1 sm:mb-8 md:mb-10 lg:mb-6 px-4 sm:px-8 md:px-12 lg:px-8">
-            Our portfolio isn't static — it's active, evolving, and built in the open. Every link you see here points to a real website in development, hosted on a test domain for client review.
+    <section
+      id="projects"
+      className="relative py-20 sm:py-12 md:py-16 lg:py-8 items-center bg-[#010a14] bg-[url('/assets/portfolio_bg.png')] bg-cover bg-center bg-no-repeat"
+    >
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-6 text-white">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-4xl font-serif text-center mb-3 sm:mb-4 md:mb-6 lg:mb-4">The Staging Room</h2>
+        <div className="flex justify-center text-center mt-2 mb-3 sm:mb-4 md:mb-6 lg:mb-3">
+          <p className={`text-lg sm:text-xl md:text-xl lg:text-lg uppercase font-bold tracking-widest bg-clip-text text-transparent text-center bg-gradient-to-r from-[#0476b5] to-[#ffffff] px-4 sm:mb-2 md:mb-4 lg:mb-2`}>
+            Real Projects in Progress
           </p>
+        </div>
+        <p className="text-center text-sm sm:text-base md:text-lg lg:text-base text-white-500 mb-1 sm:mb-8 md:mb-10 lg:mb-6 px-4 sm:px-8 md:px-12 lg:px-8">
+          Our portfolio isn't static — it's active, evolving, and built in the open. Every link you see here points to a real website in development, hosted on a test domain for client review.
+        </p>
 
         <div className="lg:mt-2 flex flex-col gap-4 sm:gap-6 md:gap-8 lg:gap-6 scale-90 sm:scale-95 lg:scale-90">
-            {/* Slider Row */}
-            {/* Use column layout on small screens, switch to row on md and above */}
-            <div className="relative w-full flex flex-col md:flex-row items-center justify-center overflow-hidden rounded-2xl sm:rounded-3xl md:rounded-3xl shadow-lg mx-2 sm:mx-4 md:mx-6 lg:mx-2">
+          {/* Slider Row */}
+          {/* Use column layout on small screens, switch to row on md and above */}
+          <div className="relative w-full flex flex-col md:flex-row items-center justify-center overflow-hidden rounded-2xl sm:rounded-3xl md:rounded-3xl shadow-lg mx-2 sm:mx-4 md:mx-6 lg:mx-2">
 
             {/* Prev Button */}
             <button
@@ -182,24 +196,24 @@ export const ProjectsSection = () => {
             </div>
           </div>
 
-                      {/* Info line about domain and live work */}
-            <p className="text-center text-sm sm:text-base md:text-lg lg:text-base text-white-500 sm:px-6 md:px-8 lg:px-6 mt-4 md:mt-6 lg:mt-4">
+          {/* Info line about domain and live work */}
+          <p className="text-center text-sm sm:text-base md:text-lg lg:text-base text-white-500 sm:px-6 md:px-8 lg:px-6 mt-4 md:mt-6 lg:mt-4">
             Some domain links may point to a different project than the preview image, thats because our domains are under constant change.
-            </p>
-          </div>
+          </p>
+        </div>
 
-          {/* CTA to full portfolio */}
-          <div className="mt-2 sm:mt-8 md:mt-12 lg:mt-8 flex flex-col items-center text-center gap-3 sm:gap-4 lg:gap-3 px-4 sm:px-6 lg:px-6">
-            <h4 className="text-xl sm:text-xl md:text-2xl lg:text-xl font-semibold">
-              Want to see our full portfolio of completed projects?
-            </h4>
-            <a
-              href="/contact"
-              className="inline-flex items-center gap-2 px-8 py-2 md:py-3 lg:py-2 mt-4 md:mt-4 lg:mt-2 rounded-full font-semibold shadow-lg bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-600 text-white hover:from-purple-600 hover:via-fuchsia-500 hover:to-pink-500 hover:scale-110 transition-all duration-300"
-            >
-              Reach Out&nbsp;&raquo;
-            </a>
-          </div>
+        {/* CTA to full portfolio */}
+        <div className="mt-2 sm:mt-8 md:mt-12 lg:mt-8 flex flex-col items-center text-center gap-3 sm:gap-4 lg:gap-3 px-4 sm:px-6 lg:px-6">
+          <h4 className="text-xl sm:text-xl md:text-2xl lg:text-xl font-semibold">
+            Want to see our full portfolio of completed projects?
+          </h4>
+          <a
+            href="/contact"
+            className="inline-flex items-center gap-2 px-8 py-2 md:py-3 lg:py-2 mt-4 md:mt-4 lg:mt-2 rounded-full font-semibold shadow-lg bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-600 text-white hover:from-purple-600 hover:via-fuchsia-500 hover:to-pink-500 hover:scale-110 transition-all duration-300"
+          >
+            Reach Out&nbsp;&raquo;
+          </a>
+        </div>
       </div>
     </section>
   );
