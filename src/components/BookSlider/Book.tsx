@@ -104,10 +104,10 @@ interface PageProps {
 
 const Page = ({ number, front, back, page, opened, bookClosed, ...props }: PageProps) => {
   const [picture, picture2, pictureRoughness] = useTexture([
-    `/textures/${front}.jpg`,
-    `/textures/${back}.jpg`,
+    `/Book-Photos2/${front}.jpg`,
+    `/Book-Photos2/${back}.jpg`,
     ...(number === 0 || number === pages.length - 1
-      ? [`/textures/book-cover-roughness.jpg`]
+      ? [`/Book-Photos2/book-cover-roughness.jpg`]
       : []),
   ]);
   picture.colorSpace = picture2.colorSpace = SRGBColorSpace;
