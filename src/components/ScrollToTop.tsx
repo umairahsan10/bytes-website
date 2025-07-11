@@ -13,14 +13,21 @@ export const ScrollToTop = () => {
         window.history.scrollRestoration = 'manual';
       }
 
-      // Scroll to top immediately
-      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      // Small delay to ensure Lenis is ready
+      const timeoutId = setTimeout(() => {
+        // Get the global Lenis instance
+        const lenis = (window as any).lenis;
+        
+        if (lenis && typeof lenis.scrollTo === 'function') {
+          // Use Lenis to scroll to top with immediate behavior
+          lenis.scrollTo(0, { immediate: true });
+        } else {
+          // Fallback to native scroll if Lenis is not available
+          window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        }
+      }, 100);
 
-      // If Lenis smooth-scroll is active, also reset its internal position
-      const lenis = (window as any).lenis;
-      if (lenis && typeof lenis.scrollTo === 'function') {
-        lenis.scrollTo(0, { immediate: true });
-      }
+      return () => clearTimeout(timeoutId);
     }
   }, [pathname]);
 

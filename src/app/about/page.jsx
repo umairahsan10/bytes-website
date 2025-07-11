@@ -2,7 +2,7 @@
 
 import { Header } from "@/sections/Navbar";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import Lenis from "lenis";
+
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ContactSection } from "@/sections/Contact";
@@ -806,25 +806,7 @@ export default function AboutPage() {
   const videoRef = useRef(null);
   const router = useRouter();
 
-  useEffect(() => {
-    const lenis = new Lenis({
-      smooth: true,
-    });
 
-    // Expose Lenis globally so other components (e.g., Navbar) can control it
-    if (typeof window !== 'undefined') {
-      window.lenis = lenis;
-    }
-
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-
-    return () => lenis.destroy();
-  }, []);
 
   // GSAP ScrollTrigger effect
   useLayoutEffect(() => {

@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
-import Lenis from "lenis";
 import { Header } from "@/sections/Navbar";
 import HeroSection from "@/sections/Hero";
 import ByteBotsSection from "@/sections/ByteBot";
@@ -15,38 +13,6 @@ import { BrandsSection } from "@/sections/brands";
 import { NumbersSection } from "@/sections/numbers";
 
 export default function Home() {
-  // Global Lenis configuration with mobile-specific values
-  useEffect(() => {
-    // Detect mobile device
-    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
-    
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      wheelMultiplier: isMobile ? 0.4 : 0.4, 
-      touchMultiplier: isMobile ? 0.9 : 0.9, 
-      infinite: false,
-    });
-
-    // Expose Lenis instance globally so other components can access it
-    if (typeof window !== 'undefined') {
-      (window as any).lenis = lenis;
-    }
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-
-    return () => {
-      lenis.destroy();
-    };
-  }, []);
-
-
-
   return (
     <main className="text-black min-h-screen">
       <Header transparentNav={true} />
