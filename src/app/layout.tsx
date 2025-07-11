@@ -1,3 +1,4 @@
+// Abdullah Zindabad
 import type { Metadata } from "next";
 import { Inter, Calistoga } from "next/font/google";
 import "./globals.css";
@@ -7,6 +8,7 @@ import { Footer } from "@/sections/Footer";
 import GTM, { GTMNoScript } from "@/components/GTM";
 import PageLoader from "@/components/PageLoader";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { LenisProvider } from "@/components/LenisProvider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const calistoga = Calistoga({
@@ -23,6 +25,39 @@ export const metadata: Metadata = {
   },
 };
 
+// Global page reload handler component
+function PageReloadHandler() {
+  return (
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `
+          // Handle page reload to ensure proper component re-initialization
+          if (typeof window !== 'undefined') {
+            // Force scroll to top on page reload
+            window.addEventListener('beforeunload', function() {
+              if (window.lenis && typeof window.lenis.scrollTo === 'function') {
+                window.lenis.scrollTo(0, { immediate: true });
+              }
+            });
+
+            // Reset any cached states on page load
+            window.addEventListener('load', function() {
+              // Dispatch custom event to notify components
+              window.dispatchEvent(new CustomEvent('pageReloaded', {
+                detail: { 
+                  pathname: window.location.pathname,
+                  isRouteChange: false,
+                  isPageReload: true 
+                }
+              }));
+            });
+          }
+        `,
+      }}
+    />
+  );
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -33,6 +68,8 @@ export default function RootLayout({
       <head>
         {/* Google Tag Manager */}
         <GTM id="GTM-MNW4L2XD" />
+        {/* Page reload handler */}
+        <PageReloadHandler />
       </head>
       <body
         className={twMerge(
@@ -43,14 +80,17 @@ export default function RootLayout({
       >
         {/* GTM noscript fallback */}
         <GTMNoScript id="GTM-MNW4L2XD" />
-        {/* Scroll to top component - handles scroll reset on route changes */}
-        <ScrollToTop />
-        <PageLoader>
-          <main className="flex-1">
-            {children}
-          </main>
-          <Footer />
-        </PageLoader>
+        {/* Lenis Provider for smooth scrolling */}
+        <LenisProvider>
+          {/* Scroll to top component - handles scroll reset on route changes */}
+          <ScrollToTop />
+          <PageLoader>
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer />
+          </PageLoader>
+        </LenisProvider>
       </body>
     </html>
   );
