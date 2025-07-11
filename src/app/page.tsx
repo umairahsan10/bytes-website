@@ -30,6 +30,8 @@ export default function Home() {
       smoothWheel: true,
     });
 
+    // hhh
+
     // Expose Lenis instance globally so other components can access it
     if (typeof window !== 'undefined') {
       (window as any).lenis = lenis;
