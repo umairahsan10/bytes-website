@@ -55,16 +55,7 @@ const WebDevelopmentLanding = () => {
   const [mernVisible, setMernVisible] = useState(false);
   const [wpVisible, setWpVisible] = useState(false);
 
-  // Ensure page starts at top when refreshed
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      // Disable automatic scroll restoration so the page always starts at the top
-      if ('scrollRestoration' in window.history) {
-        window.history.scrollRestoration = 'manual';
-      }
-      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-    }
-  }, []);
+
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);

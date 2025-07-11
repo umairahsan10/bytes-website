@@ -150,12 +150,7 @@ const MarketingPage = () => {
     return () => observer.disconnect();
   }, [animateNumbers, seoStats, seoNumbersAnimated]);
 
-  // Ensure page starts at top on initial load/refresh
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-    }
-  }, []);
+
 
   // Enhanced animation variants
   const fadeInUp = {

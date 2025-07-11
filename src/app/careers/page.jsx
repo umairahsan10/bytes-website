@@ -330,7 +330,7 @@ function App() {
                                             className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 bg-white/50 backdrop-blur-sm file:mr-2 sm:file:mr-4 file:py-1 sm:file:py-2 file:px-2 sm:file:px-4 file:rounded-lg file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 text-sm sm:text-base"
                                         />
                                     </div>
-                                    <p className="text-xs text-gray-500">PDF, DOC, or DOCX files only (Max 5MB)</p>
+                                    <p className="text-xs text-gray-500">PDF, DOC, or DOCX files only (Max 500KB)</p>
                                 </div>
 
                                 <motion.button

@@ -7,9 +7,6 @@ import HeroSection from "@/sections/Hero";
 import ByteBotsSection from "@/sections/ByteBot";
 import ServiceHead from "@/sections/serviceHead";
 import { ProjectsSection } from "@/sections/Projects";
-import { TapeSection } from "@/sections/Tape";
-import { TestimonialsSection } from "@/sections/Testimonials";
-import { AboutSection } from "@/sections/About";
 import { BookSection } from "@/sections/BookSection";
 import { ContactSection } from "@/sections/Contact";
 import CardsSection from "@/sections/CardsSection";
@@ -26,8 +23,8 @@ export default function Home() {
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      wheelMultiplier: isMobile ? 0.5 : 0.3, // Lower for mobile, higher for desktop
-      touchMultiplier: isMobile ? 1 : 0.8, // Lower for mobile, higher for desktop
+      wheelMultiplier: isMobile ? 0.4 : 0.3, 
+      touchMultiplier: isMobile ? 0.9 : 0.8, 
       infinite: false,
     });
 
@@ -48,16 +45,7 @@ export default function Home() {
     };
   }, []);
 
-  // Ensure page always starts at the very top on initial load / refresh
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      // Prevent browser from restoring previous scroll position
-      if ('scrollRestoration' in window.history) {
-        window.history.scrollRestoration = 'manual';
-      }
-      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-    }
-  }, []);
+
 
   return (
     <main className="text-black min-h-screen">
@@ -73,8 +61,6 @@ export default function Home() {
         <BookSection key="book" />,
         <BrandsSection key="brands" />,
         <ContactSection key="contact" />,
-        // <TapeSection key="tape" />, // Uncomment if needed
-        // <TestimonialsSection key="testimonials" />,
       ].map((Section, idx) => (
         <div key={idx} className="w-full">
           {Section}

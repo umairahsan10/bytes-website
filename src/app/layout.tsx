@@ -6,6 +6,7 @@ import "../sections/cards.css";
 import { Footer } from "@/sections/Footer";
 import GTM, { GTMNoScript } from "@/components/GTM";
 import PageLoader from "@/components/PageLoader";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const calistoga = Calistoga({
@@ -42,6 +43,8 @@ export default function RootLayout({
       >
         {/* GTM noscript fallback */}
         <GTMNoScript id="GTM-MNW4L2XD" />
+        {/* Scroll to top component - handles scroll reset on route changes */}
+        <ScrollToTop />
         <PageLoader>
           <main className="flex-1">
             {children}
