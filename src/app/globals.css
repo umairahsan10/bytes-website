@@ -198,6 +198,33 @@ a[aria-label="Built with Spline"] {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.07); }
 }
+
+/* Enhanced touch smoothness for mobile devices */
+@media (pointer: coarse) {
+  html {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    touch-action: pan-y;
+  }
+  
+  * {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  
+  /* Allow text selection where needed */
+  p, h1, h2, h3, h4, h5, h6, span, div {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}
 .animate-scale-pulse {
   animation: scale-pulse 3.5s ease-in-out infinite;
 }
