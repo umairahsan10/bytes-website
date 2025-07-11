@@ -23,8 +23,8 @@ export default function Home() {
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      wheelMultiplier: isMobile ? 0.4 : 0.3, 
-      touchMultiplier: isMobile ? 0.9 : 0.8, 
+      wheelMultiplier: isMobile ? 0.3 : 0.3, // Lower for mobile, higher for desktop
+      touchMultiplier: isMobile ? 0.8 : 0.8, // Lower for mobile, higher for desktop
       infinite: false,
     });
 
