@@ -232,20 +232,24 @@ export const BookSection = () => {
     };
   }, [page, scrollFlipDone, scrollReady, setPage]);
 
-  // NEW: Unlock scroll lock when the user reaches page 2 (or beyond) via ANY interaction (e.g. clicks)
+  // NEW: After the automatic open (page 1), unlock the scroll lock the FIRST time the
+  //      book is flipped either forward (page 2+) or backward (page 0) by the user.
   useEffect(() => {
-    // Only run while the lock is still active and the second flip hasn't been registered yet
+    // Only run while the lock is active and we haven't already unlocked it
     if (!scrollLockActive || scrollFlipDone) return;
 
-    // If the current page index indicates the second sheet (page >= 2), trigger unlock sequence
-    if (page >= 2) {
+    // Wait until the auto-flip animation has completed
+    if (!scrollReady) return;
+
+    // Any page other than 1 means the user performed a manual flip
+    if (page !== 1) {
       setScrollFlipDone(true);
 
       if (unlockTimerRef.current) clearTimeout(unlockTimerRef.current);
       unlockTimerRef.current = setTimeout(() => {
         setScrollLockActive(false);
 
-        // Force Lenis restart for mobile / touch devices to ensure scrolling resumes
+        // Force Lenis restart for mobile / touch devices so scrolling resumes smoothly
         const lenis = typeof window !== 'undefined' ? (window as any).lenis : null;
         if (lenis && isTouch) {
           setTimeout(() => {
@@ -257,7 +261,7 @@ export const BookSection = () => {
         }
       }, 900); // matches flip animation duration
     }
-  }, [page, scrollLockActive, scrollFlipDone, isTouch]);
+  }, [page, scrollLockActive, scrollFlipDone, scrollReady, isTouch]);
 
   // Enhanced Lenis management with fallback for mobile
   useEffect(() => {
