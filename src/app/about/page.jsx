@@ -1231,8 +1231,12 @@ export default function AboutPage() {
                   <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-[#010a14] via-blue-800 to-[#010a14] bg-clip-text text-transparent">
                     Our Philosophy
                   </h2>
-                  <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-900 leading-relaxed">
-                    We merge velocity with precision, creativity with strategy, and vision with execution. Our teams don't just build digital products — we architect experiences that drive exponential growth and redefine market standards.
+                  <p className="text-sm sm:text-sm md:text-base lg:text-lg text-gray-900 leading-relaxed">
+                  At Bytes, we don’t just build softwares — we build trust, experiences, and futures. We believe in full transparency, working openly and collaboratively so our clients are part of every step, not just the final product. Innovation drives us, but clarity guides us.
+
+We challenge the status quo of static portfolios and hidden processes by inviting you into the heart of development — live, real, and evolving. Every line of code, every design choice, is crafted with purpose, passion, and precision.
+
+Our mission is simple: to empower businesses with digital solutions that don’t just look good but perform flawlessly, scale effortlessly, and grow sustainably. Because at Bytes, your vision is our blueprint — and together, we build more than websites. We build lasting impact.
                   </p>
                 </div>
               </motion.div>
