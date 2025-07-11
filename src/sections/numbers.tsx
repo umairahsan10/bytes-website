@@ -7,8 +7,19 @@ let hasAnimatedNumbers = false;
 export const NumbersSection = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+  const [isIphonePro, setIsIphonePro] = useState(false);
 
   useEffect(() => {
+    // Detect iPhone 14 Pro/15 Pro/16 Pro and similar devices
+    const ua = window.navigator.userAgent;
+    // iPhone 14 Pro/15 Pro/16 Pro all have 'iPhone' and 'OS 16' or later, and a high devicePixelRatio
+    const isIphone = /iPhone/.test(ua);
+    const isModernIOS = /OS 1[6-9]_/.test(ua) || /OS 2[0-9]_/.test(ua); // iOS 16+
+    const isProScreen = window.devicePixelRatio >= 3 && window.screen.height >= 780;
+    if (isIphone && isModernIOS && isProScreen) {
+      setIsIphonePro(true);
+    }
+
     const handleScroll = () => {
       if (!sectionRef.current) return;
       
@@ -92,13 +103,12 @@ export const NumbersSection = () => {
     <section
       ref={sectionRef}
       id="numbers"
-      className="relative w-full h-screen bg-cover bg-center bg-no-repeat flex flex-col"
-      style={{ backgroundImage: "url('/assets/numbers/numbers_bg.png')" }}
+      className={`relative w-full h-screen bg-cover bg-center bg-no-repeat flex flex-col numbers-bg-mobile md:numbers-bg-desktop${isIphonePro ? ' iphone-pro-fix' : ''}`}
     >
       {/* Overlay to improve text readability */}
       <div className="absolute inset-0 bg-black/40" />
 
-      <div className="relative container mx-auto px-4 flex flex-col lg:flex-row items-center gap-10 lg:justify-between">
+      <div className="relative container mx-auto px-4 flex flex-col lg:flex-row items-center gap-10 lg:justify-between min-h-[80vh] lg:min-h-0 justify-center text-center lg:text-left">
         {/* Headline & CTA */}
         <div className="w-full max-w-lg text-white flex flex-col items-center lg:items-start text-center lg:text-left px-2">
           <h2 className="break-words text-2xl sm:text-3xl lg:text-5xl xl:text-6xl font-extrabold leading-snug sm:leading-tight">
@@ -111,7 +121,7 @@ export const NumbersSection = () => {
 
           <a
             href="/contact"
-            className="inline-flex items-center mt-10 px-10 py-3 text-white font-semibold rounded-full shadow-lg bg-[#0476B5] hover:bg-[#03269a] hover:scale-105 transition-all duration-300 mx-auto lg:mx-0"
+            className="inline-flex items-center mt-6 md:mt-10 px-10 py-3 text-white font-semibold rounded-full shadow-lg bg-[#0476B5] hover:bg-[#03269a] hover:scale-105 transition-all duration-300 mx-auto lg:mx-0"
           >
             Get in Touch &raquo;
           </a>
@@ -294,6 +304,18 @@ export const NumbersSection = () => {
         
         .cube-container {
           transform-style: preserve-3d;
+        }
+        .numbers-bg-mobile {
+          background-image: url('/assets/numbers/numbers14pro_bg.png');
+        }
+        .numbers-bg-desktop {
+          background-image: url('/assets/numbers/numbers_bg.png');
+        }
+        .iphone-pro-fix {
+          padding-bottom: env(safe-area-inset-bottom);
+          min-height: 100vh;
+          background-size: cover;
+          background-position: center;
         }
       `}</style>
     </section>
