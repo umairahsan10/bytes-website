@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import TextFlip from '../components/TextFlip';
+import { usePageReload } from '../hooks/usePageReload';
 
 const HeroSection = () => {
   const textRef = useRef<HTMLHeadingElement>(null);
@@ -7,6 +8,21 @@ const HeroSection = () => {
   const moonRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [moonVisible, setMoonVisible] = useState(false);
+
+  // Handle page reloads
+  usePageReload((event) => {
+    if (event.isPageReload) {
+      // Reset states on page reload
+      setIsLoaded(false);
+      setMoonVisible(false);
+      
+      // Re-initialize after a short delay
+      setTimeout(() => {
+        setIsLoaded(true);
+        setMoonVisible(true);
+      }, 200);
+    }
+  });
 
   useEffect(() => {
     // Initial animation sequence - both land and moon start at same time

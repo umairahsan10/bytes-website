@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { usePageReload } from '../hooks/usePageReload';
 
 // Cycle animated text for the keyword (Intelligence ⇢ Innovation ⇢ Growth)
 const CycleText = ({ className = "" }: { className?: string }) => {
@@ -135,6 +136,24 @@ const ByteBotsSection = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  // Handle page reloads
+  usePageReload((event) => {
+    if (event.isPageReload) {
+      // Reset states on page reload
+      setIsReady(false);
+      initialPositionsRef.current = null;
+      
+      // Re-initialize after a short delay
+      setTimeout(() => {
+        const positions = calculateInitialPositions();
+        if (positions) {
+          initialPositionsRef.current = positions;
+          setIsReady(true);
+        }
+      }, 200);
+    }
+  });
 
   useEffect(() => {
     if (!isReady || !initialPositionsRef.current) return;

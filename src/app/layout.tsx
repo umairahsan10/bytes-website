@@ -25,6 +25,39 @@ export const metadata: Metadata = {
   },
 };
 
+// Global page reload handler component
+function PageReloadHandler() {
+  return (
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `
+          // Handle page reload to ensure proper component re-initialization
+          if (typeof window !== 'undefined') {
+            // Force scroll to top on page reload
+            window.addEventListener('beforeunload', function() {
+              if (window.lenis && typeof window.lenis.scrollTo === 'function') {
+                window.lenis.scrollTo(0, { immediate: true });
+              }
+            });
+
+            // Reset any cached states on page load
+            window.addEventListener('load', function() {
+              // Dispatch custom event to notify components
+              window.dispatchEvent(new CustomEvent('pageReloaded', {
+                detail: { 
+                  pathname: window.location.pathname,
+                  isRouteChange: false,
+                  isPageReload: true 
+                }
+              }));
+            });
+          }
+        `,
+      }}
+    />
+  );
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -35,6 +68,8 @@ export default function RootLayout({
       <head>
         {/* Google Tag Manager */}
         <GTM id="GTM-MNW4L2XD" />
+        {/* Page reload handler */}
+        <PageReloadHandler />
       </head>
       <body
         className={twMerge(
