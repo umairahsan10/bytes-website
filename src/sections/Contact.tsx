@@ -69,7 +69,7 @@ function Contact() {
             <div className="contact-info">
               <h3 className="title">Let's get in touch</h3>
               <p className="text">
-              We'd love to hear from you! Whether you have a question, feedback, or just want to chat, feel free to reach out. Contact us through the form below or via our social media channels.  
+              We'd love to hear from you! Whether you have a question or feedback, feel free to reach out. Contact us through the form below or via our social media channels.  
               </p>
 
               <div className="info">
