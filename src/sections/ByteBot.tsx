@@ -35,193 +35,101 @@ const CycleText = ({ className = "" }: { className?: string }) => {
 };
 
 const ByteBotsSection = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const stickyContainerRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const introducingRef = useRef<HTMLHeadingElement>(null);
   const subheadingRef = useRef<HTMLParagraphElement>(null);
-  const targetRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const firstSectionRef = useRef<HTMLDivElement>(null);
+  const secondSectionRef = useRef<HTMLDivElement>(null);
+  const nextGenRef = useRef<HTMLDivElement>(null);
   const redefiningRef = useRef<HTMLHeadingElement>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
 
-  // Cache initial positions to avoid recalculating
-  const [isReady, setIsReady] = useState(false);
-  const initialPositionsRef = useRef<{
-    originalX: number;
-    originalY: number;
-    targetX: number;
-    targetY: number;
-    containerTop: number;
-    firstSectionHeight: number;
-    firstSectionTop: number;
-  } | null>(null);
-
-  const calculateInitialPositions = () => {
-    if (
-      !headingRef.current ||
-      !targetRef.current ||
-      !containerRef.current ||
-      !firstSectionRef.current
-    ) return null;
-
-    // Reset any existing transforms to get accurate measurements
-    headingRef.current.style.position = "";
-    headingRef.current.style.left = "";
-    headingRef.current.style.top = "";
-    headingRef.current.style.transform = "";
-    headingRef.current.style.transformOrigin = "";
-    headingRef.current.style.zIndex = "";
-    headingRef.current.style.pointerEvents = "";
-    headingRef.current.style.willChange = "";
-
-    const scrollY = window.scrollY;
-    
-    // Get container position
-    const containerRect = containerRef.current.getBoundingClientRect();
-    const containerTop = containerRect.top + scrollY;
-    
-    // Get first section dimensions
-    const firstSectionRect = firstSectionRef.current.getBoundingClientRect();
-    const firstSectionHeight = firstSectionRect.height;
-    const firstSectionTop = containerTop;
-    
-    // Get target position
-    const targetRect = targetRef.current.getBoundingClientRect();
-    const targetX = targetRect.left;
-    const targetY = targetRect.top + scrollY;
-    
-    // Get original heading position (centered in first section)
-    const originalRect = headingRef.current.getBoundingClientRect();
-    const originalX = (window.innerWidth - originalRect.width) / 2;
-    const originalY = firstSectionTop + (firstSectionHeight - originalRect.height) / 2;
-    
-    return {
-      originalX,
-      originalY,
-      targetX,
-      targetY,
-      containerTop,
-      firstSectionHeight,
-      firstSectionTop
-    };
-  };
-
   useEffect(() => {
-    const updateInitialPositions = () => {
-      const positions = calculateInitialPositions();
-      if (positions) {
-        initialPositionsRef.current = positions;
-        setIsReady(true);
-      }
-    };
-
-    // Multiple attempts to ensure we get stable measurements
-    const timer1 = setTimeout(updateInitialPositions, 100);
-    const timer2 = setTimeout(updateInitialPositions, 200);
-    const timer3 = setTimeout(updateInitialPositions, 300);
-    
-    // Recalculate on window resize
-    const handleResize = () => {
-      setIsReady(false);
-      setTimeout(updateInitialPositions, 100);
-    };
-    
-    window.addEventListener('resize', handleResize);
-    
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!isReady || !initialPositionsRef.current) return;
-
     const handleScroll = () => {
-      if (
-        !headingRef.current ||
-        !introducingRef.current ||
-        !subheadingRef.current ||
-        !redefiningRef.current ||
-        !aboutRef.current ||
-        !initialPositionsRef.current
-      ) return;
+      if (!containerRef.current || !stickyContainerRef.current) return;
 
-      const scrollY = window.scrollY;
-      const {
-        originalX,
-        originalY,
-        targetX,
-        targetY,
-        containerTop,
-        firstSectionHeight,
-        firstSectionTop
-      } = initialPositionsRef.current;
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const containerTop = containerRect.top;
+      const containerHeight = containerRect.height;
+      const windowHeight = window.innerHeight;
 
-      // Calculate trigger points
-      const triggerPoint = firstSectionTop + firstSectionHeight * 0.1;
-      const animationDistance = firstSectionHeight * 0.8;
-
-      // Check if we're in the component area
-      const componentBottom = containerTop + containerRef.current!.offsetHeight;
-      const isInComponentArea = scrollY >= firstSectionTop && scrollY <= componentBottom;
-
-      // Handle "Introducing" fade out before animation starts
-      const preAnimationDistance = firstSectionHeight * 0.05; // 5% of section height before trigger
-      const introducingTrigger = triggerPoint - preAnimationDistance;
+      // Calculate scroll progress through the container
+      const scrollStart = 0; // When container top hits viewport top
+      const scrollEnd = -containerHeight + windowHeight; // When container bottom hits viewport bottom
       
-      if (scrollY > introducingTrigger && scrollY <= triggerPoint) {
-        // Fade out "Introducing" just before main animation starts
-        const introducingProgress = (scrollY - introducingTrigger) / preAnimationDistance;
-        introducingRef.current.style.opacity = `${1 - introducingProgress}`;
-        introducingRef.current.style.transform = `translateY(${introducingProgress * 30}px)`;
-        introducingRef.current.style.transition = "none";
-      } else if (scrollY <= introducingTrigger) {
-        // Reset introducing text when scrolling back up
-        introducingRef.current.style.opacity = "";
-        introducingRef.current.style.transform = "";
-        introducingRef.current.style.transition = "";
-      }
-
-      // Only start main animation if we're past the trigger point AND in component area
-      if (scrollY > triggerPoint && isInComponentArea) {
-        const progress = Math.min(1, (scrollY - triggerPoint) / animationDistance);
+      // Determine if we're in the animation zone
+      const isInAnimationZone = containerTop <= scrollStart && containerTop >= scrollEnd;
+      
+      if (isInAnimationZone) {
+        // Calculate progress (0 to 1)
+        const progress = Math.max(0, Math.min(1, (scrollStart - containerTop) / (scrollStart - scrollEnd)));
         
-        // Improved phase calculations with smoother transitions
-        const subheadingPhase = Math.min(1, progress / 0.25); // Complete within first 25%
-        const redefiningPhase = Math.max(0, (progress - 0.3) / 0.7); // Start at 30%, complete at 100%
+                 // Make container sticky
+         stickyContainerRef.current.style.position = 'fixed';
+         stickyContainerRef.current.style.top = '0';
+         stickyContainerRef.current.style.left = '0';
+         stickyContainerRef.current.style.width = '100vw';
+         stickyContainerRef.current.style.height = '100vh';
+         stickyContainerRef.current.style.zIndex = '1000';
 
-        // Ensure introducing text stays hidden during main animation
-        introducingRef.current.style.opacity = "0";
-        introducingRef.current.style.transform = "translateY(30px)";
-        introducingRef.current.style.transition = "none";
-
-        // Animate subheading
+        // Animate elements based on progress
+        if (headingRef.current && introducingRef.current && subheadingRef.current && 
+            secondSectionRef.current && nextGenRef.current && redefiningRef.current && aboutRef.current) {
+          
+          // Phase 1: Fade out "Introducing" (0-20%)
+          const introducingPhase = Math.min(1, progress / 0.2);
+          introducingRef.current.style.opacity = `${1 - introducingPhase}`;
+          introducingRef.current.style.transform = `translateY(${- 60 - introducingPhase * 60}px)`;
+          
+          // Phase 2: Fade out subheading (20-40%)
+          const subheadingPhase = Math.max(0, Math.min(1, (progress - 0.2) / 0.2));
         subheadingRef.current.style.opacity = `${1 - subheadingPhase}`;
         subheadingRef.current.style.transform = `translateY(${subheadingPhase * 40}px)`;
-        subheadingRef.current.style.transition = "none"; // Remove transitions during animation
+          
+          // Phase 3: Fade in second section from center (40-100%)
+          const secondSectionPhase = Math.max(0, Math.min(1, (progress - 0.4) / 0.6));
+          secondSectionRef.current.style.opacity = `${secondSectionPhase}`;
+          secondSectionRef.current.style.transform = `scale(${0.8 + secondSectionPhase * 0.2})`;
+          
+          // Animate content within second section
+        redefiningRef.current.style.opacity = `${secondSectionPhase}`;
+        redefiningRef.current.style.transform = `translateY(${(1 - secondSectionPhase) * 60}px)`;
 
-        // Animate redefining section
-        redefiningRef.current.style.opacity = `${redefiningPhase}`;
-        redefiningRef.current.style.transform = `translateX(${(1 - redefiningPhase) * -120}px)`;
-        redefiningRef.current.style.transition = "none"; // Remove transitions during animation
-
-        // Animate about section
-        aboutRef.current.style.opacity = `${redefiningPhase}`;
-        aboutRef.current.style.transform = `translateX(${(1 - redefiningPhase) * -120}px)`;
-        aboutRef.current.style.transition = "none"; // Remove transitions during animation
-
-        // Calculate heading position with stable interpolation
-        const currentX = originalX + (targetX - originalX) * progress;
-        const currentY = originalY + (targetY - originalY) * progress;
-        const currentScale = 1 - 0.5 * progress;
-
-        // Change heading color to white as animation nears end (target the span inside h1)
+        aboutRef.current.style.opacity = `${secondSectionPhase}`;
+        aboutRef.current.style.transform = `translateY(${(1 - secondSectionPhase) * 60}px)`;
+          
+          // Animate heading movement to land exactly on Next-Gen Chatbots
+          const headingProgress = Math.max(0, Math.min(1, (progress - 0.3) / 0.7)); // Start at 30%
+          
+          // Calculate positions
+          const viewportCenterX = window.innerWidth / 2;
+          const viewportCenterY = window.innerHeight / 2;
+          
+          // Target position: exactly where "Byte Bots" should be in the final section
+          const nextGenRect = nextGenRef.current.getBoundingClientRect();
+          // Calculate the exact position where "Byte Bots" appears in the final section
+          const targetX = nextGenRect.left + 110; // Adjust to match final section positioning
+          const targetY = nextGenRect.top - 7 - 22; // Position above Next-Gen to match final layout
+          
+          // Interpolate position
+          const currentX = viewportCenterX + (targetX - viewportCenterX) * headingProgress;
+          const currentY = viewportCenterY + (targetY - viewportCenterY) * headingProgress;
+          const currentScale = 1 - 0.5 * headingProgress; // Scale down to 50%
+          
+          // Apply heading styles
+          headingRef.current.style.position = 'fixed';
+          headingRef.current.style.left = `${currentX}px`;
+          headingRef.current.style.top = `${currentY}px`;
+          headingRef.current.style.transform = `translate(-50%, -50%) scale(${currentScale})`;
+          headingRef.current.style.transformOrigin = 'center center';
+          headingRef.current.style.zIndex = '1001';
+          headingRef.current.style.transition = 'none';
+          
+          // Change heading color as it moves
         const headingSpan = headingRef.current.querySelector('span');
         if (headingSpan) {
-          if (progress > 0.7) {
+            if (headingProgress > 0.5) {
             headingSpan.classList.remove('text-[#01084E]');
             headingSpan.classList.add('text-white');
           } else {
@@ -230,54 +138,100 @@ const ByteBotsSection = () => {
           }
         }
 
-        // Apply positioning with improved stability
-        headingRef.current.style.position = "fixed";
-        headingRef.current.style.left = `${Math.round(currentX)}px`;
-        headingRef.current.style.top = `${Math.round(currentY - scrollY)}px`;
-        headingRef.current.style.transform = `scale(${currentScale})`;
-        headingRef.current.style.transformOrigin = "left top";
-        headingRef.current.style.zIndex = "1000";
-        headingRef.current.style.pointerEvents = "none";
-        headingRef.current.style.willChange = "transform, left, top";
-
-        // Finalize position when animation completes
+          // Final landing position
         if (progress >= 1) {
-          const landingOffset = 16;
-          headingRef.current.style.position = "absolute";
-          headingRef.current.style.top = `${Math.round(targetY - containerTop + landingOffset)}px`;
-          headingRef.current.style.left = `${Math.round(targetX)}px`;
-          headingRef.current.style.transform = "scale(0.5)";
-          headingRef.current.style.zIndex = "10";
-          headingRef.current.style.willChange = "auto";
+            headingRef.current.style.position = 'absolute';
+            headingRef.current.style.left = `${targetX}px`;
+            headingRef.current.style.top = `${targetY}px`;
+            headingRef.current.style.transform = 'translate(-50%, -50%) scale(0.5)';
+            headingRef.current.style.transformOrigin = 'center center';
+            headingRef.current.style.zIndex = '10';
+          }
         }
-      } else if (scrollY <= triggerPoint) {
-        // Reset all styles when before animation starts
-        headingRef.current.style.position = "";
-        headingRef.current.style.left = "";
-        headingRef.current.style.top = "";
-        headingRef.current.style.transform = "";
-        headingRef.current.style.transformOrigin = "";
-        headingRef.current.style.zIndex = "";
-        headingRef.current.style.pointerEvents = "";
-        headingRef.current.style.willChange = "";
+      } else {
+        // Reset sticky positioning
+        stickyContainerRef.current.style.position = '';
+        stickyContainerRef.current.style.top = '';
+        stickyContainerRef.current.style.left = '';
+        stickyContainerRef.current.style.width = '';
+        stickyContainerRef.current.style.height = '';
+        stickyContainerRef.current.style.zIndex = '';
         
-        // Don't reset introducing text here - it's handled above
-        
-        subheadingRef.current.style.opacity = "";
-        subheadingRef.current.style.transform = "";
-        subheadingRef.current.style.transition = "";
-        
-        redefiningRef.current.style.opacity = "0";
-        redefiningRef.current.style.transform = "translateX(-120px)";
-        redefiningRef.current.style.transition = "";
-        
-        aboutRef.current.style.opacity = "0";
-        aboutRef.current.style.transform = "translateX(-120px)";
-        aboutRef.current.style.transition = "";
+        // Reset all element styles
+        if (headingRef.current && introducingRef.current && subheadingRef.current && 
+            secondSectionRef.current && redefiningRef.current && aboutRef.current) {
+          
+          if (containerTop > scrollStart) {
+            // Before animation - reset to initial state
+            headingRef.current.style.position = '';
+            headingRef.current.style.left = '';
+            headingRef.current.style.top = '';
+            headingRef.current.style.transform = '';
+            headingRef.current.style.transformOrigin = '';
+            headingRef.current.style.zIndex = '';
+            headingRef.current.style.transition = '';
+            
+            introducingRef.current.style.opacity = '';
+            introducingRef.current.style.transform = '';
+            
+            subheadingRef.current.style.opacity = '';
+            subheadingRef.current.style.transform = '';
+            
+            secondSectionRef.current.style.opacity = '0';
+            secondSectionRef.current.style.transform = 'scale(0.8)';
+            
+            redefiningRef.current.style.opacity = '0';
+            redefiningRef.current.style.transform = 'translateY(60px)';
+            
+            aboutRef.current.style.opacity = '0';
+            aboutRef.current.style.transform = 'translateY(60px)';
+            
+            // Reset heading color
+            const headingSpan = headingRef.current.querySelector('span');
+            if (headingSpan) {
+              headingSpan.classList.add('text-[#01084E]');
+              headingSpan.classList.remove('text-white');
+            }
+                     } else {
+             // After animation - keep final state
+             secondSectionRef.current.style.opacity = '1';
+             secondSectionRef.current.style.transform = 'scale(1)';
+             secondSectionRef.current.style.position = 'relative';
+             secondSectionRef.current.style.minHeight = '100vh';
+             
+             redefiningRef.current.style.opacity = '1';
+             redefiningRef.current.style.transform = 'translateY(0)';
+             
+             aboutRef.current.style.opacity = '1';
+             aboutRef.current.style.transform = 'translateY(0)';
+             
+             introducingRef.current.style.opacity = '0';
+             subheadingRef.current.style.opacity = '0';
+             
+             // Keep heading in final position relative to the second section
+             if (headingRef.current && nextGenRef.current) {
+               const nextGenRect = nextGenRef.current.getBoundingClientRect();
+               const containerRect = stickyContainerRef.current.getBoundingClientRect();
+               
+               headingRef.current.style.position = 'absolute';
+               headingRef.current.style.left = `${nextGenRect.left - containerRect.left + 110}px`;
+               headingRef.current.style.top = `${nextGenRect.top - containerRect.top - 7 - 22}px`;
+               headingRef.current.style.transform = 'translate(-50%, -50%) scale(0.5)';
+               headingRef.current.style.transformOrigin = 'center center';
+               headingRef.current.style.zIndex = '10';
+               
+               const headingSpan = headingRef.current.querySelector('span');
+               if (headingSpan) {
+                 headingSpan.classList.remove('text-[#01084E]');
+                 headingSpan.classList.add('text-white');
+               }
+             }
+           }
+        }
       }
     };
 
-    // Optimized scroll handler with requestAnimationFrame
+    // Throttled scroll handler
     let ticking = false;
     const scrollListener = () => {
       if (!ticking) {
@@ -289,43 +243,40 @@ const ByteBotsSection = () => {
       }
     };
 
-    window.addEventListener("scroll", scrollListener, { passive: true });
-    
-    // Initial call only after positions are ready
-    setTimeout(handleScroll, 50);
+    window.addEventListener('scroll', scrollListener, { passive: true });
+    handleScroll(); 
 
     return () => {
-      window.removeEventListener("scroll", scrollListener);
+      window.removeEventListener('scroll', scrollListener);
     };
-  }, [isReady]);
+  }, []);
 
   return (
     <div
       ref={containerRef}
-      className="bg-gray-50 relative"
-      style={{ isolation: "isolate" }}
+      className="relative"
+      style={{ 
+        height: "200vh", // Reduced height for better scroll experience
+        background: "linear-gradient(to bottom, #f9fafb 0%, #f9fafb 50%, #01084E 50%, #01084E 100%)"
+      }}
     >
-      {/* First Section - Hero */}
+      {/* Sticky container that will stick during animation */}
       <div
-        ref={firstSectionRef}
-        className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-8 relative"
+        ref={stickyContainerRef}
+        className="relative w-full h-screen"
       >
+        {/* First Section - Hero (always visible initially) */}
+        <div className="absolute inset-0 w-full h-full flex flex-col items-center justify-center px-4 sm:px-8 bg-gray-50">
         <div className="text-center">
           <h2
             ref={introducingRef}
             className="text-base sm:text-3xl font-medium text-gray-500 tracking-widest uppercase mb-2"
-            style={{
-              opacity: 1,
-              transform: "translateY(0px)",
-              willChange: "opacity, transform",
-            }}
           >
             Introducing
           </h2>
           <h1
             ref={headingRef}
             className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-4 sm:mb-6"
-            style={{ willChange: "transform, left, top" }}
           >
             <span className="text-[#01084E]">
               Byte Bots
@@ -334,73 +285,117 @@ const ByteBotsSection = () => {
           <p
             ref={subheadingRef}
             className="text-gray-600 text-base sm:text-4xl max-w-2xl mx-auto mb-6 sm:mb-8 px-4"
-            style={{
-              opacity: 1,
-              transform: "translateY(0px)",
-              willChange: "opacity, transform",
-            }}
           >
           </p>
+          </div>
         </div>
-        {/* Fade overlay for background image */}
-        <div
-          className="pointer-events-none absolute bottom-0 left-0 w-full h-12 lg:h-16"
+        
+        {/* Second Section - Overlayed and initially hidden */}
+        <div 
+          ref={secondSectionRef}
+          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat flex items-center justify-center"
           style={{
-            background: "linear-gradient(to bottom, #ffffff 0%, #01084E 100%)",
-            zIndex: 1,
+            backgroundImage: `url('/assets/bytes-bot/botm_bg.png')`,
+            opacity: 0,
+            transform: "scale(0.8)",
+            minHeight: "100vh",
+            minWidth: "100vw"
           }}
-          aria-hidden="true"
-        />
+        >
+          <style>{`
+            @media (min-width: 640px) {
+              .bg-desktop-bot {
+                background-image: url('/assets/bytes-bot/bot_bg.png') !important;
+              }
+            }
+          `}</style>
+          {/* Desktop background overlay */}
+          <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat bg-desktop-bot pointer-events-none" style={{ zIndex: 0 }}></div>
+          
+          <div className="w-full h-full flex relative z-10">
+            {/* Left side - 50% width for content */}
+            <div className="w-1/2 flex items-center justify-start pl-8 sm:pl-16 mt-14">
+              <div className="max-w-xl">
+                {/* Next-Gen Chatbots block */}
+                <div ref={nextGenRef} className="mb-8 leading-tight">
+                  <span className="text-white font-bold text-2xl sm:text-2xl">Next-Gen </span>
+                  <span className="font-bold text-2xl sm:text-2xl text-[#00ece2]">Chatbots</span>
+                  <div className="text-white text-lg sm:text-base font-semibold leading-tight">Human-like minds</div>
+                </div>
+
+                {/* Redefining impact heading */}
+                <h3
+                  ref={redefiningRef}
+                  className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl mb-6 sm:mb-8 leading-tight"
+                  style={{ 
+                    opacity: 0, 
+                    transform: "translateY(60px)"
+                  }}
+                >
+                  <span className="text-white">THE FUTURE OF</span><br/>
+                  <span className="text-[#00ece2]">COMMUNICATION</span><br/>
+                  <span className="text-white">IS NOW</span><br/>
+                  <span className="text-[#00ece2]">POWERED BY </span>
+                  <span className="text-white font-bold">AI</span><br/>
+                </h3>
+
+                <Link
+                  href="/products/byte-bots"
+                  className="cursor-pointer text-white font-semibold px-6 py-3 rounded-full bg-[#00ece2] hover:bg-[#00ece2]/80 mt-6 inline-block" 
+                >
+                  EXPLORE MORE
+                </Link>
+              </div>
+            </div>
+
+            {/* Right side - 50% width, empty space */}
+              <div 
+                ref={aboutRef} 
+              className="w-1/2 flex items-center justify-center"
+                style={{
+                  opacity: 0, 
+                transform: 'translateY(60px)'
+              }}
+            >
+              {/* Empty space or future content */}
+            </div>
+          </div>
+        </div>
       </div>
-
-      {/* Transition Space */}
-      <div className="h-8 bg-[#01084E]"></div>
-
-      {/* Second Section */}
-      <div 
-        className="h-[90vh] py-12 sm:py-20 px-4 sm:px-8 relative bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url('/assets/bytes-bot/botm_bg.png')`,
-        }}
-      >
+      
+      {/* Final section - visible after animation */}
+      <div className="min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center relative"
+           style={{
+             backgroundImage: `url('/assets/bytes-bot/botm_bg.png')`
+           }}>
         <style>{`
           @media (min-width: 640px) {
-            .bg-desktop-bot {
+            .final-bg-desktop {
               background-image: url('/assets/bytes-bot/bot_bg.png') !important;
             }
           }
         `}</style>
-        {/* Add a class to switch background on desktop */}
-        <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat bg-desktop-bot pointer-events-none" style={{ zIndex: 0 }} aria-hidden="true"></div>
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-start">
-            {/* Left side */}
-            <div className="relative">
-              {/* Target position for animated heading */}
-              <div ref={targetRef} className="mb-6 sm:mb-8">
-                {/* Invisible placeholder to reserve space */}
-                <div className="opacity-0 text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
-                  Our Services
+        {/* Desktop background overlay */}
+        <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat final-bg-desktop pointer-events-none"></div>
+        
+        <div className="w-full h-full flex relative z-10">
+          {/* Left side - 50% width for content - EXACT SAME LAYOUT AS ANIMATION */}
+          <div className="w-1/2 flex items-center justify-start pl-8 sm:pl-16">
+            <div className="max-w-xl">
+              {/* Byte Bots heading positioned over Next-Gen */}
+              <div className="relative mb-8">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2">
+                  Byte Bots
+                </h1>
+                <div className="leading-tight">
+                  <span className="text-white font-bold text-2xl sm:text-2xl">Next-Gen </span>
+                  <span className="font-bold text-2xl sm:text-2xl text-[#00ece2]">Chatbots</span>
+                  <div className="text-white text-lg sm:text-base font-semibold leading-tight">Human-like minds</div>
                 </div>
               </div>
 
-              {/* Next-Gen Chatbots block */}
-              <div className="mb-8 leading-tight lg:ml-2">
-                <span className="text-white font-bold text-2xl sm:text-2xl">Next-Gen </span>
-                <span className="font-bold text-2xl sm:text-2xl text-[#00ece2]">Chatbots</span>
-                <div className="text-white text-lg sm:text-base font-semibold leading-tight">Human-like minds</div>
-              </div>
-
-              {/* Redefining impact heading with fade/slide in */}
-              <h3
-                ref={redefiningRef}
-                style={{ 
-                  opacity: 0, 
-                  transform: "translateX(-120px)",
-                  willChange: "opacity, transform"
-                }}
-                className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl mb-6 sm:mb-8 leading-tight lg:ml-2"
-              >
+              {/* Redefining impact heading */}
+              <h3 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl mb-6 sm:mb-8 leading-tight">
                 <span className="text-white">THE FUTURE OF</span><br/>
                 <span className="text-[#00ece2]">COMMUNICATION</span><br/>
                 <span className="text-white">IS NOW</span><br/>
@@ -410,42 +405,16 @@ const ByteBotsSection = () => {
 
               <Link
                 href="/products/byte-bots"
-                className="cursor-pointer text-white font-semibold px-6 py-3 rounded-full bg-[#00ece2] hover:bg-[#00ece2]/80 mt-6" 
+                className="cursor-pointer text-white font-semibold px-6 py-3 rounded-full bg-[#00ece2] hover:bg-[#00ece2]/80 mt-6 inline-block" 
               >
                 EXPLORE MORE
               </Link>
             </div>
+          </div>
 
-            {/* Right side */}
-            <div 
-              ref={aboutRef} 
-              className="space-y-6 sm:space-y-8" 
-              style={{
-                opacity: 0, 
-                transform: 'translateX(-120px)',
-                willChange: "opacity, transform"
-              }}
-            >
-              <div>
-                <h4 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
-                  
-                </h4>
-                <ul className="list-disc pl-5 text-gray-600 leading-relaxed text-sm sm:text-base space-y-2">
-                  <li>
-                    <span className="font-semibold"/>
-                  </li>
-                  <li>
-                    <span className="font-semibold"/>
-                  </li>
-                  <li>
-                    <span className="font-semibold"/>
-                  </li>
-                  <li>
-                    <span className="font-semibold"/>
-                  </li>
-                </ul>
-              </div>
-            </div>
+          {/* Right side - 50% width, empty space - MATCHING ANIMATION LAYOUT */}
+          <div className="w-1/2 flex items-center justify-center">
+            {/* Empty space to match animation layout */}
           </div>
         </div>
       </div>
