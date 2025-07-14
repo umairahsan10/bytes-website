@@ -12,26 +12,26 @@ export interface BlogPost {
 // TODO: Replace with real data fetching (e.g. CMS or database)
 export function getBlogs(): BlogPost[] {
   const placeholderImages = [
-    "/assets/blogs/photos1-1/page1.png",
-    "/assets/blogs/photos1-1/page2.jpg",
-    "/assets/blogs/photos1-1/page3.jpg",
-    "/assets/blogs/photos1-1/page4.jpg",
-    "/assets/blogs/photos1-1/page5.jpg",
-    "/assets/blogs/photos1-1/page6.jpg",
-    "/assets/blogs/photos1-1/page7.jpg",
-    "/assets/blogs/photos1-1/page8.jpg",
+    "/assets/Blogs/photos1-1/page1.png",
+    "/assets/Blogs/photos1-1/page2.jpg",
+    "/assets/Blogs/photos1-1/page3.jpg",
+    "/assets/Blogs/photos1-1/page4.jpg",
+    "/assets/Blogs/photos1-1/page5.jpg",
+    "/assets/Blogs/photos1-1/page6.jpg",
+    "/assets/Blogs/photos1-1/page7.jpg",
+    "/assets/Blogs/photos1-1/page8.jpg",
   ];
 
   // Different images for individual blog pages (detail view)
   const detailImages = [
-    "/assets/blogs/photo16-9/page1.png",
-    "/assets/blogs/photo16-9/page2.jpg",
-    "/assets/blogs/photo16-9/page3.jpg",
-    "/assets/blogs/photo16-9/page4.jpg",
-    "/assets/blogs/photo16-9/page5.jpg",
-    "/assets/blogs/photo16-9/page6.jpg",
-    "/assets/blogs/photo16-9/page7.jpg",
-    "/assets/blogs/photo16-9/page8.jpg",
+    "/assets/Blogs/photo16-9/page1.png",
+    "/assets/Blogs/photo16-9/page2.jpg",
+    "/assets/Blogs/photo16-9/page3.jpg",
+    "/assets/Blogs/photo16-9/page4.jpg",
+    "/assets/Blogs/photo16-9/page5.jpg",
+    "/assets/Blogs/photo16-9/page6.jpg",
+    "/assets/Blogs/photo16-9/page7.jpg",
+    "/assets/Blogs/photo16-9/page8.jpg",
   ];
 
   const customExcerpts: string[] = [
