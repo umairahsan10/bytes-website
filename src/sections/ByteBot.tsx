@@ -109,15 +109,23 @@ const ByteBotsSection = () => {
           
           // Target position: exactly where "Byte Bots" should be in the final section
           const nextGenRect = nextGenRef.current.getBoundingClientRect();
-          // Calculate the exact position where "Byte Bots" appears in the final section
-          const targetX = nextGenRect.left + 110; // Adjust to match final section positioning
-          const targetY = nextGenRect.top - 7 - 22; // Position above Next-Gen to match final layout
-          
+          // Responsive: adjust for mobile vs desktop
+          const isMobile = window.innerWidth < 640;
+          let targetX, targetY, finalScale;
+          if (isMobile) {
+            const headingWidth = headingRef.current.offsetWidth;
+            targetX = nextGenRect.left + (headingWidth / 2); // Align left edge of heading with left edge of Next
+            targetY = nextGenRect.top - 10; // Slightly above Next
+            finalScale = 0.7;
+          } else {
+            targetX = nextGenRect.left + 110;
+            targetY = nextGenRect.top - 7 - 22;
+            finalScale = 0.5;
+          }
           // Interpolate position
           const currentX = viewportCenterX + (targetX - viewportCenterX) * headingProgress;
           const currentY = viewportCenterY + (targetY - viewportCenterY) * headingProgress;
-          const currentScale = 1 - 0.5 * headingProgress; // Scale down to 50%
-          
+          const currentScale = 1 - (1 - finalScale) * headingProgress;
           // Apply heading styles
           headingRef.current.style.position = 'fixed';
           headingRef.current.style.left = `${currentX}px`;
@@ -142,9 +150,15 @@ const ByteBotsSection = () => {
           // Final landing position
         if (progress >= 1) {
             headingRef.current.style.position = 'absolute';
-            headingRef.current.style.left = `${targetX}px`;
-            headingRef.current.style.top = `${targetY}px`;
-            headingRef.current.style.transform = 'translate(-50%, -50%) scale(0.5)';
+            if (isMobile) {
+              headingRef.current.style.left = `${nextGenRect.left}px`;
+              headingRef.current.style.top = `${targetY}px`;
+              headingRef.current.style.transform = `translateY(-50%) scale(${finalScale})`;
+            } else {
+              headingRef.current.style.left = `${targetX}px`;
+              headingRef.current.style.top = `${targetY}px`;
+              headingRef.current.style.transform = `translate(-50%, -50%) scale(${finalScale})`;
+            }
             headingRef.current.style.transformOrigin = 'center center';
             headingRef.current.style.zIndex = '10';
           }
@@ -261,6 +275,15 @@ const ByteBotsSection = () => {
         background: "linear-gradient(to bottom, #f9fafb 0%, #f9fafb 50%, #01084E 50%, #01084E 100%)"
       }}
     >
+      <style>{`
+        @media (max-width: 639px) {
+          .bytebots-nowrap {
+            white-space: nowrap !important;
+            font-size: 2.5rem !important;
+            line-height: 1.1 !important;
+          }
+        }
+      `}</style>
       {/* Sticky container that will stick during animation */}
       <div
         ref={stickyContainerRef}
@@ -277,7 +300,7 @@ const ByteBotsSection = () => {
           </h2>
           <h1
             ref={headingRef}
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-4 sm:mb-6"
+            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-4 sm:mb-6 whitespace-nowrap bytebots-nowrap"
           >
             <span className="text-[#01084E]">
               Byte Bots
