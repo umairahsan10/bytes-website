@@ -197,7 +197,7 @@ const AppDevelopmentPage = () => {
           <AnimatedParagraph
             text="At Bytes Platform, we specialize in delivering mobile app development services that transform your ideas into powerful mobile experiences. Our team is dedicated to creating intuitive, user-friendly applications tailored to meet your business needs."
             // text="Transform your ideas into powerful mobile experiences with cutting-edge development expertise."
-            className="text-base sm:text-lg md:text-xl lg:text-2xl text-white leading-relaxed max-w-2xl"
+            className="text-base sm:text-lg md:text-xl lg:text-xl text-white leading-relaxed max-w-2xl"
           />
         </div>
 

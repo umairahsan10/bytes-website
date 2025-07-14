@@ -1032,7 +1032,7 @@ const SEOPage: React.FC = () => {
           >
             <AnimatedWords text="We  Help  You" className="block bg-gradient-to-r from-blue-500 via-blue-25 to-white text-transparent bg-clip-text" />
             <br />
-            <AnimatedWords text="Rank for What Matters" className="block bg-gradient-to-r from-blue-500 via-blue-25 to-white text-transparent bg-clip-text" />
+            <AnimatedWords text="Rank  for  What Matters" className="block bg-gradient-to-r from-blue-500 via-blue-25 to-white text-transparent bg-clip-text" />
           </motion.h2>
           <motion.div
             className="sub-title text-base mt-6 max-w-sm text-center md:text-left"
