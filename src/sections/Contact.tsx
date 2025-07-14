@@ -1,13 +1,23 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faEnvelope, faPhoneVolume } from '@fortawesome/free-solid-svg-icons';
 import { faFacebookF, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 import "./contact.css";
 import Image from 'next/image';
 
+// EmailJS type declarations
+declare global {
+  interface Window {
+    emailjs: {
+      sendForm: (serviceId: string, templateId: string, form: HTMLFormElement) => Promise<any>;
+    };
+  }
+}
+
 function Contact() {
+  const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -16,6 +26,8 @@ function Contact() {
   });
 
   const [errors, setErrors] = useState<{email?: string; phone?: string}>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   // Accept 10-digit US numbers with optional formatting
@@ -54,7 +66,30 @@ function Contact() {
       return;
     }
 
-    // Here you would typically send the form data to your backend
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    // Use EmailJS to send the form
+    if (typeof window !== 'undefined' && window.emailjs && formRef.current) {
+      window.emailjs.sendForm('service_9hdv3nu', 'template_3k5amts', formRef.current)
+        .then(() => {
+          setSubmitStatus('success');
+          setFormData({ name: '', email: '', phone: '', message: '' });
+          if (formRef.current) {
+            formRef.current.reset();
+          }
+        })
+        .catch((error: any) => {
+          console.error('FAILED...', error);
+          setSubmitStatus('error');
+        })
+        .finally(() => {
+          setIsSubmitting(false);
+        });
+    } else {
+      setIsSubmitting(false);
+      setSubmitStatus('error');
+    }
   };
 
   return (
@@ -107,13 +142,13 @@ function Contact() {
               <span className="circle one"></span>
               <span className="circle two"></span>
 
-              <form className="sub-form" action="index.html" autoComplete="off" onSubmit={handleSubmit}>
+              <form ref={formRef} className="sub-form" action="index.html" autoComplete="off" onSubmit={handleSubmit}>
                 <h3 className="title">Contact us</h3>
                 <div className="input-container">
-                  <input type="text" name="name" className="input" placeholder="Username" onChange={handleChange} />
+                  <input type="text" name="name" className="input" placeholder="Username" value={formData.name} onChange={handleChange} />
                 </div>
                 <div className="input-container">
-                  <input type="email" name="email" className="input" placeholder="Email" onChange={handleChange} />
+                  <input type="email" name="email" className="input" placeholder="Email" value={formData.email} onChange={handleChange} />
                   {errors.email && <span className="error-text">{errors.email}</span>}
                 </div>
                 <div className="input-container">
@@ -121,9 +156,28 @@ function Contact() {
                   {errors.phone && <span className="error-text">{errors.phone}</span>}
                 </div>
                 <div className="input-container textarea">
-                  <textarea name="message" className="input" placeholder="Message" onChange={handleChange}></textarea>
+                  <textarea name="message" className="input" placeholder="Message" value={formData.message} onChange={handleChange}></textarea>
                 </div>
-                <input type="submit" data-cta="true" value="Send" className="btn" />
+                
+                {/* Status Messages */}
+                {submitStatus === 'success' && (
+                  <div className="success-message" style={{ color: 'green', marginBottom: '10px', textAlign: 'center' }}>
+                    Message sent successfully!
+                  </div>
+                )}
+                {submitStatus === 'error' && (
+                  <div className="error-message" style={{ color: 'red', marginBottom: '10px', textAlign: 'center' }}>
+                    Failed to send message. Please try again.
+                  </div>
+                )}
+                
+                <input 
+                  type="submit" 
+                  data-cta="true" 
+                  value={isSubmitting ? "Sending..." : "Send"} 
+                  className="btn" 
+                  disabled={isSubmitting}
+                />
               </form>
             </div>
           </div>
