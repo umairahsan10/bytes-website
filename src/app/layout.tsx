@@ -70,6 +70,20 @@ export default function RootLayout({
         <GTM id="GTM-MNW4L2XD" />
         {/* Page reload handler */}
         <PageReloadHandler />
+        {/* EmailJS */}
+        <script
+          type="text/javascript"
+          src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(){
+                emailjs.init("dvKSuSLEjskV-yjTk");
+              })();
+            `,
+          }}
+        />
       </head>
       <body
         className={twMerge(
