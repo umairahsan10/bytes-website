@@ -25,7 +25,6 @@ export const LoadingPage: React.FC<LoadingPageProps> = ({ onLoadComplete }) => {
     document.body.style.overflow = 'hidden';
 
     // We will declare timer refs so they can be cleared in cleanup
-    let progressTimer: ReturnType<typeof setInterval> | undefined;
     let fallbackTimeout: ReturnType<typeof setTimeout> | undefined;
     let svgDelayTimeout: ReturnType<typeof setTimeout> | undefined;
 
@@ -33,24 +32,44 @@ export const LoadingPage: React.FC<LoadingPageProps> = ({ onLoadComplete }) => {
     const startProgressStage = () => {
       setShowProgress(true);
 
-      // ---------- Progress updater ----------
-      let internalProgress = 0;
-      const PROGRESS_INTERVAL = 25; // ms
+      // ---------- Real page loading progress tracking ----------
+      let currentProgress = 0;
+      
+      // Define loading stages with their progress weights
+      const loadingStages = [
+        { event: 'DOMContentLoaded', weight: 40, description: 'DOM Ready' },
+        { event: 'load', weight: 60, description: 'Page Loaded' }
+      ];
 
-      progressTimer = setInterval(() => {
-        if (!completedRef.current && internalProgress < 99) {
-          internalProgress += 1;
-          setProgress(internalProgress);
+      const updateProgress = (additionalProgress: number) => {
+        if (!completedRef.current) {
+          currentProgress += additionalProgress;
+          setProgress(Math.min(currentProgress, 99)); // Cap at 99% until fully complete
         }
-      }, PROGRESS_INTERVAL);
+      };
 
-      const MINIMUM_DISPLAY_TIME = 2500; // 2.5 seconds minimum *after* progress stage starts
+      // Check current state and set up event listeners
+      loadingStages.forEach(({ event, weight }) => {
+        if (document.readyState === 'complete') {
+          // Page is already fully loaded
+          updateProgress(weight);
+        } else if (event === 'DOMContentLoaded' && document.readyState === 'interactive') {
+          // DOM is already ready
+          updateProgress(weight);
+        } else {
+          // Set up event listener for future loading
+          window.addEventListener(event, () => {
+            updateProgress(weight);
+          }, { once: true });
+        }
+      });
+
+      const MINIMUM_DISPLAY_TIME = 1000; // 1 second minimum *after* progress stage starts
       const FADE_OUT_DURATION = 800; // 0.8 seconds fade out
 
       const completeLoading = () => {
         if (completedRef.current) return;
 
-        if (progressTimer) clearInterval(progressTimer);
         setProgress(100);
 
         const VISUAL_COMPLETE_DELAY = 150; // ms so users see full bar
@@ -79,14 +98,15 @@ export const LoadingPage: React.FC<LoadingPageProps> = ({ onLoadComplete }) => {
         setTimeout(completeLoading, remaining);
       };
 
+      // Only complete when page is actually loaded
       if (document.readyState === 'complete') {
         finishAfterMinimum();
       } else {
         window.addEventListener('load', finishAfterMinimum, { once: true });
       }
 
-      // Fallback in case onload never fires
-      fallbackTimeout = setTimeout(completeLoading, 12000);
+      // Fallback in case onload never fires (increased to 15 seconds for slower connections)
+      fallbackTimeout = setTimeout(completeLoading, 15000);
     };
 
     // ---------- Initial setup: ensure overlay visible and schedule progress stage ----------
@@ -97,7 +117,6 @@ export const LoadingPage: React.FC<LoadingPageProps> = ({ onLoadComplete }) => {
 
     // ---------- Cleanup ----------
     return () => {
-      if (progressTimer) clearInterval(progressTimer);
       if (fallbackTimeout) clearTimeout(fallbackTimeout);
       if (svgDelayTimeout) clearTimeout(svgDelayTimeout);
       document.body.style.overflow = 'auto';
