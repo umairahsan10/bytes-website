@@ -345,7 +345,7 @@ const ByteBotsSection = () => {
           <div className="w-full h-full flex relative z-10">
             {/* Left side - 50% width for content */}
             <div className="w-full sm:w-1/2 flex items-center justify-start pl-8 sm:pl-16 mt-14">
-              <div className="max-w-xl">
+              <div className="max-w-xl sm:mt-0 -mt-32">
                 {/* Next-Gen Chatbots block */}
                 <div ref={nextGenRef} className="mb-8 leading-tight">
                   <span className="text-white font-bold text-3xl sm:text-2xl">Next-Gen </span>
@@ -411,7 +411,7 @@ const ByteBotsSection = () => {
         <div className="w-full h-full flex flex-col sm:flex-row relative z-10">
           {/* Left side - 50% width for content - EXACT SAME LAYOUT AS ANIMATION */}
           <div className="w-full sm:w-1/2 flex items-center justify-start pl-8 sm:pl-16">
-            <div className="max-w-xl">
+            <div className="max-w-xl sm:mt-0 -mt-32">
               {/* Byte Bots heading positioned over Next-Gen */}
               <div className="relative mb-8">
                 <h1 className="text-4xl sm:text-4xl md:text-5xl font-bold text-white mb-2 whitespace-nowrap">
