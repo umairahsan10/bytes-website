@@ -110,7 +110,7 @@ export const Footer = () => {
 
       <hr className="border-white/20 my-4" />
 
-      <p className="text-center text-sm">Developed by the interns of Bytes Platform Inc.</p>
+      <p className="text-center text-sm">Developed by Bytes Platform Inc.</p>
     </footer>
   );
 };
