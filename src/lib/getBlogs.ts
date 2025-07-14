@@ -3,7 +3,8 @@ export interface BlogPost {
   slug: string;
   title: string;
   excerpt: string;
-  image: string;
+  image: string; // Image for listing/grid view
+  detailImage: string; // Image for individual blog page
   date: string;
   content: string;
 }
@@ -11,14 +12,26 @@ export interface BlogPost {
 // TODO: Replace with real data fetching (e.g. CMS or database)
 export function getBlogs(): BlogPost[] {
   const placeholderImages = [
-    "/assets/hero.jpg",
-    "/assets/business-tools.jpg",
-    "/assets/hero.jpg",
-    "/assets/business-tools.jpg",
-    "/assets/data&analytics.jpg",
-    "/assets/communication-hub.jpg",
-    "/assets/data&analytics.jpg",
-    "/assets/communication-hub.jpg",
+    "/assets/blogs/photos1-1/page1.png",
+    "/assets/blogs/photos1-1/page2.jpg",
+    "/assets/blogs/photos1-1/page3.jpg",
+    "/assets/blogs/photos1-1/page4.jpg",
+    "/assets/blogs/photos1-1/page5.jpg",
+    "/assets/blogs/photos1-1/page6.jpg",
+    "/assets/blogs/photos1-1/page7.jpg",
+    "/assets/blogs/photos1-1/page8.jpg",
+  ];
+
+  // Different images for individual blog pages (detail view)
+  const detailImages = [
+    "/assets/blogs/photo16-9/page1.png",
+    "/assets/blogs/photo16-9/page2.jpg",
+    "/assets/blogs/photo16-9/page3.jpg",
+    "/assets/blogs/photo16-9/page4.jpg",
+    "/assets/blogs/photo16-9/page5.jpg",
+    "/assets/blogs/photo16-9/page6.jpg",
+    "/assets/blogs/photo16-9/page7.jpg",
+    "/assets/blogs/photo16-9/page8.jpg",
   ];
 
   const customExcerpts: string[] = [
@@ -152,6 +165,7 @@ Local SEO is critical for businesses that want to attract nearby customers. It h
           ? customExcerpts[idx]
           : "This is a short description placeholder for the blog post. Replace with actual excerpt.",
       image: placeholderImages[idx % placeholderImages.length],
+      detailImage: detailImages[idx % detailImages.length],
       date: new Date(Date.UTC(2024, 0, id)).toISOString(),
       content:
         id === 1

@@ -37,11 +37,11 @@ export default async function BlogDetailPage({
       <main className="min-h-screen bg-white text-[#010a14] font-['PPNeueMontreal'] px-4 py-20">
         <article className="max-w-3xl mx-auto">
           <Image
-            src={blog.image}
+            src={blog.detailImage}
             alt={blog.title}
             width={1200}
-            height={600}
-            className="w-full h-60 object-cover rounded"
+            height={700}
+            className="w-full aspect-video object-cover rounded"
             priority
           />
 
