@@ -321,7 +321,7 @@ const Header: React.FC<HeaderProps> = ({
 
   // Close menu animation - BOTTOM TO TOP
   const closeMenu = () => {
-    console.log('closeMenu function called');
+
     // Close all dropdowns if open
     setIsServicesDropdownOpen(false);
     setIsProductsDropdownOpen(false);
@@ -379,7 +379,7 @@ const Header: React.FC<HeaderProps> = ({
       ease: defaultEase,
       delay: 0.4,
       onComplete: () => {
-        console.log('Menu close animation completed');
+    
         setIsOpen(false);
         setButtonText('Menu');
       }

@@ -88,7 +88,7 @@ const IndustriesPage = () => {
         const federalJsonData = await federalData.json();
         setFederalAnimationData(federalJsonData);
       } catch (error) {
-        console.error('Error loading animations:', error);
+
       }
     };
     loadAnimations();

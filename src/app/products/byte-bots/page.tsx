@@ -102,7 +102,7 @@ const ByteBotLanding: React.FC = () => {
         const conversionData = await conversionResponse.json();
         setConversionAnimationData(conversionData);
       } catch (error) {
-        console.error('Failed to load animation data:', error);
+
       }
     };
 

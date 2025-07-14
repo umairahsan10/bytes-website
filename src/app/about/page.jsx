@@ -918,27 +918,20 @@ export default function AboutPage() {
 
   // Video handler functions
   const handleVideoError = (e) => {
-    console.error('Video error:', e);
-    console.error('Video error details:', e.target.error);
-    console.error('Video error code:', e.target.error?.code);
-    console.error('Video error message:', e.target.error?.message);
     setVideoError(true);
     setVideoLoading(false);
   };
 
   const handleVideoLoadStart = () => {
-    console.log('Video loading started');
     setVideoLoading(true);
     setVideoError(false);
   };
 
   const handleVideoCanPlay = () => {
-    console.log('Video can play');
     setVideoLoading(false);
   };
 
   const handleVideoLoadedData = () => {
-    console.log('Video data loaded');
     setVideoLoading(false);
   };
 

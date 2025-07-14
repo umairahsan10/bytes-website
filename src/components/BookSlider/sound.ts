@@ -21,7 +21,7 @@ export const enableSound = (): void => {
         }
       })
       .catch(error => {
-        console.log("Audio initialization failed:", error);
+    
       });
   }
 };
@@ -55,6 +55,6 @@ export const playPageFlipSound = (): void => {
   const soundToPlay = audio.cloneNode() as HTMLAudioElement;
   
   soundToPlay.play().catch(error => {
-    console.log("Audio play failed:", error);
+
   });
 }; 

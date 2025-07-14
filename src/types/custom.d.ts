@@ -19,13 +19,7 @@ declare global {
     }
 }
 
-declare module '@splinetool/runtime' {
-  export class Application {
-    constructor(canvas: HTMLCanvasElement);
-    load(url: string): Promise<void>;
-    dispose?(): void;
-  }
-}
+
 
 declare module "*.glb" {
   const src: string;
@@ -37,10 +31,4 @@ declare module "*.mp3" {
   export default src;
 }
 
-// Declaration for Spline React component when used in Next.js
-// This prevents TypeScript errors when importing from '@splinetool/react-spline/next'.
-declare module '@splinetool/react-spline/next' {
-  import { ComponentType } from 'react';
-  const Spline: ComponentType<{ scene: string; className?: string }>;
-  export default Spline;
-} 
+ 

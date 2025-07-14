@@ -13,10 +13,10 @@ export function getBlogs(): BlogPost[] {
   const placeholderImages = [
     "/assets/hero.jpg",
     "/assets/business-tools.jpg",
-    "/assets/ai-intelligence.jpg",
-    "/assets/bytebot-ai.jpg",
-    "/assets/ecommerce.jpg",
-    "/assets/security.jpg",
+    "/assets/hero.jpg",
+    "/assets/business-tools.jpg",
+    "/assets/data&analytics.jpg",
+    "/assets/communication-hub.jpg",
     "/assets/data&analytics.jpg",
     "/assets/communication-hub.jpg",
   ];

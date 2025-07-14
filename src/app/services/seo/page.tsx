@@ -41,41 +41,7 @@ const SEOGraphAnimation: React.FC = () => {
       }
     );
 
-    // Create scroll-triggered line animation
-    // const line = lineRef.current;
-    // if (line) {
-    //   const pathLength = line.getTotalLength();
-    //   line.style.strokeDasharray = pathLength.toString();
-    //   line.style.strokeDashoffset = pathLength.toString();
 
-    //   // ScrollTrigger for line drawing
-    //   ScrollTrigger.create({
-    //     trigger: graphContainerRef.current,
-    //     start: "top center",
-    //     end: "bottom center",
-    //     scrub: 1,
-    //     onUpdate: (self) => {
-    //       const progress = self.progress;
-    //       const newOffset = pathLength - (pathLength * progress);
-    //       line.style.strokeDashoffset = newOffset.toString();
-    //     }
-    //   });
-
-    //   // ScrollTrigger for line movement (forward and upward)
-    //   ScrollTrigger.create({
-    //     trigger: graphContainerRef.current,
-    //     start: "top center",
-    //     end: "bottom center",
-    //     scrub: 1,
-    //     onUpdate: (self) => {
-    //       const progress = self.progress;
-    //       const translateX = progress * 800; // Move across full screen width
-    //       const translateY = -progress * 350; // Move from bottom to top
-
-    //       line.style.transform = `translate(${translateX}px, ${translateY}px)`;
-    //     }
-    //   });
-    // }
 
 
 
@@ -115,17 +81,7 @@ const SEOGraphAnimation: React.FC = () => {
         <rect className="graph-bar" x="400" y="270" width="40" height="110" fill="#f3f4f6" opacity="0.8" />
         <rect className="graph-bar" x="470" y="300" width="40" height="80" fill="#f3f4f6" opacity="0.8" />
 
-        {/* Growth line with gradient */}
-        {/* <path
-          ref={lineRef}
-          d="M -100 350 Q 200 300 250 250 T 400 200 T 550 150"
-          fill="none"
-          stroke="url(#lineGradient)"
-          strokeWidth="6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          filter="drop-shadow(0 2px 4px rgba(59, 130, 246, 0.3))"
-        /> */}
+
       </svg>
     </div>
   );
@@ -178,15 +134,7 @@ const SEOPage: React.FC = () => {
         ease: "power2.out"
       }, "-=0.5");
 
-    // Parallax effect for background elements
-    // gsap.to(".floating-element", {
-    //   y: -50,
-    //   rotation: 5,
-    //   duration: 3,
-    //   repeat: -1,
-    //   yoyo: true,
-    //   ease: "power1.inOut"
-    // });
+
 
     return () => {
       tl.kill();
