@@ -51,23 +51,11 @@ export function LenisProvider({ children }: LenisProviderProps) {
       }
     };
 
-    // Handle page visibility change (when user comes back to tab)
-    const handleVisibilityChange = () => {
-      if (!document.hidden && lenis && typeof lenis.scrollTo === 'function') {
-        // Small delay to ensure everything is ready
-        setTimeout(() => {
-          lenis.scrollTo(0, { immediate: true });
-        }, 100);
-      }
-    };
-
     window.addEventListener('beforeunload', handleBeforeUnload);
-    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
       lenis.destroy();
       window.removeEventListener('beforeunload', handleBeforeUnload);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
 
