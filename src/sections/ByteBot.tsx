@@ -45,8 +45,32 @@ const ByteBotsSection = () => {
   const nextGenRef = useRef<HTMLDivElement>(null);
   const redefiningRef = useRef<HTMLHeadingElement>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile(); // initial check
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    // For mobile we no longer skip the animation – instead we make sure the elements
+    // start from the same initial state as desktop.  No early return here so the
+    // scroll listener is always attached.
+    if (isMobile) {
+      if (secondSectionRef.current) {
+        secondSectionRef.current.style.opacity = '0';
+        secondSectionRef.current.style.transform = 'scale(0.8)';
+      }
+      if (headingRef.current) {
+        headingRef.current.style.position = '';
+        headingRef.current.style.left = '';
+        headingRef.current.style.top = '';
+        headingRef.current.style.transform = '';
+      }
+    }
+
     const handleScroll = () => {
       if (!containerRef.current || !stickyContainerRef.current) return;
 
@@ -109,9 +133,12 @@ const ByteBotsSection = () => {
           
           // Target position: exactly where "Byte Bots" should be in the final section
           const nextGenRect = nextGenRef.current.getBoundingClientRect();
-          // Calculate the exact position where "Byte Bots" appears in the final section
-          const targetX = nextGenRect.left + 110; // Adjust to match final section positioning
-          const targetY = nextGenRect.top - 7 - 22; // Position above Next-Gen to match final layout
+          const headingRect = headingRef.current.getBoundingClientRect();
+          // Align with the text content rather than centering over the block
+          const mobileOffset = isMobile ? 40 : 0;
+          const textAlignmentOffset = 110; // Adjust to better align with text content
+          const targetX = nextGenRect.left + textAlignmentOffset - mobileOffset;
+          const targetY = nextGenRect.top - headingRect.height / 2 - 8; // 8px spacing
           
           // Interpolate position
           const currentX = viewportCenterX + (targetX - viewportCenterX) * headingProgress;
@@ -213,10 +240,12 @@ const ByteBotsSection = () => {
              if (headingRef.current && nextGenRef.current) {
                const nextGenRect = nextGenRef.current.getBoundingClientRect();
                const containerRect = stickyContainerRef.current.getBoundingClientRect();
-               
+               const headingRect = headingRef.current.getBoundingClientRect();
+               const mobileOffsetFinal = isMobile ? 80 : 0;
+               const textAlignmentOffsetFinal = 40;
                headingRef.current.style.position = 'absolute';
-               headingRef.current.style.left = `${nextGenRect.left - containerRect.left + 110}px`;
-               headingRef.current.style.top = `${nextGenRect.top - containerRect.top - 7 - 22}px`;
+               headingRef.current.style.left = `${nextGenRect.left - containerRect.left + textAlignmentOffsetFinal - mobileOffsetFinal}px`;
+               headingRef.current.style.top = `${nextGenRect.top - containerRect.top - headingRect.height / 2 - 8}px`;
                headingRef.current.style.transform = 'translate(-50%, -50%) scale(0.5)';
                headingRef.current.style.transformOrigin = 'center center';
                headingRef.current.style.zIndex = '10';
@@ -250,14 +279,14 @@ const ByteBotsSection = () => {
     return () => {
       window.removeEventListener('scroll', scrollListener);
     };
-  }, []);
+  }, [isMobile]);
 
   return (
     <div
       ref={containerRef}
       className="relative"
       style={{ 
-        height: "200vh", // Reduced height for better scroll experience
+        height: "200vh",
         background: "linear-gradient(to bottom, #f9fafb 0%, #f9fafb 50%, #01084E 50%, #01084E 100%)"
       }}
     >
@@ -277,7 +306,7 @@ const ByteBotsSection = () => {
           </h2>
           <h1
             ref={headingRef}
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-4 sm:mb-6"
+            className="text-6xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-4 sm:mb-6 whitespace-nowrap"
           >
             <span className="text-[#01084E]">
               Byte Bots
@@ -294,7 +323,7 @@ const ByteBotsSection = () => {
         {/* Second Section - Overlayed and initially hidden */}
         <div 
           ref={secondSectionRef}
-          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat flex items-center justify-center"
+          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat flex flex-col sm:flex-row items-center justify-center"
           style={{
             backgroundImage: `url('/assets/bytes-bot/botm_bg.png')`,
             opacity: 0,
@@ -315,19 +344,19 @@ const ByteBotsSection = () => {
           
           <div className="w-full h-full flex relative z-10">
             {/* Left side - 50% width for content */}
-            <div className="w-1/2 flex items-center justify-start pl-8 sm:pl-16 mt-14">
+            <div className="w-full sm:w-1/2 flex items-center justify-start pl-8 sm:pl-16 mt-14">
               <div className="max-w-xl">
                 {/* Next-Gen Chatbots block */}
                 <div ref={nextGenRef} className="mb-8 leading-tight">
-                  <span className="text-white font-bold text-2xl sm:text-2xl">Next-Gen </span>
-                  <span className="font-bold text-2xl sm:text-2xl text-[#00ece2]">Chatbots</span>
+                  <span className="text-white font-bold text-3xl sm:text-2xl">Next-Gen </span>
+                  <span className="font-bold text-3xl sm:text-2xl text-[#00ece2]">Chatbots</span>
                   <div className="text-white text-lg sm:text-base font-semibold leading-tight">Human-like minds</div>
                 </div>
 
                 {/* Redefining impact heading */}
                 <h3
                   ref={redefiningRef}
-                  className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl mb-6 sm:mb-8 leading-tight"
+                  className="text-4xl sm:text-2xl md:text-3xl lg:text-4xl mb-6 sm:mb-8 leading-tight"
                   style={{ 
                     opacity: 0, 
                     transform: "translateY(60px)"
@@ -352,7 +381,7 @@ const ByteBotsSection = () => {
             {/* Right side - 50% width, empty space */}
               <div 
                 ref={aboutRef} 
-              className="w-1/2 flex items-center justify-center"
+                className="hidden sm:flex w-1/2 items-center justify-center"
                 style={{
                   opacity: 0, 
                 transform: 'translateY(60px)'
@@ -379,24 +408,24 @@ const ByteBotsSection = () => {
         {/* Desktop background overlay */}
         <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat final-bg-desktop pointer-events-none"></div>
         
-        <div className="w-full h-full flex relative z-10">
+        <div className="w-full h-full flex flex-col sm:flex-row relative z-10">
           {/* Left side - 50% width for content - EXACT SAME LAYOUT AS ANIMATION */}
-          <div className="w-1/2 flex items-center justify-start pl-8 sm:pl-16">
+          <div className="w-full sm:w-1/2 flex items-center justify-start pl-8 sm:pl-16">
             <div className="max-w-xl">
               {/* Byte Bots heading positioned over Next-Gen */}
               <div className="relative mb-8">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2">
+                <h1 className="text-4xl sm:text-4xl md:text-5xl font-bold text-white mb-2 whitespace-nowrap">
                   Byte Bots
                 </h1>
                 <div className="leading-tight">
-                  <span className="text-white font-bold text-2xl sm:text-2xl">Next-Gen </span>
-                  <span className="font-bold text-2xl sm:text-2xl text-[#00ece2]">Chatbots</span>
+                  <span className="text-white font-bold text-3xl sm:text-2xl">Next-Gen </span>
+                  <span className="font-bold text-3xl sm:text-2xl text-[#00ece2]">Chatbots</span>
                   <div className="text-white text-lg sm:text-base font-semibold leading-tight">Human-like minds</div>
                 </div>
               </div>
 
               {/* Redefining impact heading */}
-              <h3 className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl mb-6 sm:mb-8 leading-tight">
+              <h3 className="text-4xl sm:text-2xl md:text-3xl lg:text-4xl mb-6 sm:mb-8 leading-tight">
                 <span className="text-white">THE FUTURE OF</span><br/>
                 <span className="text-[#00ece2]">COMMUNICATION</span><br/>
                 <span className="text-white">IS NOW</span><br/>
@@ -414,7 +443,7 @@ const ByteBotsSection = () => {
           </div>
 
           {/* Right side - 50% width, empty space - MATCHING ANIMATION LAYOUT */}
-          <div className="w-1/2 flex items-center justify-center">
+          <div className="hidden sm:flex w-1/2 items-center justify-center">
             {/* Empty space to match animation layout */}
           </div>
         </div>
