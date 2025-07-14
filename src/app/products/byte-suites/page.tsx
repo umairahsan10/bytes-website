@@ -274,44 +274,6 @@ const ByteSuitePage: React.FC = () => {
     const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
     scene.add(lines);
 
-    // Create floating orbs
-    // const orbGeometry = new THREE.SphereGeometry(0.2, 32, 32);
-    // const orbMaterial = new THREE.MeshBasicMaterial({
-    //   color: PRIMARY_COLOR,
-    //   transparent: true,
-    //   opacity: 0.5
-    // });
-
-    // const orbs: THREE.Mesh[] = [];
-    // for (let i = 0; i < 12; i++) {
-    //   const orb = new THREE.Mesh(orbGeometry, orbMaterial);
-    //   orb.position.set(
-    //     (Math.random() - 0.5) * 15,
-    //     (Math.random() - 0.5) * 15,
-    //     (Math.random() - 0.5) * 15
-    //   );
-    //   orbs.push(orb);
-    //   scene.add(orb);
-    // }
-
-    // Add some larger background orbs
-    // const largeOrbGeometry = new THREE.SphereGeometry(1.2, 32, 32);
-    // const largeOrbMaterial = new THREE.MeshBasicMaterial({
-    //   color: SECONDARY_COLOR,
-    //   transparent: true,
-    //   opacity: 0.15
-    // });
-
-    // for (let i = 0; i < 4; i++) {
-    //   const largeOrb = new THREE.Mesh(largeOrbGeometry, largeOrbMaterial);
-    //   largeOrb.position.set(
-    //     (Math.random() - 0.5) * 25,
-    //     (Math.random() - 0.5) * 25,
-    //     (Math.random() - 0.5) * 25
-    //   );
-    //   scene.add(largeOrb);
-    // }
-
     camera.position.z = 6;
 
     // Animation loop
@@ -321,15 +283,6 @@ const ByteSuitePage: React.FC = () => {
       // Rotate particles
       particlesMesh.rotation.x += 0.0005;
       particlesMesh.rotation.y += 0.001;
-
-      // Animate orbs
-      // orbs.forEach((orb, index) => {
-      //   orb.position.y += Math.sin(Date.now() * 0.0008 + index) * 0.008;
-      //   orb.position.x += Math.cos(Date.now() * 0.0008 + index) * 0.008;
-      //   orb.rotation.x += 0.005;
-      //   orb.rotation.y += 0.005;
-      //   (orb.material as THREE.MeshBasicMaterial).opacity = 0.3 + Math.sin(Date.now() * 0.001 + index) * 0.2;
-      // });
 
       renderer.render(scene, camera);
     };
@@ -460,24 +413,6 @@ const ByteSuitePage: React.FC = () => {
   /* -------------------------- Markup -------------------------- */
   return (
     <div className="min-h-screen bg-[#010a14] text-white overflow-hidden">
-      {/* Dynamic Background */}
-      {/* <div className="fixed inset-0 pointer-events-none">
-        <motion.div
-          className="absolute inset-0"
-          style={{
-            background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(255, 111, 0, 0.1) 0%, transparent 50%)`,
-          }}
-        />
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-orange-500 rounded-full opacity-40"
-            style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%` }}
-            animate={{ opacity: [0.2, 0.8, 0.2], scale: [1, 2, 1] }}
-            transition={{ duration: 4 + Math.random() * 2, repeat: Infinity, delay: Math.random() * 2 }}
-          />
-        ))}
-      </div> */}
 
       {/* Header */}
       <Header />
@@ -1163,9 +1098,9 @@ const ByteSuitePage: React.FC = () => {
                       className="w-full h-auto max-h-40 sm:max-h-56 md:max-h-64 lg:max-h-80 object-contain"
                       style={{ maxWidth: '100%', minWidth: 'auto' }}
                       variants={imageVariants}
-                      onLoad={() => console.log('Image loaded successfully:', audience.image)}
+                      onLoad={() => {}}
                       onError={(e) => {
-                        console.error('Image failed to load:', audience.image);
+
                         // Remove placeholder for sales-teams.png specifically
                         if (audience.image !== "/assets/sales-teams.png") {
                           e.currentTarget.src = `https://via.placeholder.com/500x320/010a14/ffffff?text=${audience.title}`;

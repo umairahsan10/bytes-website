@@ -12,7 +12,7 @@ import Link from "next/link";
 import "./bookSection.css";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
+
 // import { useBookScroll } from "@/components/BookSlider/useBookScroll";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -52,8 +52,7 @@ export const BookSection = () => {
     }
   }, []);
 
-  // Bind wheel-to-page-flip only while the book area is fully visible — disabled for now
-  // useBookScroll(bookAreaRef);
+
 
   // Helper: is the book canvas fully visible?
   const isBookFullyVisible = () => {

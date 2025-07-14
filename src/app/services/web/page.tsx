@@ -9,7 +9,7 @@ import AnimatedBeam from "@/components/AnimatedBeam";
 import FAQ from "@/components/FAQ";
 import Lottie from "lottie-react";
 import Shopping from "../../../../public/assets/WebDev/animations/Shopping.json";
-// @ts-ignore – lucide-react icons (ensure dependency installed in runtime)
+// lucide-react icons
 import { ChevronDown, Menu, X, Code, Zap, Users, Award, ArrowRight, Star, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Play, Smartphone, Monitor, Database, Cloud, Globe, Layers, BarChart, TrendingUp, LayoutDashboard, CreditCard, Plug, ShoppingCart } from 'lucide-react';
 
 const WebDevelopmentLanding = () => {

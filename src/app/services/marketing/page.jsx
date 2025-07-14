@@ -228,7 +228,7 @@ const MarketingPage = () => {
     fetch('/assets/Marketing/animations/ppc.json')
       .then(res => res.json())
       .then(setPpcAnimationData)
-      .catch(console.error);
+      .catch(() => {});
   }, []);
 
   // Load Reels animation for Custom Posts section
@@ -236,7 +236,7 @@ const MarketingPage = () => {
     fetch('/assets/Marketing/animations/reels.json')
       .then(res => res.json())
       .then(setReelsAnimationData)
-      .catch(console.error);
+      .catch(() => {});
   }, []);
 
   // Load Campaign Leaders animation
@@ -244,7 +244,7 @@ const MarketingPage = () => {
     fetch('/assets/Marketing/animations/campaign.json')
       .then(res => res.json())
       .then(setCampaignAnimationData)
-      .catch(console.error);
+      .catch(() => {});
   }, []);
 
   // Load Strategic Planning animation
@@ -252,7 +252,7 @@ const MarketingPage = () => {
     fetch('/assets/Marketing/animations/plan.json')
       .then(res => res.json())
       .then(setPlanAnimationData)
-      .catch(console.error);
+      .catch(() => {});
   }, []);
 
   return (

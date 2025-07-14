@@ -53,7 +53,7 @@ function Contact() {
       setErrors({ email: emailError, phone: phoneError });
       return;
     }
-    console.log('Form submitted:', formData);
+
     // Here you would typically send the form data to your backend
   };
 
