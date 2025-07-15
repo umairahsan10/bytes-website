@@ -201,3 +201,30 @@ a[aria-label="Built with Spline"] {
 .animate-scale-pulse {
   animation: scale-pulse 3.5s ease-in-out infinite;
 }
+
+/* Transparent scrollbars specifically for the Home page */
+.home-scrollbars,
+.home-scrollbars body {
+  /* For Firefox */
+  scrollbar-width: none; /* fully hide */
+  scrollbar-color: transparent transparent;
+}
+
+/* WebKit-based browsers (Chrome, Safari, Edge) */
+.home-scrollbars::-webkit-scrollbar,
+.home-scrollbars body::-webkit-scrollbar {
+  width: 0px;  /* Hide completely */
+  height: 0px;
+  background: transparent;
+}
+
+.home-scrollbars::-webkit-scrollbar-track,
+.home-scrollbars body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.home-scrollbars::-webkit-scrollbar-thumb,
+.home-scrollbars body::-webkit-scrollbar-thumb {
+  background: transparent;
+  border: none;
+}
