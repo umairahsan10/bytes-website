@@ -129,13 +129,13 @@ export default function Home() {
       // (scroll a bit more) before the animations begin – producing a **later**
       // opening compared with the 80 % variant but still earlier than the old
       // 20 % setting.
-      const revealStart = "top 40%";
-      const revealEnd   = "bottom 20%";
+      const revealStart = "top 80%"; // was 40%
+      const revealEnd   = "bottom 80%"; // was 20%
 
       // Flip timings: keep very-short screens special-cased, but for normal
-      // mobiles start at 40 % and finish at 10 % of the viewport.
-      const flipStart = isShortScreen ? "bottom 90%" : "top 40%";
-      const flipEnd   = isShortScreen ? "bottom 80%" : "top 10%";
+      // mobiles start when card is partially visible and finish at center.
+      const flipStart = isShortScreen ? "bottom 100%" : "top 70%";
+      const flipEnd   = isShortScreen ? "bottom 80%" : "center center";
       
       // Set initial states for mobile cards
       cards.forEach((card) => {
@@ -158,7 +158,7 @@ export default function Home() {
         gsap.to(card, {
           y: 0,
           scale: 1,
-          duration: 0.8,
+          duration: 0.8, // was 0.8
           ease: "power2.out",
           scrollTrigger: {
             trigger: card,
