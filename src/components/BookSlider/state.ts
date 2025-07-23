@@ -6,22 +6,22 @@ interface Page {
 }
 
 const pictures = [
-  "title1",
-  "page1",
-  "title2",
-  "page2",
-  "title3",
-  "page3",
-  "title4",
-  "page4",
-  "title5",
-  "page5",
-  "title6",
-  "page6",
-  "title7",
-  "page7",
-  "title8",
-  "page8",
+  "newtitle1",
+  "new1",
+  "newtitle2",
+  "new2",
+  "newtitle3",
+  "new3",
+  "newtitle4",
+  "new4",
+  "newtitle5",
+  "new5",
+  "newtitle6",
+  "new6",
+  "newtitle7",
+  "new7",
+  "newtitle8",
+  "new8",
 ];
 
 // Initialize page state to 0 (closed book)
