@@ -18,10 +18,14 @@ const calistoga = Calistoga({
 });
 
 export const metadata: Metadata = {
-  title: "Bytes Platform",
-  description: "Testing the portfolio",
+  title: "Digital Marketing Agency | Bytes Platform Marketing Agency",
+  description: "Bytes Platform is a full-service digital marketing agency. We provide SEO, PPC, social media, web design, and more.",
   icons: {
     icon: "/favicon.png",
+  },
+  metadataBase: new URL("https://bytesplatform.com/"),
+  alternates: {
+    canonical: "/",
   },
 };
 
