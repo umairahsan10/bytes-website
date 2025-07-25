@@ -102,7 +102,7 @@ function Contact() {
           <img src="img/shape.png" className="square" alt="" />
           <div className="form">
             <div className="contact-info">
-              <h3 className="title">Let's get in touch</h3>
+              <h2 className="title">Let's get in touch</h2>
               <p className="text">
               We'd love to hear from you! Whether you have a question or feedback, feel free to reach out. Contact us through the form below or via our social media channels.  
               </p>
@@ -143,7 +143,7 @@ function Contact() {
               <span className="circle two"></span>
 
               <form ref={formRef} className="sub-form" action="index.html" autoComplete="off" onSubmit={handleSubmit}>
-                <h3 className="title">Contact us</h3>
+                <h2 className="title">Contact us</h2>
                 <div className="input-container">
                   <input type="text" name="name" className="input" placeholder="Username" value={formData.name} onChange={handleChange} />
                 </div>

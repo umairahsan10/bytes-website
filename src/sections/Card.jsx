@@ -17,7 +17,7 @@ const Card = forwardRef(({id, frontSrc, frontAlt, category, title, services, ico
                 </div>
                 <div className="flip-card-back" onClick={onClick}>
                     <div className="card-header">
-                        <h2 className="card-category">{category}</h2>
+                        <h3 className="card-category">{category}</h3>
                         <div className="card-icon">{icon}</div>
                     </div>
                     <div className="card-content">

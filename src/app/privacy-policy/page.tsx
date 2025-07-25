@@ -28,10 +28,8 @@ export default function PrivacyPolicyPage() {
       {/* Content */}
       <section className="flex-1 bg-white py-12 md:py-16">
         <FadeIn
-          className="prose md:prose-lg prose-gray max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 leading-relaxed space-y-8"
+          className="prose md:prose-lg prose-gray max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 leading-relaxed space-y-8 [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:mt-10"
         >
-          <h1>Privacy Policy</h1>
-
           <p>
             This Privacy Policy explains how Bytes Platform ("Bytes Platform," "we," "us," or "our") collects,
             uses, discloses, and safeguards your information when you visit <strong>www.bytesplatform.com</strong>

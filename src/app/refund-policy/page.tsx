@@ -28,10 +28,8 @@ export default function RefundPolicyPage() {
       {/* Content */}
       <section className="flex-1 bg-white py-12 md:py-16">
         <FadeIn
-          className="prose md:prose-lg prose-gray text-black max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 leading-relaxed space-y-8"
-        >
-          <h1>Refund &amp; Return Policy – Bytes Platform</h1>
-          
+          className="prose md:prose-lg prose-gray text-black max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 leading-relaxed space-y-8 [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-bold [&_h2]:mt-10"
+        > 
           <p>
             Bytes Platform is committed to delivering high-quality digital services through structured processes and transparent agreements. 
             This refund and return policy outlines the conditions under which refunds or cancellations may be considered.
