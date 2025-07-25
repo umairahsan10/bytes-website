@@ -4,10 +4,6 @@ import Link from 'next/link';
 import FadeIn from '@/components/FadeIn';
 import { Header } from '@/sections/Navbar';
 
-export const metadata = {
-  title: 'Bytes Platform',
-  description: 'Read the terms and conditions governing the use of Bytes Platform website and services.'
-};
 
 export default function TermsConditionsPage() {
   return (

@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL("https://bytesplatform.com/"),
   alternates: {
-    canonical: "/",
+    canonical: "/", // This will apply to homepage and any page without its own canonical
   },
 };
 
