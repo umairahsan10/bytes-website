@@ -460,7 +460,7 @@ const ByteSuitePage: React.FC = () => {
                     }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                   >
-                    <motion.h1
+                    {/* <motion.h1
                       className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-black leading-none tracking-tighter bg-gradient-to-r from-[#010a14] to-[#010a14] bg-clip-text text-transparent"
                       animate={{
                         scale: [1, 1.05, 1],
@@ -468,7 +468,7 @@ const ByteSuitePage: React.FC = () => {
                       transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                     >
                       BYTE
-                    </motion.h1>
+                    </motion.h1> */}
                     <motion.h1
                       className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-black leading-none tracking-tighter bg-gradient-to-r from-[#010a14] to-[#010a14] bg-clip-text text-transparent"
                       animate={{
@@ -481,7 +481,7 @@ const ByteSuitePage: React.FC = () => {
                       }}
                       transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                     >
-                      SUITE
+                      BYTE SUITE
                     </motion.h1>
                   </motion.div>
                 </motion.div>

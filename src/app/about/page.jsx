@@ -1151,7 +1151,7 @@ export default function AboutPage() {
             viewport={{ once: false, margin: "-100px" }}
           >
             <div className="inline-block">
-              <motion.h1
+              <motion.h2
                 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-tight"
                 animate={{
                   backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
@@ -1164,7 +1164,7 @@ export default function AboutPage() {
                 style={{ backgroundSize: "200% 200%" }}
               >
                 About Bytes Platform
-              </motion.h1>
+              </motion.h2>
               <motion.div
                 className="h-2 w-48 bg-gradient-to-r from-white via-[#010a14] to-white mx-auto mt-6 rounded-full"
                 animate={{

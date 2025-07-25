@@ -304,14 +304,14 @@ const ByteBotsSection = () => {
           >
             Introducing
           </h2>
-          <h1
+          <h2
             ref={headingRef}
             className="text-6xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-4 sm:mb-6 whitespace-nowrap"
           >
             <span className="text-[#01084E]">
               Byte Bots
             </span>
-          </h1>
+          </h2>
           <p
             ref={subheadingRef}
             className="text-gray-600 text-base sm:text-4xl max-w-2xl mx-auto mb-6 sm:mb-8 px-4"
@@ -414,9 +414,9 @@ const ByteBotsSection = () => {
             <div className="max-w-xl sm:mt-0 -mt-32">
               {/* Byte Bots heading positioned over Next-Gen */}
               <div className="relative mb-8">
-                <h1 className="text-4xl sm:text-4xl md:text-5xl font-bold text-white mb-2 whitespace-nowrap">
+                <h2 className="text-4xl sm:text-4xl md:text-5xl font-bold text-white mb-2 whitespace-nowrap">
                   Byte Bots
-                </h1>
+                </h2>
                 <div className="leading-tight">
                   <span className="text-white font-bold text-3xl sm:text-2xl">Next-Gen </span>
                   <span className="font-bold text-3xl sm:text-2xl text-[#00ece2]">Chatbots</span>

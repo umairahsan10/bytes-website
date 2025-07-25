@@ -249,17 +249,39 @@ const IndustriesPage = () => {
 
   // Animated Text Components
   // Animate heading only the first time its section scrolls into view
-  const AnimatedHeader = ({ children, className, triggered, variants = headerVariants, ...props }: any) => (
-    <motion.h1
-      className={className}
-      variants={variants}
-      initial={false}
-      animate={triggered ? "visible" : "hidden"}
-      {...props}
-    >
-      {children}
-    </motion.h1>
-  );
+  type HeadingTag = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+  const headingMap: Record<HeadingTag, any> = {
+    h1: motion.h1,
+    h2: motion.h2,
+    h3: motion.h3,
+    h4: motion.h4,
+    h5: motion.h5,
+    h6: motion.h6,
+  };
+
+  interface AnimatedHeaderProps {
+    children: React.ReactNode;
+    className?: string;
+    triggered?: boolean;
+    variants?: any;
+    as?: HeadingTag;
+    [key: string]: any;
+  }
+
+  const AnimatedHeader = ({ children, className, triggered, variants = headerVariants, as = "h1", ...props }: AnimatedHeaderProps) => {
+    const MotionTag = headingMap[as as HeadingTag];
+    return (
+      <MotionTag
+        className={className}
+        variants={variants}
+        initial={false}
+        animate={triggered ? "visible" : "hidden"}
+        {...props}
+      >
+        {children}
+      </MotionTag>
+    );
+  };
 
   // Bullet list that animates exactly once when its parent section becomes visible
   const AnimatedBulletPoints = ({ points, className = "", bulletColor = "bg-yellow-400", triggered }: any) => (
@@ -299,9 +321,15 @@ const IndustriesPage = () => {
     </motion.div>
   );
 
-  const HeroAnimatedText = ({ text }: { text: string }) => {
+  interface HeroAnimatedTextProps {
+    text: string;
+    as?: HeadingTag;
+  }
+
+  const HeroAnimatedText = ({ text, as = "h1" }: HeroAnimatedTextProps) => {
+    const MotionTag = headingMap[as as HeadingTag];
     return (
-      <motion.div
+      <MotionTag
         className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-none text-white font-bold tracking-wider uppercase"
         style={{ fontFamily: 'Bebas Neue, sans-serif', fontWeight: 700 }}
         initial={false}
@@ -346,7 +374,7 @@ const IndustriesPage = () => {
             {text}
           </motion.span>
         </motion.div>
-      </motion.div>
+      </MotionTag>
     );
   };
 
@@ -465,10 +493,11 @@ const IndustriesPage = () => {
             animate={educationTriggered ? 'visible' : 'hidden'}
             className="space-y-6 order-1 lg:order-2"
           >
-            <motion.div variants={staggerContainer as any} className="space-y-6">
+            <motion.h2 variants={staggerContainer as any} className="space-y-6">
               <AnimatedHeader
                 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight"
                 triggered={educationTriggered}
+                as="h2"
               >
                 FEDERAL GOVERNMENT
                 <br />
@@ -480,7 +509,7 @@ const IndustriesPage = () => {
                 animate={educationTriggered ? { width: "100%" } : { width: 0 }}
                 transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
               />
-            </motion.div>
+            </motion.h2>
 
             <motion.p
               variants={paragraphVariants as any}
@@ -583,6 +612,7 @@ const IndustriesPage = () => {
               <AnimatedHeader
                 className="text-4xl lg:text-6xl font-bold leading-none"
                 triggered={ecommerceTriggered}
+                as="h2"
               >
                 RETAIL
                 <br />
@@ -676,6 +706,7 @@ const IndustriesPage = () => {
               <AnimatedHeader
                 className="text-4xl lg:text-6xl font-bold leading-none"
                 triggered={fintechTriggered}
+                as="h2"
               >
                 BANKING &amp;
                 <br />
@@ -726,6 +757,7 @@ const IndustriesPage = () => {
               <AnimatedHeader
                 className="text-4xl lg:text-6xl font-bold leading-none"
                 triggered={healthcareTriggered}
+                as="h2"
               >
                 HEALTH SECTOR
               </AnimatedHeader>
