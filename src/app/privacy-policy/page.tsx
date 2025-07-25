@@ -4,10 +4,7 @@ import Link from 'next/link';
 import FadeIn from '@/components/FadeIn';
 import { Header } from '@/sections/Navbar';
 
-export const metadata = {
-  title: 'Bytes Platform',
-  description: 'Learn how Bytes Platform collects, uses, and protects your data.'
-};
+
 
 export default function PrivacyPolicyPage() {
   return (
