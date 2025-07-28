@@ -4,11 +4,6 @@ import Link from 'next/link';
 import FadeIn from '@/components/FadeIn';
 import { Header } from '@/sections/Navbar';
 
-export const metadata = {
-  title: 'Bytes Platform',
-  description: 'Learn about our refund and return policy terms and conditions.'
-};
-
 export default function RefundPolicyPage() {
   return (
     <main className="min-h-screen flex flex-col bg-white">

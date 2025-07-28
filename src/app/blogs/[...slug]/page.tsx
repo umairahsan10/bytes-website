@@ -7,10 +7,64 @@ import BlogListingIntro from "@/components/BlogListingIntro";
 import ReactMarkdown from "react-markdown";
 import BlogDetailIntro from "@/components/BlogDetailIntro";
 import Image from "next/image";
+import { Metadata } from "next";
+import { blogMetaData } from "../layout";
 
 const POSTS_PER_PAGE = 8;
 
 export const dynamicParams = false;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string[] }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const path = slug.join('/');
+  
+  // Check if this is a pagination URL
+  if (path.startsWith('page-')) {
+    return {
+      title: 'Digital Marketing Insight Blogs | Bytes Platform',
+      description: 'Blog from Bytes Platform, a source with digital marketing techniques, CMS tips, SEO, PPC, and Social media.',
+      alternates: {
+        canonical: `/blogs/${path}`,
+      },
+    };
+  }
+  
+  // Handle individual blog post metadata
+  const blog = getBlogs().find((b) => b.slug === path);
+  
+  if (!blog) {
+    return {
+      title: 'Blog Not Found | Bytes Platform',
+      description: 'The requested blog post could not be found.',
+    };
+  }
+  
+  // Get meta data for this specific blog
+  const metaData = blogMetaData[path];
+  
+  if (metaData) {
+    return {
+      title: metaData.title,
+      description: metaData.description,
+      alternates: {
+        canonical: `https://bytesplatform.com/blogs/${path}`,
+      },
+    };
+  }
+  
+  // Fallback metadata if not found in blogMetaData
+  return {
+    title: `${blog.title} | Bytes Platform`,
+    description: blog.title,
+    alternates: {
+      canonical: `https://bytesplatform.com/blogs/${path}`,
+    },
+  };
+}
 
 export async function generateStaticParams() {
   const blogs = getBlogs();

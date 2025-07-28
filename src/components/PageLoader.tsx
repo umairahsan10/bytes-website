@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import dynamic from "next/dynamic";
-import { usePathname, useRouter } from "next/navigation";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { usePathname } from "next/navigation";
 import LoadingPage from "@/sections/LoadingPage";
 
 interface PageLoaderProps {
@@ -11,11 +10,34 @@ interface PageLoaderProps {
 
 const PageLoader: React.FC<PageLoaderProps> = ({ children }) => {
   const pathname = usePathname();
-  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(true);
   const isMountedRef = useRef(true);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Refresh ScrollTrigger positions when loader completes to fix animations that rely on layout (especially on mobile)
+  // Use useCallback to memoize the handlers to prevent unnecessary re-renders
+  const handleRouteChangeStart = useCallback(() => {
+    if (isMountedRef.current) {
+      // Use setTimeout to defer the state update and avoid useInsertionEffect conflicts
+      timeoutRef.current = setTimeout(() => {
+        if (isMountedRef.current) {
+          setLoading(true);
+        }
+      }, 0);
+    }
+  }, []);
+
+  const handleBeforeUnload = useCallback(() => {
+    if (isMountedRef.current) {
+      // Use setTimeout to defer the state update
+      timeoutRef.current = setTimeout(() => {
+        if (isMountedRef.current) {
+          setLoading(true);
+        }
+      }, 0);
+    }
+  }, []);
+
+  // Refresh ScrollTrigger positions when loader completes
   useEffect(() => {
     if (!loading) {
       // Dynamically import to avoid SSR mismatch
@@ -33,70 +55,64 @@ const PageLoader: React.FC<PageLoaderProps> = ({ children }) => {
     }
   }, [loading]);
 
-  // Router event interception to show loading immediately on navigation start
+  // Set up navigation event listeners
   useEffect(() => {
-    const handleRouteChangeStart = () => {
-      // Only update state if component is still mounted
-      if (isMountedRef.current) {
-        setLoading(true);
-      }
-    };
-
-    const handleBeforeUnload = () => {
-      // Only update state if component is still mounted
-      if (isMountedRef.current) {
-        setLoading(true);
-      }
-    };
+    if (typeof window === 'undefined') return;
 
     // Store original history methods for cleanup
     const originalPushState = history.pushState;
     const originalReplaceState = history.replaceState;
 
     // Add event listeners for navigation events
-    if (typeof window !== 'undefined') {
-      // Listen for beforeunload to catch page unloads
-      window.addEventListener('beforeunload', handleBeforeUnload);
-      
-      // Listen for popstate to catch browser back/forward
-      window.addEventListener('popstate', handleRouteChangeStart);
-      
-      // Listen for pushstate/replacestate to catch programmatic navigation
-      history.pushState = function(...args) {
-        originalPushState.apply(history, args);
-        handleRouteChangeStart();
-      };
-      
-      history.replaceState = function(...args) {
-        originalReplaceState.apply(history, args);
-        handleRouteChangeStart();
-      };
-    }
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('popstate', handleRouteChangeStart);
+    
+    // Override history methods
+    history.pushState = function(...args) {
+      originalPushState.apply(history, args);
+      handleRouteChangeStart();
+    };
+    
+    history.replaceState = function(...args) {
+      originalReplaceState.apply(history, args);
+      handleRouteChangeStart();
+    };
 
-    // Cleanup event listeners
+    // Cleanup function
     return () => {
-      // Mark component as unmounted
       isMountedRef.current = false;
       
-      if (typeof window !== 'undefined') {
-        window.removeEventListener('beforeunload', handleBeforeUnload);
-        window.removeEventListener('popstate', handleRouteChangeStart);
-        
-        // Restore original history methods
-        history.pushState = originalPushState;
-        history.replaceState = originalReplaceState;
+      // Clear any pending timeouts
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
       }
+      
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('popstate', handleRouteChangeStart);
+      
+      // Restore original history methods
+      history.pushState = originalPushState;
+      history.replaceState = originalReplaceState;
     };
-  }, []);
+  }, [handleRouteChangeStart, handleBeforeUnload]);
 
-  // Keep the existing pathname-based loading trigger as fallback
+  // Handle pathname changes
   useEffect(() => {
-    setLoading(true);
+    if (isMountedRef.current) {
+      // Use setTimeout to defer the state update
+      timeoutRef.current = setTimeout(() => {
+        if (isMountedRef.current) {
+          setLoading(true);
+        }
+      }, 0);
+    }
   }, [pathname]);
 
-  const handleLoadComplete = () => {
-    setLoading(false);
-  };
+  const handleLoadComplete = useCallback(() => {
+    if (isMountedRef.current) {
+      setLoading(false);
+    }
+  }, []);
 
   return (
     <>
