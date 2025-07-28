@@ -18,10 +18,16 @@ const MotionLink = motion(Link);
  */
 export default function BlogGrid({ posts, startIndexInPage = 0 }: BlogGridProps) {
   const getCategory = (id: number) => {
-    if (id <= 2) return 'SEO';
-    if (id <= 4) return 'WEB';
-    if (id <= 6) return 'APP';
-    if (id <= 8) return 'MARKETING';
+    // Calculate which group of 8 this blog belongs to (0-based)
+    const groupIndex = Math.floor((id - 1) / 8);
+    // Calculate position within the current group (1-8)
+    const positionInGroup = ((id - 1) % 8) + 1;
+    
+    // Apply the same pattern for each group of 8
+    if (positionInGroup <= 2) return 'SEO';
+    if (positionInGroup <= 4) return 'WEB';
+    if (positionInGroup <= 6) return 'APP';
+    if (positionInGroup <= 8) return 'MARKETING';
     return '';
   };
 
