@@ -404,7 +404,7 @@ export const BookSection = () => {
         {/* View more blogs button */}
         <div className="flex justify-center relative z-20 pointer-events-auto w-full mt-20">
           <Link
-            href="/blogs/page/1"
+            href="/blogs"
             className="inline-block rounded-full bg-gradient-to-r from-black to-gray-600 px-8 py-3 text-base font-semibold text-white shadow-lg transform transition-all duration-200 hover:scale-105 hover:bg-gradient-to-r hover:from-gray-600 hover:to-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
           >
             View&nbsp;More&nbsp;Blogs

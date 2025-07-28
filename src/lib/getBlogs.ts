@@ -9,6 +9,16 @@ export interface BlogPost {
   content: string;
 }
 
+// Function to convert title to URL-friendly slug
+function titleToSlug(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '') // Remove special characters except spaces and hyphens
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
+    .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
+}
+
 // TODO: Replace with real data fetching (e.g. CMS or database)
 export function getBlogs(): BlogPost[] {
   const placeholderImages = [
@@ -113,39 +123,62 @@ export function getBlogs(): BlogPost[] {
     "Why UI/UX Design is Critical for US Mobile App Success",
     "How to Create Digital Marketing Campaigns That Engage Customers",
     "How Paid Advertising Can Drive Business Growth in the US",
-    // Remaining blogs
     "Common SEO Mistakes US Companies Make and How to Fix Them",
-    "How On-Page SEO Helps Increase Organic Traffic for US Businesses",
-    "Step-by-Step SEO Plan for E-commerce Stores in the US",
-    "How to Build a Link-Building Strategy That Works for US Websites",
-    "How Core Web Vitals Affect SEO Rankings in the US",
-    "How to Improve Mobile SEO for Better Rankings in the US",
-    "How to Combine SEO and Content Marketing for Higher Rankings in the US",
-    "How to Speed Up Your Website for US Visitors and Improve Experience",
-    "Why Custom Web Development is Better Than Templates for US Companies",
-    "How Website Accessibility Can Help Your Business Reach More US Customers",
-    "Why Progressive Web Apps Are Becoming Essential for US Businesses",
-    "How Scalable Web Architecture Supports Growth for US Startups",
-    "Key Elements of a User-Friendly Website That Boosts Engagement in the US",
-    "Features US Users Expect from Mobile Apps in 2025",
-    "How Cross-Platform App Development Benefits US Companies",
-    "How to Build Scalable Mobile Apps for the US Market",
-    "How to Improve App Security to Protect US User Data",
-    "How to Lower Mobile App Development Costs Without Sacrificing Quality",
-    "Mobile App Development Trends US Businesses Should Watch in 2025",
-    "How Cloud Integration Improves App Performance for US Companies",
-    "How to Test Mobile Apps for a Smooth US User Experience",
-    "How to Write Email Campaigns That Convert US Small Business Leads",
-    "How to Use Video Marketing to Increase Sales for US Small Businesses",
-    "How Marketing Analytics Can Help US Businesses Make Better Decisions",
-    "How Personalization Boosts Customer Engagement in US Marketing",
-    "How to Build a Marketing Funnel That Works for US E-commerce Stores",
+    // Remaining blogs
+    
+    // "How On-Page SEO Helps Increase Organic Traffic for US Businesses",
+    // "Step-by-Step SEO Plan for E-commerce Stores in the US",
+    // "How to Build a Link-Building Strategy That Works for US Websites",
+    // "How Core Web Vitals Affect SEO Rankings in the US",
+    // "How to Improve Mobile SEO for Better Rankings in the US",
+    // "How to Combine SEO and Content Marketing for Higher Rankings in the US",
+    // "How to Speed Up Your Website for US Visitors and Improve Experience",
+    // "Why Custom Web Development is Better Than Templates for US Companies",
+    // "How Website Accessibility Can Help Your Business Reach More US Customers",
+    // "Why Progressive Web Apps Are Becoming Essential for US Businesses",
+    // "How Scalable Web Architecture Supports Growth for US Startups",
+    // "Key Elements of a User-Friendly Website That Boosts Engagement in the US",
+    // "Features US Users Expect from Mobile Apps in 2025",
+    // "How Cross-Platform App Development Benefits US Companies",
+    // "How to Build Scalable Mobile Apps for the US Market",
+    // "How to Improve App Security to Protect US User Data",
+    // "How to Lower Mobile App Development Costs Without Sacrificing Quality",
+    // "Mobile App Development Trends US Businesses Should Watch in 2025",
+    // "How Cloud Integration Improves App Performance for US Companies",
+    // "How to Test Mobile Apps for a Smooth US User Experience",
+    // "How to Write Email Campaigns That Convert US Small Business Leads",
+    // "How to Use Video Marketing to Increase Sales for US Small Businesses",
+    // "How Marketing Analytics Can Help US Businesses Make Better Decisions",
+    // "How Personalization Boosts Customer Engagement in US Marketing",
+    // "How to Build a Marketing Funnel That Works for US E-commerce Stores",
+  ];
+
+  // Custom URL slugs for each blog
+  const customSlugs: string[] = [
+    //first new blogs
+    "what-technical-seo-includes",
+    "local-seo-vs-national-seo",
+    "how-to-choose-right-development-framework",
+    "how-to-ensure-security-during-project-development",
+    "ways-to-boost-mobile-app-performance",
+    "social-media-marketing-strategies",
+    "content-marketing-ideas-that-help-websites-rank",
+    "how-to-measure-roi",
+    // First 8 blogs (as requested)
+    "what-is-seo",
+    "how-to-implement-seo-strategies",
+    "important-web-development-trends",
+    "why-responsive-web-design-is-essential",
+    "why-ui-ux-design-is-crucial",
+    "how-to-create-digital-marketing-campaigns",
+    "how-paid-advertising-works",
+    "how-to-fix-common-seo-mistakes"
   ];
 
   return Array.from({ length: customTitles.length }, (_, idx) => {
     const id = idx + 1;
     const title = customTitles[idx] ?? `Blog Post ${id}`;
-
+    
     // Inject detailed article content for the first blog post
     // const firstBlogContent = `## What Is Technical SEO and Why It's Crucial for Your Website's Visibility and Performance\nIn today's competitive digital landscape, having great content simply isn't enough. If your website loads slowly, isn't crawlable, or lacks mobile responsiveness, search engines like Google may overlook it—no matter how valuable the content may be. That's where technical SEO becomes crucial.\n\nBut what is technical SEO, and why is it essential for your website's success?\n\n## Understanding What Technical SEO Is\nTechnical SEO refers to the structural and backend elements of a website that help search engines crawl, index, and rank it efficiently. It doesn't focus on content or keyword strategies—instead, it ensures the foundation of the website is sound, reliable, and optimized for search engine visibility.\n\nIn short, technical SEO ensures that your website is built in a way that search engines can easily access, interpret, and trust.\n\n## Key Components of Technical SEO\n### 1. Site Speed and Performance\nWebsite loading speed is a major ranking factor. A fast-loading site enhances user experience, reduces bounce rates, and improves engagement—all of which contribute to stronger search visibility. Speed optimization includes compressing images, enabling browser caching, and reducing server response times.\n\n### 2. Mobile-Friendliness\nWith Google's mobile-first indexing, the mobile version of your site plays a primary role in how your site ranks. A responsive design that adapts seamlessly across devices is essential. Mobile-optimized navigation, readable fonts, and intuitive user experience are now non-negotiable.\n\n### 3. Secure and Accessible Website (HTTPS)\nSecurity is a critical component of technical SEO. HTTPS ensures encrypted data transfer, building trust with users and signaling reliability to search engines. Sites using SSL certificates not only protect their visitors but are also favored in Google's search rankings.\n\n### 4. Crawlability and Indexing\nSearch engines need to be able to navigate your site efficiently. A well-structured website makes use of internal linking, optimized robots.txt files, and XML sitemaps to direct search engine bots effectively. Avoiding broken links and duplicate pages ensures important content is not missed or penalized.\n\n### 5. Structured Data (Schema Markup)\nSchema markup provides additional context to search engines, helping them understand the meaning of your content. This structured data can enhance listings with rich snippets, making your search results more visible and engaging. Implementing structured data correctly can increase click-through rates and improve organic performance.\n\n### 6. Canonicalization and URL Hygiene\nClean, human-readable URLs enhance both user experience and SEO. Canonical tags help avoid duplicate content issues by indicating the preferred version of a page. Proper URL structures also aid in organizing your website's hierarchy and improving crawl efficiency.\n\n### 7. Core Web Vitals\nCore Web Vitals are performance metrics that Google uses to assess page experience. These include Largest Contentful Paint (LCP), which measures loading time; First Input Delay (FID), which measures interactivity; and Cumulative Layout Shift (CLS), which evaluates visual stability. Optimizing for these ensures your site provides a smooth, reliable experience for users.\n\n## Why Technical SEO Matters for Your Website\nTechnical SEO forms the foundation upon which all other SEO efforts are built. Without it, even the most compelling content can remain undiscovered. A well-optimized technical framework improves visibility, ensures your pages are indexed efficiently, and creates a better experience for users.\n\nMoreover, it supports your on-page and content strategies by ensuring that everything from page speed to structured data is properly configured. This increases your chances of earning higher rankings, driving more traffic, and achieving better conversion rates.\n\n## Final Thoughts\nSo, what is technical SEO? It's the essential infrastructure that allows your website to perform well in search engines and offer a seamless experience to visitors. From crawlability and page speed to mobile optimization and structured data, technical SEO lays the groundwork for digital growth and long-term visibility.\n\nNeglecting technical SEO can quietly undermine all your digital marketing efforts. Prioritizing it, on the other hand, puts your site on solid ground—ready to rank, engage, and convert.\n\n## Take the Next Step with Bytes Platform\nReady to strengthen your website's foundation? At Bytes Platform, we specialize in delivering tailored technical SEO solutions that ensure your site performs seamlessly across all devices, ranks higher in search results, and meets the latest performance standards. Whether you're launching a new site or optimizing an existing one, our team is here to help. Contact us today to schedule a free consultation and take the first step toward long-term digital growth.\n`;
     const firstBlogContent = `## What Is Technical SEO and Why It's Crucial for Your Website's Visibility and Performance\nIn today's competitive digital landscape, having great content simply isn't enough. If your website loads slowly, isn't crawlable, or lacks mobile responsiveness, search engines like Google may overlook it—no matter how valuable the content may be. That's where technical SEO becomes crucial.\n\nBut what is technical SEO, and why is it essential for your website's success?\n\n## Understanding What Technical SEO Is\nTechnical SEO refers to the structural and backend elements of a website that help search engines crawl, index, and rank it efficiently. It doesn't focus on content or keyword strategies—instead, it ensures the foundation of the website is sound, reliable, and optimized for search engine visibility.\n\nIn short, technical SEO ensures that your website is built in a way that search engines can easily access, interpret, and trust.\n\n## Key Components of Technical SEO\n### 1. Site Speed and Performance\nWebsite loading speed is a major ranking factor. A fast-loading site enhances user experience, reduces bounce rates, and improves engagement—all of which contribute to stronger search visibility. Speed optimization includes compressing images, enabling browser caching, and reducing server response times.\n\n### 2. Mobile-Friendliness\nWith Google's mobile-first indexing, the mobile version of your site plays a primary role in how your site ranks. A responsive design that adapts seamlessly across devices is essential. Mobile-optimized navigation, readable fonts, and intuitive user experience are now non-negotiable.\n\n### 3. Secure and Accessible Website (HTTPS)\nSecurity is a critical component of technical SEO. HTTPS ensures encrypted data transfer, building trust with users and signaling reliability to search engines. Sites using SSL certificates not only protect their visitors but are also favored in Google's search rankings.\n\n### 4. Crawlability and Indexing\nSearch engines need to be able to navigate your site efficiently. A well-structured website makes use of internal linking, optimized robots.txt files, and XML sitemaps to direct search engine bots effectively. Avoiding broken links and duplicate pages ensures important content is not missed or penalized.\n\n### 5. Structured Data (Schema Markup)\nSchema markup provides additional context to search engines, helping them understand the meaning of your content. This structured data can enhance listings with rich snippets, making your search results more visible and engaging. Implementing structured data correctly can increase click-through rates and improve organic performance.\n\n### 6. Canonicalization and URL Hygiene\nClean, human-readable URLs enhance both user experience and SEO. Canonical tags help avoid duplicate content issues by indicating the preferred version of a page. Proper URL structures also aid in organizing your website's hierarchy and improving crawl efficiency.\n\n### 7. Core Web Vitals\nCore Web Vitals are performance metrics that Google uses to assess page experience. These include Largest Contentful Paint (LCP), which measures loading time; First Input Delay (FID), which measures interactivity; and Cumulative Layout Shift (CLS), which evaluates visual stability. Optimizing for these ensures your site provides a smooth, reliable experience for users.\n\n## Why Technical SEO Matters for Your Website\nTechnical SEO forms the foundation upon which all other SEO efforts are built. Without it, even the most compelling content can remain undiscovered. A well-optimized technical framework improves visibility, ensures your pages are indexed efficiently, and creates a better experience for users.\n\nMoreover, it supports your on-page and content strategies by ensuring that everything from page speed to structured data is properly configured. This increases your chances of earning higher rankings, driving more traffic, and achieving better conversion rates.\n\n## Final Thoughts\nSo, what is technical SEO? It's the essential infrastructure that allows your website to perform well in search engines and offer a seamless experience to visitors. From crawlability and page speed to mobile optimization and structured data, technical SEO lays the groundwork for digital growth and long-term visibility.\n\nNeglecting technical SEO can quietly undermine all your digital marketing efforts. Prioritizing it, on the other hand, puts your site on solid ground—ready to rank, engage, and convert.\n\n## Take the Next Step with Bytes Platform\nReady to strengthen your website's foundation? At Bytes Platform, we specialize in delivering tailored technical SEO solutions that ensure your site performs seamlessly across all devices, ranks higher in search results, and meets the latest performance standards. Whether you're launching a new site or optimizing an existing one, our team is here to help. Contact us today to schedule a free consultation and take the first step toward long-term digital growth.\n`;
@@ -197,7 +230,7 @@ export function getBlogs(): BlogPost[] {
     
     return {
       id,
-      slug: `blog-${id}`,
+      slug: customSlugs[idx] || titleToSlug(title),
       title,
       excerpt:
         idx < customExcerpts.length
