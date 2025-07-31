@@ -14,7 +14,7 @@ export default function BlogsRoot() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-white text-[#010a14] font-['PPNeueMontreal'] px-4 py-20">
+      <main className="min-h-screen bg-white text-[#010a14] font-sans px-4 py-20">
         <div className="max-w-7xl mx-auto text-center">
           <BlogListingIntro />
 

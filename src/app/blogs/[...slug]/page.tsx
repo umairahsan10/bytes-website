@@ -5,10 +5,13 @@ import BlogGrid from "@/components/BlogGrid";
 import Link from "next/link";
 import BlogListingIntro from "@/components/BlogListingIntro";
 import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 import BlogDetailIntro from "@/components/BlogDetailIntro";
 import Image from "next/image";
 import { Metadata } from "next";
 import { blogMetaData } from "../layout";
+import { addInternalLinks } from "@/lib/internalLinking";
+import RelatedPosts from "@/components/RelatedPosts";
 
 const POSTS_PER_PAGE = 8;
 
@@ -98,6 +101,15 @@ const markdownComponents = {
   li: ({ node, ...props }: any) => (
     <li className="mb-2" {...props} />
   ),
+  a: ({ node, href, children, ...props }: any) => (
+    <a 
+      href={href} 
+      className={`${href?.startsWith('/blogs/') ? 'internal-link' : 'text-blue-600 hover:text-blue-800'}`}
+      {...props}
+    >
+      {children}
+    </a>
+  ),
 };
 
 export default async function BlogPage({
@@ -129,7 +141,7 @@ export default async function BlogPage({
     return (
       <>
         <Header />
-        <main className="min-h-screen bg-white text-[#010a14] font-['PPNeueMontreal'] px-4 py-20">
+        <main className="min-h-screen bg-white text-[#010a14] font-sans px-4 py-20">
           <div className="max-w-7xl mx-auto text-center">
             <BlogListingIntro />
 
@@ -180,10 +192,14 @@ export default async function BlogPage({
     return notFound();
   }
 
+  // Process content with internal links (keep as markdown for ReactMarkdown)
+  const processedContent = addInternalLinks(blog.content, blog.slug);
+  const allPosts = getBlogs();
+
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-white text-[#010a14] font-['PPNeueMontreal'] px-4 py-20">
+      <main className="min-h-screen bg-white text-[#010a14] font-sans px-4 py-20">
         <article className="max-w-3xl mx-auto">
           <Image
             src={blog.detailImage}
@@ -200,8 +216,15 @@ export default async function BlogPage({
           />
 
           <div className="prose md:prose-lg mt-6 max-w-none font-light prose-p:font-light">
-            <ReactMarkdown components={markdownComponents}>{blog.content}</ReactMarkdown>
+            <ReactMarkdown 
+              components={markdownComponents}
+              rehypePlugins={[rehypeRaw]}
+            >
+              {processedContent}
+            </ReactMarkdown>
           </div>
+          
+          <RelatedPosts currentSlug={blog.slug} allPosts={allPosts} />
         </article>
       </main>
     </>
