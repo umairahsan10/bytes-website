@@ -89,6 +89,15 @@ const markdownComponents = {
   h3: ({ node, ...props }: any) => (
     <h3 className="text-lg md:text-xl font-semibold mt-6 mb-3" {...props} />
   ),
+  ul: ({ node, ...props }: any) => (
+    <ul className="list-disc ml-6 pl-4 space-y-2" {...props} />
+  ),
+  ol: ({ node, ...props }: any) => (
+    <ol className="list-decimal ml-6 pl-4 space-y-2" {...props} />
+  ),
+  li: ({ node, ...props }: any) => (
+    <li className="mb-2" {...props} />
+  ),
 };
 
 export default async function BlogPage({

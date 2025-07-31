@@ -67,6 +67,39 @@ const blogMetaData: Record<string, { title: string; description: string }> = {
   'how-paid-advertising-works': {
     title: 'How Paid Advertising Can Drive Business Growth in the US',
     description: 'Learn how paid advertising drives business growth. Discover proven strategies to reach your audience, boost visibility, and achieve results.'
+  },
+   // Page 3 blogs (8 new blogs)
+   'white-hat-seo-vs-black-hat-seo': {
+    title: 'White Hat SEO vs Black Hat SEO: Which Strategy Wins?',
+    description: 'Learn the key differences between white hat SEO vs black hat SEO. Discover which approach builds lasting results and which can damage your rankings.'
+  },
+  'how-schema-markup-boosts-local-seo': {
+    title: 'How Schema Markup Boosts Local SEO for Small Businesses',
+    description: 'Learn how schema markup boosts local SEO by improving visibility, accuracy, and search rankings. Drive more local traffic with structured data.'
+  },
+  'what-is-content-pruning-and-why-it-matters': {
+    title: 'What Is Content Pruning and Why It Boosts SEO Performance',
+    description: 'What is content pruning? Learn how removing or updating low-value content improves SEO, boosts rankings, and strengthens your site’s authority.'
+  },
+  'how-to-improve-your-sites-visibility': {
+    title: 'How to Improve Your Site’s Visibility and Get Found Online',
+    description: 'Learn how to improve your site’s visibility with SEO, content, speed, and strategy. Boost traffic, reach the right audience, and grow your online presence.'
+  },
+  'effective-link-building-strategies': {
+    title: 'Effective Link-Building Strategies for Best SEO Results',
+    description: 'Discover effective link-building strategies for best results. Boost your rankings, earn trusted backlinks, and grow your site’s authority the right way.'
+  },
+  'what-is-a-content-management-system': {
+    title: 'What Is a Content Management System and Why It Matters',
+    description: 'What is a content management system? Learn how a CMS helps you manage, publish, and scale your website with ease—even without technical skills.'
+  },
+  'how-to-improve-marketing-campaign-efficiency': {
+    title: 'How To Improve Marketing Campaign Efficiency Effectively',
+    description: 'Learn how to improve marketing campaign efficiency with smart strategies. Optimize targeting, spend, and content for better ROI—without wasting resources.'
+  },
+  'what-is-front-end-development-and-why-it-matters': {
+    title: 'What Is Front-End Development and Why It Matters Today',
+    description: 'What is front-end development? Learn how it powers modern websites, improves user experience, and helps your business grow online.'
   }
 };
 
