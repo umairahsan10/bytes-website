@@ -75,25 +75,34 @@ export function addInternalLinks(content: string, excludeSlug?: string): string 
   // Sort keywords by length (longer keywords first to avoid partial matches)
   const sortedKeywords = keywordKeys.sort((a, b) => b.length - a.length);
   
-  // Track linked concepts per page to prevent over-linking (only one per concept per page)
-  const linkedConceptsInPage = new Set<string>();
+  // Track which concepts have been linked (by URL)
+  const linkedConcepts = new Set<string>();
+  
+  // Track which keywords have been linked (case-insensitive)
+  const linkedKeywords = new Set<string>();
   
   // Find all potential keywords in the content
   const foundKeywords: Array<{ keyword: string; url: string; index: number }> = [];
   
-  sortedKeywords.forEach(keyword => {
-    const regex = new RegExp(`\\b${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi');
-    let match;
+  // Process each keyword only once
+  for (const keyword of sortedKeywords) {
+    const conceptUrl = keywords[keyword];
     
-    while ((match = regex.exec(processedContent)) !== null) {
-      // Get the concept URL to check if this concept has already been linked
-      const conceptUrl = keywords[keyword];
-      
-      // Skip if this concept has already been linked on this page
-      if (linkedConceptsInPage.has(conceptUrl)) {
-        continue;
-      }
-      
+    // Skip if this concept has already been linked
+    if (linkedConcepts.has(conceptUrl)) {
+      continue;
+    }
+    
+    // Skip if this keyword has already been linked
+    if (linkedKeywords.has(keyword.toLowerCase())) {
+      continue;
+    }
+    
+    // Find the first occurrence of this keyword in the content
+    const regex = new RegExp(`\\b${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi');
+    const match = regex.exec(processedContent);
+    
+    if (match) {
       // Skip if this is in a heading (lines starting with #)
       const lineStart = processedContent.lastIndexOf('\n', match.index);
       const lineEnd = processedContent.indexOf('\n', match.index);
@@ -102,7 +111,6 @@ export function addInternalLinks(content: string, excludeSlug?: string): string 
         lineEnd === -1 ? processedContent.length : lineEnd
       );
       
-      // Skip if this line is a heading (starts with #)
       if (line.trim().startsWith('#')) {
         continue;
       }
@@ -113,34 +121,40 @@ export function addInternalLinks(content: string, excludeSlug?: string): string 
       
       const lastATag = beforeMatch.lastIndexOf('<a');
       const nextATagClose = afterMatch.indexOf('</a>');
-      if (lastATag !== -1 && nextATagClose !== -1) {
-        const aTagContent = processedContent.substring(lastATag, match.index + match[0].length + nextATagClose);
-        if (aTagContent.match(/<a[^>]*>/)) {
-          continue; // Skip if inside an existing link
+      const nextATagOpen = afterMatch.indexOf('<a>');
+      
+      if (lastATag !== -1) {
+        if (nextATagClose !== -1 && (nextATagOpen === -1 || nextATagClose < nextATagOpen)) {
+          continue; // We're inside an existing link
         }
       }
       
-      // Add this keyword to the found list (only first occurrence per concept per page)
+      // Add this keyword to the found list
       foundKeywords.push({
         keyword: match[0],
         url: conceptUrl,
         index: match.index
       });
       
-      // Mark this concept as linked on this page (using URL as unique identifier)
-      linkedConceptsInPage.add(conceptUrl);
+      // Mark this concept and keyword as linked
+      linkedConcepts.add(conceptUrl);
+      linkedKeywords.add(keyword.toLowerCase());
       
-      // Break after finding the first occurrence of this concept
-      break;
+      // Mark all other keywords that point to the same URL as linked
+      keywordKeys.forEach(k => {
+        if (keywords[k] === conceptUrl) {
+          linkedKeywords.add(k.toLowerCase());
+        }
+      });
     }
-  });
+  }
   
   // Sort by index in reverse order to avoid offset issues when replacing
   foundKeywords.sort((a, b) => b.index - a.index);
   
   // Add links
   foundKeywords.forEach(({ keyword, url, index }) => {
-    const link = `<a href="${url}" class="internal-link" title="Learn more about ${keyword}">${keyword}</a>`;
+    const link = `<a href="${url}" class="internal-link text-blue-600 hover:text-blue-800 underline" title="Learn more about ${keyword}">${keyword}</a>`;
     processedContent = processedContent.substring(0, index) + 
                       link + 
                       processedContent.substring(index + keyword.length);
@@ -211,4 +225,4 @@ export function processBlogPostWithInternalLinks(post: BlogPost): BlogPost {
 // Function to process all blog posts with internal linking
 export function processAllBlogPostsWithInternalLinks(posts: BlogPost[]): BlogPost[] {
   return posts.map(post => processBlogPostWithInternalLinks(post));
-} 
+}

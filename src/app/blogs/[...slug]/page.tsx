@@ -1,21 +1,22 @@
 import { notFound, redirect } from "next/navigation";
-import { getBlogs } from "@/lib/getBlogs";
+import { getHybridBlogs, getHybridBlogBySlug, getHybridRelatedPosts } from "@/lib/hybridBlogs";
+import { getSanityBlogBySlug as getSanityBlogBySlugDirect } from "@/lib/sanityBlogs";
 import { Header } from "@/sections/Navbar";
 import BlogGrid from "@/components/BlogGrid";
 import Link from "next/link";
 import BlogListingIntro from "@/components/BlogListingIntro";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
 import BlogDetailIntro from "@/components/BlogDetailIntro";
 import Image from "next/image";
 import { Metadata } from "next";
-import { blogMetaData } from "../layout";
 import { addInternalLinks } from "@/lib/internalLinking";
 import RelatedPosts from "@/components/RelatedPosts";
+import PortableText from "@/components/PortableText";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 
 const POSTS_PER_PAGE = 8;
 
-export const dynamicParams = false;
+export const dynamicParams = true;
 
 export async function generateMetadata({
   params,
@@ -37,32 +38,82 @@ export async function generateMetadata({
   }
   
   // Handle individual blog post metadata
-  const blog = getBlogs().find((b) => b.slug === path);
+  const hybridPost = await getHybridBlogBySlug(path);
   
-  if (!blog) {
+  if (!hybridPost) {
     return {
       title: 'Blog Not Found | Bytes Platform',
       description: 'The requested blog post could not be found.',
     };
   }
   
-  // Get meta data for this specific blog
-  const metaData = blogMetaData[path];
+  // Use comprehensive SEO metadata from Sanity if available, otherwise fallback
+  const title = hybridPost.source === 'sanity' && hybridPost.seo?.metaTitle 
+    ? hybridPost.seo.metaTitle 
+    : `${hybridPost.title} | Bytes Platform`;
+  const description = hybridPost.source === 'sanity' && hybridPost.seo?.metaDescription 
+    ? hybridPost.seo.metaDescription 
+    : hybridPost.excerpt || hybridPost.title;
   
-  if (metaData) {
-    return {
-      title: metaData.title,
-      description: metaData.description,
-      alternates: {
-        canonical: `https://bytesplatform.com/blogs/${path}`,
-      },
+  // Build comprehensive metadata
+  const metadata: Metadata = {
+    title,
+    description,
+    alternates: {
+      canonical: hybridPost.source === 'sanity' && hybridPost.seo?.canonicalUrl 
+        ? hybridPost.seo.canonicalUrl 
+        : `https://bytesplatform.com/blogs/${path}`,
+    },
+  };
+
+  // Add Open Graph metadata
+  if (hybridPost.source === 'sanity' && hybridPost.seo) {
+    metadata.openGraph = {
+      title: hybridPost.seo.ogTitle || title,
+      description: hybridPost.seo.ogDescription || description,
+      images: hybridPost.seo.ogImage ? [
+        {
+          url: hybridPost.seo.ogImage,
+          width: 1200,
+          height: 630,
+          alt: hybridPost.title,
+        }
+      ] : undefined,
+      type: 'article',
+      publishedTime: hybridPost.date,
     };
+
+    // Add Twitter metadata
+    const twitterCard = hybridPost.seo.twitterCard === 'summary' || hybridPost.seo.twitterCard === 'summary_large_image' 
+      ? hybridPost.seo.twitterCard 
+      : 'summary_large_image';
+    
+    metadata.twitter = {
+      card: twitterCard,
+      title: hybridPost.seo.ogTitle || title,
+      description: hybridPost.seo.ogDescription || description,
+      images: hybridPost.seo.ogImage ? [hybridPost.seo.ogImage] : undefined,
+    };
+
+    // Add robots metadata
+    if (hybridPost.seo.noIndex || hybridPost.seo.noFollow) {
+      metadata.robots = {
+        index: !hybridPost.seo.noIndex,
+        follow: !hybridPost.seo.noFollow,
+      };
+    }
+
+    // Add keywords
+    if (hybridPost.seo.keywords && hybridPost.seo.keywords.length > 0) {
+      metadata.keywords = hybridPost.seo.keywords.join(', ');
+    }
   }
+
+  return metadata;
   
-  // Fallback metadata if not found in blogMetaData
   return {
-    title: `${blog.title} | Bytes Platform`,
-    description: blog.title,
+    title,
+    description,
     alternates: {
       canonical: `https://bytesplatform.com/blogs/${path}`,
     },
@@ -70,12 +121,12 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const blogs = getBlogs();
-  const totalPosts = blogs.length;
+  const allPosts = await getHybridBlogs();
+  const totalPosts = allPosts.length;
   const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
   
   // Generate params for blog posts
-  const blogParams = blogs.map((b) => ({ slug: [b.slug] }));
+  const blogParams = allPosts.map((b) => ({ slug: [b.slug] }));
   
   // Generate params for pagination (skip page-1 since it redirects to /blogs)
   const pageParams = Array.from({ length: totalPages - 1 }, (_, idx) => ({ 
@@ -85,32 +136,10 @@ export async function generateStaticParams() {
   return [...blogParams, ...pageParams];
 }
 
-const markdownComponents = {
-  h2: ({ node, ...props }: any) => (
-    <h2 className="text-xl md:text-2xl font-semibold mt-8 mb-4" {...props} />
-  ),
-  h3: ({ node, ...props }: any) => (
-    <h3 className="text-lg md:text-xl font-semibold mt-6 mb-3" {...props} />
-  ),
-  ul: ({ node, ...props }: any) => (
-    <ul className="list-disc ml-6 pl-4 space-y-2" {...props} />
-  ),
-  ol: ({ node, ...props }: any) => (
-    <ol className="list-decimal ml-6 pl-4 space-y-2" {...props} />
-  ),
-  li: ({ node, ...props }: any) => (
-    <li className="mb-2" {...props} />
-  ),
-  a: ({ node, href, children, ...props }: any) => (
-    <a 
-      href={href} 
-      className={`${href?.startsWith('/blogs/') ? 'internal-link' : 'text-blue-600 hover:text-blue-800'}`}
-      {...props}
-    >
-      {children}
-    </a>
-  ),
-};
+// Add ISR (Incremental Static Regeneration)
+export const revalidate = 300; // Revalidate every 5 minutes
+
+
 
 export default async function BlogPage({
   params,
@@ -123,8 +152,8 @@ export default async function BlogPage({
   // Check if this is a pagination URL (e.g., page-1, page-2)
   if (path.startsWith('page-')) {
     const pageNumber = parseInt(path.replace('page-', ''), 10);
-    const posts = getBlogs();
-    const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
+    const allPosts = await getHybridBlogs();
+    const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
 
     if (!pageNumber || pageNumber < 1 || pageNumber > totalPages) {
       return notFound();
@@ -136,7 +165,7 @@ export default async function BlogPage({
     }
 
     const startIndex = (pageNumber - 1) * POSTS_PER_PAGE;
-    const visiblePosts = posts.slice(startIndex, startIndex + POSTS_PER_PAGE);
+    const visiblePosts = allPosts.slice(startIndex, startIndex + POSTS_PER_PAGE);
 
     return (
       <>
@@ -186,15 +215,42 @@ export default async function BlogPage({
   }
   
   // Handle individual blog post
-  const blog = getBlogs().find((b) => b.slug === path);
+  const hybridPost = await getHybridBlogBySlug(path);
   
-  if (!blog) {
+  if (!hybridPost) {
     return notFound();
   }
 
-  // Process content with internal links (keep as markdown for ReactMarkdown)
-  const processedContent = addInternalLinks(blog.content, blog.slug);
-  const allPosts = getBlogs();
+  // Get related posts
+  const relatedPosts = await getHybridRelatedPosts(hybridPost.slug);
+
+  // Markdown components for static blogs
+  const markdownComponents = {
+    h2: ({ node, ...props }: any) => (
+      <h2 className="text-xl md:text-2xl font-semibold mt-8 mb-4" {...props} />
+    ),
+    h3: ({ node, ...props }: any) => (
+      <h3 className="text-lg md:text-xl font-semibold mt-6 mb-3" {...props} />
+    ),
+    ul: ({ node, ...props }: any) => (
+      <ul className="list-disc ml-6 pl-4 space-y-2" {...props} />
+    ),
+    ol: ({ node, ...props }: any) => (
+      <ol className="list-decimal ml-6 pl-4 space-y-2" {...props} />
+    ),
+    li: ({ node, ...props }: any) => (
+      <li className="mb-2" {...props} />
+    ),
+    a: ({ node, href, children, ...props }: any) => (
+      <a 
+        href={href} 
+        className={`${href?.startsWith('/blogs/') ? 'internal-link' : 'text-blue-600 hover:text-blue-800'}`}
+        {...props}
+      >
+        {children}
+      </a>
+    ),
+  };
 
   return (
     <>
@@ -202,8 +258,8 @@ export default async function BlogPage({
       <main className="min-h-screen bg-white text-[#010a14] font-sans px-4 py-20">
         <article className="max-w-3xl mx-auto">
           <Image
-            src={blog.detailImage}
-            alt={blog.title}
+            src={hybridPost.detailImage}
+            alt={hybridPost.title}
             width={1200}
             height={700}
             className="w-full aspect-video object-cover rounded"
@@ -211,20 +267,27 @@ export default async function BlogPage({
           />
 
           <BlogDetailIntro
-            title={blog.title}
-            date={new Date(blog.date).toLocaleDateString()}
+            title={hybridPost.title}
+            date={new Date(hybridPost.date).toLocaleDateString()}
           />
 
-          <div className="prose md:prose-lg mt-6 max-w-none font-light prose-p:font-light">
-            <ReactMarkdown 
-              components={markdownComponents}
-              rehypePlugins={[rehypeRaw]}
-            >
-              {processedContent}
-            </ReactMarkdown>
-          </div>
+          {/* Render content based on source */}
+          {hybridPost.source === 'static' ? (
+            <div className="prose md:prose-lg mt-6 max-w-none font-light prose-p:font-light">
+              <ReactMarkdown 
+                components={markdownComponents}
+                rehypePlugins={[rehypeRaw]}
+              >
+                {addInternalLinks(hybridPost.content, hybridPost.slug)}
+              </ReactMarkdown>
+            </div>
+          ) : (
+            <div className="prose md:prose-lg mt-6 max-w-none font-light prose-p:font-light">
+              <PortableText value={hybridPost.content} currentSlug={hybridPost.slug} />
+            </div>
+          )}
           
-          <RelatedPosts currentSlug={blog.slug} allPosts={allPosts} />
+          <RelatedPosts currentSlug={hybridPost.slug} allPosts={relatedPosts} />
         </article>
       </main>
     </>
