@@ -145,3 +145,65 @@ export function generateTemplateFile(): string {
   
   return JSON.stringify(template, null, 2);
 } 
+
+// Function to generate code update for internalLinking.ts
+export function generateCodeUpdate(fileContent: string): { success: boolean; codeUpdate?: string; error?: string } {
+  const result = parseKeywordFile(fileContent);
+  
+  if (!result.success || !result.data) {
+    return { success: false, error: result.error || 'Failed to parse file' };
+  }
+  
+  // Convert to the format expected by the code
+  const keywordMap: Record<string, string> = {};
+  result.data.keywords.forEach(entry => {
+    keywordMap[entry.keyword.toLowerCase()] = entry.url;
+  });
+  
+  // Generate the code update
+  const codeUpdate = `// Updated keywordToUrlMap - Generated on ${new Date().toISOString()}
+export const keywordToUrlMap: Record<string, string> = ${JSON.stringify(keywordMap, null, 2)};`;
+  
+  return { success: true, codeUpdate };
+}
+
+// Function to merge keywords and generate code update
+export function mergeKeywordsAndGenerateCode(fileContent: string): { 
+  success: boolean; 
+  message: string; 
+  codeUpdate?: string;
+  added?: number; 
+  total?: number 
+} {
+  const result = parseKeywordFile(fileContent);
+  
+  if (!result.success || !result.data) {
+    return { success: false, message: result.error || 'Failed to parse file' };
+  }
+  
+  const currentKeywords = getStoredKeywords();
+  let addedCount = 0;
+  
+  // Add new keywords, skip existing ones
+  result.data.keywords.forEach(entry => {
+    const key = entry.keyword.toLowerCase();
+    if (!currentKeywords[key]) {
+      currentKeywords[key] = entry.url;
+      addedCount++;
+    }
+  });
+  
+  // Save to storage
+  saveKeywords(currentKeywords);
+  
+  // Generate code update
+  const codeResult = generateCodeUpdate(fileContent);
+  
+  return { 
+    success: true, 
+    message: `Successfully merged ${addedCount} new keywords (${Object.keys(currentKeywords).length} total)`,
+    codeUpdate: codeResult.codeUpdate,
+    added: addedCount,
+    total: Object.keys(currentKeywords).length
+  };
+} 

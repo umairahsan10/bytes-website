@@ -61,31 +61,37 @@ export function getBlogs(): BlogPost[] {
   ];
 
   const customExcerpts: string[] = [
-    // Page 3 blog excerpts (8 new blogs)
-    "Master advanced SEO strategies specifically designed for e-commerce websites to boost sales and improve search rankings.",
-    "Learn how to optimize your website for voice search queries and stay ahead of the growing voice search trend.",
-    "Explore the latest trends and technologies shaping the future of mobile app development in 2025.",
-    "Discover how to build a compelling brand identity that resonates with your target audience through digital marketing.",
-    "Implement effective email marketing strategies that drive engagement and conversions for US businesses.",
-    "Learn how to leverage data analytics to make informed marketing decisions and improve your ROI.",
-    "A comprehensive guide to creating successful social media advertising campaigns in the competitive US market.",
-    "Understand why customer experience is crucial for digital success and how to optimize it for better results.",
-    "Discover how counterbalanced putters improve stability and consistency on the greens for golfers of all skill levels.",
-    "A deep dive into the cutting-edge GCQuad launch monitor—how it works and why it's the gold standard for swing analysis.",
-    "Everything you need to know about Uniflex shafts and whether they're the right fit for your playing style.",
-    "Step-by-step instructions and pro tips for safely shortening a graphite golf shaft without compromising performance.",
-    "Proven drills and training aids to unlock greater swing speed and add yards to every drive.",
-    "Understand golf ball compression and pick the perfect ball for your swing speed and feel preferences.",
-    "Break down the anatomy of a putter to learn how head shape, weight, and inserts influence roll.",
-    "Choosing the right golf glove: materials, sizing tips, and care instructions for lasting grip.",
-    "Exploring the benefits of custom club fitting and how it can shave strokes off your handicap.",
-    "The role of shaft flex in shot trajectory and how to select the ideal flex for your tempo.",
-    "An introduction to launch-angle optimization for maximizing driver distance and carry.",
-    "How groove design on wedges affects spin rates and greenside control.",
-    "Fairway woods vs hybrids: decide which club belongs in your long-game arsenal.",
-    "Top mental game strategies to stay focused under tournament pressure.",
-    "The science behind premium golf grips and when you should re-grip your clubs.",
-    "Speed training 101: resistance bands, overspeed sticks, and tempo drills explained.",
+    // Page 3 blog excerpts (8 new blogs) - now moved to page 1
+    "Learn the key differences between white hat and black hat SEO strategies and why ethical SEO is crucial for long-term business success.",
+    "Discover how schema markup can significantly boost your local SEO rankings and help you appear in more relevant search results.",
+    "Understand what content pruning is and how removing outdated content can improve your website's SEO performance and user experience.",
+    "Explore proven strategies to improve your website's visibility in search results and attract more organic traffic to your business.",
+    "Master effective link-building strategies that earn high-quality backlinks and boost your website's authority and search rankings.",
+    "Learn what a content management system (CMS) is and why it's essential for modern businesses to manage their website content efficiently.",
+    "Discover practical methods to improve your marketing campaign efficiency and maximize ROI without increasing your budget.",
+    "Understand what front-end development is and why it's crucial for creating modern, user-friendly websites that convert visitors.",
+    
+    // First 8 blogs (as requested) - now moved to page 2
+    "Learn what SEO is and why it matters for US business websites, with practical strategies to improve your search rankings.",
+    "Discover effective SEO strategies specifically designed for small businesses in the US to compete with larger companies.",
+    "Explore the most important web development trends for US companies in 2025 and how they can benefit your business.",
+    "Understand why responsive web design is essential for modern websites and how it impacts user experience and SEO.",
+    "Learn why UI/UX design is critical for US mobile app success and how it affects user engagement and conversion rates.",
+    "Discover how to build scalable mobile apps for the US market that can grow with your business and handle increased demand.",
+    "Learn how to create digital marketing campaigns that engage customers and drive meaningful results for your business.",
+    "Understand the role of paid advertising in modern business and how it can complement your overall marketing strategy.",
+    
+    //first new blogs - now moved to page 3
+    "Discover what technical SEO includes and why it matters for US business websites to improve search rankings and user experience.",
+    "Learn the differences between local SEO and national SEO strategies and choose the right approach for your US business.",
+    "Understand how to choose the right web development framework for your project based on your specific needs and goals.",
+    "Explore essential web security practices during development to protect your US projects and user data.",
+    "Discover the best ways to boost mobile app performance for US audiences and improve user satisfaction.",
+    "Learn the best social media marketing strategies for US brands in 2025 to increase engagement and drive conversions.",
+    "Explore content marketing ideas that help US websites rank higher on Google and attract more organic traffic.",
+    "Learn how to measure the ROI of your digital marketing efforts in the US and optimize your campaigns for better results.",
+    
+    // Remaining excerpts
     "Breaking down MOI (Moment of Inertia) and why forgiveness matters off the tee.",
     "Essential warm-up stretches to prevent injury and improve swing consistency.",
     "How altitude and temperature influence golf ball flight and club selection.",
@@ -114,27 +120,7 @@ export function getBlogs(): BlogPost[] {
   ];
 
   const customTitles: string[] = [
-    
-    //first new blogs
-    "What Technical SEO Includes and Why It Matters for US Business Websites",
-    "A Complete Guide to Choosing Between Local SEO and National SEO in the US",
-    "How to Choose the Right Web Development Framework for Your Project",
-    "How to Ensure Web Security During Development for US Projects",
-    "Best Ways to Boost Mobile App Performance for US Audiences",
-    "Best Social Media Marketing Strategies for US Brands in 2025",
-    "Content Marketing Ideas That Help US Websites Rank on Google",
-    "How to Measure the ROI of Your Digital Marketing Efforts in the US",
-    
-    // First 8 blogs (as requested)
-    "What is SEO and Why It Matters for US Business Websites",
-    "How to Implement Effective SEO Strategies for Small Businesses in the US",
-    "The Most Important Web Development Trends for US Companies in 2025",
-    "Why Responsive Web Design is Essential",
-    "Why UI/UX Design is Critical for US Mobile App Success",
-    "How to Build Scalable Mobile Apps for the US Market",
-    "How to Create Digital Marketing Campaigns That Engage Customers",
-    "The Role of Paid Advertising in Modern Business",
-    // Page 3 blogs (8 new blogs)
+    // Page 3 blogs (8 new blogs) - now moved to page 1
     "White Hat SEO vs Black Hat SEO: What's the Real Difference?",
     "How Schema Markup Boosts Local SEO and Drives More Customers",
     "What Is Content Pruning and Why It Matters for SEO",
@@ -143,6 +129,26 @@ export function getBlogs(): BlogPost[] {
     "What Is a Content Management System (CMS) and Why It Matters",
     "How To Improve Marketing Campaign Efficiency Without Burning Your Budget",
     "What Is Front-End Development and Why It's Crucial for Modern Websites",
+    
+    // First 8 blogs (as requested) - now moved to page 2
+    "What is SEO and Why It Matters for US Business Websites",
+    "How to Implement Effective SEO Strategies for Small Businesses in the US",
+    "The Most Important Web Development Trends for US Companies in 2025",
+    "Why Responsive Web Design is Essential",
+    "Why UI/UX Design is Critical for US Mobile App Success",
+    "How to Build Scalable Mobile Apps for the US Market",
+    "How to Create Digital Marketing Campaigns That Engage Customers",
+    "The Role of Paid Advertising in Modern Business",
+    
+    //first new blogs - now moved to page 3
+    "What Technical SEO Includes and Why It Matters for US Business Websites",
+    "A Complete Guide to Choosing Between Local SEO and National SEO in the US",
+    "How to Choose the Right Web Development Framework for Your Project",
+    "How to Ensure Web Security During Development for US Projects",
+    "Best Ways to Boost Mobile App Performance for US Audiences",
+    "Best Social Media Marketing Strategies for US Brands in 2025",
+    "Content Marketing Ideas That Help US Websites Rank on Google",
+    "How to Measure the ROI of Your Digital Marketing Efforts in the US",
     // Remaining blogs
     
     // "How On-Page SEO Helps Increase Organic Traffic for US Businesses",
@@ -174,16 +180,16 @@ export function getBlogs(): BlogPost[] {
 
   // Custom URL slugs for each blog
   const customSlugs: string[] = [
-    //first new blogs
-    "what-technical-seo-includes",
-    "local-seo-vs-national-seo",
-    "how-to-choose-right-development-framework",
-    "how-to-ensure-security-during-project-development",
-    "ways-to-boost-mobile-app-performance",
-    "social-media-marketing-strategies",
-    "content-marketing-ideas-that-help-websites-rank",
-    "how-to-measure-roi",
-    // Page2 8 blogs (as requested)
+    // Page 3 blogs (8 new blogs) - now moved to page 1
+    "white-hat-seo-vs-black-hat-seo",
+    "how-schema-markup-boosts-local-seo",
+    "what-is-content-pruning-and-why-it-matters",
+    "how-to-improve-your-sites-visibility",
+    "effective-link-building-strategies",
+    "what-is-a-content-management-system",
+    "how-to-improve-marketing-campaign-efficiency",
+    "what-is-front-end-development-and-why-it-matters",
+    // Page2 8 blogs (as requested) - now moved to page 2
     "what-is-seo",
     "how-to-implement-seo-strategies",
     "important-web-development-trends",
@@ -192,11 +198,15 @@ export function getBlogs(): BlogPost[] {
     "how-to-build-scalable-mobile-apps",
     "how-to-create-digital-marketing-campaigns",
     "how-paid-advertising-works",
-    // Page 3 blogs (8 new blogs)
-    "white-hat-seo-vs-black-hat-seo",
-    "how-schema-markup-boosts-local-seo",
-    "what-is-content-pruning-and-why-it-matters",
-    "how-to-improve-your-sites-visibility",
+    //first new blogs - now moved to page 3
+    "what-technical-seo-includes",
+    "local-seo-vs-national-seo",
+    "how-to-choose-right-development-framework",
+    "how-to-ensure-security-during-project-development",
+    "ways-to-boost-mobile-app-performance",
+    "social-media-marketing-strategies",
+    "content-marketing-ideas-that-help-websites-rank",
+    "how-to-measure-roi",
     "effective-link-building-strategies",
     "what-is-a-content-management-system",
     "how-to-improve-marketing-campaign-efficiency",
@@ -285,21 +295,21 @@ export function getBlogs(): BlogPost[] {
       date: new Date(Date.UTC(2025, 6, id)).toISOString(),
       content:
         id === 1
-          ? firstBlogContent
+          ? seventeenBlogContent
           : id === 2
-          ? secondBlogContent
+          ? eighteenBlogContent
           : id === 3
-          ? thirdBlogContent
+          ? nineteenBlogContent
           : id === 4
-          ? fourthBlogContent
+          ? twentyBlogContent
           : id === 5
-          ? fifthBlogContent
+          ? twentyoneBlogContent
           : id === 6
-          ? sixthBlogContent
+          ? twentytwoBlogContent
           : id === 7
-          ? seventhBlogContent
+          ? twentythreeBlogContent
           : id === 8
-          ? eighthBlogContent
+          ? twentyfourBlogContent
           : id === 9
           ? ninthBlogContent
           : id === 10
@@ -317,21 +327,21 @@ export function getBlogs(): BlogPost[] {
           : id === 16
           ? sixteenthBlogContent
           : id === 17
-          ? seventeenBlogContent
+          ? firstBlogContent
           : id === 18
-          ? eighteenBlogContent 
+          ? secondBlogContent
           : id === 19
-          ? nineteenBlogContent
+          ? thirdBlogContent
           : id === 20
-          ? twentyBlogContent
+          ? fourthBlogContent
           : id === 21
-          ? twentyoneBlogContent
+          ? fifthBlogContent
           : id === 22
-          ? twentytwoBlogContent
+          ? sixthBlogContent
           : id === 23
-          ? twentythreeBlogContent
+          ? seventhBlogContent
           : id === 24
-          ? twentyfourBlogContent
+          ? eighthBlogContent
           : ("Full content for " + title + ". Replace with actual markdown or rich text from CMS."),
     };
   });

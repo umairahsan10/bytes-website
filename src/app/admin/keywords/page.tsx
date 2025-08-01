@@ -12,7 +12,8 @@ import {
   importKeywordsFromFile, 
   mergeKeywordsFromFile, 
   exportKeywordsToFile, 
-  generateTemplateFile 
+  generateTemplateFile,
+  mergeKeywordsAndGenerateCode
 } from '@/lib/keywordFileManager';
 
 export default function KeywordsAdminPage() {
@@ -24,6 +25,8 @@ export default function KeywordsAdminPage() {
   const [showFileUpload, setShowFileUpload] = useState(false);
   const [uploadMode, setUploadMode] = useState<'replace' | 'merge'>('merge');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [codeUpdate, setCodeUpdate] = useState<string>('');
+  const [showCodeUpdate, setShowCodeUpdate] = useState(false);
 
   const categories = ['All', 'SEO', 'Web Development', 'Mobile Apps', 'Digital Marketing', 'General'];
 
@@ -74,13 +77,17 @@ export default function KeywordsAdminPage() {
         if (result.success) {
           setKeywords(getStoredKeywords());
           setSelectedFile(null);
+          setShowCodeUpdate(false);
+          setCodeUpdate('');
         }
       } else {
-        const result = mergeKeywordsFromFile(content);
+        const result = mergeKeywordsAndGenerateCode(content);
         setAddMessage(result.message);
         if (result.success) {
           setKeywords(getStoredKeywords());
           setSelectedFile(null);
+          setCodeUpdate(result.codeUpdate || '');
+          setShowCodeUpdate(true);
         }
       }
     };
@@ -245,10 +252,43 @@ export default function KeywordsAdminPage() {
                     <li>• <strong>Merge mode:</strong> Adds new keywords, keeps existing ones</li>
                     <li>• <strong>Replace mode:</strong> Replaces all keywords with file content</li>
                   </ul>
-                </div>
+                                 </div>
+               </div>
+             )}
+           </div>
+
+           {/* Code Update Section */}
+           {showCodeUpdate && codeUpdate && (
+             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mt-6">
+               <h3 className="text-lg font-semibold text-yellow-900 mb-4">
+                 🔧 Code Update Required
+               </h3>
+               <p className="text-yellow-800 mb-4">
+                 To make these changes permanent, you need to update your code file. 
+                 Copy the code below and replace the <code className="bg-yellow-100 px-1 rounded">keywordToUrlMap</code> in <code className="bg-yellow-100 px-1 rounded">src/lib/internalLinking.ts</code>:
+               </p>
+               <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
+                 <pre className="text-sm">{codeUpdate}</pre>
+               </div>
+               <div className="mt-4 flex gap-2">
+                 <button
+                   onClick={() => {
+                     navigator.clipboard.writeText(codeUpdate);
+                     setAddMessage('Code copied to clipboard!');
+                   }}
+                   className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                 >
+                   Copy Code
+                 </button>
+                 <button
+                   onClick={() => setShowCodeUpdate(false)}
+                   className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                 >
+                   Hide
+                 </button>
+               </div>
              </div>
            )}
-         </div>
 
          
 
