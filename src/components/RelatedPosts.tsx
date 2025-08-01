@@ -1,16 +1,18 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { BlogPost } from '@/lib/getBlogs';
-import { getRelatedPosts } from '@/lib/internalLinking';
+import { HybridBlogPost } from '@/lib/hybridBlogs';
 
 interface RelatedPostsProps {
   currentSlug: string;
-  allPosts: BlogPost[];
+  allPosts: HybridBlogPost[];
   limit?: number;
 }
 
 export default function RelatedPosts({ currentSlug, allPosts, limit = 3 }: RelatedPostsProps) {
-  const relatedPosts = getRelatedPosts(currentSlug, allPosts, limit);
+  // Filter out the current post and get related posts
+  const relatedPosts = allPosts
+    .filter(post => post.slug !== currentSlug)
+    .slice(0, limit);
 
   if (relatedPosts.length === 0) {
     return null;

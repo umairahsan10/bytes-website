@@ -1,0 +1,711 @@
+[
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Unique ID for the blog post (used for category calculation)",
+        "name": "id",
+        "type": "number",
+        "title": "ID"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "max",
+                "constraint": 100
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The main title of the blog post",
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "URL-friendly version of the title (auto-generated)",
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "max",
+                "constraint": 200
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Brief summary of the blog post (shown in blog listings)",
+        "name": "excerpt",
+        "type": "text"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Image shown in blog grid/listings (1:1 aspect ratio recommended)",
+        "fields": [
+          {
+            "options": {
+              "isHighlighted": true
+            },
+            "description": "Important for SEO and accessibility",
+            "name": "alt",
+            "type": "string",
+            "title": "Alternative text"
+          }
+        ],
+        "name": "listingImage",
+        "type": "image"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Image shown on individual blog page (16:9 aspect ratio recommended)",
+        "fields": [
+          {
+            "options": {
+              "isHighlighted": true
+            },
+            "description": "Important for SEO and accessibility",
+            "name": "alt",
+            "type": "string",
+            "title": "Alternative text"
+          }
+        ],
+        "name": "detailImage",
+        "type": "image"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "SEO",
+              "value": "SEO"
+            },
+            {
+              "title": "WEB",
+              "value": "WEB"
+            },
+            {
+              "title": "APP",
+              "value": "APP"
+            },
+            {
+              "title": "MARKETING",
+              "value": "MARKETING"
+            }
+          ],
+          "layout": "radio"
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "SEO",
+                  "WEB",
+                  "APP",
+                  "MARKETING"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Blog category (SEO, WEB, APP, MARKETING)",
+        "name": "category",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "When the blog post was published",
+        "name": "publishedAt",
+        "type": "datetime",
+        "title": "Published Date"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The main content of the blog post",
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/"
+                                  ],
+                                  "allowRelative": false,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "name": "href",
+                      "type": "url",
+                      "title": "URL"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object",
+                  "title": "URL"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Strong"
+                },
+                {
+                  "value": "em",
+                  "title": "Emphasis"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h2",
+                "title": "H2"
+              },
+              {
+                "value": "h3",
+                "title": "H3"
+              },
+              {
+                "value": "h4",
+                "title": "H4"
+              },
+              {
+                "value": "blockquote",
+                "title": "Quote"
+              }
+            ],
+            "of": [],
+            "type": "block",
+            "name": "contentBlock",
+            "title": "Block"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "fields": [
+              {
+                "options": {
+                  "isHighlighted": true
+                },
+                "description": "Important for SEO and accessibility",
+                "name": "alt",
+                "type": "string",
+                "title": "Alternative text"
+              },
+              {
+                "description": "Optional caption for the image",
+                "name": "caption",
+                "type": "string"
+              }
+            ],
+            "type": "image",
+            "name": "contentImage"
+          },
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Strong"
+                },
+                {
+                  "value": "em",
+                  "title": "Emphasis"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "code",
+                "title": "Code"
+              }
+            ],
+            "of": [],
+            "type": "block",
+            "name": "codeBlock",
+            "title": "Block"
+          }
+        ],
+        "name": "content",
+        "type": "array"
+      },
+      {
+        "description": "Comprehensive SEO metadata for search engines and social media",
+        "fields": [
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "max",
+                    "constraint": 60
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "Title used for search engines (60 characters max, if blank, post title will be used)",
+            "name": "metaTitle",
+            "type": "string"
+          },
+          {
+            "rows": 3,
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "max",
+                    "constraint": 160
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "Description for search engines (160 characters max, if blank, excerpt will be used)",
+            "name": "metaDescription",
+            "type": "text"
+          },
+          {
+            "options": {
+              "layout": "tags"
+            },
+            "description": "Target keywords for SEO (comma-separated)",
+            "of": [
+              {
+                "type": "string"
+              }
+            ],
+            "name": "keywords",
+            "type": "array"
+          },
+          {
+            "description": "Primary keyword for this post (used for internal linking)",
+            "name": "focusKeyword",
+            "type": "string"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "Canonical URL if different from default /blogs/[slug]",
+            "name": "canonicalUrl",
+            "type": "url",
+            "title": "Canonical URL"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "max",
+                    "constraint": 60
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "Title for social media sharing (if blank, meta title will be used)",
+            "name": "ogTitle",
+            "type": "string",
+            "title": "Open Graph Title"
+          },
+          {
+            "rows": 2,
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "max",
+                    "constraint": 160
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "Description for social media sharing (if blank, meta description will be used)",
+            "name": "ogDescription",
+            "type": "text",
+            "title": "Open Graph Description"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "description": "Image for social media sharing (if blank, detail image will be used)",
+            "name": "ogImage",
+            "type": "image",
+            "title": "Open Graph Image"
+          },
+          {
+            "options": {
+              "list": [
+                {
+                  "title": "Summary",
+                  "value": "summary"
+                },
+                {
+                  "title": "Summary Large Image",
+                  "value": "summary_large_image"
+                }
+              ],
+              "layout": "radio"
+            },
+            "initialValue": "summary_large_image",
+            "description": "Type of Twitter card to display",
+            "name": "twitterCard",
+            "type": "string",
+            "title": "Twitter Card Type"
+          },
+          {
+            "initialValue": false,
+            "description": "Prevent search engines from indexing this page",
+            "name": "noIndex",
+            "type": "boolean"
+          },
+          {
+            "initialValue": false,
+            "description": "Prevent search engines from following links on this page",
+            "name": "noFollow",
+            "type": "boolean"
+          }
+        ],
+        "name": "seo",
+        "type": "object",
+        "title": "SEO Settings"
+      },
+      {
+        "description": "Internal linking settings for SEO and user experience",
+        "fields": [
+          {
+            "description": "Manually select related posts to link to",
+            "of": [
+              {
+                "to": [
+                  {
+                    "type": "post"
+                  }
+                ],
+                "type": "reference",
+                "title": "Reference to blog post"
+              }
+            ],
+            "name": "relatedPosts",
+            "type": "array"
+          },
+          {
+            "description": "Keywords that should be automatically linked to other posts",
+            "of": [
+              {
+                "fields": [
+                  {
+                    "description": "The keyword to link",
+                    "name": "keyword",
+                    "type": "string"
+                  },
+                  {
+                    "description": "The post to link to",
+                    "to": [
+                      {
+                        "type": "post"
+                      }
+                    ],
+                    "name": "targetPost",
+                    "type": "reference"
+                  },
+                  {
+                    "description": "Custom link text (if different from keyword)",
+                    "name": "linkText",
+                    "type": "string"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "name": "linkKeywords",
+            "type": "array"
+          },
+          {
+            "initialValue": true,
+            "description": "Automatically link keywords found in content to other posts",
+            "name": "autoLinkKeywords",
+            "type": "boolean",
+            "title": "Auto-Link Keywords"
+          },
+          {
+            "initialValue": 5,
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "min",
+                    "constraint": 0
+                  },
+                  {
+                    "flag": "max",
+                    "constraint": 20
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "Maximum number of internal links to add to this post",
+            "name": "maxInternalLinks",
+            "type": "number",
+            "title": "Maximum Internal Links"
+          }
+        ],
+        "name": "internalLinking",
+        "type": "object"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Draft",
+              "value": "draft"
+            },
+            {
+              "title": "Published",
+              "value": "published"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "draft",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "draft",
+                  "published"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Publication status",
+        "name": "status",
+        "type": "string"
+      }
+    ],
+    "name": "post",
+    "type": "document",
+    "title": "Blog Post"
+  }
+]

@@ -5,8 +5,13 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { BlogPost } from '@/lib/getBlogs';
 
+// Extend BlogPost interface for hybrid system
+interface HybridBlogPost extends BlogPost {
+  source?: 'static' | 'sanity';
+}
+
 interface BlogGridProps {
-  posts: BlogPost[];
+  posts: (BlogPost | HybridBlogPost)[];
   startIndexInPage?: number; // index offset for stagger delay
 }
 
@@ -35,17 +40,27 @@ export default function BlogGrid({ posts, startIndexInPage = 0 }: BlogGridProps)
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
       {posts.map((post, idx) => {
         const category = getCategory(post.id);
+        const hybridPost = post as HybridBlogPost;
+        const isSanityPost = hybridPost.source === 'sanity';
+        
         return (
           <MotionLink
             key={post.id}
             href={`/blogs/${post.slug}`}
-            className="bg-[#dcdfe5] rounded-xl overflow-hidden flex flex-col h-[30rem] shadow-lg hover:shadow-xl transition-shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#010a14]"
+            className="bg-[#dcdfe5] rounded-xl overflow-hidden flex flex-col h-[30rem] shadow-lg hover:shadow-xl transition-shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#010a14] relative"
             whileHover={{ scale: 1.08, transition: { duration: 0.12, ease: 'easeOut' } }}
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.3, ease: 'easeOut', delay: (startIndexInPage + idx) * 0.025 }}
           >
+            {/* Source indicator for Sanity posts */}
+            {isSanityPost && (
+              <div className="absolute top-2 right-2 z-10 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
+                Sanity
+              </div>
+            )}
+            
             <div className="relative" style={{ flex: '0 0 70%' }}>
               <Image
                 src={post.image}
