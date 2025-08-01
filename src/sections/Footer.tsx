@@ -39,7 +39,7 @@ export const Footer = () => {
         {/* Quick Links */}
         <div className="lg:w-1/5 mb-6 lg:mb-0 text-center sm:text-left">
           <h4 className="text-xl font-semibold mb-4">Quick Links</h4>
-          <ul className="space-y-3">
+          <ul className="space-y-3 list-none m-0 p-0">
             {quickLinks.map((item) => (
               <li key={item.title}>
                 <Link href={item.href} className="hover:text-white transition">{item.title}</Link>
@@ -51,7 +51,7 @@ export const Footer = () => {
         {/* Products */}
         <div className="lg:w-1/5 mb-6 lg:mb-0 text-center sm:text-left">
           <h4 className="text-xl font-semibold mb-4">Products</h4>
-          <ul className="space-y-3">
+          <ul className="space-y-3 list-none m-0 p-0">
             {productsLinks.map((item) => (
               <li key={item.title}>
                 <Link href={item.href} className="hover:text-white transition">{item.title}</Link>
@@ -66,7 +66,7 @@ export const Footer = () => {
         {/* Services */}
         <div className="lg:w-1/5 mb-6 lg:mb-0 text-center sm:text-left">
           <h4 className="text-xl font-semibold mb-4">Services</h4>
-          <ul className="space-y-3">
+          <ul className="space-y-3 list-none m-0 p-0">
             {servicesLinks.map((item) => (
               <li key={item.title}>
                 <Link href={item.href} className="hover:text-white transition">{item.title}</Link>
@@ -78,7 +78,7 @@ export const Footer = () => {
         {/* Contacts */}
         <div className="lg:w-1/5 mb-6 lg:mb-0 text-center sm:text-left">
           <h4 className="text-xl font-semibold mb-4">Contacts</h4>
-          <ul className="space-y-3 text-sm">
+          <ul className="space-y-3 text-sm list-none m-0 p-0">
             <li className="flex items-center gap-4 justify-center sm:justify-start">
               <Phone size={16} />
               <Link href="tel:8333230371" className="hover:text-white transition">833-323-0371 (Toll Free)</Link>
