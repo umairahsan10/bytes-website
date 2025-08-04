@@ -57,22 +57,31 @@ export default async function BlogsRoot() {
 
           <BlogGrid posts={visiblePosts} />
 
-          {/* Pagination (if needed) */}
+          {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex justify-center mt-8 space-x-4">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <Link
-                  key={page}
-                  href={`/blogs/page-${page}`}
-                  className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-                    1 === page
-                      ? 'bg-[#010a14] text-white'
-                      : 'bg-gray-200 text-[#010a14] hover:bg-gray-300'
-                  }`}
-                >
-                  {page}
-                </Link>
-              ))}
+            <div className="flex justify-center items-center gap-3 mt-6 flex-wrap">
+              {/* Prev button - disabled on page 1 */}
+              <span className="px-3 py-1 rounded border border-gray-300 text-gray-400 select-none">Prev</span>
+
+              {/* Numbered buttons */}
+              {Array.from({ length: totalPages }, (_, idx) => {
+                const p = idx + 1;
+                const isActive = p === 1;
+                return isActive ? (
+                  <span key={p} className="px-3 py-1 rounded bg-[#010a14] text-white font-semibold">
+                    {p}
+                  </span>
+                ) : (
+                  <Link key={p} href={`/blogs/page-${p}`} className="px-3 py-1 rounded text-[#010a14] hover:bg-[#010a14] hover:text-white transition-colors border border-[#010a14]">
+                    {p}
+                  </Link>
+                );
+              })}
+
+              {/* Next button - enabled on page 1 */}
+              <Link href="/blogs/page-2" className="px-3 py-1 rounded text-[#010a14] hover:bg-[#010a14] hover:text-white transition-colors border border-[#010a14]">
+                Next
+              </Link>
             </div>
           )}
         </div>

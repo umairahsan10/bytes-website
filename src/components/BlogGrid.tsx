@@ -54,12 +54,7 @@ export default function BlogGrid({ posts, startIndexInPage = 0 }: BlogGridProps)
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.3, ease: 'easeOut', delay: (startIndexInPage + idx) * 0.025 }}
           >
-            {/* Source indicator for Sanity posts */}
-            {isSanityPost && (
-              <div className="absolute top-2 right-2 z-10 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
-                Sanity
-              </div>
-            )}
+
             
             <div className="relative" style={{ flex: '0 0 70%' }}>
               <Image
