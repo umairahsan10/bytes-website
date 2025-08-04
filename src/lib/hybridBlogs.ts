@@ -17,48 +17,35 @@ export interface HybridBlogPost extends BlogPost {
     noIndex?: boolean;
     noFollow?: boolean;
   };
-  internalLinking?: {
-    relatedPosts?: any[];
-    linkKeywords?: Array<{
-      keyword: string;
-      targetPost: any;
-      linkText?: string;
-    }>;
-    autoLinkKeywords?: boolean;
-    maxInternalLinks?: number;
-  };
 }
 
 // Get all blogs from both sources
 export async function getHybridBlogs(): Promise<HybridBlogPost[]> {
   const staticBlogs = getBlogs();
-  const sanityBlogs = await getSanityBlogs();
   
   // Convert static blogs to hybrid format
   const staticHybridBlogs: HybridBlogPost[] = staticBlogs.map(blog => ({
     ...blog,
     source: 'static' as const,
-    seo: undefined,
-    internalLinking: undefined
+    seo: undefined
   }));
   
   // Convert Sanity blogs to hybrid format
-  const sanityHybridBlogs: HybridBlogPost[] = sanityBlogs.map(sanityPost => {
+  const sanityBlogs = await getSanityBlogs();
+  const sanityHybridBlogs: HybridBlogPost[] = sanityBlogs.map((sanityPost, index) => {
     const converted = convertSanityPostToBlogPost(sanityPost);
     return {
       ...converted,
-      source: 'sanity' as const
+      id: 25 + index, // Start from ID 25 and increment
+      source: 'sanity' as const,
+      seo: sanityPost.seo
     };
   });
   
-  // Combine and sort by date (newest first)
+  // Combine blogs
   const allBlogs = [...staticHybridBlogs, ...sanityHybridBlogs];
   
-  return allBlogs.sort((a, b) => {
-    const dateA = new Date(a.date).getTime();
-    const dateB = new Date(b.date).getTime();
-    return dateB - dateA;
-  });
+  return allBlogs;
 }
 
 // Get a single blog post by slug (check both sources)
@@ -75,8 +62,7 @@ export async function getHybridBlogBySlug(slug: string): Promise<HybridBlogPost 
       ...staticBlog,
       content: processedContent,
       source: 'static' as const,
-      seo: undefined,
-      internalLinking: undefined
+      seo: undefined
     };
   }
   
@@ -97,8 +83,7 @@ export async function getHybridBlogBySlug(slug: string): Promise<HybridBlogPost 
       ...converted,
       source: 'sanity' as const,
       content: sanityBlog.content, // Keep the original Sanity content for PortableText
-      seo: sanityBlog.seo,
-      internalLinking: sanityBlog.internalLinking
+      seo: sanityBlog.seo
     };
   }
   

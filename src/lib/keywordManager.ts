@@ -9,19 +9,6 @@ export interface KeywordEntry {
   description?: string;
 }
 
-// Function to add a new keyword to the map
-export function addKeyword(keyword: string, url: string, category: string, description?: string): void {
-  // This would typically update a database or CMS
-  // For now, we'll log the addition
-  console.log(`Adding keyword: "${keyword}" -> "${url}" (${category})`);
-  
-  // In a real implementation, you might:
-  // 1. Update a database
-  // 2. Update a CMS
-  // 3. Update a configuration file
-  // 4. Trigger a rebuild
-}
-
 // Function to remove a keyword
 export function removeKeyword(keyword: string): void {
   console.log(`Removing keyword: "${keyword}"`);

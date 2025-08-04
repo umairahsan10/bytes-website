@@ -13,8 +13,36 @@ import RelatedPosts from "@/components/RelatedPosts";
 import PortableText from "@/components/PortableText";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
+import { blogMetaData } from "../layout";
 
 const POSTS_PER_PAGE = 8;
+
+// Dynamic pagination function to get posts for specific ID ranges
+function getPostsForPage(allPosts: any[], pageNumber: number) {
+  const maxId = Math.max(...allPosts.map(post => post.id));
+  const minId = Math.min(...allPosts.map(post => post.id));
+  
+  // Calculate how many pages we need
+  const totalPosts = maxId - minId + 1;
+  const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
+  
+  // Calculate the ID range for the requested page
+  // Page 1 gets the highest 8 IDs, Page 2 gets the next 8, etc.
+  const startId = maxId - (pageNumber - 1) * POSTS_PER_PAGE - (POSTS_PER_PAGE - 1);
+  const endId = maxId - (pageNumber - 1) * POSTS_PER_PAGE;
+  
+  // Filter posts by ID range
+  return allPosts.filter(post => post.id >= startId && post.id <= endId);
+}
+
+// Calculate total pages based on available posts
+function calculateTotalPages(allPosts: any[]) {
+  const maxId = Math.max(...allPosts.map(post => post.id));
+  const minId = Math.min(...allPosts.map(post => post.id));
+  
+  const totalPosts = maxId - minId + 1;
+  return Math.ceil(totalPosts / POSTS_PER_PAGE);
+}
 
 export const dynamicParams = true;
 
@@ -47,7 +75,21 @@ export async function generateMetadata({
     };
   }
   
-  // Use comprehensive SEO metadata from Sanity if available, otherwise fallback
+  // Check if this is one of the first 24 posts (static metadata)
+  const staticMetadata = blogMetaData[path];
+  
+  if (staticMetadata) {
+    // Use static metadata for the first 24 posts
+    return {
+      title: staticMetadata.title,
+      description: staticMetadata.description,
+      alternates: {
+        canonical: `https://bytesplatform.com/blogs/${path}`,
+      },
+    };
+  }
+  
+  // For newer posts (beyond the first 24), use dynamic metadata from Sanity
   const title = hybridPost.source === 'sanity' && hybridPost.seo?.metaTitle 
     ? hybridPost.seo.metaTitle 
     : `${hybridPost.title} | Bytes Platform`;
@@ -110,20 +152,11 @@ export async function generateMetadata({
   }
 
   return metadata;
-  
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: `https://bytesplatform.com/blogs/${path}`,
-    },
-  };
 }
 
 export async function generateStaticParams() {
   const allPosts = await getHybridBlogs();
-  const totalPosts = allPosts.length;
-  const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
+  const totalPages = calculateTotalPages(allPosts);
   
   // Generate params for blog posts
   const blogParams = allPosts.map((b) => ({ slug: [b.slug] }));
@@ -153,7 +186,7 @@ export default async function BlogPage({
   if (path.startsWith('page-')) {
     const pageNumber = parseInt(path.replace('page-', ''), 10);
     const allPosts = await getHybridBlogs();
-    const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+    const totalPages = calculateTotalPages(allPosts);
 
     if (!pageNumber || pageNumber < 1 || pageNumber > totalPages) {
       return notFound();
@@ -164,8 +197,7 @@ export default async function BlogPage({
       redirect('/blogs');
     }
 
-    const startIndex = (pageNumber - 1) * POSTS_PER_PAGE;
-    const visiblePosts = allPosts.slice(startIndex, startIndex + POSTS_PER_PAGE);
+    const visiblePosts = getPostsForPage(allPosts, pageNumber);
 
     return (
       <>
