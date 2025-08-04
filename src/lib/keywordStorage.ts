@@ -1,6 +1,6 @@
 import { keywordToUrlMap as defaultKeywords } from './internalLinking';
 
-// Get keywords from localStorage or use defaults
+// Get keywords from localStorage or use defaults (the 37 keywords)
 export function getStoredKeywords(): Record<string, string> {
   if (typeof window === 'undefined') {
     return defaultKeywords;
@@ -19,7 +19,7 @@ export function getStoredKeywords(): Record<string, string> {
   return defaultKeywords;
 }
 
-// Save keywords to localStorage
+// Save keywords to localStorage (for admin functionality)
 export function saveKeywords(keywords: Record<string, string>): void {
   if (typeof window === 'undefined') return;
   
@@ -30,20 +30,7 @@ export function saveKeywords(keywords: Record<string, string>): void {
   }
 }
 
-// Add a new keyword
-export function addKeyword(keyword: string, url: string): boolean {
-  const keywords = getStoredKeywords();
-  
-  if (keywords[keyword.toLowerCase()]) {
-    return false; // Keyword already exists
-  }
-  
-  keywords[keyword.toLowerCase()] = url;
-  saveKeywords(keywords);
-  return true;
-}
-
-// Remove a keyword
+// Remove a keyword (for admin functionality)
 export function removeKeyword(keyword: string): boolean {
   const keywords = getStoredKeywords();
   
@@ -56,7 +43,13 @@ export function removeKeyword(keyword: string): boolean {
   return true;
 }
 
-// Reset to default keywords
+// Reset to default 37 keywords
 export function resetToDefaults(): void {
-  saveKeywords(defaultKeywords);
+  if (typeof window === 'undefined') return;
+  
+  try {
+    localStorage.setItem('internal-linking-keywords', JSON.stringify(defaultKeywords));
+  } catch (error) {
+    console.error('Failed to reset keywords:', error);
+  }
 } 

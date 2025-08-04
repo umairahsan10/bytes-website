@@ -41,7 +41,7 @@ export interface SanityBlogPost {
 // Convert Sanity post to match existing BlogPost interface
 export function convertSanityPostToBlogPost(sanityPost: SanityBlogPost) {
   return {
-    id: sanityPost.id || parseInt(sanityPost._id.slice(-3)) || 1,
+    id: 1, // Default ID, will be overridden in getHybridBlogs
     slug: sanityPost.slug.current.replace(/^\//, ''), // Remove leading slash
     title: sanityPost.title,
     excerpt: sanityPost.excerpt || '',
@@ -56,12 +56,6 @@ export function convertSanityPostToBlogPost(sanityPost: SanityBlogPost) {
 // Get all blog posts from Sanity
 export async function getSanityBlogs(): Promise<SanityBlogPost[]> {
   try {
-    // Check if Sanity is properly configured
-    if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'your-project-id') {
-      console.warn('Sanity not configured. Please set up your environment variables.');
-      return [];
-    }
-    
     const posts = await client.fetch(blogQueries.getAllPosts);
     return posts || [];
   } catch (error) {

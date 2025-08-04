@@ -6,6 +6,33 @@ import BlogListingIntro from "@/components/BlogListingIntro";
 
 const POSTS_PER_PAGE = 8;
 
+// Dynamic pagination function to get posts for specific ID ranges
+function getPostsForPage(allPosts: any[], pageNumber: number) {
+  const maxId = Math.max(...allPosts.map(post => post.id));
+  const minId = Math.min(...allPosts.map(post => post.id));
+  
+  // Calculate how many pages we need
+  const totalPosts = maxId - minId + 1;
+  const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
+  
+  // Calculate the ID range for the requested page
+  // Page 1 gets the highest 8 IDs, Page 2 gets the next 8, etc.
+  const startId = maxId - (pageNumber - 1) * POSTS_PER_PAGE - (POSTS_PER_PAGE - 1);
+  const endId = maxId - (pageNumber - 1) * POSTS_PER_PAGE;
+  
+  // Filter posts by ID range
+  return allPosts.filter(post => post.id >= startId && post.id <= endId);
+}
+
+// Calculate total pages based on available posts
+function calculateTotalPages(allPosts: any[]) {
+  const maxId = Math.max(...allPosts.map(post => post.id));
+  const minId = Math.min(...allPosts.map(post => post.id));
+  
+  const totalPosts = maxId - minId + 1;
+  return Math.ceil(totalPosts / POSTS_PER_PAGE);
+}
+
 // Add ISR (Incremental Static Regeneration)
 export const revalidate = 300; // Revalidate every 5 minutes
 
@@ -14,12 +41,12 @@ export default async function BlogsRoot() {
   const allPosts = await getHybridBlogs();
   const blogCounts = getBlogCounts();
   
-  const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
-  const visiblePosts = allPosts.slice(0, POSTS_PER_PAGE);
+  // Get posts for page 1 (highest 8 IDs)
+  const visiblePosts = getPostsForPage(allPosts, 1);
+  const totalPages = calculateTotalPages(allPosts);
 
   // Show hybrid status message
-  const hasSanityConfigured = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && 
-                             process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'your-project-id';
+  const hasSanityConfigured = true; // Sanity is always configured with fallback values
   
   return (
     <>
@@ -27,8 +54,6 @@ export default async function BlogsRoot() {
       <main className="min-h-screen bg-white text-[#010a14] font-sans px-4 py-20">
         <div className="max-w-7xl mx-auto text-center">
           <BlogListingIntro />
-
-
 
           <BlogGrid posts={visiblePosts} />
 
