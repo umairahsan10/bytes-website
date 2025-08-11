@@ -19,6 +19,44 @@ function titleToSlug(title: string): string {
     .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
 }
 
+// Custom category mapping for static blogs (by title)
+export const STATIC_BLOG_CATEGORIES: { [key: string]: string } = {
+  // Add your static blog titles and their desired categories here
+  "What Is Digital Marketing?": "MARKETING",
+      // First 16 blogs - page 2
+
+      "What Technical SEO Includes and Why It Matters for US Business Websites" : "SEO",
+      "A Complete Guide to Choosing Between Local SEO and National SEO in the US" : "SEO",
+      "How to Choose the Right Web Development Framework for Your Project" : "WEB",
+      "How to Ensure Web Security During Development for US Projects" : "WEB",
+      "Best Ways to Boost Mobile App Performance for US Audiences" : "APP",
+      "Best Social Media Marketing Strategies for US Brands in 2025" : "MARKETING",
+      "Content Marketing Ideas That Help US Websites Rank on Google" : "MARKETING",
+      "How to Measure the ROI of Your Digital Marketing Efforts in the US" : "MARKETING",
+  
+      // First 8 blogs - page 3
+      "What is SEO and Why It Matters for US Business Websites" : "SEO",
+      "How to Implement Effective SEO Strategies for Small Businesses in the US" : "SEO",
+      "The Most Important Web Development Trends for US Companies in 2025" : "WEB",
+      "Why Responsive Web Design is Essential" : "WEB",
+      "Why UI/UX Design is Critical for US Mobile App Success" : "APP",
+      "How to Build Scalable Mobile Apps for the US Market" : "APP",
+      "How to Create Digital Marketing Campaigns That Engage Customers" : "MARKETING",
+      "The Role of Paid Advertising in Modern Business" : "MARKETING",
+  
+      // First 24 blogs - page 1
+      "White Hat SEO vs Black Hat SEO: What's the Real Difference?" : "SEO",
+      "How Schema Markup Boosts Local SEO and Drives More Customers" : "SEO",
+      "What Is Content Pruning and Why It Matters for SEO" : "SEO",
+      "How to Improve Your Site's Visibility: Smart Strategies That Actually Work" : "SEO",
+      "Effective Link-Building Strategies for Best Results" : "SEO",
+      "What Is a Content Management System (CMS) and Why It Matters" : "ADVANCED SERVICES",
+      "How To Improve Marketing Campaign Efficiency Without Burning Your Budget" : "MARKETING",
+      "What Is Front-End Development and Why It's Crucial for Modern Websites" : "WEB",
+
+  
+};
+
 // TODO: Replace with real data fetching (e.g. CMS or database)
 export function getBlogs(): BlogPost[] {
   const placeholderImages = [
@@ -41,7 +79,7 @@ export function getBlogs(): BlogPost[] {
     "/assets/Blogs/photos1-1/White Hat SEO vs Black Hat SEO 1 by 1.jpg",
     "/assets/Blogs/photos1-1/How Schema Markup Boosts Local SEO 1 by 1.jpg",
     "/assets/Blogs/photos1-1/What Is Content Pruning 1 by 1.jpg",
-    "/assets/Blogs/photos1-1/How to Improve Your Site’s Visibility 1 by 1.jpg",
+    "/assets/Blogs/photos1-1/How to Improve Your Site's Visibility 1 by 1.jpg",
     "/assets/Blogs/photos1-1/Effective Link-Building Strategies 1 by 1.jpg",
     "/assets/Blogs/photos1-1/What Is a Content Management System 1 by 1.jpg",
     "/assets/Blogs/photos1-1/How To Improve Marketing Campaign Efficiency 1 by 1.jpg",
@@ -70,7 +108,7 @@ export function getBlogs(): BlogPost[] {
     "/assets/Blogs/photo16-9/White Hat SEO vs Black Hat SEO.jpg",
     "/assets/Blogs/photo16-9/How Schema Markup Boosts Local SEO.jpg",
     "/assets/Blogs/photo16-9/What Is Content Pruning.jpg",
-    "/assets/Blogs/photo16-9/How to Improve Your Site’s Visibility.jpg",
+    "/assets/Blogs/photo16-9/How to Improve Your Site's Visibility.jpg",
     "/assets/Blogs/photo16-9/Effective Link-Building Strategies.jpg",
     "/assets/Blogs/photo16-9/What Is a Content Management System.jpg",
     "/assets/Blogs/photo16-9/How To Improve Marketing Campaign Efficiency.jpg",

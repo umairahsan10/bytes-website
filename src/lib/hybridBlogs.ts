@@ -4,6 +4,9 @@ import { addInternalLinks } from './internalLinking';
 
 export interface HybridBlogPost extends BlogPost {
   source: 'static' | 'sanity';
+  category?: string;
+  publishedAt?: string;
+  internalLinking?: any;
   seo?: {
     metaTitle?: string;
     metaDescription?: string;
@@ -30,22 +33,16 @@ export async function getHybridBlogs(): Promise<HybridBlogPost[]> {
     seo: undefined
   }));
   
-  // Convert Sanity blogs to hybrid format with PRIORITY
+  // Convert Sanity blogs to hybrid format with real data
   const sanityBlogs = await getSanityBlogs();
-  const sanityHybridBlogs: HybridBlogPost[] = sanityBlogs.map((sanityPost, index) => {
+  const sanityHybridBlogs: HybridBlogPost[] = sanityBlogs.map((sanityPost) => {
     const converted = convertSanityPostToBlogPost(sanityPost);
     return {
       ...converted,
-      id: 25 + index, // Start from ID 25 and increment
+      // Use real data instead of arbitrary IDs
+      id: Date.parse(sanityPost.publishedAt), // Use timestamp as natural ID
       source: 'sanity' as const,
-      seo: sanityPost.seo,
-      // Ensure Sanity data takes priority
-      title: sanityPost.title,
-      excerpt: sanityPost.excerpt || '',
-      category: sanityPost.category || 'BLOG',
-      publishedAt: sanityPost.publishedAt,
-      // Use Sanity's internal linking data
-      internalLinking: sanityPost.internalLinking
+      seo: sanityPost.seo
     };
   });
   
@@ -74,13 +71,7 @@ export async function getHybridBlogBySlug(slug: string): Promise<HybridBlogPost 
       ...converted,
       source: 'sanity' as const,
       content: sanityBlog.content, // Keep the original Sanity content for PortableText
-      seo: sanityBlog.seo,
-      // Ensure all Sanity fields are preserved
-      title: sanityBlog.title,
-      excerpt: sanityBlog.excerpt || '',
-      category: sanityBlog.category || 'BLOG',
-      publishedAt: sanityBlog.publishedAt,
-      internalLinking: sanityBlog.internalLinking
+      seo: sanityBlog.seo
     };
   }
   
@@ -125,11 +116,13 @@ export async function getHybridRelatedPosts(currentSlug: string): Promise<Hybrid
 }
 
 // Get blog count by source
-export function getBlogCounts() {
+export async function getBlogCounts() {
   const staticBlogs = getBlogs();
+  const sanityBlogs = await getSanityBlogs();
+  
   return {
     static: staticBlogs.length,
-    sanity: 0, // Will be updated when Sanity is configured
-    total: staticBlogs.length
+    sanity: sanityBlogs.length,
+    total: staticBlogs.length + sanityBlogs.length
   };
 } 
