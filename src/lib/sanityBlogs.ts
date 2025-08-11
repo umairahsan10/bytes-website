@@ -50,6 +50,10 @@ export function convertSanityPostToBlogPost(sanityPost: SanityBlogPost) {
     date: sanityPost.publishedAt,
     content: sanityPost.content || '', // Keep as is for PortableText
     category: sanityPost.category || 'BLOG',
+    // Preserve all Sanity-specific data
+    publishedAt: sanityPost.publishedAt,
+    seo: sanityPost.seo,
+    internalLinking: sanityPost.internalLinking
   };
 }
 

@@ -96,6 +96,7 @@ export default {
           { title: 'WEB', value: 'WEB' },
           { title: 'APP', value: 'APP' },
           { title: 'MARKETING', value: 'MARKETING' },
+          { title: 'ADVANCED SERVICES', value: 'ADVANCED SERVICES' },
         ],
         layout: 'radio',
       },

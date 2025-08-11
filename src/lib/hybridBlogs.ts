@@ -30,7 +30,7 @@ export async function getHybridBlogs(): Promise<HybridBlogPost[]> {
     seo: undefined
   }));
   
-  // Convert Sanity blogs to hybrid format
+  // Convert Sanity blogs to hybrid format with PRIORITY
   const sanityBlogs = await getSanityBlogs();
   const sanityHybridBlogs: HybridBlogPost[] = sanityBlogs.map((sanityPost, index) => {
     const converted = convertSanityPostToBlogPost(sanityPost);
@@ -38,35 +38,26 @@ export async function getHybridBlogs(): Promise<HybridBlogPost[]> {
       ...converted,
       id: 25 + index, // Start from ID 25 and increment
       source: 'sanity' as const,
-      seo: sanityPost.seo
+      seo: sanityPost.seo,
+      // Ensure Sanity data takes priority
+      title: sanityPost.title,
+      excerpt: sanityPost.excerpt || '',
+      category: sanityPost.category || 'BLOG',
+      publishedAt: sanityPost.publishedAt,
+      // Use Sanity's internal linking data
+      internalLinking: sanityPost.internalLinking
     };
   });
   
-  // Combine blogs
-  const allBlogs = [...staticHybridBlogs, ...sanityHybridBlogs];
+  // Combine blogs with Sanity blogs FIRST (priority)
+  const allBlogs = [...sanityHybridBlogs, ...staticHybridBlogs];
   
   return allBlogs;
 }
 
 // Get a single blog post by slug (check both sources)
 export async function getHybridBlogBySlug(slug: string): Promise<HybridBlogPost | null> {
-  // First check static blogs
-  const staticBlogs = getBlogs();
-  const staticBlog = staticBlogs.find(blog => blog.slug === slug);
-  
-  if (staticBlog) {
-    // Apply internal linking to static blogs using the 37 keywords
-    const processedContent = addInternalLinks(staticBlog.content, staticBlog.slug);
-    
-    return {
-      ...staticBlog,
-      content: processedContent,
-      source: 'static' as const,
-      seo: undefined
-    };
-  }
-  
-  // Then check Sanity blogs
+  // FIRST check Sanity blogs (priority)
   const sanityBlogs = await getSanityBlogs();
   
   const sanityBlog = sanityBlogs.find(blog => {
@@ -83,7 +74,29 @@ export async function getHybridBlogBySlug(slug: string): Promise<HybridBlogPost 
       ...converted,
       source: 'sanity' as const,
       content: sanityBlog.content, // Keep the original Sanity content for PortableText
-      seo: sanityBlog.seo
+      seo: sanityBlog.seo,
+      // Ensure all Sanity fields are preserved
+      title: sanityBlog.title,
+      excerpt: sanityBlog.excerpt || '',
+      category: sanityBlog.category || 'BLOG',
+      publishedAt: sanityBlog.publishedAt,
+      internalLinking: sanityBlog.internalLinking
+    };
+  }
+  
+  // THEN check static blogs (fallback)
+  const staticBlogs = getBlogs();
+  const staticBlog = staticBlogs.find(blog => blog.slug === slug);
+  
+  if (staticBlog) {
+    // Apply internal linking to static blogs using the 37 keywords
+    const processedContent = addInternalLinks(staticBlog.content, staticBlog.slug);
+    
+    return {
+      ...staticBlog,
+      content: processedContent,
+      source: 'static' as const,
+      seo: undefined
     };
   }
   
