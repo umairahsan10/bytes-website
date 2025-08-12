@@ -17,31 +17,26 @@ import { blogMetaData } from "../layout";
 
 const POSTS_PER_PAGE = 8;
 
-// Dynamic pagination function to get posts for specific ID ranges
+// Dynamic pagination function to get posts for specific page ranges
 function getPostsForPage(allPosts: any[], pageNumber: number) {
-  const maxId = Math.max(...allPosts.map(post => post.id));
-  const minId = Math.min(...allPosts.map(post => post.id));
+  // Sort posts by actual publish date (newest first)
+  const sortedPosts = allPosts.sort((a, b) => {
+    const dateA = new Date(a.publishedAt || a.date || 0);
+    const dateB = new Date(b.publishedAt || b.date || 0);
+    return dateB.getTime() - dateA.getTime();
+  });
   
-  // Calculate how many pages we need
-  const totalPosts = maxId - minId + 1;
-  const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
+  const POSTS_PER_PAGE = 8;
+  const startIndex = (pageNumber - 1) * POSTS_PER_PAGE;
+  const endIndex = startIndex + POSTS_PER_PAGE;
   
-  // Calculate the ID range for the requested page
-  // Page 1 gets the highest 8 IDs, Page 2 gets the next 8, etc.
-  const startId = maxId - (pageNumber - 1) * POSTS_PER_PAGE - (POSTS_PER_PAGE - 1);
-  const endId = maxId - (pageNumber - 1) * POSTS_PER_PAGE;
-  
-  // Filter posts by ID range
-  return allPosts.filter(post => post.id >= startId && post.id <= endId);
+  return sortedPosts.slice(startIndex, endIndex);
 }
 
 // Calculate total pages based on available posts
 function calculateTotalPages(allPosts: any[]) {
-  const maxId = Math.max(...allPosts.map(post => post.id));
-  const minId = Math.min(...allPosts.map(post => post.id));
-  
-  const totalPosts = maxId - minId + 1;
-  return Math.ceil(totalPosts / POSTS_PER_PAGE);
+  const POSTS_PER_PAGE = 8;
+  return Math.ceil(allPosts.length / POSTS_PER_PAGE);
 }
 
 export const dynamicParams = true;
@@ -156,21 +151,24 @@ export async function generateMetadata({
 
 export async function generateStaticParams() {
   const allPosts = await getHybridBlogs();
-  const totalPages = calculateTotalPages(allPosts);
+  const totalPages = Math.max(1, calculateTotalPages(allPosts)); // Ensure minimum 1
   
   // Generate params for blog posts
   const blogParams = allPosts.map((b) => ({ slug: [b.slug] }));
   
   // Generate params for pagination (skip page-1 since it redirects to /blogs)
-  const pageParams = Array.from({ length: totalPages - 1 }, (_, idx) => ({ 
-    slug: [`page-${idx + 2}`] 
-  }));
+  // Only generate pagination params if we have more than 1 page
+  const pageParams = totalPages > 1 
+    ? Array.from({ length: totalPages - 1 }, (_, idx) => ({ 
+        slug: [`page-${idx + 2}`] 
+      }))
+    : []; // Return empty array if no pagination needed
   
   return [...blogParams, ...pageParams];
 }
 
 // Add ISR (Incremental Static Regeneration)
-export const revalidate = 300; // Revalidate every 5 minutes
+export const revalidate = 600; // Revalidate every 5 minutes
 
 
 
@@ -186,7 +184,7 @@ export default async function BlogPage({
   if (path.startsWith('page-')) {
     const pageNumber = parseInt(path.replace('page-', ''), 10);
     const allPosts = await getHybridBlogs();
-    const totalPages = calculateTotalPages(allPosts);
+    const totalPages = Math.max(1, calculateTotalPages(allPosts)); // Ensure minimum 1
 
     if (!pageNumber || pageNumber < 1 || pageNumber > totalPages) {
       return notFound();
@@ -208,38 +206,41 @@ export default async function BlogPage({
 
             <BlogGrid posts={visiblePosts} />
 
-            {/* Pagination */}
-            <div className="flex justify-center items-center gap-3 mt-6 flex-wrap">
-                          {pageNumber > 1 ? (
-              <Link href={pageNumber - 1 === 1 ? '/blogs' : `/blogs/page-${pageNumber - 1}`} className="px-3 py-1 rounded text-[#010a14] hover:bg-[#010a14] hover:text-white transition-colors border border-[#010a14]">
-                Prev
-              </Link>
-            ) : (
-              <span className="px-3 py-1 rounded border border-gray-300 text-gray-400 select-none">Prev</span>
-            )}
-
-              {Array.from({ length: totalPages }, (_, idx) => {
-                const p = idx + 1;
-                const isActive = p === pageNumber;
-                return isActive ? (
-                  <span key={p} className="px-3 py-1 rounded bg-[#010a14] text-white font-semibold">
-                    {p}
-                  </span>
-                ) : (
-                  <Link key={p} href={p === 1 ? '/blogs' : `/blogs/page-${p}`} className="px-3 py-1 rounded text-[#010a14] hover:bg-[#010a14] hover:text-white transition-colors border border-[#010a14]">
-                    {p}
+            {/* Pagination - Only show if we have multiple pages */}
+            {totalPages > 1 && (
+              <div className="flex justify-center items-center gap-3 mt-6 flex-wrap">
+                {pageNumber > 1 ? (
+                  <Link href={pageNumber - 1 === 1 ? '/blogs' : `/blogs/page-${pageNumber - 1}`} className="px-3 py-1 rounded text-[#010a14] hover:bg-[#010a14] hover:text-white transition-colors border border-[#010a14]">
+                    Prev
                   </Link>
-                );
-              })}
+                ) : (
+                  <span className="px-3 py-1 rounded border border-gray-300 text-gray-400 select-none">Prev</span>
+                )}
 
-              {pageNumber < totalPages ? (
-                <Link href={`/blogs/page-${pageNumber + 1}`} className="px-3 py-1 rounded text-[#010a14] hover:bg-[#010a14] hover:text-white transition-colors border border-[#010a14]">
-                  Next
-                </Link>
-              ) : (
-                <span className="px-3 py-1 rounded border border-gray-300 text-gray-400 select-none">Next</span>
-              )}
-            </div>
+                {/* Only generate pagination buttons if totalPages is valid */}
+                {totalPages > 0 && Array.from({ length: totalPages }, (_, idx) => {
+                  const p = idx + 1;
+                  const isActive = p === pageNumber;
+                  return isActive ? (
+                    <span key={p} className="px-3 py-1 rounded bg-[#010a14] text-white font-semibold">
+                      {p}
+                    </span>
+                  ) : (
+                    <Link key={p} href={p === 1 ? '/blogs' : `/blogs/page-${p}`} className="px-3 py-1 rounded text-[#010a14] hover:bg-[#010a14] hover:text-white transition-colors border border-[#010a14]">
+                      {p}
+                    </Link>
+                  );
+                })}
+
+                {pageNumber < totalPages ? (
+                  <Link href={`/blogs/page-${pageNumber + 1}`} className="px-3 py-1 rounded text-[#010a14] hover:bg-[#010a14] hover:text-white transition-colors border border-[#010a14]">
+                    Next
+                  </Link>
+                ) : (
+                  <span className="px-3 py-1 rounded border border-gray-300 text-gray-400 select-none">Next</span>
+                )}
+              </div>
+            )}
           </div>
         </main>
       </>

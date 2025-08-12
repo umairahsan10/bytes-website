@@ -4,6 +4,9 @@ import { addInternalLinks } from './internalLinking';
 
 export interface HybridBlogPost extends BlogPost {
   source: 'static' | 'sanity';
+  category?: string;
+  publishedAt?: string;
+  internalLinking?: any;
   seo?: {
     metaTitle?: string;
     metaDescription?: string;
@@ -30,43 +33,28 @@ export async function getHybridBlogs(): Promise<HybridBlogPost[]> {
     seo: undefined
   }));
   
-  // Convert Sanity blogs to hybrid format
+  // Convert Sanity blogs to hybrid format with real data
   const sanityBlogs = await getSanityBlogs();
-  const sanityHybridBlogs: HybridBlogPost[] = sanityBlogs.map((sanityPost, index) => {
+  const sanityHybridBlogs: HybridBlogPost[] = sanityBlogs.map((sanityPost) => {
     const converted = convertSanityPostToBlogPost(sanityPost);
     return {
       ...converted,
-      id: 25 + index, // Start from ID 25 and increment
+      // Use real data instead of arbitrary IDs
+      id: Date.parse(sanityPost.publishedAt), // Use timestamp as natural ID
       source: 'sanity' as const,
       seo: sanityPost.seo
     };
   });
   
-  // Combine blogs
-  const allBlogs = [...staticHybridBlogs, ...sanityHybridBlogs];
+  // Combine blogs with Sanity blogs FIRST (priority)
+  const allBlogs = [...sanityHybridBlogs, ...staticHybridBlogs];
   
   return allBlogs;
 }
 
 // Get a single blog post by slug (check both sources)
 export async function getHybridBlogBySlug(slug: string): Promise<HybridBlogPost | null> {
-  // First check static blogs
-  const staticBlogs = getBlogs();
-  const staticBlog = staticBlogs.find(blog => blog.slug === slug);
-  
-  if (staticBlog) {
-    // Apply internal linking to static blogs using the 37 keywords
-    const processedContent = addInternalLinks(staticBlog.content, staticBlog.slug);
-    
-    return {
-      ...staticBlog,
-      content: processedContent,
-      source: 'static' as const,
-      seo: undefined
-    };
-  }
-  
-  // Then check Sanity blogs
+  // FIRST check Sanity blogs (priority)
   const sanityBlogs = await getSanityBlogs();
   
   const sanityBlog = sanityBlogs.find(blog => {
@@ -83,7 +71,25 @@ export async function getHybridBlogBySlug(slug: string): Promise<HybridBlogPost 
       ...converted,
       source: 'sanity' as const,
       content: sanityBlog.content, // Keep the original Sanity content for PortableText
-      seo: sanityBlog.seo
+      seo: sanityBlog.seo,
+      category: sanityBlog.category // Ensure category is preserved
+    };
+  }
+  
+  // THEN check static blogs (fallback)
+  const staticBlogs = getBlogs();
+  const staticBlog = staticBlogs.find(blog => blog.slug === slug);
+  
+  if (staticBlog) {
+    // Apply internal linking to static blogs using the 37 keywords
+    const processedContent = addInternalLinks(staticBlog.content, staticBlog.slug);
+    
+    return {
+      ...staticBlog,
+      content: processedContent,
+      source: 'static' as const,
+      seo: undefined,
+      category: staticBlog.category // Ensure category is preserved
     };
   }
   
@@ -112,11 +118,13 @@ export async function getHybridRelatedPosts(currentSlug: string): Promise<Hybrid
 }
 
 // Get blog count by source
-export function getBlogCounts() {
+export async function getBlogCounts() {
   const staticBlogs = getBlogs();
+  const sanityBlogs = await getSanityBlogs();
+  
   return {
     static: staticBlogs.length,
-    sanity: 0, // Will be updated when Sanity is configured
-    total: staticBlogs.length
+    sanity: sanityBlogs.length,
+    total: staticBlogs.length + sanityBlogs.length
   };
 } 

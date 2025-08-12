@@ -6,35 +6,30 @@ import BlogListingIntro from "@/components/BlogListingIntro";
 
 const POSTS_PER_PAGE = 8;
 
-// Dynamic pagination function to get posts for specific ID ranges
+// Dynamic pagination function to get posts for specific page ranges
 function getPostsForPage(allPosts: any[], pageNumber: number) {
-  const maxId = Math.max(...allPosts.map(post => post.id));
-  const minId = Math.min(...allPosts.map(post => post.id));
+  // Sort posts by actual publish date (newest first)
+  const sortedPosts = allPosts.sort((a, b) => {
+    const dateA = new Date(a.publishedAt || a.date || 0);
+    const dateB = new Date(b.publishedAt || b.date || 0);
+    return dateB.getTime() - dateA.getTime();
+  });
   
-  // Calculate how many pages we need
-  const totalPosts = maxId - minId + 1;
-  const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
+  const POSTS_PER_PAGE = 8;
+  const startIndex = (pageNumber - 1) * POSTS_PER_PAGE;
+  const endIndex = startIndex + POSTS_PER_PAGE;
   
-  // Calculate the ID range for the requested page
-  // Page 1 gets the highest 8 IDs, Page 2 gets the next 8, etc.
-  const startId = maxId - (pageNumber - 1) * POSTS_PER_PAGE - (POSTS_PER_PAGE - 1);
-  const endId = maxId - (pageNumber - 1) * POSTS_PER_PAGE;
-  
-  // Filter posts by ID range
-  return allPosts.filter(post => post.id >= startId && post.id <= endId);
+  return sortedPosts.slice(startIndex, endIndex);
 }
 
 // Calculate total pages based on available posts
 function calculateTotalPages(allPosts: any[]) {
-  const maxId = Math.max(...allPosts.map(post => post.id));
-  const minId = Math.min(...allPosts.map(post => post.id));
-  
-  const totalPosts = maxId - minId + 1;
-  return Math.ceil(totalPosts / POSTS_PER_PAGE);
+  const POSTS_PER_PAGE = 8;
+  return Math.ceil(allPosts.length / POSTS_PER_PAGE);
 }
 
 // Add ISR (Incremental Static Regeneration)
-export const revalidate = 300; // Revalidate every 5 minutes
+export const revalidate = 600; // Revalidate every 5 minutes
 
 export default async function BlogsRoot() {
   // Fetch posts from both static and Sanity sources
