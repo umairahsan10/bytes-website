@@ -22,12 +22,12 @@ export default function BlogGrid({ posts, startIndexInPage = 0 }: BlogGridProps)
   const getCategory = (post: BlogPost | HybridBlogPost) => {
     const hybridPost = post as HybridBlogPost;
     
-    // PRIORITY 1: Use Sanity category if available
-    if (hybridPost.source === 'sanity' && hybridPost.category) {
-      return hybridPost.category;
+    // PRIORITY 1: Use category from the post object (works for both Sanity and static blogs)
+    if (post.category) {
+      return post.category;
     }
     
-    // PRIORITY 2: Use custom category mapping for static blogs
+    // PRIORITY 2: Use custom category mapping for static blogs (fallback)
     if (STATIC_BLOG_CATEGORIES[post.title]) {
       return STATIC_BLOG_CATEGORIES[post.title];
     }
@@ -41,6 +41,8 @@ export default function BlogGrid({ posts, startIndexInPage = 0 }: BlogGridProps)
     // if (positionInGroup <= 6) return 'APP';
     // if (positionInGroup <= 8) return 'MARKETING';
     // return '';
+    
+    return ''; // Return empty string if no category found
   };
 
   return (

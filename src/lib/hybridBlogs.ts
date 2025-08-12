@@ -71,7 +71,8 @@ export async function getHybridBlogBySlug(slug: string): Promise<HybridBlogPost 
       ...converted,
       source: 'sanity' as const,
       content: sanityBlog.content, // Keep the original Sanity content for PortableText
-      seo: sanityBlog.seo
+      seo: sanityBlog.seo,
+      category: sanityBlog.category // Ensure category is preserved
     };
   }
   
@@ -87,7 +88,8 @@ export async function getHybridBlogBySlug(slug: string): Promise<HybridBlogPost 
       ...staticBlog,
       content: processedContent,
       source: 'static' as const,
-      seo: undefined
+      seo: undefined,
+      category: staticBlog.category // Ensure category is preserved
     };
   }
   

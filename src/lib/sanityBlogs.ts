@@ -48,7 +48,8 @@ export function convertSanityPostToBlogPost(sanityPost: SanityBlogPost) {
     image: sanityPost.listingImage ? urlFor(sanityPost.listingImage).width(400).height(400).url() : '/assets/Blogs/photos1-1/new1.jpg',
     detailImage: sanityPost.detailImage ? urlFor(sanityPost.detailImage).width(1200).height(700).url() : '/assets/Blogs/photo16-9/new1.jpg',
     date: sanityPost.publishedAt,
-    content: sanityPost.content || '' // Keep as is for PortableText
+    content: sanityPost.content || '', // Keep as is for PortableText
+    category: sanityPost.category // Preserve the category field
   };
 }
 
