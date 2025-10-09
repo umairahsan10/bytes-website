@@ -167,8 +167,9 @@ export async function generateStaticParams() {
   return [...blogParams, ...pageParams];
 }
 
-// Add ISR (Incremental Static Regeneration)
-export const revalidate = 600; // Revalidate every 5 minutes
+// Webhooks as primary, ISR as fallback
+// ISR set to 20 minutes - only runs if webhook fails
+export const revalidate = 1200; // 20 minutes
 
 
 
