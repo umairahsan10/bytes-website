@@ -4,7 +4,7 @@ import React, { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faEnvelope, faPhoneVolume } from '@fortawesome/free-solid-svg-icons';
 import { faFacebookF, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
-import "./contact.css";
+import "./contact-short.css";
 import Image from 'next/image';
 
 // EmailJS type declarations
@@ -16,7 +16,7 @@ declare global {
   }
 }
 
-function Contact() {
+function ContactShort() {
   const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState({
     name: '',
@@ -96,11 +96,11 @@ function Contact() {
     <>
      
       {/* Contact Form Section */}
-      <div className='pt-20 bg-[#fafafa]'>
+      <div className='pb-10 bg-[#ffffff] '>
         <div className="container1">
           <span className="big-circle"></span>
           <div className="form">
-            <div className="contact-info">
+            {/* <div className="contact-info">
               <h2 className="title">Let's get in touch</h2>
               <p className="text">
               We'd love to hear from you! Whether you have a question or feedback, feel free to reach out. Contact us through the form below or via our social media channels.  
@@ -135,7 +135,7 @@ function Contact() {
                   </a>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className="contact-form">
               <span className="circle one"></span>
@@ -143,24 +143,41 @@ function Contact() {
 
               <form ref={formRef} className="sub-form" action="index.html" autoComplete="off" onSubmit={handleSubmit}>
                 <h2 className="title">Contact us</h2>
-                <div className="input-container">
-                  <input type="text" name="name" className="input" placeholder="Username" value={formData.name} onChange={handleChange} />
+
+                {/* First row: name, email, phone (horizontal) */}
+                <div className="short-row">
+                  <div className="input-container">
+                    <input type="text" name="name" className="input" placeholder="Username" value={formData.name} onChange={handleChange} />
+                  </div>
+                  <div className="input-container">
+                    <input type="email" name="email" className="input" placeholder="Email" value={formData.email} onChange={handleChange} />
+                    {errors.email && <span className="error-text">{errors.email}</span>}
+                  </div>
+                  <div className="input-container">
+                    <input type="tel" name="phone" className="input" placeholder="Phone" value={formData.phone} onChange={handleChange} />
+                    {errors.phone && <span className="error-text">{errors.phone}</span>}
+                  </div>
                 </div>
-                <div className="input-container">
-                  <input type="email" name="email" className="input" placeholder="Email" value={formData.email} onChange={handleChange} />
-                  {errors.email && <span className="error-text">{errors.email}</span>}
-                </div>
-                <div className="input-container">
-                  <input type="tel" name="phone" className="input" placeholder="Phone" value={formData.phone} onChange={handleChange} />
-                  {errors.phone && <span className="error-text">{errors.phone}</span>}
-                </div>
-                <div className="input-container textarea">
-                  <textarea name="message" className="input" placeholder="Message" value={formData.message} onChange={handleChange}></textarea>
+
+                {/* Second row: message and send button */}
+                <div className="short-message-row">
+                  <div className="input-container textarea">
+                    <textarea name="message" className="input" placeholder="Message" value={formData.message} onChange={handleChange}></textarea>
+                  </div>
+                  <div className="short-submit-wrap">
+                    <input 
+                      type="submit" 
+                      data-cta="true" 
+                      value={isSubmitting ? "Sending..." : "Send"} 
+                      className="btn short-btn" 
+                      disabled={isSubmitting}
+                    />
+                  </div>
                 </div>
                 
                 {/* Status Messages */}
                 {submitStatus === 'success' && (
-                  <div className="success-message" style={{ color: 'green', marginBottom: '10px', textAlign: 'center' }}>
+                  <div className="success-message" style={{ color: 'lightgreen', marginBottom: '10px', textAlign: 'center'}}>
                     Message sent successfully!
                   </div>
                 )}
@@ -169,14 +186,6 @@ function Contact() {
                     Failed to send message. Please try again.
                   </div>
                 )}
-                
-                <input 
-                  type="submit" 
-                  data-cta="true" 
-                  value={isSubmitting ? "Sending..." : "Send"} 
-                  className="btn" 
-                  disabled={isSubmitting}
-                />
               </form>
             </div>
           </div>
@@ -186,5 +195,5 @@ function Contact() {
   );
 }
 
-export default Contact;
-export const ContactSection = Contact;
+export default ContactShort;
+export const ContactSection = ContactShort;

@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import ContactShort from '@/sections/ContactShort';
 
 // Define meta data for each blog post
 const blogMetaData: Record<string, { title: string; description: string }> = {
@@ -122,7 +123,12 @@ export default function BlogsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <>
+      {children}
+      <ContactShort />
+    </>
+  );
 }
 
 // Export the blog meta data for use in individual blog pages
