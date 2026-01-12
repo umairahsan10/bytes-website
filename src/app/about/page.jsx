@@ -1108,8 +1108,9 @@ export default function AboutPage() {
               poster="/assets/aboutUs/hero.jpg"
               autoPlay={false}
               playsInline
+              preload="none"
             >
-              <source src="/Videos/About-Video.mp4" type="video/mp4" />
+              <source src="https://cuajqisgccknt4yu.public.blob.vercel-storage.com/About-Video.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
