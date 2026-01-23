@@ -3,6 +3,8 @@ const nextConfig = {
   eslint: {           
     ignoreDuringBuilds: true,
   },
+  // Explicitly use webpack instead of Turbopack
+  turbopack: {},
   images: {
     remotePatterns: [
       {
