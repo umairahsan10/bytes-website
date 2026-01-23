@@ -2,9 +2,9 @@
 
 @import "tailwindcss/preflight";
 @import "tailwindcss/utilities";
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700&display=swap');
+
+/* External fonts loaded via Next.js for optimal performance */
+/* Poppins, Bebas Neue, and League Spartan now optimized in layout.tsx */
 
 /* Font removed - using system fonts instead */
 

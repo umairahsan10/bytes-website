@@ -27,7 +27,10 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-sans)"],
         serif: ["var(--font-serif)"],
-        league: ["'League Spartan'", "sans-serif"],
+        poppins: ["var(--font-poppins)", "sans-serif"],
+        bebas: ["var(--font-bebas)", "sans-serif"],
+        spartan: ["var(--font-spartan)", "sans-serif"],
+        league: ["var(--font-spartan)", "sans-serif"], // Using spartan as league
       },
       animation: {
         // 'ping-large': "ping-large 1s ease-in-out infinite",
