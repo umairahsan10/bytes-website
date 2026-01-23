@@ -3,8 +3,8 @@ import bytesTest3 from "../../public/portfolio/bytes-test-3.png";
 import bytesTest5 from "../../public/portfolio/bytes-test-5.png";
 import bytesTest6 from "../../public/portfolio/bytes-test-6.png";
 import Image from "next/image";
-import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg?url"
-import { SectionHeader } from "@/components/SectionHeader"
+import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg";
+import { SectionHeader } from "@/components/SectionHeader";
 import { useState, useEffect, useCallback } from "react";
 
 const portfolioProjects = [

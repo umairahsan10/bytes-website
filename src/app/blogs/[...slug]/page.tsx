@@ -13,7 +13,7 @@ import RelatedPosts from "@/components/RelatedPosts";
 import PortableText from "@/components/PortableText";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
-import { blogMetaData } from "../layout";
+import { blogMetaData } from "@/lib/blogMetaData";
 
 const POSTS_PER_PAGE = 8;
 
