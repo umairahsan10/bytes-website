@@ -3,7 +3,7 @@ import bytesTest3 from "../../public/portfolio/bytes-test-3.png";
 import bytesTest5 from "../../public/portfolio/bytes-test-5.png";
 import bytesTest6 from "../../public/portfolio/bytes-test-6.png";
 import Image from "next/image";
-import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg"
+import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg?url"
 import { SectionHeader } from "@/components/SectionHeader"
 import { useState, useEffect, useCallback } from "react";
 
@@ -188,7 +188,7 @@ export const ProjectsSection = () => {
                       className="inline-flex items-center justify-center gap-2 bg-white text-gray-900 px-6 py-3 rounded-xl text-sm font-semibold shadow-md hover:bg-gray-200 transition-colors"
                     >
                       Visit Live Site
-                      <ArrowUpRightIcon className="w-4 h-4" />
+                      <Image src={ArrowUpRightIcon} alt="arrow" width={16} height={16} className="w-4 h-4" />
                     </a>
                   </div>
                 ))}
