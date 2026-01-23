@@ -119,14 +119,14 @@ const AppDevelopmentPage = () => {
       id: "messaging",
       title: "Smart Messaging",
       description: "Built-in communication features that keep your users connected and engaged.",
-      image: "/assets/appdev/chat-image.png",
+      image: "/assets/appdev/chat-image.webp",
       features: ["Real-time chat", "Push notifications", "Media sharing"]
     },
     {
       id: "profile",
       title: "User Profiles",
       description: "Personalized user experiences with comprehensive profile management and customization options.",
-      image: "/assets/appdev/user-profile.jpg",
+      image: "/assets/appdev/user-profile.webp",
       features: ["Profile customization", "Privacy controls", "Social integration"]
     }
   ];
@@ -221,10 +221,11 @@ const AppDevelopmentPage = () => {
             viewport={{ once: false }}
           >
             <Image
-              src="/assets/app-hero-img.png"
+              src="/assets/app-hero-img.webp"
               alt="Team brainstorming on mobile-app UI"
               fill
               className="object-contain opacity-100 scale-150 -translate-x-20"
+              sizes="(max-width: 640px) 80vw, (max-width: 768px) 70vw, (max-width: 1024px) 60vw, 50vw"
               style={{
                 maskImage: 'linear-gradient(to left, transparent 0%, black 30%)',
                 WebkitMaskImage: 'linear-gradient(to left, transparent 0%, black 30%)'
@@ -312,6 +313,7 @@ const AppDevelopmentPage = () => {
                       alt="iPhone 14 Space Black"
                       fill
                       className="object-contain drop-shadow-2xl"
+                      sizes="(max-width: 400px) 140px, (max-width: 640px) 200px, (max-width: 768px) 240px, 260px"
                       priority
                     />
                   </div>
@@ -594,10 +596,11 @@ const AppDevelopmentPage = () => {
               }}
             >
               <Image
-                src="/assets/newimages/mobileapp.png"
+                src="/assets/newimages/mobileapp.webp"
                 alt="Mobile app hero mockup"
                 fill
                 className="object-contain"
+                sizes="(max-width: 640px) 90vw, (max-width: 1024px) 50vw, 40vw"
                 priority
               />
             </motion.div>
@@ -743,14 +746,14 @@ const AppDevelopmentPage = () => {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { name: "React Native", category: "For cross-platform development", icon: "/assets/react-native-icon.png", color: "from-blue-500 to-cyan-500" },
-                { name: "Flutter", category: "Another cross-platform framework for efficient app development", icon: "/assets/flutter-icon.png", color: "from-blue-600 to-blue-800" },
-                { name: "Swift/SwiftUI", category: "For native iOS applications", icon: "/assets/swift-icon.png", color: "from-orange-500 to-red-500" },
-                { name: "Kotlin/Java", category: "For native Android applications", icon: "/assets/kotlin-icon.png", color: "from-purple-600 to-purple-800" },
-                { name: "Node.js", category: "For backend development", icon: "/assets/nodejs-icon.png", color: "from-green-500 to-green-700" },
-                { name: "Firebase", category: "For backend services", icon: "/assets/firebase-icon.png", color: "from-orange-400 to-yellow-500" },
-                { name: "MongoDB", category: "For database management", icon: "/assets/mongodb-icon.png", color: "from-green-600 to-green-800" },
-                { name: "AWS/Azure", category: "For cloud services", icon: "/assets/aws-icon.png", color: "from-orange-600 to-red-600" }
+                { name: "React Native", category: "For cross-platform development", icon: "/assets/react-native-icon.webp", color: "from-blue-500 to-cyan-500" },
+                { name: "Flutter", category: "Another cross-platform framework for efficient app development", icon: "/assets/flutter-icon.webp", color: "from-blue-600 to-blue-800" },
+                { name: "Swift/SwiftUI", category: "For native iOS applications", icon: "/assets/swift-icon.webp", color: "from-orange-500 to-red-500" },
+                { name: "Kotlin/Java", category: "For native Android applications", icon: "/assets/kotlin-icon.webp", color: "from-purple-600 to-purple-800" },
+                { name: "Node.js", category: "For backend development", icon: "/assets/nodejs-icon.webp", color: "from-green-500 to-green-700" },
+                { name: "Firebase", category: "For backend services", icon: "/assets/firebase-icon.webp", color: "from-orange-400 to-yellow-500" },
+                { name: "MongoDB", category: "For database management", icon: "/assets/mongodb-icon.webp", color: "from-green-600 to-green-800" },
+                { name: "AWS/Azure", category: "For cloud services", icon: "/assets/aws-icon.webp", color: "from-orange-600 to-red-600" }
               ].map((tech, index) => (
                 <motion.div
                   key={index}
@@ -793,7 +796,14 @@ const AppDevelopmentPage = () => {
                       transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                     />
                     <motion.div className="relative z-10" whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
-                      <Image src={tech.icon} alt={`${tech.name} icon`} width={48} height={48} className="object-contain" />
+                      <Image 
+                        src={tech.icon} 
+                        alt={`${tech.name} icon`} 
+                        width={48} 
+                        height={48} 
+                        className="object-contain"
+                        sizes="48px"
+                      />
                     </motion.div>
                   </motion.div>
                   <motion.h3 className="text-lg font-semibold text-center mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-purple-800 group-hover:bg-clip-text transition-all duration-300" whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
@@ -815,10 +825,11 @@ const AppDevelopmentPage = () => {
         <section className="relative py-32 px-6 bg-[#E1E1E1] overflow-hidden">
           {/* Decorative background image */}
           <Image
-            src="/assets/app-img-3.png"
+            src="/assets/app-img-3.webp"
             alt="Mobile app showcase"
             fill
             className="object-cover absolute inset-0"
+            sizes="100vw"
             priority
           />
           {/* Semi-transparent overlay to improve text readability */}
