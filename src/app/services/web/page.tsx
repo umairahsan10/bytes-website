@@ -790,7 +790,7 @@ const WebDevelopmentLanding = () => {
         )
       }
 
-      <style jsx>{`
+      <style dangerouslySetInnerHTML={{__html: `
         .animate-fade-in-up {
           animation: fadeInUp 1s ease-out;
         }
@@ -880,7 +880,7 @@ const WebDevelopmentLanding = () => {
             animation: fadeInUp 0.8s ease-out;
           }
         }
-      `}</style>
+      `}} />
     </div >
   );
 };
