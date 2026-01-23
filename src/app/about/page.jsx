@@ -8,13 +8,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ContactSection } from "@/sections/Contact";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useMotionValue, animate, useInView } from "framer-motion";
-import ReactIcon from "@/assets/icons/react.svg";
-import JsIcon from "@/assets/icons/square-js.svg";
-import HtmlIcon from "@/assets/icons/html5.svg";
-import CssIcon from "@/assets/icons/css3.svg";
-import GithubIcon from "@/assets/icons/github.svg";
-import ChromeIcon from "@/assets/icons/chrome.svg";
-import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg";
+import ReactIcon from "@/assets/icons/react.svg?url";
+import JsIcon from "@/assets/icons/square-js.svg?url";
+import HtmlIcon from "@/assets/icons/html5.svg?url";
+import CssIcon from "@/assets/icons/css3.svg?url";
+import GithubIcon from "@/assets/icons/github.svg?url";
+import ChromeIcon from "@/assets/icons/chrome.svg?url";
+import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg?url";
 import { useRouter } from "next/navigation";
 
 // Animated counter component
@@ -1354,20 +1354,20 @@ Our mission is simple: to empower businesses with digital solutions that don’t
                           whileInView="visible"
                         >
                           {[
-                            { Icon: ReactIcon, name: "React" },
-                            { Icon: JsIcon, name: "JavaScript" },
-                            { Icon: HtmlIcon, name: "HTML5" },
-                            { Icon: CssIcon, name: "CSS3" },
-                            { Icon: GithubIcon, name: "GitHub" },
-                            { Icon: ChromeIcon, name: "Chrome DevTools" },
-                          ].map(({ Icon, name }, idx) => (
+                            { icon: ReactIcon, name: "React" },
+                            { icon: JsIcon, name: "JavaScript" },
+                            { icon: HtmlIcon, name: "HTML5" },
+                            { icon: CssIcon, name: "CSS3" },
+                            { icon: GithubIcon, name: "GitHub" },
+                            { icon: ChromeIcon, name: "Chrome DevTools" },
+                          ].map(({ icon, name }, idx) => (
                             <motion.div
                               key={name}
                               className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center"
                               variants={scaleIn}
                               whileHover={{ scale: 1.1, rotate: 5 }}
                             >
-                              <Icon className="w-8 h-8 sm:w-10 sm:h-10 text-[#010a14]" aria-label={name} />
+                              <Image src={icon} alt={name} width={40} height={40} className="w-8 h-8 sm:w-10 sm:h-10 text-[#010a14]" />
                             </motion.div>
                           ))}
                         </motion.div>
