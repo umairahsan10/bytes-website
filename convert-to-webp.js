@@ -31,7 +31,13 @@ const imagesToConvert = [
   
   // SEO page images
   'public/assets/seo-img-1.png',
-  'public/assets/seo-handshake.png'
+  'public/assets/seo-handshake.png',
+  
+  // Advanced Services page images
+  'public/assets/servicebg.png',
+  'public/assets/Cybersecurity.jpg',
+  'public/assets/Emerging_tech.png',
+  'public/assets/wallpaper.jpg'
 ];
 
 async function convertToWebP(inputPath) {
@@ -48,7 +54,7 @@ async function convertToWebP(inputPath) {
   
   try {
     await sharp(fullPath)
-      .webp({ quality: 85 }) // Adjust quality as needed (80-90 recommended)
+      .webp({ quality: 95 }) // High quality for optimal visual fidelity
       .toFile(outputPath);
     
     const inputStats = fs.statSync(fullPath);
