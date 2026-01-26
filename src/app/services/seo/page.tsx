@@ -10,6 +10,22 @@ import { Header } from '@/sections/Navbar';
 import { useRouter } from 'next/navigation';
 import FAQ from '@/components/FAQ-SEO';
 
+// Critical inline styles for above-the-fold content
+const criticalStyles = `
+  .seo-hero-section {
+    background: linear-gradient(135deg, #010a14, #0a1929);
+    min-height: 100vh;
+    position: relative;
+  }
+  
+  .seo-gradient-text {
+    background: linear-gradient(to right, #93c5fd, #3b82f6, #ffffff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+`;
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
@@ -414,6 +430,9 @@ const SEOPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white text-black overflow-hidden">
+      {/* Inject critical CSS */}
+      <style dangerouslySetInnerHTML={{ __html: criticalStyles }} />
+      
       {/* Navbar */}
       <div className="fixed top-0 left-0 w-full z-50">
         <Header />
@@ -1424,12 +1443,13 @@ const SEOPage: React.FC = () => {
               >
                 <div className="relative aspect-square rounded-lg overflow-hidden shadow-lg">
                   <Image
-                    src="/assets/seo-img-1.png"
+                    src="/assets/seo-img-1.webp"
                     alt="SEO Strategy"
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    priority
+                    loading="lazy"
+                    quality={90}
                   />
                 </div>
               </motion.div>
@@ -1450,7 +1470,7 @@ const SEOPage: React.FC = () => {
       {/* CTA Section */}
       <section
         className="relative py-20 text-black bg-center bg-cover bg-no-repeat"
-        style={{ backgroundImage: "url('/assets/seo-handshake.png')" }}
+        style={{ backgroundImage: "url('/assets/seo-handshake.webp')" }}
       >
         {/* Overlay to ensure text readability */}
         <div className="absolute inset-0 bg-white/30" />
