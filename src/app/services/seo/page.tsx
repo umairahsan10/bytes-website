@@ -1424,7 +1424,7 @@ const SEOPage: React.FC = () => {
               >
                 <div className="relative aspect-square rounded-lg overflow-hidden shadow-lg">
                   <Image
-                    src="/assets/seo-img-1.png"
+                    src="/assets/seo-img-1.webp"
                     alt="SEO Strategy"
                     fill
                     className="object-cover"
@@ -1450,7 +1450,7 @@ const SEOPage: React.FC = () => {
       {/* CTA Section */}
       <section
         className="relative py-20 text-black bg-center bg-cover bg-no-repeat"
-        style={{ backgroundImage: "url('/assets/seo-handshake.png')" }}
+        style={{ backgroundImage: "url('/assets/seo-handshake.webp')" }}
       >
         {/* Overlay to ensure text readability */}
         <div className="absolute inset-0 bg-white/30" />

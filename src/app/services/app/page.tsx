@@ -119,14 +119,14 @@ const AppDevelopmentPage = () => {
       id: "messaging",
       title: "Smart Messaging",
       description: "Built-in communication features that keep your users connected and engaged.",
-      image: "/assets/appdev/chat-image.png",
+      image: "/assets/appdev/chat-image.webp",
       features: ["Real-time chat", "Push notifications", "Media sharing"]
     },
     {
       id: "profile",
       title: "User Profiles",
       description: "Personalized user experiences with comprehensive profile management and customization options.",
-      image: "/assets/appdev/user-profile.jpg",
+      image: "/assets/appdev/user-profile.webp",
       features: ["Profile customization", "Privacy controls", "Social integration"]
     }
   ];
@@ -221,7 +221,7 @@ const AppDevelopmentPage = () => {
             viewport={{ once: false }}
           >
             <Image
-              src="/assets/app-hero-img.png"
+              src="/assets/app-hero-img.webp"
               alt="Team brainstorming on mobile-app UI"
               fill
               className="object-contain opacity-100 scale-150 -translate-x-20"
@@ -594,7 +594,7 @@ const AppDevelopmentPage = () => {
               }}
             >
               <Image
-                src="/assets/newimages/mobileapp.png"
+                src="/assets/newimages/mobileapp.webp"
                 alt="Mobile app hero mockup"
                 fill
                 className="object-contain"
@@ -743,14 +743,14 @@ const AppDevelopmentPage = () => {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { name: "React Native", category: "For cross-platform development", icon: "/assets/react-native-icon.png", color: "from-blue-500 to-cyan-500" },
-                { name: "Flutter", category: "Another cross-platform framework for efficient app development", icon: "/assets/flutter-icon.png", color: "from-blue-600 to-blue-800" },
-                { name: "Swift/SwiftUI", category: "For native iOS applications", icon: "/assets/swift-icon.png", color: "from-orange-500 to-red-500" },
-                { name: "Kotlin/Java", category: "For native Android applications", icon: "/assets/kotlin-icon.png", color: "from-purple-600 to-purple-800" },
-                { name: "Node.js", category: "For backend development", icon: "/assets/nodejs-icon.png", color: "from-green-500 to-green-700" },
-                { name: "Firebase", category: "For backend services", icon: "/assets/firebase-icon.png", color: "from-orange-400 to-yellow-500" },
-                { name: "MongoDB", category: "For database management", icon: "/assets/mongodb-icon.png", color: "from-green-600 to-green-800" },
-                { name: "AWS/Azure", category: "For cloud services", icon: "/assets/aws-icon.png", color: "from-orange-600 to-red-600" }
+                { name: "React Native", category: "For cross-platform development", icon: "/assets/react-native-icon.webp", color: "from-blue-500 to-cyan-500" },
+                { name: "Flutter", category: "Another cross-platform framework for efficient app development", icon: "/assets/flutter-icon.webp", color: "from-blue-600 to-blue-800" },
+                { name: "Swift/SwiftUI", category: "For native iOS applications", icon: "/assets/swift-icon.webp", color: "from-orange-500 to-red-500" },
+                { name: "Kotlin/Java", category: "For native Android applications", icon: "/assets/kotlin-icon.webp", color: "from-purple-600 to-purple-800" },
+                { name: "Node.js", category: "For backend development", icon: "/assets/nodejs-icon.webp", color: "from-green-500 to-green-700" },
+                { name: "Firebase", category: "For backend services", icon: "/assets/firebase-icon.webp", color: "from-orange-400 to-yellow-500" },
+                { name: "MongoDB", category: "For database management", icon: "/assets/mongodb-icon.webp", color: "from-green-600 to-green-800" },
+                { name: "AWS/Azure", category: "For cloud services", icon: "/assets/aws-icon.webp", color: "from-orange-600 to-red-600" }
               ].map((tech, index) => (
                 <motion.div
                   key={index}
@@ -815,7 +815,7 @@ const AppDevelopmentPage = () => {
         <section className="relative py-32 px-6 bg-[#E1E1E1] overflow-hidden">
           {/* Decorative background image */}
           <Image
-            src="/assets/app-img-3.png"
+            src="/assets/app-img-3.webp"
             alt="Mobile app showcase"
             fill
             className="object-cover absolute inset-0"

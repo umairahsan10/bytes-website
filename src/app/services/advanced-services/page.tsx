@@ -117,7 +117,7 @@ const AdvancedServicesPage: React.FC = () => {
       >
         {/* Background Image */}
         <Image
-          src="/assets/servicebg.png"
+          src="/assets/servicebg.webp"
           alt="Advanced Services Background"
           fill
           priority
@@ -211,7 +211,7 @@ const AdvancedServicesPage: React.FC = () => {
                 whileHover={{ scale: 1.04 }}
               >
                 <Image
-                  src="/assets/Cybersecurity.jpg"
+                  src="/assets/Cybersecurity.webp"
                   alt="Cybersecurity shield and lock protection"
                   width={600}
                   height={400}
@@ -253,7 +253,7 @@ const AdvancedServicesPage: React.FC = () => {
               whileHover={{ scale: 1.04 }}
             >
               <Image
-                src="/assets/Emerging_tech.png"
+                src="/assets/Emerging_tech.webp"
                 alt="Futuristic technology and AI visualization"
                 width={600}
                 height={400}
@@ -273,7 +273,7 @@ const AdvancedServicesPage: React.FC = () => {
       <section className="relative py-16 pb-24 overflow-hidden bg-[#09122C] text-white">
         {/* Background Wallpaper */}
         <Image
-          src="/assets/wallpaper.jpg"
+          src="/assets/wallpaper.webp"
           alt="Transform business background wallpaper"
           fill
           priority
