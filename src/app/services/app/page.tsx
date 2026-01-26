@@ -126,7 +126,7 @@ const AppDevelopmentPage = () => {
       id: "profile",
       title: "User Profiles",
       description: "Personalized user experiences with comprehensive profile management and customization options.",
-      image: "/assets/appdev/user-profile.webp",
+      image: "/assets/appdev/user-profile-hq.webp",
       features: ["Profile customization", "Privacy controls", "Social integration"]
     }
   ];
@@ -338,8 +338,9 @@ const AppDevelopmentPage = () => {
                             src={screen.image}
                             alt={screen.title}
                             fill
-                            className={`object-cover ${screen.id === 'profile' ? 'transform scale-110 translate-x-2 xs:translate-x-3 sm:translate-x-4' : ''}`}
-                            sizes="(max-width: 400px) 100px, (max-width: 640px) 124px, (max-width: 768px) 140px, 188px, 204px"
+                            className={`${screen.id === 'profile' ? 'object-contain' : 'object-cover'}`}
+                            sizes="(max-width: 400px) 140px, (max-width: 640px) 180px, (max-width: 768px) 200px, 240px, 260px"
+                            quality={95}
                           />
 
                           {/* Screen overlay removed as per request */}

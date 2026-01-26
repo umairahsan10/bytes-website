@@ -22,7 +22,12 @@ const imagesToConvert = [
   // Web page images
   'public/assets/newimages/laptop.png',
   'public/assets/newimages/whychoseus.png',
-  'public/assets/WebDev/buildwithus.png'
+  'public/assets/WebDev/buildwithus.png',
+  
+  // Marketing page images
+  'public/assets/Marketing/market(2).png',
+  'public/assets/Marketing/smm.png',
+  'public/assets/Marketing/PPC_Management.png'
 ];
 
 async function convertToWebP(inputPath) {
