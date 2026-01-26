@@ -335,7 +335,7 @@ const WebDevelopmentLanding = () => {
           {/* Right Side - Background Image */}
           <div
             className="relative flex items-center justify-center h-full min-h-[350px] bg-center bg-no-repeat bg-contain"
-            style={{ backgroundImage: "url('/assets/newimages/laptop.png')" }}
+            style={{ backgroundImage: "url('/assets/newimages/laptop.webp')" }}
           >
             {/* Right-side fade overlay */}
             <div className="absolute right-0 top-0 h-full w-1/2 pointer-events-none"
@@ -653,7 +653,7 @@ const WebDevelopmentLanding = () => {
               className={`relative w-full aspect-square max-w-sm lg:max-w-md lg:-mt-8 xl:-mt-8 lg:scale-[1.1] xl:scale-[1.2] rounded-3xl overflow-hidden shadow-3xl transition-all duration-700 transform origin-center lg:ml-12 xl:ml-16 ${chooseVisible ? 'opacity-100 animate-float' : 'opacity-0 translate-y-8'}`}
             >
               <Image
-                src="/assets/newimages/whychoseus.png"
+                src="/assets/newimages/whychoseus.webp"
                 alt="Why choose our web development services"
                 fill
                 className="object-contain object-center"
@@ -710,7 +710,7 @@ const WebDevelopmentLanding = () => {
         {/* Background image */}
         <div
           className="absolute inset-0 bg-center bg-cover opacity-70 pointer-events-none"
-          style={{ backgroundImage: "url('/assets/WebDev/buildwithus.png')" }}
+          style={{ backgroundImage: "url('/assets/WebDev/buildwithus.webp')" }}
         />
 
         {/* Content */}
