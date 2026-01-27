@@ -25,22 +25,16 @@ export default function Home() {
   return (
     <main className="text-black min-h-screen">
       <Header transparentNav={true} />
-      {[
-        <HeroSection key="hero" />,
-        <ByteBotsSection key="bytebots" />,
-        <ServiceHead key="servicehead" />,
-        <CardsSection key="cards" />,
-        <LineAnimationSection key="line" />,
-        <NumbersSection key="numbers" />,
-        <ProjectsSection key="projects" />,
-        <BookSection key="book" />,
-        <BrandsSection key="brands" />,
-        <ContactSection key="contact" />,
-      ].map((Section, idx) => (
-        <div key={idx} className="w-full">
-          {Section}
-        </div>
-      ))}
+      <HeroSection />
+      <ByteBotsSection />
+      <ServiceHead />
+      <CardsSection />
+      <LineAnimationSection />
+      <NumbersSection />
+      <ProjectsSection />
+      <BookSection />
+      <BrandsSection />
+      <ContactSection />
       {/* Footer is now included globally in the RootLayout */}
     </main>
   );

@@ -1,14 +1,22 @@
 "use client";
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback, useMemo } from 'react';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Header } from '@/sections/Navbar';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Script from 'next/script';
-import FAQ from "@/components/FAQ-ByteBots";
-import LottieAnimation from '@/components/LottieAnimation';
+
+// Dynamic imports for heavy components
+const FAQ = dynamic(() => import("@/components/FAQ-ByteBots"), {
+  loading: () => <div className="h-96 flex items-center justify-center"><div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full"></div></div>
+});
+const LottieAnimation = dynamic(() => import('@/components/LottieAnimation'), {
+  loading: () => <div className="h-64 bg-gray-100 animate-pulse rounded-lg"></div>
+});
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
@@ -33,7 +41,7 @@ const ByteBotLanding: React.FC = () => {
   const [conversionAnimationData, setConversionAnimationData] = React.useState<any>(null);
   const [vantaScriptsLoaded, setVantaScriptsLoaded] = React.useState(false);
 
-  // Load Vanta scripts once
+  // Defer Vanta scripts loading until after initial render
   useEffect(() => {
     let threeLoaded = false;
     let vantaLoaded = false;
@@ -42,24 +50,29 @@ const ByteBotLanding: React.FC = () => {
       if (threeLoaded && vantaLoaded) setVantaScriptsLoaded(true);
     };
 
-    // Load three.js
-    const threeScript = document.createElement('script');
-    threeScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js';
-    threeScript.onload = () => {
-      threeLoaded = true;
-      // Load Vanta after three.js
-      const vantaScript = document.createElement('script');
-      vantaScript.src = 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.halo.min.js';
-      vantaScript.onload = () => {
-        vantaLoaded = true;
-        checkAndSetLoaded();
+    // Defer loading by 1 second to prioritize main content
+    const timeoutId = setTimeout(() => {
+      // Load three.js
+      const threeScript = document.createElement('script');
+      threeScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js';
+      threeScript.async = true;
+      threeScript.onload = () => {
+        threeLoaded = true;
+        // Load Vanta after three.js
+        const vantaScript = document.createElement('script');
+        vantaScript.src = 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.halo.min.js';
+        vantaScript.async = true;
+        vantaScript.onload = () => {
+          vantaLoaded = true;
+          checkAndSetLoaded();
+        };
+        document.head.appendChild(vantaScript);
       };
-      document.head.appendChild(vantaScript);
-    };
-    document.head.appendChild(threeScript);
+      document.head.appendChild(threeScript);
+    }, 1000);
 
     return () => {
-      // Optionally remove scripts if needed
+      clearTimeout(timeoutId);
     };
   }, []);
 
@@ -89,27 +102,39 @@ const ByteBotLanding: React.FC = () => {
   }, [vantaScriptsLoaded]);
 
   useEffect(() => {
-    // Load animation data
+    // Lazy load animation data only when user scrolls near them
+    let hasLoaded = false;
+    
     const loadAnimationData = async () => {
+      if (hasLoaded) return;
+      hasLoaded = true;
+      
       try {
-        // Load integration animation
-        const integrationResponse = await fetch('/assets/newimages/Animation - 1752082488879.json');
-        const integrationData = await integrationResponse.json();
+        // Load both animations in parallel
+        const [integrationData, conversionData] = await Promise.all([
+          fetch('/assets/newimages/Animation - 1752082488879.json').then(r => r.json()),
+          fetch('/assets/newimages/Animation - 1752084319586.json').then(r => r.json())
+        ]);
+        
         setIntegrationAnimationData(integrationData);
-
-        // Load conversion animation
-        const conversionResponse = await fetch('/assets/newimages/Animation - 1752084319586.json');
-        const conversionData = await conversionResponse.json();
         setConversionAnimationData(conversionData);
       } catch (error) {
-
+        console.error('Failed to load animation data:', error);
       }
     };
 
-    loadAnimationData();
+    // Load animation data on idle or after a delay
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => loadAnimationData());
+    } else {
+      setTimeout(loadAnimationData, 2000);
+    }
 
     // Initialize animations
     const initAnimations = () => {
+      // Batch DOM reads/writes for better performance
+      ScrollTrigger.config({ autoRefreshEvents: 'visibilitychange,DOMContentLoaded,load' });
+      
       // Hero text animations (only within hero section)
       gsap.set('.hero-content .bubble-text', { opacity: 0, y: 50 });
 
@@ -139,13 +164,19 @@ const ByteBotLanding: React.FC = () => {
           trigger: section,
           start: "top 50%",
           end: "bottom 50%",
+          fastScrollEnd: true,
           onEnter: () => {
+            // Add will-change hint for smooth animations
+            bubbleTexts.forEach((el: Element) => (el as HTMLElement).style.willChange = 'opacity, transform');
             gsap.to(bubbleTexts, {
               opacity: 1,
               y: 0,
               duration: 0.6,
               stagger: 0.05,
-              ease: "back.out(1.7)"
+              ease: "back.out(1.7)",
+              onComplete: () => {
+                bubbleTexts.forEach((el: Element) => (el as HTMLElement).style.willChange = 'auto');
+              }
             });
 
             if (sectionImage) {
@@ -186,7 +217,7 @@ const ByteBotLanding: React.FC = () => {
     };
   }, []);
 
-  const handleRippleEffect = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleRippleEffect = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     const button = e.currentTarget;
     const rect = button.getBoundingClientRect();
     const ripple = document.createElement('span');
@@ -215,17 +246,20 @@ const ByteBotLanding: React.FC = () => {
         button.removeChild(ripple);
       }
     }, 600);
-  };
+  }, []);
 
   return (
-    <div ref={pageRef} className="font-inter overflow-x-hidden bg-white">
-      <Header />
+    <>
+      {/* Preconnect to external resources */}
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+      <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+      
+      <div ref={pageRef} className="font-inter overflow-x-hidden bg-white">
+        <Header />
 
       <style jsx>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        
         .font-inter {
-          font-family: 'Inter', sans-serif;
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
         
         .section-container {
@@ -1165,10 +1199,15 @@ const ByteBotLanding: React.FC = () => {
 
                 <div className="w-full lg:w-1/2 mobile-full-width flex justify-center items-center">
                   <div className="chatbot-container">
-                    <img
+                    <Image
                       src="/assets/newimages/chatbot.png"
                       alt="Data Intelligence Dashboard"
                       className="chatbot-image"
+                      width={600}
+                      height={600}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 600px"
+                      quality={85}
+                      priority={false}
                     />
                     <div className="chatbot-particles">
                       <div className="particle-dot dot-1"></div>
@@ -1245,10 +1284,15 @@ const ByteBotLanding: React.FC = () => {
 
                       {/* Image with enhanced styling */}
                       <div className="relative w-full h-full flex items-center justify-center">
-                        <img
+                        <Image
                           src="/assets/newimages/snake.png"
                           alt="AI Learning System"
                           className="w-65 h-65 object-contain drop-shadow-2xl filter brightness-110 contrast-110"
+                          width={320}
+                          height={320}
+                          sizes="(max-width: 768px) 260px, 320px"
+                          quality={85}
+                          priority={false}
                         />
                       </div>
 
@@ -1282,10 +1326,20 @@ const ByteBotLanding: React.FC = () => {
       <FAQ />
 
       {/* Simple Call-to-Action Section */}
-      <section id="cta" className="relative h-[50vh] bg-white/40 flex items-center justify-center text-center" style={{ backgroundImage: 'url("/bots/cta_bot.png")', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <section id="cta" className="relative h-[50vh] bg-white/40 flex items-center justify-center text-center overflow-hidden">
+        {/* Background Image */}
+        <Image
+          src="/bots/cta_bot.png"
+          alt="Call to Action Background"
+          fill
+          className="object-cover"
+          sizes="100vw"
+          quality={75}
+          priority={false}
+        />
         {/* overlay */}
-        <div className="absolute inset-0 bg-black/50"></div>
-        <div className="relative z-10 max-w-2xl px-6">
+        <div className="absolute inset-0 bg-black/50 z-10"></div>
+        <div className="relative z-20 max-w-2xl px-6">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Ready to transform your conversations?</h2>
           <p className="text-lg md:text-xl text-gray-200 mb-8">Book a free Byte-Bots Consultation and see how AI can power your business.</p>
           <Link
@@ -1297,8 +1351,8 @@ const ByteBotLanding: React.FC = () => {
           </Link>
         </div>
       </section>
-
-    </div>
+      </div>
+    </>
   );
 };
 
