@@ -1,16 +1,14 @@
 'use client';
 
-import React, { useEffect, useState, useRef, lazy, Suspense } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Header } from "@/sections/Navbar";
 import * as THREE from 'three';
+import FAQ from "@/components/FAQ-ByteSuite";
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 
-// Lazy load FAQ component
-const FAQ = lazy(() => import("@/components/FAQ-ByteSuite"));
 
 // ---------------------------------------------------------------------------
 // Theme colours
@@ -46,8 +44,7 @@ const ByteSuitePage: React.FC = () => {
       id: 'lead',
       title: 'Smart Lead Management',
       description: 'Intelligent capture, qualification and nurture.',
-      image: '/assets/lead-management.webp',
-      fallbackImage: '/assets/lead-management.png',
+      image: '/assets/lead-management.png',
       features: [
         'Intelligent Lead Capture',
         'AI-Powered Qualification',
@@ -58,8 +55,7 @@ const ByteSuitePage: React.FC = () => {
       id: 'bytebot',
       title: 'ByteBot AI Assistant',
       description: '24/7 support and sales intelligence.',
-      image: '/assets/bytebot-ai.webp',
-      fallbackImage: '/assets/bytebot-ai.png',
+      image: '/assets/bytebot-ai.png',
       features: [
         'Always-on Customer Support',
         'Real-time Sales Insights',
@@ -70,8 +66,7 @@ const ByteSuitePage: React.FC = () => {
       id: 'communication',
       title: 'Communication Hub',
       description: 'Unified inbox with calendar sync.',
-      image: '/assets/communication-hub.webp',
-      fallbackImage: '/assets/communication-hub.jpg',
+      image: '/assets/communication-hub.jpg',
       features: [
         'Unified Inbox',
         'Calendar & Reminders',
@@ -84,8 +79,7 @@ const ByteSuitePage: React.FC = () => {
       id: 'analytics',
       title: 'Sales Automation & Analytics',
       description: 'Automation & AI-driven insights.',
-      image: '/assets/Analytics.webp',
-      fallbackImage: '/assets/Analytics.jpg',
+      image: '/assets/Analytics.jpg',
       features: [
         'Deal Flow Automation',
         'AI Sales Forecasting',
@@ -96,8 +90,7 @@ const ByteSuitePage: React.FC = () => {
       id: 'tools',
       title: 'Built-in Business Tools',
       description: 'Billing, scheduling, inventory & more.',
-      image: '/assets/Business.webp',
-      fallbackImage: '/assets/Business.jpg',
+      image: '/assets/Business.jpg',
       features: [
         'Branded Invoicing',
         'Appointment Scheduler',
@@ -195,6 +188,9 @@ const ByteSuitePage: React.FC = () => {
       snap: !isMobileScreen ? 1 / (laptopScreens.length - 1) : undefined,
       onUpdate: (self) => {
         const rawProgress = self.progress;
+        // On mobile, round to the nearest slide instead of always flooring. This lets the
+        // final (5th) slide reach its snapped state *before* the ScrollTrigger ends,
+        // ensuring the section stays pinned while that slide is in view.
         const snappedProgress = isMobileScreen
           ? Math.round(rawProgress * (laptopScreens.length - 1)) / (laptopScreens.length - 1)
           : rawProgress;
@@ -207,7 +203,7 @@ const ByteSuitePage: React.FC = () => {
     };
   }, [isMobileScreen, laptopScreens]);
 
-  // Optimized Three.js setup
+  // Three.js setup
   useEffect(() => {
     if (!canvasRef.current) return;
 
@@ -216,16 +212,15 @@ const ByteSuitePage: React.FC = () => {
     const renderer = new THREE.WebGLRenderer({ 
       canvas: canvasRef.current, 
       alpha: true,
-      antialias: false, // Disabled for performance
-      powerPreference: 'high-performance' // Performance preference
+      antialias: true 
     });
 
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Limit pixel ratio for performance
+    renderer.setPixelRatio(1); // instead of devicePixelRatio
 
-    // Reduced particle count for better performance
+    // Create animated particles
     const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = isMobileScreen ? 300 : 800; // Reduced from 500/1500
+    const particlesCount = isMobileScreen ? 500 : 1500;
     const posArray = new Float32Array(particlesCount * 3);
 
     for (let i = 0; i < particlesCount * 3; i++) {
@@ -246,16 +241,16 @@ const ByteSuitePage: React.FC = () => {
     const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
     scene.add(particlesMesh);
 
-    // Reduced line connections for performance
+    // Create connecting lines between nearby particles
     const lineGeometry = new THREE.BufferGeometry();
     const linePositions: number[] = [];
     
-    for (let i = 0; i < particlesCount; i += 15) { // Increased step from 10 to 15
+    for (let i = 0; i < particlesCount; i += 10) {
       const x1 = posArray[i * 3];
       const y1 = posArray[i * 3 + 1];
       const z1 = posArray[i * 3 + 2];
       
-      for (let j = i + 15; j < particlesCount; j += 15) {
+      for (let j = i + 10; j < particlesCount; j += 10) {
         const x2 = posArray[j * 3];
         const y2 = posArray[j * 3 + 1];
         const z2 = posArray[j * 3 + 2];
@@ -281,28 +276,18 @@ const ByteSuitePage: React.FC = () => {
 
     camera.position.z = 6;
 
-    // Optimized animation loop with throttling
-    let lastTime = 0;
-    const targetFPS = 30; // Target 30 FPS for better performance
-    const frameInterval = 1000 / targetFPS;
-
-    const animate = (currentTime: number) => {
+    // Animation loop
+    const animate = () => {
       requestAnimationFrame(animate);
 
-      const deltaTime = currentTime - lastTime;
-      
-      if (deltaTime > frameInterval) {
-        lastTime = currentTime - (deltaTime % frameInterval);
-        
-        // Rotate particles
-        particlesMesh.rotation.x += 0.0005;
-        particlesMesh.rotation.y += 0.001;
+      // Rotate particles
+      particlesMesh.rotation.x += 0.0005;
+      particlesMesh.rotation.y += 0.001;
 
-        renderer.render(scene, camera);
-      }
+      renderer.render(scene, camera);
     };
 
-    animate(0);
+    animate();
 
     // Handle resize
     const handleResize = () => {
@@ -316,10 +301,6 @@ const ByteSuitePage: React.FC = () => {
     return () => {
       window.removeEventListener('resize', handleResize);
       renderer.dispose();
-      particlesGeometry.dispose();
-      particlesMaterial.dispose();
-      lineGeometry.dispose();
-      lineMaterial.dispose();
     };
   }, [isMobileScreen, laptopScreens]);
 
@@ -328,28 +309,28 @@ const ByteSuitePage: React.FC = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.05 }, // Reduced delays
+      transition: { staggerChildren: 0.15, delayChildren: 0.1 },
     },
   } as const;
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 50 }, // Reduced from 100
-    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } }, // Reduced from 0.4
+    hidden: { opacity: 0, y: 100 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
   } as const;
 
   const textReveal = {
-    hidden: { opacity: 0, y: 30 }, // Reduced from 50
-    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
   } as const;
 
   const cardVariants = {
-    hidden: { opacity: 0, scale: 0.9 }, // Reduced from 0.8
-    visible: { opacity: 1, scale: 1, transition: { duration: 0.25 } }, // Reduced from 0.3
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
   } as const;
 
   const imageVariants = {
-    hidden: { opacity: 0, scale: 0.9, rotate: -2 }, // Reduced from 0.8 and -5
-    visible: { opacity: 1, scale: 1, rotate: 0, transition: { duration: 0.4 } }, // Reduced from 0.5
+    hidden: { opacity: 0, scale: 0.8, rotate: -5 },
+    visible: { opacity: 1, scale: 1, rotate: 0, transition: { duration: 0.5 } },
   } as const;
 
   const floatingVariants = {
@@ -358,7 +339,7 @@ const ByteSuitePage: React.FC = () => {
       opacity: 1, 
       y: 0,
       transition: { 
-        duration: 0.4,
+        duration: 0.5,
         repeat: Infinity,
         repeatType: "reverse",
         ease: "easeInOut"
@@ -367,38 +348,38 @@ const ByteSuitePage: React.FC = () => {
   } as const;
 
   const slideInLeft = {
-    hidden: { opacity: 0, x: -50 }, // Reduced from -100
-    visible: { opacity: 1, x: 0, transition: { duration: 0.3 } },
+    hidden: { opacity: 0, x: -100 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.4 } },
   } as const;
 
   const slideInRight = {
-    hidden: { opacity: 0, x: 50 }, // Reduced from 100
-    visible: { opacity: 1, x: 0, transition: { duration: 0.3 } },
+    hidden: { opacity: 0, x: 100 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.4 } },
   } as const;
 
   const scaleIn = {
-    hidden: { opacity: 0, scale: 0.8 }, // Reduced from 0.5
-    visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
+    hidden: { opacity: 0, scale: 0.5 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.4 } },
   } as const;
 
   const fadeInUp = {
-    hidden: { opacity: 0, y: 30 }, // Reduced from 60
-    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+    hidden: { opacity: 0, y: 60 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
   } as const;
 
   const fadeInDown = {
-    hidden: { opacity: 0, y: -15 }, // Reduced from -20
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }, // Reduced from 0.6
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
   } as const;
 
   const bounceIn = {
-    hidden: { opacity: 0, scale: 0.5, y: 10 }, // Reduced from 0.3
+    hidden: { opacity: 0, scale: 0.3, y: 10 },
     visible: { 
       opacity: 1, 
       scale: 1, 
       y: 0, 
       transition: { 
-        duration: 0.3,
+        duration: 0.4,
         type: "spring",
         stiffness: 100
       } 
@@ -406,23 +387,23 @@ const ByteSuitePage: React.FC = () => {
   } as const;
 
   const slideInFromLeft = {
-    hidden: { opacity: 0, x: -50 }, // Reduced from -100
-    visible: { opacity: 1, x: 0, transition: { duration: 0.3 } },
+    hidden: { opacity: 0, x: -100 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.4 } },
   } as const;
 
   const slideInFromRight = {
-    hidden: { opacity: 0, x: 50 }, // Reduced from 100
-    visible: { opacity: 1, x: 0, transition: { duration: 0.3 } },
+    hidden: { opacity: 0, x: 100 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.4 } },
   } as const;
 
   const rotateIn = {
-    hidden: { opacity: 0, rotate: -90, scale: 0.8 }, // Reduced from -180 and 0.5
+    hidden: { opacity: 0, rotate: -180, scale: 0.5 },
     visible: { 
       opacity: 1, 
       rotate: 0, 
       scale: 1, 
       transition: { 
-        duration: 0.4,
+        duration: 0.5,
         type: "spring",
         stiffness: 200
       } 
@@ -469,7 +450,7 @@ const ByteSuitePage: React.FC = () => {
                 {/* Main Title with Side-by-Side Layout */}
                 <motion.div
                   variants={fadeInDown}
-                  transition={{ duration: 0.6, type: "spring", stiffness: 150 }} // Reduced from 0.8
+                  transition={{ duration: 0.8, type: "spring", stiffness: 150 }}
                   className="mb-12"
                 >
                   <motion.div
@@ -479,10 +460,19 @@ const ByteSuitePage: React.FC = () => {
                     }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                   >
+                    {/* <motion.h1
+                      className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-black leading-none tracking-tighter bg-gradient-to-r from-[#010a14] to-[#010a14] bg-clip-text text-transparent"
+                      animate={{
+                        scale: [1, 1.05, 1],
+                      }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                      BYTE
+                    </motion.h1> */}
                     <motion.h1
                       className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-black leading-none tracking-tighter bg-gradient-to-r from-[#010a14] to-[#010a14] bg-clip-text text-transparent"
                       animate={{
-                        scale: [1, 1.05, 1], // Reduced from 1.1
+                        scale: [1, 1.1, 1],
                         filter: [
                           "drop-shadow(0 0 5px rgba(1, 10, 20, 0.2))",
                           "drop-shadow(0 0 10px rgba(1, 10, 20, 0.3))",
@@ -505,7 +495,8 @@ const ByteSuitePage: React.FC = () => {
                     className="text-2xl lg:text-4xl xl:text-5xl font-bold mb-6"
                     style={{ color: PRIMARY_COLOR }}
                     variants={fadeInUp}
-                    transition={{ duration: 0.4, delay: 0.2 }} // Reduced from 0.5, 0.3
+
+                    transition={{ duration: 0.5, delay: 0.3 }}
                   >
                     The Future of
                     <motion.span
@@ -527,7 +518,8 @@ const ByteSuitePage: React.FC = () => {
                     className="text-lg lg:text-xl xl:text-2xl leading-relaxed"
                     style={{ color: PRIMARY_COLOR }}
                     variants={fadeInUp}
-                    transition={{ duration: 0.4, delay: 0.3 }} // Reduced from 0.5, 0.5
+
+                    transition={{ duration: 0.5, delay: 0.5 }}
                   >
                     AI-powered customer relationships that transform how you handle leads
                   </motion.p>
@@ -536,12 +528,13 @@ const ByteSuitePage: React.FC = () => {
                 {/* CTA Buttons */}
                 <motion.div
                   variants={fadeInUp}
-                  transition={{ duration: 0.4, delay: 0.4 }} // Reduced from 0.5, 0.7
+
+                  transition={{ duration: 0.5, delay: 0.7 }}
                   className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start"
                 >
                   <motion.button
                     whileHover={{ 
-                      scale: 1.05, // Reduced from 1.1
+                      scale: 1.1, 
                       backgroundColor: PRIMARY_COLOR, 
                       boxShadow: '0 20px 60px rgba(1, 10, 20, 0.4)',
                       textShadow: '0 0 20px rgba(255, 255, 255, 0.5)'
@@ -566,42 +559,35 @@ const ByteSuitePage: React.FC = () => {
                 </motion.div>
               </motion.div>
 
-              {/* Right Column - Image with Next.js Image component for optimization */}
+              {/* Right Column - Image */}
               <motion.div
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={imageVariants}
-                transition={{ duration: 0.5, delay: 0.15 }} // Reduced from 0.6, 0.2
+                transition={{ duration: 0.6, delay: 0.2 }}
                 className="relative"
               >
                 <motion.div
                   className="relative z-10"
                   animate={{ 
-                    y: [0, -10, 0], // Reduced from -15
-                    rotate: [0, 0.5, 0, -0.5, 0] // Reduced from 1, -1
+                    y: [0, -15, 0],
+                    rotate: [0, 1, 0, -1, 0]
                   }}
                   transition={{ 
                     y: { duration: 1 },
                     rotate: { duration: 3 }
                   }}
                 >
-                  {/* Optimized hero image with priority loading */}
-                  <Image
-                    src="/assets/bytesuite-hero.webp"
+                  <img
+                    src="/assets/bytesuite-hero.png"
                     alt="ByteSuite CRM Dashboard"
-                    width={800}
-                    height={600}
-                    priority
-                    quality={85}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                     className="w-full h-auto max-w-2xl mx-auto rounded-2xl"
                     style={{ 
                       boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 10px 20px -5px rgba(0, 0, 0, 0.3)'
                     }}
                     onError={(e) => {
-                      // Fallback to PNG if WebP fails
-                      e.currentTarget.src = '/assets/bytesuite-hero.png';
+                      e.currentTarget.src = 'https://via.placeholder.com/800x600/1f2937/ffffff?text=ByteSuite+CRM+Dashboard';
                     }}
                   />
                 </motion.div>
@@ -669,8 +655,7 @@ const ByteSuitePage: React.FC = () => {
                     "AI-Powered Qualification", 
                     "Custom Sales Pipelines",
                   ],
-                  image: "/assets/ai-intelligence.webp",
-                  fallbackImage: "/assets/ai-intelligence.png",
+                  image: "/assets/ai-intelligence.png",
                   icon: (
                     <svg className="w-10 h-10 text-blue-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M9.5 2C9.5 2 9.5 4 9.5 6C9.5 8 7.5 10 5.5 10C3.5 10 1.5 8 1.5 6C1.5 4 3.5 2 5.5 2C7.5 2 9.5 4 9.5 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -690,8 +675,7 @@ const ByteSuitePage: React.FC = () => {
                     "Appointment Scheduler",
                     "Inventory Tracking",
                   ],
-                  image: "/assets/revenue-tools.webp",
-                  fallbackImage: "/assets/revenue-tools.png",
+                  image: "/assets/revenue-tools.png",
                   icon: (
                     <svg className="w-10 h-10 text-blue-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -707,8 +691,7 @@ const ByteSuitePage: React.FC = () => {
                     "AI Sales Forecasting",
                     "Custom Dashboards",
                   ],
-                  image: "/assets/conversion-design.webp",
-                  fallbackImage: "/assets/conversion-design.png",
+                  image: "/assets/conversion-design.png",
                   icon: (
                     <svg className="w-10 h-10 text-blue-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
@@ -746,10 +729,13 @@ const ByteSuitePage: React.FC = () => {
                       </ul>
                     </div>
                   </div>
-                  <div className="flex items-center justify-center transition-all duration-700">
-                    {benefit.image === "/assets/conversion-design.webp" ? (
-                      <motion.div 
-                        className="relative w-full h-[320px]"
+                                    <div className="flex items-center justify-center transition-all duration-700">
+                    {benefit.image === "/assets/conversion-design.png" ? (
+                      <motion.img
+                        src={benefit.image}
+                        alt={benefit.title}
+                        className="object-contain"
+                        style={{ maxWidth: '100%', maxHeight: '320px' }}
                         animate={{ 
                           rotate: [0, 360],
                           y: [0, -10, 0]
@@ -766,33 +752,20 @@ const ByteSuitePage: React.FC = () => {
                             ease: "easeInOut" 
                           }
                         }}
-                      >
-                        <Image
-                          src={benefit.image}
-                          alt={benefit.title}
-                          fill
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          quality={75}
-                          className="object-contain"
-                          onError={(e) => {
-                            e.currentTarget.src = benefit.fallbackImage;
-                          }}
-                        />
-                      </motion.div>
+                        onError={(e) => {
+                          e.currentTarget.src = `https://via.placeholder.com/500x350/010a14/ffffff?text=${benefit.title}`;
+                        }}
+                      />
                     ) : (
-                      <div className="relative w-full h-[320px]">
-                        <Image
-                          src={benefit.image}
-                          alt={benefit.title}
-                          fill
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          quality={75}
-                          className="object-contain animate-float"
-                          onError={(e) => {
-                            e.currentTarget.src = benefit.fallbackImage;
-                          }}
-                        />
-                      </div>
+                      <img
+                        src={benefit.image}
+                        alt={benefit.title}
+                        className="object-contain animate-float"
+                        style={{ maxWidth: '100%', maxHeight: '320px' }}
+                        onError={(e) => {
+                          e.currentTarget.src = `https://via.placeholder.com/500x350/010a14/ffffff?text=${benefit.title}`;
+                        }}
+                      />
                     )}
                   </div>
                 </motion.div>
@@ -842,26 +815,18 @@ const ByteSuitePage: React.FC = () => {
                   <div className="relative w-full max-w-[500px] aspect-[5/3] md:w-[500px] md:h-[320px] bg-gray-900 rounded-xl overflow-hidden shadow-2xl border-[12px] border-gray-800">
                     <motion.div className="relative w-full h-full">
                       {laptopScreens.map((screen, idx) => (
-                        <div key={screen.id} className="absolute top-0 left-0 w-full h-full">
-                          <motion.div
-                            className="relative w-full h-full"
-                            initial={false}
-                            animate={idx === currentLaptopScreen ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-                            transition={{ duration: isMobileScreen ? 0.25 : 0.6, ease: 'easeOut' }}
-                          >
-                            <Image
-                              src={screen.image}
-                              alt={screen.title}
-                              fill
-                              sizes="500px"
-                              quality={70}
-                              className="object-cover"
-                              onError={(e) => {
-                                e.currentTarget.src = screen.fallbackImage;
-                              }}
-                            />
-                          </motion.div>
-                        </div>
+                        <motion.img
+                          key={screen.id}
+                          src={screen.image}
+                          alt={screen.title}
+                          className="absolute top-0 left-0 w-full h-full object-cover"
+                          initial={false}
+                          animate={idx === currentLaptopScreen ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+                          transition={{ duration: isMobileScreen ? 0.25 : 0.6, ease: 'easeOut' }}
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = `https://via.placeholder.com/800x600/010a14/ffffff?text=${screen.title}`;
+                          }}
+                        />
                       ))}
                     </motion.div>
                   </div>
@@ -1001,8 +966,7 @@ const ByteSuitePage: React.FC = () => {
                     "Automated client communication workflows",
                     "Professional invoicing with recurring billing"
                   ],
-                  image: "/assets/consultants.webp",
-                  fallbackImage: "/assets/consultants.jpg"
+                  image: "/assets/consultants.jpg"
                 },
                 {
                   title: "Sales Teams & Agencies",
@@ -1013,8 +977,7 @@ const ByteSuitePage: React.FC = () => {
                     "Advanced team performance analytics",
                     "Intelligent lead scoring and qualification"
                   ],
-                  image: "/assets/sales-teams.webp",
-                  fallbackImage: "/assets/sales-teams.png"
+                  image: "/assets/sales-teams.png"
                 },
                 {
                   title: "Small-Medium Businesses",
@@ -1025,8 +988,7 @@ const ByteSuitePage: React.FC = () => {
                     "Scalable architecture from startup to growth",
                     "Intuitive interface for rapid team adoption"
                   ],
-                  image: "/assets/smb.webp",
-                  fallbackImage: "/assets/smb.png"
+                  image: "/assets/smb.png"
                 },
                 {
                   title: "E-commerce & Retail",
@@ -1037,8 +999,7 @@ const ByteSuitePage: React.FC = () => {
                     "Real-time inventory and sales integration",
                     "Automated customer support systems"
                   ],
-                  image: "/assets/ecommerce.webp",
-                  fallbackImage: "/assets/ecommerce.png"
+                  image: "/assets/ecommerce.png"
                 }
               ].map((audience, index) => (
                 <motion.div
@@ -1131,22 +1092,21 @@ const ByteSuitePage: React.FC = () => {
                     transition={{ duration: 0.4, delay: index * 0.1 + 0.2 }}
                     whileHover={{ scale: 1.02 }}
                   >
-                    <div className="relative w-full h-40 sm:h-56 md:h-64 lg:h-80">
-                      <Image
-                        src={audience.image}
-                        alt={audience.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                        quality={70}
-                        className="object-contain"
-                        onError={(e) => {
-                          // Skip placeholder for sales-teams specifically
-                          if (audience.image !== "/assets/sales-teams.webp") {
-                            e.currentTarget.src = audience.fallbackImage;
-                          }
-                        }}
-                      />
-                    </div>
+                    <motion.img
+                      src={audience.image}
+                      alt={audience.title}
+                      className="w-full h-auto max-h-40 sm:max-h-56 md:max-h-64 lg:max-h-80 object-contain"
+                      style={{ maxWidth: '100%', minWidth: 'auto' }}
+                      variants={imageVariants}
+                      onLoad={() => {}}
+                      onError={(e) => {
+
+                        // Remove placeholder for sales-teams.png specifically
+                        if (audience.image !== "/assets/sales-teams.png") {
+                          e.currentTarget.src = `https://via.placeholder.com/500x320/010a14/ffffff?text=${audience.title}`;
+                        }
+                      }}
+                    />
                   </motion.div>
                 </motion.div>
               ))}
@@ -1183,20 +1143,17 @@ const ByteSuitePage: React.FC = () => {
                 {
                   title: "API-First Architecture",
                   description: "Seamlessly integrates with existing tools and websites. Custom integrations and workflow automation.",
-                  image: "/assets/api-architecture.webp",
-                  fallbackImage: "/assets/api-architecture.png"
+                  image: "/assets/api-architecture.png"
                 },
                 {
                   title: "Security & Reliability",
                   description: "Enterprise-grade security and data protection. Role-based access control and 99.9% uptime guarantee.",
-                  image: "/assets/security.webp",
-                  fallbackImage: "/assets/security.png"
+                  image: "/assets/security.png"
                 },
                 {
                   title: "User Experience",
                   description: "Clean, modern interface designed for daily use. Mobile-responsive with minimal learning curve.",
-                  image: "/assets/user-experience.webp",
-                  fallbackImage: "/assets/user-experience.png"
+                  image: "/assets/user-experience.png"
                 }
               ].map((advantage, index) => (
                 <motion.div
@@ -1216,21 +1173,16 @@ const ByteSuitePage: React.FC = () => {
                   <motion.div
                     variants={imageVariants}
                     transition={{ duration: 0.3, delay: index * 0.1 + 0.1 }}
-                    className="mb-6 overflow-hidden rounded-lg relative"
+                    className="mb-6 overflow-hidden rounded-lg"
                   >
-                    <div className="relative w-full h-56">
-                      <Image
-                        src={advantage.image}
-                        alt={advantage.title}
-                        fill
-                        sizes="(max-width: 1024px) 100vw, 33vw"
-                        quality={70}
-                        className="object-cover group-hover:scale-110 transition-transform duration-300"
-                        onError={(e) => {
-                          e.currentTarget.src = advantage.fallbackImage;
-                        }}
-                      />
-                    </div>
+                    <img
+                      src={advantage.image}
+                      alt={advantage.title}
+                      className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-300"
+                      onError={(e) => {
+                        e.currentTarget.src = `https://via.placeholder.com/500x350/010a14/ffffff?text=${advantage.title}`;
+                      }}
+                    />
                   </motion.div>
                   <motion.h3 
                     className="text-xl font-bold mb-3"
@@ -1448,8 +1400,7 @@ const ByteSuitePage: React.FC = () => {
                       "Scalable Architecture - Grows from department-level to enterprise-wide",
                       "CRM Integration - Your ByteSuite CRM becomes the customer-facing hub of a larger system"
                   ],
-                  image: "/assets/erp-solutions.webp",
-                  fallbackImage: "/assets/erp-solutions.png"
+                  image: "/assets/erp-solutions.png"
                 },
                 {
                   title: "When You Need ERP",
@@ -1459,8 +1410,7 @@ const ByteSuitePage: React.FC = () => {
                     "Need supply chain and inventory management",
                     "Want unified reporting across all business functions"
                   ],
-                  image: "/assets/erp-needs.webp",
-                  fallbackImage: "/assets/erp-needs.png"
+                  image: "/assets/erp-needs.png"
                 }
               ].map((section, index) => (
                 <motion.div
@@ -1522,19 +1472,14 @@ const ByteSuitePage: React.FC = () => {
                         boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 10px 20px -5px rgba(0, 0, 0, 0.3)'
                       }}
                     >
-                      <div className="relative w-full h-80">
-                        <Image
-                          src={section.image}
-                          alt={section.title}
-                          fill
-                          sizes="(max-width: 1024px) 100vw, 50vw"
-                          quality={75}
-                          className="object-cover"
-                          onError={(e) => {
-                            e.currentTarget.src = section.fallbackImage;
-                          }}
-                        />
-                      </div>
+                      <img
+                        src={section.image}
+                        alt={section.title}
+                        className="w-full h-80 object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = `https://via.placeholder.com/700x500/010a14/ffffff?text=${section.title}`;
+                        }}
+                      />
                       <motion.div 
                         className="absolute inset-0 opacity-0"
                         style={{ backgroundColor: PRIMARY_COLOR }}
@@ -1636,10 +1581,8 @@ const ByteSuitePage: React.FC = () => {
         </div>
       </motion.footer>
 
-      {/* Lazy loaded FAQ Section */}
-      <Suspense fallback={<div className="py-20 text-center">Loading FAQ...</div>}>
-        <FAQ />
-      </Suspense>
+      {/* FAQ Section */}
+      <FAQ />
 
       <style jsx>{`
         .animate-float {
