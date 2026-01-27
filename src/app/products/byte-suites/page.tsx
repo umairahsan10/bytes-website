@@ -113,6 +113,9 @@ const ByteSuitePage: React.FC = () => {
     return -slideHeight * index;
   });
 
+  // Timeline progress line scale
+  const timelineScaleY = useTransform(laptopScreenProgress, [0.2, 0.8], [0, 1]);
+
   useEffect(() => {
     const unsubscribe = laptopScreenProgress.onChange((progress) => {
       let computed = 0;
@@ -875,7 +878,7 @@ const ByteSuitePage: React.FC = () => {
                       <motion.div
                         className="absolute top-0 left-0 w-full bg-gradient-to-b from-purple-600 to-purple-800 origin-top"
                         style={{
-                          scaleY: useTransform(laptopScreenProgress,[0.2,0.8],[0,1]),
+                          scaleY: timelineScaleY,
                           transformOrigin: 'top'
                         }}
                       />
