@@ -8,6 +8,7 @@ import { Header } from "@/sections/Navbar";
 import * as THREE from 'three';
 import FAQ from "@/components/FAQ-ByteSuite";
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 
 // ---------------------------------------------------------------------------
@@ -44,7 +45,7 @@ const ByteSuitePage: React.FC = () => {
       id: 'lead',
       title: 'Smart Lead Management',
       description: 'Intelligent capture, qualification and nurture.',
-      image: '/assets/lead-management.png',
+      image: '/assets/lead-management.webp',
       features: [
         'Intelligent Lead Capture',
         'AI-Powered Qualification',
@@ -55,7 +56,7 @@ const ByteSuitePage: React.FC = () => {
       id: 'bytebot',
       title: 'ByteBot AI Assistant',
       description: '24/7 support and sales intelligence.',
-      image: '/assets/bytebot-ai.png',
+      image: '/assets/bytebot-ai.webp',
       features: [
         'Always-on Customer Support',
         'Real-time Sales Insights',
@@ -66,7 +67,7 @@ const ByteSuitePage: React.FC = () => {
       id: 'communication',
       title: 'Communication Hub',
       description: 'Unified inbox with calendar sync.',
-      image: '/assets/communication-hub.jpg',
+      image: '/assets/communication-hub.webp',
       features: [
         'Unified Inbox',
         'Calendar & Reminders',
@@ -79,7 +80,7 @@ const ByteSuitePage: React.FC = () => {
       id: 'analytics',
       title: 'Sales Automation & Analytics',
       description: 'Automation & AI-driven insights.',
-      image: '/assets/Analytics.jpg',
+      image: '/assets/Analytics.webp',
       features: [
         'Deal Flow Automation',
         'AI Sales Forecasting',
@@ -90,7 +91,7 @@ const ByteSuitePage: React.FC = () => {
       id: 'tools',
       title: 'Built-in Business Tools',
       description: 'Billing, scheduling, inventory & more.',
-      image: '/assets/Business.jpg',
+      image: '/assets/Business.webp',
       features: [
         'Branded Invoicing',
         'Appointment Scheduler',
@@ -569,7 +570,7 @@ const ByteSuitePage: React.FC = () => {
                 className="relative"
               >
                 <motion.div
-                  className="relative z-10"
+                  className="relative z-10 w-full h-auto max-w-2xl mx-auto"
                   animate={{ 
                     y: [0, -15, 0],
                     rotate: [0, 1, 0, -1, 0]
@@ -578,17 +579,19 @@ const ByteSuitePage: React.FC = () => {
                     y: { duration: 1 },
                     rotate: { duration: 3 }
                   }}
+                  style={{ 
+                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 10px 20px -5px rgba(0, 0, 0, 0.3)'
+                  }}
                 >
-                  <img
-                    src="/assets/bytesuite-hero.png"
+                  <Image
+                    src="/assets/bytesuite-hero.webp"
                     alt="ByteSuite CRM Dashboard"
-                    className="w-full h-auto max-w-2xl mx-auto rounded-2xl"
-                    style={{ 
-                      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 10px 20px -5px rgba(0, 0, 0, 0.3)'
-                    }}
-                    onError={(e) => {
-                      e.currentTarget.src = 'https://via.placeholder.com/800x600/1f2937/ffffff?text=ByteSuite+CRM+Dashboard';
-                    }}
+                    width={800}
+                    height={600}
+                    priority
+                    quality={90}
+                    className="w-full h-auto rounded-2xl"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                   />
                 </motion.div>
               </motion.div>
@@ -655,7 +658,7 @@ const ByteSuitePage: React.FC = () => {
                     "AI-Powered Qualification", 
                     "Custom Sales Pipelines",
                   ],
-                  image: "/assets/ai-intelligence.png",
+                  image: "/assets/ai-intelligence.webp",
                   icon: (
                     <svg className="w-10 h-10 text-blue-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M9.5 2C9.5 2 9.5 4 9.5 6C9.5 8 7.5 10 5.5 10C3.5 10 1.5 8 1.5 6C1.5 4 3.5 2 5.5 2C7.5 2 9.5 4 9.5 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -675,7 +678,7 @@ const ByteSuitePage: React.FC = () => {
                     "Appointment Scheduler",
                     "Inventory Tracking",
                   ],
-                  image: "/assets/revenue-tools.png",
+                  image: "/assets/revenue-tools.webp",
                   icon: (
                     <svg className="w-10 h-10 text-blue-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -691,7 +694,7 @@ const ByteSuitePage: React.FC = () => {
                     "AI Sales Forecasting",
                     "Custom Dashboards",
                   ],
-                  image: "/assets/conversion-design.png",
+                  image: "/assets/conversion-design.webp",
                   icon: (
                     <svg className="w-10 h-10 text-blue-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
@@ -730,12 +733,10 @@ const ByteSuitePage: React.FC = () => {
                     </div>
                   </div>
                                     <div className="flex items-center justify-center transition-all duration-700">
-                    {benefit.image === "/assets/conversion-design.png" ? (
-                      <motion.img
-                        src={benefit.image}
-                        alt={benefit.title}
-                        className="object-contain"
-                        style={{ maxWidth: '100%', maxHeight: '320px' }}
+                    {benefit.image === "/assets/conversion-design.webp" ? (
+                      <motion.div
+                        className="relative"
+                        style={{ maxWidth: '100%', maxHeight: '320px', width: '500px', height: '350px' }}
                         animate={{ 
                           rotate: [0, 360],
                           y: [0, -10, 0]
@@ -752,20 +753,29 @@ const ByteSuitePage: React.FC = () => {
                             ease: "easeInOut" 
                           }
                         }}
-                        onError={(e) => {
-                          e.currentTarget.src = `https://via.placeholder.com/500x350/010a14/ffffff?text=${benefit.title}`;
-                        }}
-                      />
+                      >
+                        <Image
+                          src={benefit.image}
+                          alt={benefit.title}
+                          width={500}
+                          height={350}
+                          quality={85}
+                          className="object-contain"
+                          sizes="(max-width: 768px) 100vw, 500px"
+                        />
+                      </motion.div>
                     ) : (
-                      <img
-                        src={benefit.image}
-                        alt={benefit.title}
-                        className="object-contain animate-float"
-                        style={{ maxWidth: '100%', maxHeight: '320px' }}
-                        onError={(e) => {
-                          e.currentTarget.src = `https://via.placeholder.com/500x350/010a14/ffffff?text=${benefit.title}`;
-                        }}
-                      />
+                      <div className="relative animate-float" style={{ width: '500px', height: '350px' }}>
+                        <Image
+                          src={benefit.image}
+                          alt={benefit.title}
+                          width={500}
+                          height={350}
+                          quality={85}
+                          className="object-contain"
+                          sizes="(max-width: 768px) 100vw, 500px"
+                        />
+                      </div>
                     )}
                   </div>
                 </motion.div>
@@ -815,18 +825,22 @@ const ByteSuitePage: React.FC = () => {
                   <div className="relative w-full max-w-[500px] aspect-[5/3] md:w-[500px] md:h-[320px] bg-gray-900 rounded-xl overflow-hidden shadow-2xl border-[12px] border-gray-800">
                     <motion.div className="relative w-full h-full">
                       {laptopScreens.map((screen, idx) => (
-                        <motion.img
+                        <motion.div
                           key={screen.id}
-                          src={screen.image}
-                          alt={screen.title}
-                          className="absolute top-0 left-0 w-full h-full object-cover"
+                          className="absolute top-0 left-0 w-full h-full"
                           initial={false}
                           animate={idx === currentLaptopScreen ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
                           transition={{ duration: isMobileScreen ? 0.25 : 0.6, ease: 'easeOut' }}
-                          onError={(e) => {
-                            (e.currentTarget as HTMLImageElement).src = `https://via.placeholder.com/800x600/010a14/ffffff?text=${screen.title}`;
-                          }}
-                        />
+                        >
+                          <Image
+                            src={screen.image}
+                            alt={screen.title}
+                            fill
+                            quality={85}
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 500px"
+                          />
+                        </motion.div>
                       ))}
                     </motion.div>
                   </div>
@@ -966,7 +980,7 @@ const ByteSuitePage: React.FC = () => {
                     "Automated client communication workflows",
                     "Professional invoicing with recurring billing"
                   ],
-                  image: "/assets/consultants.jpg"
+                  image: "/assets/consultants.webp"
                 },
                 {
                   title: "Sales Teams & Agencies",
@@ -977,7 +991,7 @@ const ByteSuitePage: React.FC = () => {
                     "Advanced team performance analytics",
                     "Intelligent lead scoring and qualification"
                   ],
-                  image: "/assets/sales-teams.png"
+                  image: "/assets/sales-teams.webp"
                 },
                 {
                   title: "Small-Medium Businesses",
@@ -988,7 +1002,7 @@ const ByteSuitePage: React.FC = () => {
                     "Scalable architecture from startup to growth",
                     "Intuitive interface for rapid team adoption"
                   ],
-                  image: "/assets/smb.png"
+                  image: "/assets/smb.webp"
                 },
                 {
                   title: "E-commerce & Retail",
@@ -999,7 +1013,7 @@ const ByteSuitePage: React.FC = () => {
                     "Real-time inventory and sales integration",
                     "Automated customer support systems"
                   ],
-                  image: "/assets/ecommerce.png"
+                  image: "/assets/ecommerce.webp"
                 }
               ].map((audience, index) => (
                 <motion.div
@@ -1088,24 +1102,19 @@ const ByteSuitePage: React.FC = () => {
                     whileInView="visible"
                     viewport={{ once: true }}
                     variants={index % 2 === 0 ? slideInFromRight : slideInFromLeft}
-                    className={`flex items-center justify-center ${index % 2 === 1 ? 'lg:order-1' : ''}`}
+                    className={`flex items-center justify-center ${index % 2 === 1 ? 'lg:order-1' : ''} relative`}
                     transition={{ duration: 0.4, delay: index * 0.1 + 0.2 }}
                     whileHover={{ scale: 1.02 }}
+                    style={{ width: '100%', maxWidth: '500px', height: '320px' }}
                   >
-                    <motion.img
+                    <Image
                       src={audience.image}
                       alt={audience.title}
-                      className="w-full h-auto max-h-40 sm:max-h-56 md:max-h-64 lg:max-h-80 object-contain"
-                      style={{ maxWidth: '100%', minWidth: 'auto' }}
-                      variants={imageVariants}
-                      onLoad={() => {}}
-                      onError={(e) => {
-
-                        // Remove placeholder for sales-teams.png specifically
-                        if (audience.image !== "/assets/sales-teams.png") {
-                          e.currentTarget.src = `https://via.placeholder.com/500x320/010a14/ffffff?text=${audience.title}`;
-                        }
-                      }}
+                      width={500}
+                      height={320}
+                      quality={85}
+                      className="object-contain"
+                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 224px, (max-width: 1024px) 256px, 320px"
                     />
                   </motion.div>
                 </motion.div>
@@ -1143,17 +1152,17 @@ const ByteSuitePage: React.FC = () => {
                 {
                   title: "API-First Architecture",
                   description: "Seamlessly integrates with existing tools and websites. Custom integrations and workflow automation.",
-                  image: "/assets/api-architecture.png"
+                  image: "/assets/api-architecture.webp"
                 },
                 {
                   title: "Security & Reliability",
                   description: "Enterprise-grade security and data protection. Role-based access control and 99.9% uptime guarantee.",
-                  image: "/assets/security.png"
+                  image: "/assets/security.webp"
                 },
                 {
                   title: "User Experience",
                   description: "Clean, modern interface designed for daily use. Mobile-responsive with minimal learning curve.",
-                  image: "/assets/user-experience.png"
+                  image: "/assets/user-experience.webp"
                 }
               ].map((advantage, index) => (
                 <motion.div
@@ -1173,15 +1182,15 @@ const ByteSuitePage: React.FC = () => {
                   <motion.div
                     variants={imageVariants}
                     transition={{ duration: 0.3, delay: index * 0.1 + 0.1 }}
-                    className="mb-6 overflow-hidden rounded-lg"
+                    className="mb-6 overflow-hidden rounded-lg relative h-56"
                   >
-                    <img
+                    <Image
                       src={advantage.image}
                       alt={advantage.title}
-                      className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-300"
-                      onError={(e) => {
-                        e.currentTarget.src = `https://via.placeholder.com/500x350/010a14/ffffff?text=${advantage.title}`;
-                      }}
+                      fill
+                      quality={85}
+                      className="object-cover group-hover:scale-110 transition-transform duration-300"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 400px"
                     />
                   </motion.div>
                   <motion.h3 
@@ -1400,7 +1409,7 @@ const ByteSuitePage: React.FC = () => {
                       "Scalable Architecture - Grows from department-level to enterprise-wide",
                       "CRM Integration - Your ByteSuite CRM becomes the customer-facing hub of a larger system"
                   ],
-                  image: "/assets/erp-solutions.png"
+                  image: "/assets/erp-solutions.webp"
                 },
                 {
                   title: "When You Need ERP",
@@ -1410,7 +1419,7 @@ const ByteSuitePage: React.FC = () => {
                     "Need supply chain and inventory management",
                     "Want unified reporting across all business functions"
                   ],
-                  image: "/assets/erp-needs.png"
+                  image: "/assets/erp-needs.webp"
                 }
               ].map((section, index) => (
                 <motion.div
@@ -1466,19 +1475,19 @@ const ByteSuitePage: React.FC = () => {
                       variants={imageVariants}
                       transition={{ duration: 0.5 }}
                       whileHover={{ scale: 1.05, rotate: 2 }}
-                      className="relative overflow-hidden rounded-lg"
+                      className="relative overflow-hidden rounded-lg h-80"
                       style={{ 
                         backgroundColor: SECONDARY_COLOR,
                         boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 10px 20px -5px rgba(0, 0, 0, 0.3)'
                       }}
                     >
-                      <img
+                      <Image
                         src={section.image}
                         alt={section.title}
-                        className="w-full h-80 object-cover"
-                        onError={(e) => {
-                          e.currentTarget.src = `https://via.placeholder.com/700x500/010a14/ffffff?text=${section.title}`;
-                        }}
+                        fill
+                        quality={85}
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 50vw"
                       />
                       <motion.div 
                         className="absolute inset-0 opacity-0"

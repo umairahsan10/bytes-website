@@ -10,11 +10,18 @@ import PageLoader from "@/components/PageLoader";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { LenisProvider } from "@/components/LenisProvider";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const inter = Inter({ 
+  subsets: ["latin"], 
+  variable: "--font-sans",
+  display: 'swap',
+  preload: true
+});
 const calistoga = Calistoga({
   subsets: ["latin"],
   variable: "--font-serif",
   weight: ["400"],
+  display: 'swap',
+  preload: true
 });
 
 export const metadata: Metadata = {
