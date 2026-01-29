@@ -2,18 +2,26 @@
 
 @import "tailwindcss/preflight";
 @import "tailwindcss/utilities";
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700&display=swap');
+
+/* External fonts loaded via Next.js for optimal performance */
+/* Poppins, Bebas Neue, and League Spartan now optimized in layout.tsx */
 
 /* Font removed - using system fonts instead */
 
-@import url('https://fonts.cdnfonts.com/css/discrdive-3d');
-@import url('https://fonts.cdnfonts.com/css/goldrops-personal-use');
+/* Local fonts - self-hosted for better performance */
+@font-face {
+  font-family: 'Discrdive 3D';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Discrdive 3D'), url('/fonts/discrdive-3d.woff') format('woff');
+  font-display: swap;
+}
 
 @font-face {
   font-family: 'Goldrops';
-  src: url('https://fonts.cdnfonts.com/s/91326/GOLDROPSPERSONALUSE-Regular.woff') format('woff');
+  font-style: normal;
+  font-weight: 400;
+  src: local('GOLDROPS PERSONAL USE'), url('/fonts/goldrops-regular.woff') format('woff');
   font-display: swap;
 }
 
