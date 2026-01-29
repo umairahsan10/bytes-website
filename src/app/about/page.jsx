@@ -8,14 +8,16 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ContactSection } from "@/sections/Contact";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useMotionValue, animate, useInView } from "framer-motion";
-import ReactIcon from "@/assets/icons/react.svg";
-import JsIcon from "@/assets/icons/square-js.svg";
-import HtmlIcon from "@/assets/icons/html5.svg";
-import CssIcon from "@/assets/icons/css3.svg";
-import GithubIcon from "@/assets/icons/github.svg";
-import ChromeIcon from "@/assets/icons/chrome.svg";
-import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg";
+import { ArrowUpRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+// Icon components as simple SVG placeholders
+const ReactIcon = () => <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="2"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>;
+const JsIcon = () => <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><rect width="24" height="24" rx="4"/></svg>;
+const HtmlIcon = () => <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-10-3z"/></svg>;
+const CssIcon = () => <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-10-3z"/></svg>;
+const GithubIcon = () => <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>;
+const ChromeIcon = () => <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>;
 
 // Animated counter component
 function Counter({ from = 0, to, duration = 2, className = "" }) {
