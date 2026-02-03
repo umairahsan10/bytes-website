@@ -6,6 +6,13 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
+  // Increase static generation timeout to prevent build failures
+  staticPageGenerationTimeout: 180,
+  // Enable experimental features for better performance
+  experimental: {
+    workerThreads: false,
+    cpus: 1,
+  },
   images: {
     remotePatterns: [
       {

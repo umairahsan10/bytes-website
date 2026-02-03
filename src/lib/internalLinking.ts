@@ -1,6 +1,9 @@
 import { BlogPost } from './getBlogs';
 import { getStoredKeywords } from './keywordStorage';
 
+// Memoization cache for processed content
+const contentCache = new Map<string, string>();
+
 // Define default keywords and their corresponding blog URLs
 export const keywordToUrlMap: Record<string, string> = {
   // SEO Keywords
@@ -52,13 +55,24 @@ export const keywordToUrlMap: Record<string, string> = {
 
 // Function to add internal links to content using the 37 keywords
 export function addInternalLinks(content: string, excludeSlug?: string): string {
+  // Create a cache key
+  const cacheKey = `${excludeSlug || 'default'}_${content.substring(0, 100)}`;
+  
+  // Check cache first
+  if (contentCache.has(cacheKey)) {
+    return contentCache.get(cacheKey)!;
+  }
+  
   let processedContent = content;
   const keywords = getStoredKeywords();
   const keywordKeys = Object.keys(keywords);
   
+  // Limit to top 20 most important keywords to speed up processing
+  const limitedKeywords = keywordKeys.slice(0, 20);
+  
   // Sort keywords by length (longer keywords first to avoid partial matches)
   // Also sort by specificity - more specific terms first
-  const sortedKeywords = keywordKeys.sort((a, b) => {
+  const sortedKeywords = limitedKeywords.sort((a, b) => {
     // First sort by length (longer first)
     if (b.length !== a.length) {
       return b.length - a.length;
@@ -193,6 +207,16 @@ export function addInternalLinks(content: string, excludeSlug?: string): string 
     const link = `<a href="${url}" class="internal-link text-blue-600 hover:text-blue-800 underline" title="Learn more about ${keyword}">${keyword}</a>`;
     processedContent = beforeIndex + link + afterIndex;
   });
+  
+  // Store in cache (limit cache size to prevent memory issues)
+  if (contentCache.size > 200) {
+    // Clear oldest entries
+    const firstKey = contentCache.keys().next().value;
+    if (firstKey !== undefined) {
+      contentCache.delete(firstKey);
+    }
+  }
+  contentCache.set(cacheKey, processedContent);
   
   return processedContent;
 }
