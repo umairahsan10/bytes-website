@@ -34,6 +34,13 @@ const IMAGES_TO_OPTIMIZE = [
     sizes: [640, 1024, 1536, 1920],
     formats: ['webp'],
   },
+  {
+    input: 'public/assets/industry/hero.png',
+    outputDir: 'public/assets/industry/optimized',
+    outputName: 'hero',
+    sizes: [640, 1024, 1536, 1920, 2560],
+    formats: ['webp'],
+  },
 ];
 
 // Quality settings

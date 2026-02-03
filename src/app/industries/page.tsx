@@ -1,12 +1,19 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo, memo } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Header } from '@/sections/Navbar';
 import { useRouter } from 'next/navigation';
-import Lottie from 'lottie-react';
+import dynamic from 'next/dynamic';
+import type { LottieComponentProps } from 'lottie-react';
+
+// Dynamically import Lottie to reduce initial bundle size
+const Lottie = dynamic(() => import('lottie-react'), {
+  ssr: false,
+  loading: () => <div className="w-full h-full animate-pulse bg-gray-200 rounded-lg" />
+}) as React.ComponentType<LottieComponentProps>;
 
 const IndustriesPage = () => {
   const router = useRouter();
@@ -64,35 +71,66 @@ const IndustriesPage = () => {
     );
   };
 
-  // Load animation data
+  // Load animation data lazily when sections come into view
   useEffect(() => {
-    const loadAnimations = async () => {
+    if (!fintechTriggered || animationData) return;
+    
+    const loadFinanceAnimation = async () => {
       try {
-        // Load finance animation
         const financeData = await fetch('/assets/newimages/Animation - 1751914349014.json');
         const financeJsonData = await financeData.json();
         setAnimationData(financeJsonData);
+      } catch (error) {
+        console.error('Failed to load finance animation:', error);
+      }
+    };
+    loadFinanceAnimation();
+  }, [fintechTriggered, animationData]);
 
-        // Load health animation
+  useEffect(() => {
+    if (!healthcareTriggered || healthAnimationData) return;
+    
+    const loadHealthAnimation = async () => {
+      try {
         const healthData = await fetch('/assets/newimages/Animation - 1751915546890.json');
         const healthJsonData = await healthData.json();
         setHealthAnimationData(healthJsonData);
+      } catch (error) {
+        console.error('Failed to load health animation:', error);
+      }
+    };
+    loadHealthAnimation();
+  }, [healthcareTriggered, healthAnimationData]);
 
-        // Load retail animation
+  useEffect(() => {
+    if (!ecommerceTriggered || retailAnimationData) return;
+    
+    const loadRetailAnimation = async () => {
+      try {
         const retailData = await fetch('/assets/newimages/Animation - 1751922478340.json');
         const retailJsonData = await retailData.json();
         setRetailAnimationData(retailJsonData);
+      } catch (error) {
+        console.error('Failed to load retail animation:', error);
+      }
+    };
+    loadRetailAnimation();
+  }, [ecommerceTriggered, retailAnimationData]);
 
-        // Load federal government animation
+  useEffect(() => {
+    if (!educationTriggered || federalAnimationData) return;
+    
+    const loadFederalAnimation = async () => {
+      try {
         const federalData = await fetch('/assets/newimages/Animation - 1751923093110.json');
         const federalJsonData = await federalData.json();
         setFederalAnimationData(federalJsonData);
       } catch (error) {
-
+        console.error('Failed to load federal animation:', error);
       }
     };
-    loadAnimations();
-  }, []);
+    loadFederalAnimation();
+  }, [educationTriggered, federalAnimationData]);
 
   // Update individual animation flags when their section comes into view
   useEffect(() => {
@@ -115,7 +153,7 @@ const IndustriesPage = () => {
     if (educationInView) setEducationTriggered(true);
   }, [educationInView]);
 
-  const StarField = () => {
+  const StarField = memo(() => {
     // Avoid rendering randomised stars on the server to prevent hydration mismatch
     const [stars, setStars] = useState<React.ReactElement[]>([]);
 
@@ -153,7 +191,8 @@ const IndustriesPage = () => {
         {stars}
       </div>
     );
-  };
+  });
+  StarField.displayName = 'StarField';
 
   const GeometricShapes = () => (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
@@ -388,11 +427,13 @@ const IndustriesPage = () => {
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/assets/industry/hero.png"
+            src="/assets/industry/optimized/hero.webp"
             alt="Industry Background"
             fill
             className="object-cover"
             priority
+            quality={85}
+            sizes="100vw"
           />
           {/* Overlay for better text readability */}
           <div className="absolute inset-0 bg-[rgba(1,10,20,0.2)]"></div>
@@ -831,10 +872,17 @@ const IndustriesPage = () => {
       {/* Call To Action Section */}
       <section className="relative overflow-hidden py-24 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-center">
         {/* Background image */}
-        <div
-          className="absolute inset-0 bg-center bg-cover opacity-70 pointer-events-none"
-          style={{ backgroundImage: "url('/assets/WebDev/buildwithus.png')" }}
-        />
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/assets/WebDev/optimized/buildwithus.webp"
+            alt="Build with us background"
+            fill
+            className="object-cover opacity-70 pointer-events-none"
+            quality={85}
+            sizes="100vw"
+            loading="lazy"
+          />
+        </div>
 
         {/* Content */}
         <div className="relative z-10 container mx-auto px-6">
