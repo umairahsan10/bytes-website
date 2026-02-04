@@ -1,7 +1,7 @@
 "use client";
 
 import { Header } from "@/sections/Navbar";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, memo } from "react";
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -1048,7 +1048,15 @@ export default function AboutPage() {
       <section ref={heroRef} className="relative h-screen w-full overflow-hidden pt-20">
         <div className="bg bg-[#010a14] absolute inset-0"></div>
         <div className="img-container relative flex flex-col gap-8 items-center justify-center h-full w-full will-change-transform transform-gpu">
-          <Image className="image" src="/assets/bg.jpg" alt="Background" fill priority />
+          <Image 
+            className="image" 
+            src="/assets/optimized/bg.webp" 
+            alt="Background" 
+            fill 
+            priority 
+            quality={85}
+            sizes="100vw"
+          />
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
             <h1 className="hero-title text-[12vw] sm:text-[10vw] md:text-[8vw] lg:text-8xl xl:text-9xl leading-none whitespace-nowrap will-change-transform transform-gpu">
               <span className="bg-gradient-to-r from-purple-900 via-white to-purple-900 bg-clip-text text-transparent">About</span> <span className="bg-gradient-to-r from-purple-500 via-white to-purple-400 bg-clip-text text-transparent">Us</span>
@@ -1063,8 +1071,16 @@ export default function AboutPage() {
         <div
           ref={overlayRef}
           className="info-overlay pointer-events-auto absolute inset-0 will-change-transform transform-gpu bg-white/90 backdrop-blur-xl"
-          style={{ backgroundImage: 'url("/assets/aboutUs/hero.jpg")', backgroundSize: 'cover', backgroundPosition: 'center' }}
         >
+          <Image
+            src="/assets/aboutUs/optimized/hero.webp"
+            alt="Hero background"
+            fill
+            className="object-cover"
+            quality={85}
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-white/90 backdrop-blur-xl" />
           <div className="h-full flex flex-col items-center justify-center text-center px-4 py-8 sm:py-12">
             <div className="w-full max-w-7xl mx-auto space-y-6 sm:space-y-8">
               <div className="pt-4 sm:pt-8">
@@ -1105,9 +1121,10 @@ export default function AboutPage() {
             <video
               className="w-full h-auto rounded-none sm:rounded-2xl"
               controls
-              poster="/assets/aboutUs/hero.jpg"
+              poster="/assets/aboutUs/optimized/hero.webp"
               autoPlay={false}
               playsInline
+              preload="metadata"
             >
               <source src="/Videos/About-Video.mp4" type="video/mp4" />
               Your browser does not support the video tag.
@@ -1226,11 +1243,14 @@ Our mission is simple: to empower businesses with digital solutions that don’t
               >
                 <motion.div variants={fadeInUp}>
                   <Image
-                    src="/assets/aboutUs/image1.png"
+                    src="/assets/aboutUs/optimized/image1.webp"
                     alt="Philosophy"
                     width={800}
                     height={600}
                     className="object-contain w-full h-[420px] lg:h-[500px]"
+                    quality={85}
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    loading="lazy"
                   />
                 </motion.div>
               </motion.div>
@@ -1326,11 +1346,14 @@ Our mission is simple: to empower businesses with digital solutions that don’t
                 viewport={{ once: true, margin: "-100px" }}
               >
                 <Image
-                  src="/assets/aboutUs/img2.png"
+                  src="/assets/aboutUs/optimized/img2.webp"
                   alt="Tech Stack Image Left"
                   width={800}
                   height={600}
                   className="object-cover w-full h-64 rounded-2xl"
+                  quality={85}
+                  sizes="(max-width: 1024px) 100vw, 33vw"
+                  loading="lazy"
                 />
               </motion.div>
 
@@ -1388,11 +1411,14 @@ Our mission is simple: to empower businesses with digital solutions that don’t
                 viewport={{ once: true, margin: "-100px" }}
               >
                 <Image
-                  src="/assets/aboutUs/tech-stack.png"
+                  src="/assets/aboutUs/optimized/tech-stack.webp"
                   alt="Tech Stack Image Right"
                   width={800}
                   height={600}
                   className="object-cover w-full h-64 rounded-2xl"
+                  quality={85}
+                  sizes="(max-width: 1024px) 100vw, 33vw"
+                  loading="lazy"
                 />
               </motion.div>
             </div>
@@ -1568,11 +1594,13 @@ Our mission is simple: to empower businesses with digital solutions that don’t
       <section className="relative py-16 px-4 bg-[#E1E1E1] overflow-hidden">
         {/* Decorative background image */}
         <Image
-          src="/assets/aboutUs/aboutus-contact.png"
+          src="/assets/aboutUs/optimized/aboutus-contact.webp"
           alt="Contact illustration"
           fill
           className="object-cover absolute inset-0"
-          priority
+          quality={85}
+          sizes="100vw"
+          loading="lazy"
         />
         {/* Semi-transparent overlay to improve text readability */}
         <div className="absolute inset-0 bg-white/40" />
