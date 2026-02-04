@@ -117,7 +117,7 @@ const AdvancedServicesPage: React.FC = () => {
       >
         {/* Background Image */}
         <Image
-          src="/assets/servicebg.png"
+          src="/assets/servicebg.webp"
           alt="Advanced Services Background"
           fill
           priority
@@ -132,7 +132,7 @@ const AdvancedServicesPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Data & Analytics Section */}
+      {/* Data & Analytics Section - Optimized */}
       <section className="relative py-20 bg-[#010a14] text-white animate-section overflow-hidden" aria-labelledby="data-analytics-heading">
         {/* Background Circle */}
         <div className="absolute top-10 right-10 w-96 h-96 bg-blue-100/30 rounded-full blur-3xl -z-10"></div>
@@ -141,52 +141,80 @@ const AdvancedServicesPage: React.FC = () => {
         <div className="w-full px-4 sm:px-6 lg:px-8">
           {/* First Subsection - Overview */}
           <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center mb-16 sm:mb-20">
-            <div className="animate-content text-center lg:text-left" data-fade="left">
-              <AnimatedWords 
-                text="Data & Analytics" 
-                className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight" 
-                as="h2"
-              />
-              <AnimatedWords text="Unlock the full potential of your data with comprehensive analytics solutions. We help organizations transform raw data into strategic insights that drive informed decision-making and competitive advantage." className="text-base sm:text-lg text-gray-200 mb-4 sm:mb-6 leading-relaxed" as="p" />
-              <AnimatedWords text="Our data-driven approach combines advanced statistical methods, machine learning algorithms, and visualization techniques to reveal hidden patterns and predict future outcomes with unprecedented accuracy." className="text-base sm:text-lg text-gray-200 leading-relaxed" as="p" />
-            </div>
             <motion.div 
-              initial={{ opacity: 0, y: 60, scale: 0.85, rotate: -6 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
-              transition={{ type: 'spring', stiffness: 70, damping: 15, duration: 0.9 }}
-              viewport={{ once: false }}
-              whileHover={{ scale: 1.04 }}
-              className="relative w-full h-64 sm:h-80 md:h-96 rounded-lg shadow-xl overflow-hidden"
-              style={{
-                backgroundImage: 'url(/assets/newimages/binary_loop.gif)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat'
-              }}
-            />
+              className="animate-content text-center lg:text-left"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              viewport={{ once: true, amount: 0.3 }}
+            >
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight">
+                Data &amp; Analytics
+              </h2>
+              <p className="text-base sm:text-lg text-gray-200 mb-4 sm:mb-6 leading-relaxed">
+                Unlock the full potential of your data with comprehensive analytics solutions. We help organizations transform raw data into strategic insights that drive informed decision-making and competitive advantage.
+              </p>
+              <p className="text-base sm:text-lg text-gray-200 leading-relaxed">
+                Our data-driven approach combines advanced statistical methods, machine learning algorithms, and visualization techniques to reveal hidden patterns and predict future outcomes with unprecedented accuracy.
+              </p>
+            </motion.div>
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              viewport={{ once: true, amount: 0.3 }}
+              className="relative w-full h-64 sm:h-80 md:h-96 rounded-lg shadow-xl overflow-hidden bg-gradient-to-br from-cyan-900 via-blue-900 to-indigo-900"
+            >
+              <Image
+                src="/assets/newimages/binary_loop.webp"
+                alt="Data Analytics Visualization"
+                fill
+                className="object-cover"
+                loading="lazy"
+              />
+            </motion.div>
           </div>
 
           {/* Second Subsection - Sub-services Cards */}
-          <div 
+          <motion.div 
             ref={cardsRef}
             className="bg-gradient-to-br from-white to-white rounded-2xl p-6 sm:p-8 lg:p-12 shadow-inner"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.2 }}
           >
-            <AnimatedWords text="Our Data & Analytics Services" className="text-2xl sm:text-3xl font-bold text-[#010a14] mb-8 sm:mb-12 text-center" as="h2" />
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#010a14] mb-8 sm:mb-12 text-center">
+              Our Data &amp; Analytics Services
+            </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
               {subServices.map((service, index) => (
-                <div
+                <motion.div
                   key={index}
-                  className="service-card bg-white rounded-xl p-4 sm:p-6 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group text-center"
+                  className="service-card bg-white rounded-xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group text-center"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  whileHover={{ scale: 1.03 }}
+                  transition={{ 
+                    duration: 0.3,
+                    delay: index * 0.08,
+                    ease: "easeOut"
+                  }}
+                  viewport={{ once: true, amount: 0.3 }}
                   role="article"
                   tabIndex={0}
                   aria-label={`${service.title} service details`}
                 >
-                  <AnimatedWords text={service.title} className="text-lg sm:text-xl font-semibold text-[#010a14] mb-3 sm:mb-4 group-hover:text-[#0d3b60] transition-colors" as="h3" />
-                  <AnimatedWords text={service.description} className="text-sm sm:text-base text-gray-600 leading-relaxed" as="p" />
-                </div>
+                  <h3 className="text-lg sm:text-xl font-semibold text-[#010a14] mb-3 sm:mb-4 group-hover:text-[#0d3b60] transition-colors">
+                    {service.title}
+                  </h3>
+                  <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                    {service.description}
+                  </p>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -211,7 +239,7 @@ const AdvancedServicesPage: React.FC = () => {
                 whileHover={{ scale: 1.04 }}
               >
                 <Image
-                  src="/assets/Cybersecurity.jpg"
+                  src="/assets/Cybersecurity.webp"
                   alt="Cybersecurity shield and lock protection"
                   width={600}
                   height={400}
@@ -253,7 +281,7 @@ const AdvancedServicesPage: React.FC = () => {
               whileHover={{ scale: 1.04 }}
             >
               <Image
-                src="/assets/Emerging_tech.png"
+                src="/assets/Emerging_tech.webp"
                 alt="Futuristic technology and AI visualization"
                 width={600}
                 height={400}
@@ -273,7 +301,7 @@ const AdvancedServicesPage: React.FC = () => {
       <section className="relative py-16 pb-24 overflow-hidden bg-[#09122C] text-white">
         {/* Background Wallpaper */}
         <Image
-          src="/assets/wallpaper.jpg"
+          src="/assets/wallpaper.webp"
           alt="Transform business background wallpaper"
           fill
           priority
