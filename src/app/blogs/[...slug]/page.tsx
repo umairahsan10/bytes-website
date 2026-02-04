@@ -40,6 +40,8 @@ function calculateTotalPages(allPosts: any[]) {
 }
 
 export const dynamicParams = true;
+export const dynamic = 'force-static';
+export const revalidate = 1200; // 20 minutes
 
 export async function generateMetadata({
   params,
@@ -167,9 +169,7 @@ export async function generateStaticParams() {
   return [...blogParams, ...pageParams];
 }
 
-// Webhooks as primary, ISR as fallback
-// ISR set to 20 minutes - only runs if webhook fails
-export const revalidate = 1200; // 20 minutes
+// Remove duplicate revalidate declaration since it's now at the top
 
 
 
@@ -312,7 +312,8 @@ export default async function BlogPage({
                 components={markdownComponents}
                 rehypePlugins={[rehypeRaw]}
               >
-                {addInternalLinks(hybridPost.content, hybridPost.slug)}
+                {/* Skip internal linking during build to prevent timeouts */}
+                {hybridPost.content}
               </ReactMarkdown>
             </div>
           ) : (
