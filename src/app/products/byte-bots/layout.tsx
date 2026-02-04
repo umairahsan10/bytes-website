@@ -4,6 +4,16 @@ export const metadata = {
   alternates: {
     canonical: "/products/byte-bots",
   },
+  other: {
+    'google-site-verification': 'your-verification-code',
+  },
+};
+
+// Optimize font loading
+export const viewport = {
+  themeColor: '#010A14',
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function ByteBotsLayout({

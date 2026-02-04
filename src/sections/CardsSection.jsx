@@ -17,7 +17,7 @@ const isMobile = () => {
   return window.innerWidth <= 768;
 };
 
-export default function Home() {
+export default function CardsSection() {
   const container = useRef(null);
   const cardRefs = useRef([]);
   const [focusedCard, setFocusedCard] = useState(null);
