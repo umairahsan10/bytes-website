@@ -7,6 +7,32 @@ import { Header } from '@/sections/Navbar';
 import FAQ from '@/components/FAQ-Marketing';
 import LottieAnimation from '@/components/LottieAnimation';
 
+// Critical inline styles for above-the-fold content
+const criticalStyles = `
+  .marketing-hero-section {
+    background: linear-gradient(to right, #000000, #010a14, #000000);
+    min-height: 100vh;
+    position: relative;
+  }
+  
+  .marketing-gradient-text {
+    background: linear-gradient(to right, #E1E3E2, #9333ea);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .marketing-fade-overlay {
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    background: linear-gradient(to left, #010a14, transparent);
+  }
+`;
+
 // Enhanced helper component for staggered word reveal with smoother animations
 const AnimatedParagraph = ({ text, className = "" }) => {
   const container = {
@@ -75,6 +101,12 @@ const MarketingPage = () => {
 
   const seoStatsRef = useRef([]);
   const smmStatsRef = useRef([]);
+  
+  // Refs for lazy loading animations
+  const ppcSectionRef = useRef(null);
+  const reelsSectionRef = useRef(null);
+  const campaignSectionRef = useRef(null);
+  const planSectionRef = useRef(null);
 
   const seoStats = [
     { target: 850, label: "% Average ROAS" },
@@ -224,39 +256,66 @@ const MarketingPage = () => {
     }
   };
 
+  // Lazy load animations using Intersection Observer
   useEffect(() => {
-    fetch('/assets/Marketing/animations/ppc.json')
-      .then(res => res.json())
-      .then(setPpcAnimationData)
-      .catch(() => {});
-  }, []);
+    const loadAnimation = async (url, setter) => {
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        setter(data);
+      } catch (error) {
+        console.error(`Failed to load animation: ${url}`, error);
+      }
+    };
 
-  // Load Reels animation for Custom Posts section
-  useEffect(() => {
-    fetch('/assets/Marketing/animations/reels.json')
-      .then(res => res.json())
-      .then(setReelsAnimationData)
-      .catch(() => {});
-  }, []);
+    const observerOptions = { threshold: 0.1, rootMargin: '100px' };
 
-  // Load Campaign Leaders animation
-  useEffect(() => {
-    fetch('/assets/Marketing/animations/campaign.json')
-      .then(res => res.json())
-      .then(setCampaignAnimationData)
-      .catch(() => {});
-  }, []);
+    const ppcObserver = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !ppcAnimationData) {
+        loadAnimation('/assets/Marketing/animations/ppc.json', setPpcAnimationData);
+        ppcObserver.disconnect();
+      }
+    }, observerOptions);
 
-  // Load Strategic Planning animation
-  useEffect(() => {
-    fetch('/assets/Marketing/animations/plan.json')
-      .then(res => res.json())
-      .then(setPlanAnimationData)
-      .catch(() => {});
-  }, []);
+    const reelsObserver = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !reelsAnimationData) {
+        loadAnimation('/assets/Marketing/animations/reels.json', setReelsAnimationData);
+        reelsObserver.disconnect();
+      }
+    }, observerOptions);
+
+    const campaignObserver = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !campaignAnimationData) {
+        loadAnimation('/assets/Marketing/animations/campaign.json', setCampaignAnimationData);
+        campaignObserver.disconnect();
+      }
+    }, observerOptions);
+
+    const planObserver = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !planAnimationData) {
+        loadAnimation('/assets/Marketing/animations/plan.json', setPlanAnimationData);
+        planObserver.disconnect();
+      }
+    }, observerOptions);
+
+    if (ppcSectionRef.current) ppcObserver.observe(ppcSectionRef.current);
+    if (reelsSectionRef.current) reelsObserver.observe(reelsSectionRef.current);
+    if (campaignSectionRef.current) campaignObserver.observe(campaignSectionRef.current);
+    if (planSectionRef.current) planObserver.observe(planSectionRef.current);
+
+    return () => {
+      ppcObserver.disconnect();
+      reelsObserver.disconnect();
+      campaignObserver.disconnect();
+      planObserver.disconnect();
+    };
+  }, [ppcAnimationData, reelsAnimationData, campaignAnimationData, planAnimationData]);
 
   return (
     <div className="font-sans bg-[#010a14] overflow-x-hidden" style={{ scrollBehavior: 'smooth' }}>
+      {/* Inject critical CSS */}
+      <style dangerouslySetInnerHTML={{ __html: criticalStyles }} />
+      
       {/* Header Navigation */}
       <div className="fixed top-0 left-0 w-full z-50">
         <Header />
@@ -311,7 +370,7 @@ const MarketingPage = () => {
         >
           <div className="relative w-full h-full">
             <Image
-              src="/assets/Marketing/market(2).png"
+              src="/assets/Marketing/market(2).webp"
               alt="Marketing Illustration"
               fill
               className="object-contain object-center"
@@ -338,10 +397,12 @@ const MarketingPage = () => {
             className="w-full lg:w-2/5 max-w-sm lg:max-w-md aspect-square rounded-full overflow-hidden relative z-10 shadow-2xl"
           >
             <div className="absolute -top-2 -right-2 left-2 bottom-2 sm:-top-4 sm:-right-4 sm:left-4 sm:bottom-4 border-2 sm:border-4 border-purple-400 -z-10 rounded-full"></div>
-            <img
-              src="/assets/Marketing/smm.png"
+            <Image
+              src="/assets/Marketing/smm.webp"
               alt="Social Media Marketing"
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              loading="lazy"
             />
           </motion.div>
 
@@ -433,6 +494,7 @@ const MarketingPage = () => {
 
       {/* SMM Sub-Section: Custom Posts & Reels - Enhanced Responsive */}
       <motion.section
+        ref={reelsSectionRef}
         variants={staggerContainer}
         initial="hidden"
         whileInView="visible"
@@ -492,6 +554,7 @@ const MarketingPage = () => {
 
       {/* SMM Sub-Section: Strategic Planning - Enhanced Responsive */}
       <motion.section
+        ref={planSectionRef}
         variants={staggerContainer}
         initial="hidden"
         whileInView="visible"
@@ -552,6 +615,7 @@ const MarketingPage = () => {
 
       {/* PPC Main Section - Enhanced Responsive */}
       <motion.section
+        ref={ppcSectionRef}
         variants={staggerContainer}
         initial="hidden"
         whileInView="visible"
@@ -706,15 +770,22 @@ const MarketingPage = () => {
           {/* Image */}
           <motion.div
             variants={slideInRight}
-            className="flex-1 order-1 md:order-2 w-full max-w-md aspect-square rounded-3xl overflow-hidden shadow-2xl"
+            className="flex-1 order-1 md:order-2 w-full max-w-md aspect-square rounded-3xl overflow-hidden shadow-2xl relative"
           >
-            <img src="/assets/Marketing/PPC_Management.png" alt="Professional PPC" className="w-full h-full object-cover" />
+            <Image
+              src="/assets/Marketing/PPC_Management.webp"
+              alt="Professional PPC"
+              fill
+              className="object-cover"
+              loading="lazy"
+            />
           </motion.div>
         </div>
       </motion.section>
 
       {/* PPC Sub-Section: Campaign Leaders - Enhanced Responsive */}
       <motion.section
+        ref={campaignSectionRef}
         variants={staggerContainer}
         initial="hidden"
         whileInView="visible"

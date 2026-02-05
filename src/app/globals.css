@@ -1,15 +1,16 @@
+/* All @import rules must be at the top */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700&display=swap');
+@import url('https://fonts.cdnfonts.com/css/discrdive-3d');
+@import url('https://fonts.cdnfonts.com/css/goldrops-personal-use');
+
 @reference "tailwindcss";
 
 @import "tailwindcss/preflight";
 @import "tailwindcss/utilities";
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700&display=swap');
 
 /* Font removed - using system fonts instead */
-
-@import url('https://fonts.cdnfonts.com/css/discrdive-3d');
-@import url('https://fonts.cdnfonts.com/css/goldrops-personal-use');
 
 @font-face {
   font-family: 'Goldrops';

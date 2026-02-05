@@ -333,12 +333,18 @@ const WebDevelopmentLanding = () => {
             </div>
           </div>
           {/* Right Side - Background Image */}
-          <div
-            className="relative flex items-center justify-center h-full min-h-[350px] bg-center bg-no-repeat bg-contain"
-            style={{ backgroundImage: "url('/assets/newimages/laptop.png')" }}
-          >
+          <div className="relative flex items-center justify-center h-full min-h-[350px]">
+            <Image
+              src="/assets/newimages/laptop.png"
+              alt="Web Development Services"
+              fill
+              className="object-contain object-center"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px"
+              quality={85}
+              priority
+            />
             {/* Right-side fade overlay */}
-            <div className="absolute right-0 top-0 h-full w-1/2 pointer-events-none"
+            <div className="absolute right-0 top-0 h-full w-1/2 pointer-events-none z-10"
               style={{ background: "linear-gradient(to right, transparent 0%, #bfdbfe 100%)" }}
             />
           </div>
@@ -657,8 +663,9 @@ const WebDevelopmentLanding = () => {
                 alt="Why choose our web development services"
                 fill
                 className="object-contain object-center"
-                sizes="(max-width: 1024px) 50vw, 50vw"
-                priority
+                sizes="(max-width: 640px) 384px, (max-width: 1024px) 448px, 512px"
+                quality={85}
+                loading="lazy"
                 style={{
                   maskImage: 'linear-gradient(to bottom, white 75%, transparent)',
                   WebkitMaskImage: 'linear-gradient(to bottom, white 75%, transparent)'
@@ -708,10 +715,17 @@ const WebDevelopmentLanding = () => {
       {/* Call To Action Section */}
       <section className="relative overflow-hidden py-20 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-center">
         {/* Background image */}
-        <div
-          className="absolute inset-0 bg-center bg-cover opacity-70 pointer-events-none"
-          style={{ backgroundImage: "url('/assets/WebDev/buildwithus.png')" }}
-        />
+        <div className="absolute inset-0 pointer-events-none opacity-70">
+          <Image
+            src="/assets/WebDev/buildwithus.png"
+            alt="Build with us background"
+            fill
+            className="object-cover object-center"
+            sizes="100vw"
+            quality={75}
+            loading="lazy"
+          />
+        </div>
 
         {/* Content */}
         <div className="relative z-10 container mx-auto px-6">
