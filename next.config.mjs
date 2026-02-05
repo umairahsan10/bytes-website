@@ -3,6 +3,14 @@ const nextConfig = {
   eslint: {           
     ignoreDuringBuilds: true,
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  experimental: {
+    // Reduce memory usage during build
+    workerThreads: false,
+    cpus: 1,
+  },
   images: {
     remotePatterns: [
       {

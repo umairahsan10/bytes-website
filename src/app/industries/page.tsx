@@ -534,7 +534,7 @@ const IndustriesPage = () => {
             animate={educationTriggered ? 'visible' : 'hidden'}
             className="space-y-6 order-1 lg:order-2"
           >
-            <motion.h2 variants={staggerContainer as any} className="space-y-6">
+            <motion.div variants={staggerContainer as any} className="space-y-6">
               <AnimatedHeader
                 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight"
                 triggered={educationTriggered}
@@ -550,7 +550,7 @@ const IndustriesPage = () => {
                 animate={educationTriggered ? { width: "100%" } : { width: 0 }}
                 transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
               />
-            </motion.h2>
+            </motion.div>
 
             <motion.p
               variants={paragraphVariants as any}
@@ -874,7 +874,7 @@ const IndustriesPage = () => {
         {/* Background image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/assets/WebDev/optimized/buildwithus.webp"
+            src="/assets/WebDev/optimized/buildwithus-1536.webp"
             alt="Build with us background"
             fill
             className="object-cover opacity-70 pointer-events-none"
