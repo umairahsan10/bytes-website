@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { Header } from '@/sections/Navbar';
 
+export const dynamic = 'force-static';
+
 export default function NotFound() {
   return (
     <>

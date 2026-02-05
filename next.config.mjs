@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {           
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -10,6 +7,15 @@ const nextConfig = {
     // Reduce memory usage during build
     workerThreads: false,
     cpus: 1,
+  },
+  // Turbopack configuration for SVG handling
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
   },
   images: {
     remotePatterns: [
