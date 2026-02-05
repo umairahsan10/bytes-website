@@ -23,7 +23,7 @@
     "@sanity/client": "^7.8.1",
     "@sanity/image-url": "^1.1.0",
     "@svgr/webpack": "^8.1.0",
-    "@tailwindcss/postcss": "^4.1.10",
+    "@tailwindcss/postcss": "^4.1.18",
     "framer-motion": "^12.18.1",
     "gsap": "^3.13.0",
     "jotai": "^2.12.5",
