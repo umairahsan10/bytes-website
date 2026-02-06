@@ -11,6 +11,8 @@ const nextConfig = {
     workerThreads: false,
     cpus: 1,
   },
+  // Empty turbopack config to acknowledge webpack configuration exists
+  turbopack: {},
   images: {
     remotePatterns: [
       {
