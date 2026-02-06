@@ -1200,14 +1200,14 @@ const ByteBotLanding: React.FC = () => {
                 <div className="w-full lg:w-1/2 mobile-full-width flex justify-center items-center">
                   <div className="chatbot-container">
                     <Image
-                      src="/assets/newimages/chatbot.png"
+                      src="/assets/newimages/chatbot.webp"
                       alt="Data Intelligence Dashboard"
                       className="chatbot-image"
                       width={600}
                       height={600}
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 600px"
-                      quality={85}
-                      priority={false}
+                      quality={90}
+                      priority={true}
                     />
                     <div className="chatbot-particles">
                       <div className="particle-dot dot-1"></div>
@@ -1285,14 +1285,14 @@ const ByteBotLanding: React.FC = () => {
                       {/* Image with enhanced styling */}
                       <div className="relative w-full h-full flex items-center justify-center">
                         <Image
-                          src="/assets/newimages/snake.png"
+                          src="/assets/newimages/snake.webp"
                           alt="AI Learning System"
                           className="w-65 h-65 object-contain drop-shadow-2xl filter brightness-110 contrast-110"
                           width={320}
                           height={320}
                           sizes="(max-width: 768px) 260px, 320px"
-                          quality={85}
-                          priority={false}
+                          quality={90}
+                          loading="lazy"
                         />
                       </div>
 
@@ -1329,13 +1329,13 @@ const ByteBotLanding: React.FC = () => {
       <section id="cta" className="relative h-[50vh] bg-white/40 flex items-center justify-center text-center overflow-hidden">
         {/* Background Image */}
         <Image
-          src="/bots/cta_bot.png"
+          src="/bots/cta_bot.webp"
           alt="Call to Action Background"
           fill
           className="object-cover"
           sizes="100vw"
-          quality={75}
-          priority={false}
+          quality={85}
+          loading="lazy"
         />
         {/* overlay */}
         <div className="absolute inset-0 bg-black/50 z-10"></div>
