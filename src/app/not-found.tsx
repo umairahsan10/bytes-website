@@ -1,13 +1,29 @@
 import Link from 'next/link';
-import { Header } from '@/sections/Navbar';
 
 export const dynamic = 'force-static';
+
+function SimpleHeader() {
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100">
+      <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+        <Link href="/" className="text-2xl font-bold text-[#010a14]">
+          Bytes
+        </Link>
+        <nav className="flex gap-6">
+          <Link href="/" className="text-gray-600 hover:text-[#010a14]">Home</Link>
+          <Link href="/about" className="text-gray-600 hover:text-[#010a14]">About</Link>
+          <Link href="/contact" className="text-gray-600 hover:text-[#010a14]">Contact</Link>
+        </nav>
+      </div>
+    </header>
+  );
+}
 
 export default function NotFound() {
   return (
     <>
-      <Header />
-      <main className="min-h-screen bg-white text-[#010a14] font-sans px-4 py-20">
+      <SimpleHeader />
+      <main className="min-h-screen bg-white text-[#010a14] font-sans px-4 py-20 pt-24">
         <div className="max-w-4xl mx-auto text-center">
           <div className="mb-8">
             <h1 className="text-6xl font-bold text-gray-300 mb-4">404</h1>
