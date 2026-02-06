@@ -48,10 +48,12 @@ const nextConfig = {
         {
           test: /\.svg$/i,
           issuer: fileLoaderRule.issuer,
-          resourceQuery: { not: [...(fileLoaderRule.resourceQuery?.not || []), /url/] }, // exclude if *.svg?url
+          resourceQuery: { not: [...(fileLoaderRule.resourceQuery?.not || []), /url/] },
           use: {
             loader: "@svgr/webpack",
             options: {
+              typescript: false,
+              ext: "tsx",
               svgoConfig: {
                 plugins: [
                   {
