@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { Header } from "@/sections/Navbar";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
@@ -8,13 +9,16 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ContactSection } from "@/sections/Contact";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useMotionValue, animate, useInView } from "framer-motion";
-import ReactIcon from "@/assets/icons/react.svg";
-import JsIcon from "@/assets/icons/square-js.svg";
-import HtmlIcon from "@/assets/icons/html5.svg";
-import CssIcon from "@/assets/icons/css3.svg";
-import GithubIcon from "@/assets/icons/github.svg";
-import ChromeIcon from "@/assets/icons/chrome.svg";
-import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg";
+
+// Dynamic import SVGs to avoid SSR issues
+const ReactIcon = dynamic(() => import("@/assets/icons/react.svg"), { ssr: false });
+const JsIcon = dynamic(() => import("@/assets/icons/square-js.svg"), { ssr: false });
+const HtmlIcon = dynamic(() => import("@/assets/icons/html5.svg"), { ssr: false });
+const CssIcon = dynamic(() => import("@/assets/icons/css3.svg"), { ssr: false });
+const GithubIcon = dynamic(() => import("@/assets/icons/github.svg"), { ssr: false });
+const ChromeIcon = dynamic(() => import("@/assets/icons/chrome.svg"), { ssr: false });
+const ArrowUpRightIcon = dynamic(() => import("@/assets/icons/arrow-up-right.svg"), { ssr: false });
+
 import { useRouter } from "next/navigation";
 
 // Animated counter component

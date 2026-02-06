@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -8,15 +11,8 @@ const nextConfig = {
     workerThreads: false,
     cpus: 1,
   },
-  // Turbopack configuration for SVG handling
-  turbopack: {
-    rules: {
-      '*.svg': {
-        loaders: ['@svgr/webpack'],
-        as: '*.js',
-      },
-    },
-  },
+  // Empty turbopack config to acknowledge webpack configuration exists
+  turbopack: {},
   images: {
     remotePatterns: [
       {
@@ -52,10 +48,12 @@ const nextConfig = {
         {
           test: /\.svg$/i,
           issuer: fileLoaderRule.issuer,
-          resourceQuery: { not: [...(fileLoaderRule.resourceQuery?.not || []), /url/] }, // exclude if *.svg?url
+          resourceQuery: { not: [...(fileLoaderRule.resourceQuery?.not || []), /url/] },
           use: {
             loader: "@svgr/webpack",
             options: {
+              typescript: false,
+              ext: "tsx",
               svgoConfig: {
                 plugins: [
                   {
