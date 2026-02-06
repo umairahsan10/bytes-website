@@ -1,11 +1,20 @@
+'use client';
+
 import bytesTest2 from "../../public/portfolio/bytes-test-2.png";
 import bytesTest3 from "../../public/portfolio/bytes-test-3.png";
 import bytesTest5 from "../../public/portfolio/bytes-test-5.png";
 import bytesTest6 from "../../public/portfolio/bytes-test-6.png";
 import Image from "next/image";
-import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg"
+import dynamic from "next/dynamic";
 import { SectionHeader } from "@/components/SectionHeader"
 import { useState, useEffect, useCallback } from "react";
+import React from "react";
+
+// Dynamic import SVG to avoid SSR issues
+const ArrowUpRightIcon = dynamic<React.SVGProps<SVGSVGElement>>(
+  () => import("@/assets/icons/arrow-up-right.svg"),
+  { ssr: false }
+);
 
 const portfolioProjects = [
   {
