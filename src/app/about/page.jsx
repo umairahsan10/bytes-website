@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { Header } from "@/sections/Navbar";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -138,11 +138,18 @@ const AnimatedCodeEditor = () => {
 };
 
 const AnimatedNetworkGraph = () => {
-  const nodes = Array.from({ length: 8 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 300,
-    y: Math.random() * 200,
-  }));
+  const [nodes, setNodes] = useState([]);
+
+  useEffect(() => {
+    // Generate random node positions only on client side
+    setNodes(
+      Array.from({ length: 8 }, (_, i) => ({
+        id: i,
+        x: Math.random() * 300,
+        y: Math.random() * 200,
+      }))
+    );
+  }, []);
 
   return (
     <div className="relative w-full h-64 bg-gradient-to-br from-purple-900/20 to-blue-900/20 rounded-2xl overflow-hidden">
@@ -289,6 +296,8 @@ const AnimatedAIBrain = () => {
 // ────────────────────────────────────────────────────────────────────────────────
 
 const AnimatedNeuralNetwork = () => {
+  const [sparkles, setSparkles] = useState([]);
+
   const nodes = [
     { id: 1, x: 20, y: 30, layer: 'input' },
     { id: 2, x: 20, y: 50, layer: 'input' },
@@ -312,6 +321,20 @@ const AnimatedNeuralNetwork = () => {
 
   const getNodeById = (id) => nodes.find((n) => n.id === id);
 
+  useEffect(() => {
+    // Generate random sparkle positions only on client side
+    setSparkles(
+      Array.from({ length: 8 }).map(() => ({
+        initialX: Math.random() * 400,
+        initialY: Math.random() * 300,
+        animateX: Math.random() * 400,
+        animateY: Math.random() * 300,
+        duration: 3 + Math.random() * 2,
+        delay: Math.random() * 2,
+      }))
+    );
+  }, []);
+
   return (
     <div className="relative w-full h-80 overflow-hidden">
       <div
@@ -333,27 +356,45 @@ const AnimatedNeuralNetwork = () => {
         })}
         {nodes.map((n, idx) => (
           <motion.circle key={n.id} cx={`${n.x}%`} cy={`${n.y}%`} r="4" fill={{ input: '#10b981', hidden1: '#3b82f6', hidden2: '#8b5cf6', output: '#f59e0b' }[n.layer]} initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.5, delay: idx * 0.1 }}>
-            <motion.animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite" />
+            <animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite" />
           </motion.circle>
         ))}
       </svg>
-      {Array.from({ length: 8 }).map((_, i) => (
-        <motion.div key={i} className="absolute w-1 h-1 bg-cyan-400 rounded-full" initial={{ x: Math.random() * 400, y: Math.random() * 300, opacity: 0 }} animate={{ x: Math.random() * 400, y: Math.random() * 300, opacity: [0, 1, 0] }} transition={{ duration: 3 + Math.random() * 2, repeat: Infinity, delay: Math.random() * 2 }} />
+      {sparkles.map((sparkle, i) => (
+        <motion.div 
+          key={i} 
+          className="absolute w-1 h-1 bg-cyan-400 rounded-full" 
+          initial={{ x: sparkle.initialX, y: sparkle.initialY, opacity: 0 }} 
+          animate={{ x: sparkle.animateX, y: sparkle.animateY, opacity: [0, 1, 0] }} 
+          transition={{ duration: sparkle.duration, repeat: Infinity, delay: sparkle.delay }} 
+        />
       ))}
     </div>
   );
 };
 
 const FloatingParticles = ({ children }) => {
+  const [particles, setParticles] = useState([]);
+
+  useEffect(() => {
+    // Generate random positions only on client side
+    setParticles(
+      Array.from({ length: 5 }).map(() => ({
+        left: Math.random() * 100,
+        top: Math.random() * 100,
+      }))
+    );
+  }, []);
+
   return (
     <div className="relative">
-      {Array.from({ length: 5 }).map((_, i) => (
+      {particles.map((particle, i) => (
         <motion.div
           key={i}
           className="absolute w-2 h-2 bg-blue-400 rounded-full opacity-20"
           style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            left: `${particle.left}%`,
+            top: `${particle.top}%`,
           }}
           animate={{ y: [-20, 20, -20], x: [-10, 10, -10] }}
           transition={{ duration: 3 + i, repeat: Infinity, ease: "easeInOut" }}
@@ -813,7 +854,7 @@ export default function AboutPage() {
 
 
   // GSAP ScrollTrigger effect
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (typeof window === "undefined") return;
 
     // Clear any existing ScrollTriggers to prevent conflicts
@@ -1052,7 +1093,15 @@ export default function AboutPage() {
       <section ref={heroRef} className="relative h-screen w-full overflow-hidden pt-20">
         <div className="bg bg-[#010a14] absolute inset-0"></div>
         <div className="img-container relative flex flex-col gap-8 items-center justify-center h-full w-full will-change-transform transform-gpu">
-          <Image className="image" src="/assets/bg.jpg" alt="Background" fill priority />
+          <Image 
+            className="image" 
+            src="/assets/bg.webp" 
+            alt="Background" 
+            fill 
+            priority 
+            sizes="100vw"
+            quality={85}
+          />
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
             <h1 className="hero-title text-[12vw] sm:text-[10vw] md:text-[8vw] lg:text-8xl xl:text-9xl leading-none whitespace-nowrap will-change-transform transform-gpu">
               <span className="bg-gradient-to-r from-purple-900 via-white to-purple-900 bg-clip-text text-transparent">About</span> <span className="bg-gradient-to-r from-purple-500 via-white to-purple-400 bg-clip-text text-transparent">Us</span>
@@ -1067,8 +1116,19 @@ export default function AboutPage() {
         <div
           ref={overlayRef}
           className="info-overlay pointer-events-auto absolute inset-0 will-change-transform transform-gpu bg-white/90 backdrop-blur-xl"
-          style={{ backgroundImage: 'url("/assets/aboutUs/hero.jpg")', backgroundSize: 'cover', backgroundPosition: 'center' }}
         >
+          {/* Responsive Hero Background Image */}
+          <div className="absolute inset-0 -z-10">
+            <Image
+              src="/assets/aboutUs/hero.webp"
+              alt="Hero Background"
+              fill
+              className="object-cover"
+              sizes="100vw"
+              quality={80}
+              priority={true}
+            />
+          </div>
           <div className="h-full flex flex-col items-center justify-center text-center px-4 py-8 sm:py-12">
             <div className="w-full max-w-7xl mx-auto space-y-6 sm:space-y-8">
               <div className="pt-4 sm:pt-8">
@@ -1230,11 +1290,14 @@ Our mission is simple: to empower businesses with digital solutions that don’t
               >
                 <motion.div variants={fadeInUp}>
                   <Image
-                    src="/assets/aboutUs/image1.png"
+                    src="/assets/aboutUs/image1.webp"
                     alt="Philosophy"
                     width={800}
                     height={600}
                     className="object-contain w-full h-[420px] lg:h-[500px]"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 800px"
+                    quality={85}
+                    loading="lazy"
                   />
                 </motion.div>
               </motion.div>
@@ -1330,11 +1393,14 @@ Our mission is simple: to empower businesses with digital solutions that don’t
                 viewport={{ once: true, margin: "-100px" }}
               >
                 <Image
-                  src="/assets/aboutUs/img2.png"
+                  src="/assets/aboutUs/img2.webp"
                   alt="Tech Stack Image Left"
                   width={800}
                   height={600}
                   className="object-cover w-full h-64 rounded-2xl"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
+                  quality={85}
+                  loading="lazy"
                 />
               </motion.div>
 
@@ -1392,11 +1458,14 @@ Our mission is simple: to empower businesses with digital solutions that don’t
                 viewport={{ once: true, margin: "-100px" }}
               >
                 <Image
-                  src="/assets/aboutUs/tech-stack.png"
+                  src="/assets/aboutUs/tech-stack.webp"
                   alt="Tech Stack Image Right"
                   width={800}
                   height={600}
                   className="object-cover w-full h-64 rounded-2xl"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
+                  quality={85}
+                  loading="lazy"
                 />
               </motion.div>
             </div>
@@ -1572,11 +1641,13 @@ Our mission is simple: to empower businesses with digital solutions that don’t
       <section className="relative py-16 px-4 bg-[#E1E1E1] overflow-hidden">
         {/* Decorative background image */}
         <Image
-          src="/assets/aboutUs/aboutus-contact.png"
+          src="/assets/aboutUs/aboutus-contact.webp"
           alt="Contact illustration"
           fill
           className="object-cover absolute inset-0"
-          priority
+          sizes="100vw"
+          quality={75}
+          loading="lazy"
         />
         {/* Semi-transparent overlay to improve text readability */}
         <div className="absolute inset-0 bg-white/40" />
