@@ -102,9 +102,12 @@ const Header: React.FC<HeaderProps> = ({
     checkScreenSize();
 
     // Initial GSAP setup - set starting positions for animation elements
-    gsap.set(".menu-logo img", { y: 50, opacity: 0 });
-    gsap.set(".menu-link p", { y: 40, opacity: 0 });
-    gsap.set(".menu-sub-item p", { y: 12, opacity: 0 });
+    const menuLogoItems = document.querySelectorAll(".menu-logo img");
+    const menuLinkItems = document.querySelectorAll(".menu-link p");
+    const menuSubItems = document.querySelectorAll(".menu-sub-item p");
+    if (menuLogoItems.length > 0) gsap.set(menuLogoItems, { y: 50, opacity: 0 });
+    if (menuLinkItems.length > 0) gsap.set(menuLinkItems, { y: 40, opacity: 0 });
+    if (menuSubItems.length > 0) gsap.set(menuSubItems, { y: 12, opacity: 0 });
     
     // Set initial clip-path for menu (closed state - showing only top edge)
     gsap.set(".menu", { 

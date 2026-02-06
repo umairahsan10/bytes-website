@@ -40,6 +40,16 @@ const ByteBotLanding: React.FC = () => {
   const [integrationAnimationData, setIntegrationAnimationData] = React.useState<any>(null);
   const [conversionAnimationData, setConversionAnimationData] = React.useState<any>(null);
   const [vantaScriptsLoaded, setVantaScriptsLoaded] = React.useState(false);
+  const hasWebGLSupport = useCallback(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      return !!gl;
+    } catch (error) {
+      return false;
+    }
+  }, []);
 
   // Defer Vanta scripts loading until after initial render
   useEffect(() => {
@@ -79,27 +89,32 @@ const ByteBotLanding: React.FC = () => {
   // Vanta initialization (runs only after scripts loaded and ref ready)
   useEffect(() => {
     if (vantaScriptsLoaded && typeof window !== 'undefined' && window.VANTA && heroRef.current) {
+      if (!hasWebGLSupport()) return;
       const isMobile = window.innerWidth < 640;
-      vantaRef.current = window.VANTA.HALO({
-        el: heroRef.current,
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        minHeight: isMobile ? 100 : 200.00,
-        minWidth: isMobile ? 100 : 200.00,
-        color: 0xffffff,
-        backgroundColor: 0x000000,
-        amplitudeFactor: isMobile ? 1.2 : 2.00,
-        size: isMobile ? 1.0 : 1.50,
-        mouseEase: true
-      });
+      try {
+        vantaRef.current = window.VANTA.HALO({
+          el: heroRef.current,
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          minHeight: isMobile ? 100 : 200.00,
+          minWidth: isMobile ? 100 : 200.00,
+          color: 0xffffff,
+          backgroundColor: 0x000000,
+          amplitudeFactor: isMobile ? 1.2 : 2.00,
+          size: isMobile ? 1.0 : 1.50,
+          mouseEase: true
+        });
+      } catch (error) {
+        console.error('Vanta initialization failed:', error);
+      }
     }
     return () => {
       if (vantaRef.current && vantaRef.current.destroy) {
         vantaRef.current.destroy();
       }
     };
-  }, [vantaScriptsLoaded]);
+  }, [vantaScriptsLoaded, hasWebGLSupport]);
 
   useEffect(() => {
     // Lazy load animation data only when user scrolls near them
@@ -136,16 +151,19 @@ const ByteBotLanding: React.FC = () => {
       ScrollTrigger.config({ autoRefreshEvents: 'visibilitychange,DOMContentLoaded,load' });
       
       // Hero text animations (only within hero section)
-      gsap.set('.hero-content .bubble-text', { opacity: 0, y: 50 });
+      const heroBubbleText = document.querySelectorAll('.hero-content .bubble-text');
+      if (heroBubbleText.length > 0) {
+        gsap.set(heroBubbleText, { opacity: 0, y: 50 });
 
-      gsap.to('.hero-content .bubble-text', {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: "back.out(1.7)",
-        delay: 0.5
-      });
+        gsap.to(heroBubbleText, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: "back.out(1.7)",
+          delay: 0.5
+        });
+      }
 
       // ---------------------------
       // Section reveal & background-colour change
