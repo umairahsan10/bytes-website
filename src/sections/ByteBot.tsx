@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { usePageReload } from '../hooks/usePageReload';
 
 // Cycle animated text for the keyword (Intelligence ⇢ Innovation ⇢ Growth)
@@ -323,24 +324,45 @@ const ByteBotsSection = () => {
         {/* Second Section - Overlayed and initially hidden */}
         <div 
           ref={secondSectionRef}
-          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat flex flex-col sm:flex-row items-center justify-center"
+          className="absolute inset-0 w-full h-full flex flex-col sm:flex-row items-center justify-center"
           style={{
-            backgroundImage: `url('/assets/bytes-bot/botm_bg.png')`,
             opacity: 0,
             transform: "scale(0.8)",
             minHeight: "100vh",
             minWidth: "100vw"
           }}
         >
-          <style>{`
-            @media (min-width: 640px) {
-              .bg-desktop-bot {
-                background-image: url('/assets/bytes-bot/bot_bg.png') !important;
-              }
-            }
-          `}</style>
-          {/* Desktop background overlay */}
-          <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat bg-desktop-bot pointer-events-none" style={{ zIndex: 0 }}></div>
+          {/* Responsive Background Images */}
+          <div className="absolute inset-0 w-full h-full">
+            {/* Mobile Background */}
+            <div className="sm:hidden absolute inset-0">
+              <Image
+                src="/assets/bytes-bot/botm_bg.png"
+                alt="ByteBots Background Mobile"
+                fill
+                className="object-cover"
+                sizes="100vw"
+                quality={75}
+                priority={true}
+                placeholder="blur"
+                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+              />
+            </div>
+            {/* Desktop Background */}
+            <div className="hidden sm:block absolute inset-0">
+              <Image
+                src="/assets/bytes-bot/bot_bg.png"
+                alt="ByteBots Background Desktop"
+                fill
+                className="object-cover"
+                sizes="100vw"
+                quality={80}
+                priority={true}
+                placeholder="blur"
+                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+              />
+            </div>
+          </div>
           
           <div className="w-full h-full flex relative z-10">
             {/* Left side - 50% width for content */}
@@ -394,19 +416,38 @@ const ByteBotsSection = () => {
       </div>
       
       {/* Final section - visible after animation */}
-      <div className="min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center relative"
-           style={{
-             backgroundImage: `url('/assets/bytes-bot/botm_bg.png')`
-           }}>
-        <style>{`
-          @media (min-width: 640px) {
-            .final-bg-desktop {
-              background-image: url('/assets/bytes-bot/bot_bg.png') !important;
-            }
-          }
-        `}</style>
-        {/* Desktop background overlay */}
-        <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat final-bg-desktop pointer-events-none"></div>
+      <div className="min-h-screen flex items-center justify-center relative">
+        {/* Responsive Background Images */}
+        <div className="absolute inset-0 w-full h-full">
+          {/* Mobile Background */}
+          <div className="sm:hidden absolute inset-0">
+            <Image
+              src="/assets/bytes-bot/botm_bg.png"
+              alt="ByteBots Background Mobile"
+              fill
+              className="object-cover"
+              sizes="100vw"
+              quality={75}
+              loading="lazy"
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+            />
+          </div>
+          {/* Desktop Background */}
+          <div className="hidden sm:block absolute inset-0">
+            <Image
+              src="/assets/bytes-bot/bot_bg.png"
+              alt="ByteBots Background Desktop"
+              fill
+              className="object-cover"
+              sizes="100vw"
+              quality={80}
+              loading="lazy"
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+            />
+          </div>
+        </div>
         
         <div className="w-full h-full flex flex-col sm:flex-row relative z-10">
           {/* Left side - 50% width for content - EXACT SAME LAYOUT AS ANIMATION */}

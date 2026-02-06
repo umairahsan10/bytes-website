@@ -1205,9 +1205,11 @@ const ByteBotLanding: React.FC = () => {
                       className="chatbot-image"
                       width={600}
                       height={600}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 600px"
-                      quality={90}
+                      sizes="(max-width: 480px) 300px, (max-width: 768px) 400px, (max-width: 1024px) 500px, 600px"
+                      quality={85}
                       priority={true}
+                      placeholder="blur"
+                      blurDataURL="data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACyAgCdASoIAAgAAkA4JaQAA3AA/vuUAAA="
                     />
                     <div className="chatbot-particles">
                       <div className="particle-dot dot-1"></div>
@@ -1290,9 +1292,11 @@ const ByteBotLanding: React.FC = () => {
                           className="w-65 h-65 object-contain drop-shadow-2xl filter brightness-110 contrast-110"
                           width={320}
                           height={320}
-                          sizes="(max-width: 768px) 260px, 320px"
-                          quality={90}
+                          sizes="(max-width: 480px) 200px, (max-width: 768px) 260px, 320px"
+                          quality={80}
                           loading="lazy"
+                          placeholder="blur"
+                          blurDataURL="data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACyAgCdASoIAAgAAkA4JaQAA3AA/vuUAAA="
                         />
                       </div>
 
@@ -1333,9 +1337,11 @@ const ByteBotLanding: React.FC = () => {
           alt="Call to Action Background"
           fill
           className="object-cover"
-          sizes="100vw"
-          quality={85}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1920px"
+          quality={75}
           loading="lazy"
+          placeholder="blur"
+          blurDataURL="data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACyAgCdASoIAAgAAkA4JaQAA3AA/vuUAAA="
         />
         {/* overlay */}
         <div className="absolute inset-0 bg-black/50 z-10"></div>
