@@ -303,10 +303,11 @@ export default function Home() {
   }, { scope: container, dependencies: [isMobileDevice] });
 
   useEffect(() => {
+    const currentContainer = container.current;
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => {
         const trg = trigger.vars?.trigger;
-        if (trg && container.current && container.current.contains(trg)) {
+        if (trg && currentContainer && currentContainer.contains(trg)) {
           trigger.kill();
         }
       });

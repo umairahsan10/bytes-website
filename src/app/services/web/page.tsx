@@ -733,7 +733,7 @@ const WebDevelopmentLanding = () => {
             Ready to <span className="text-white">Transform Your Digital Presence?</span>
           </h2>
           <p className="text-lg text-white-600 leading-relaxed mb-4">
-            We don't just build websites; we create professional websites that empower your business to thrive in the digital age. If you're looking for web development services in the USA, our team is here to bring your vision to life.
+            We don&apos;t just build websites; we create professional websites that empower your business to thrive in the digital age. If you&apos;re looking for web development services in the USA, our team is here to bring your vision to life.
           </p>
           <Link
             href="/contact"

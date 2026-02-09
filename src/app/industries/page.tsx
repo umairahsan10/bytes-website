@@ -54,7 +54,7 @@ const IndustriesPage = () => {
         setIndex((prev) => (prev + 1) % words.length);
       }, 2000);
       return () => clearInterval(id);
-    }, []);
+    }, [words.length]);
 
     return (
       <AnimatePresence mode="wait">

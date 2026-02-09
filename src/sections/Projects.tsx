@@ -5,7 +5,7 @@ import bytesTest6 from "../../public/portfolio/bytes-test-6.png";
 import Image from "next/image";
 import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg"
 import { SectionHeader } from "@/components/SectionHeader"
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 
 const portfolioProjects = [
   {
@@ -31,7 +31,7 @@ const portfolioProjects = [
 ];
 
 export const ProjectsSection = () => {
-  const slides = [...portfolioProjects, portfolioProjects[0]];
+  const slides = useMemo(() => [...portfolioProjects, portfolioProjects[0]], []);
   const [index, setIndex] = useState(0);
   const [withTransition, setWithTransition] = useState(true);
 
@@ -104,7 +104,7 @@ export const ProjectsSection = () => {
           </p>
         </div>
         <p className="text-center text-sm sm:text-base md:text-lg lg:text-base text-white-500 mb-1 sm:mb-8 md:mb-10 lg:mb-6 px-4 sm:px-8 md:px-12 lg:px-8">
-          Our portfolio isn't static — it's active, evolving, and built in the open. Every link you see here points to a real website in development, hosted on a test domain for client review.
+          Our portfolio isn&apos;t static — it&apos;s active, evolving, and built in the open. Every link you see here points to a real website in development, hosted on a test domain for client review.
         </p>
 
         <div className="lg:mt-2 flex flex-col gap-4 sm:gap-6 md:gap-8 lg:gap-6 scale-90 sm:scale-95 lg:scale-90">

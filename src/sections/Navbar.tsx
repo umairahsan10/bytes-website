@@ -674,10 +674,10 @@ const Header: React.FC<HeaderProps> = ({
               </p>
               <div className={`dropdown-menu ${isJourneyDropdownOpen ? 'open' : ''}`}>
                 <div className="dropdown-item">
-                  <a href="/careers" onClick={handleJourneyDropdownClick}>Careers</a>
+                  <Link href="/careers" onClick={handleJourneyDropdownClick}>Careers</Link>
                 </div>
                 <div className="dropdown-item">
-                  <a href="/blogs" onClick={handleJourneyDropdownClick}>Blogs</a>
+                  <Link href="/blogs" onClick={handleJourneyDropdownClick}>Blogs</Link>
                 </div>
               </div>
             </div>

@@ -229,7 +229,7 @@ export const BookSection = () => {
       window.removeEventListener('touchmove', handleTouchMove as any);
       // Do NOT clear unlockTimerRef here; it must complete to release scroll lock
     };
-  }, [page, scrollFlipDone, scrollReady, setPage]);
+  }, [page, scrollFlipDone, scrollReady, setPage, isTouch]);
 
   // NEW: After the automatic open (page 1), unlock the scroll lock the FIRST time the
   //      book is flipped either forward (page 2+) or backward (page 0) by the user.

@@ -101,9 +101,9 @@ function Contact() {
           <span className="big-circle"></span>
           <div className="form">
             <div className="contact-info">
-              <h2 className="title">Let's get in touch</h2>
+              <h2 className="title">Let&apos;s get in touch</h2>
               <p className="text">
-              We'd love to hear from you! Whether you have a question or feedback, feel free to reach out. Contact us through the form below or via our social media channels.  
+              We&apos;d love to hear from you! Whether you have a question or feedback, feel free to reach out. Contact us through the form below or via our social media channels.  
               </p>
 
               <div className="info">

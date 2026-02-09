@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Header } from '@/sections/Navbar';
@@ -108,17 +108,17 @@ const MarketingPage = () => {
   const campaignSectionRef = useRef(null);
   const planSectionRef = useRef(null);
 
-  const seoStats = [
+  const seoStats = useMemo(() => [
     { target: 850, label: "% Average ROAS" },
     { target: 65, label: "% CPA Reduction" },
     { target: 120, label: "Active Campaigns" }
-  ];
+  ], []);
 
-  const smmStats = [
+  const smmStats = useMemo(() => [
     { target: 2, label: "Million Followers" },
     { target: 500, label: "% Engagement Rate" },
     { target: 75, label: "Campaigns Launched" }
-  ];
+  ], []);
 
   const animateNumbers = useCallback((statsRefs, targets, setAnimated) => {
     statsRefs.current.forEach((ref, index) => {
@@ -511,7 +511,7 @@ const MarketingPage = () => {
             Custom Posts & Reels
             </h3>
             <p className="text-sm sm:text-base md:text-lg lg:text-xl text-[#010a14] leading-relaxed mb-6">
-            Our team specializes in creating viral content and building brand loyalty through social media campaigns. We work with businesses of all sizes to produce tailored posts, engaging stories, and high-conversion videos designed for every platform's algorithm.
+            Our team specializes in creating viral content and building brand loyalty through social media campaigns. We work with businesses of all sizes to produce tailored posts, engaging stories, and high-conversion videos designed for every platform&apos;s algorithm.
             </p>
             <motion.ul
               variants={staggerContainer}
@@ -802,7 +802,7 @@ const MarketingPage = () => {
             Scalable Growth Across Multiple Platforms
             </h3>
             <p className="text-sm sm:text-base md:text-lg lg:text-xl text-[#010a14] leading-relaxed mb-6">
-              Whether you're just starting or scaling your business, we ensure your message reaches the right audience across multiple platforms. Our campaigns are designed to grow with you, driving consistent results across Facebook, Instagram, Google, and LinkedIn.
+              Whether you&apos;re just starting or scaling your business, we ensure your message reaches the right audience across multiple platforms. Our campaigns are designed to grow with you, driving consistent results across Facebook, Instagram, Google, and LinkedIn.
             </p>
             <motion.ul
               variants={staggerContainer}
