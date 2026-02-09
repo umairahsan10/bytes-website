@@ -63,7 +63,7 @@ export const BrandsSection = () => {
         </div>
 
         <p className="mt-4 text-md text-center text-gray-500 italic">
-          These logos represent brands we've worked with, our past clients.
+          These logos represent brands we&apos;ve worked with, our past clients.
         </p>
       </div>
     </section>

@@ -265,7 +265,7 @@ function TextLine() {
     return () => {
       st.kill()
     }
-  }, [])
+  }, [fullGeometries])
 
   // State flag to start animation after delay
   const [animationStarted, setAnimationStarted] = useState(false)

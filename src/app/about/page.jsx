@@ -1022,7 +1022,7 @@ export default function AboutPage() {
                   Who We Are
                 </h2>
                 <p className="max-w-2xl mx-auto text-center text-white text-base sm:text-lg md:text-xl lg:text-2xl">
-                  We're a passionate team of innovators, designers, and developers dedicated to crafting exceptional digital experiences that drive meaningful change.
+                  We&apos;re a passionate team of innovators, designers, and developers dedicated to crafting exceptional digital experiences that drive meaningful change.
                 </p>
               </div>
 
@@ -1134,7 +1134,7 @@ export default function AboutPage() {
               className="text-sm sm:text-base md:text-lg lg:text-xl text-white max-w-5xl mx-auto leading-relaxed"
               variants={animationVariants.fadeInUp}
             >
-              Your full-spectrum digital transformation partner, engineering tomorrow's most profitable brands with cutting-edge solutions that scale.
+              Your full-spectrum digital transformation partner, engineering tomorrow&apos;s most profitable brands with cutting-edge solutions that scale.
             </motion.p>
           </motion.div>
         </div>
@@ -1561,7 +1561,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Contact our team and let's bring your vision to life.
+            Contact our team and let&apos;s bring your vision to life.
           </motion.p>
           <motion.button
             data-cta="true"

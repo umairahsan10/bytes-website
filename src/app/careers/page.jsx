@@ -266,10 +266,10 @@ function App() {
                         >
                             <div className="space-y-4">
                                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-blue-700 bg-clip-text text-transparent">
-                                    Let's Connect
+                                    Let&apos;s Connect
                                 </h2>
                                 <p className="text-lg sm:text-xl text-gray-600 leading-relaxed">
-                                    Ready to take the next step in your career? We'd love to hear from you.
+                                    Ready to take the next step in your career? We&apos;d love to hear from you.
                                 </p>
                             </div>
 

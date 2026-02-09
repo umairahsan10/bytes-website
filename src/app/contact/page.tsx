@@ -27,7 +27,7 @@ export default function ContactPage() {
             Get in Touch
           </h1>
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-xl sm:max-w-2xl md:max-w-3xl mx-auto px-2">
-            We'd love to hear from you. Reach out with any questions, feedback, or collaboration ideas—our team will respond promptly.
+            We&apos;d love to hear from you. Reach out with any questions, feedback, or collaboration ideas—our team will respond promptly.
           </p>
         </div>
       </section>

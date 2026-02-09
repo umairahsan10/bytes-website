@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -40,7 +40,7 @@ const ByteSuitePage: React.FC = () => {
   // Keep the laptop vertically fixed while background scrolls
   const laptopMockupY = useTransform(laptopScreenProgress, [0, 1], [0, 0]);
 
-  const laptopScreens = [
+  const laptopScreens = useMemo(() => [
     {
       id: 'lead',
       title: 'Smart Lead Management',
@@ -99,7 +99,7 @@ const ByteSuitePage: React.FC = () => {
         'Accounting',
       ],
     },
-  ] as const;
+  ], []);
 
   // Now that laptopScreens is defined we can compute snap translateY
   const laptopTranslateY = useTransform(laptopScreenProgress, (p) => {
@@ -202,7 +202,7 @@ const ByteSuitePage: React.FC = () => {
     return () => {
       st.kill();
     };
-  }, [isMobileScreen, laptopScreens]);
+  }, [isMobileScreen, laptopScreens, autoProgress]);
 
   // Three.js setup
   useEffect(() => {

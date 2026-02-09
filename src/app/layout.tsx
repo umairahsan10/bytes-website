@@ -70,18 +70,31 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Preconnect to critical domains for faster resource loading */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+        
         {/* Page reload handler */}
         <PageReloadHandler />
         {/* EmailJS */}
         <script
-          type="text/javascript"
-          src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"
-        />
-        <script
           dangerouslySetInnerHTML={{
             __html: `
-              (function(){
-                emailjs.init("dvKSuSLEjskV-yjTk");
+              (function() {
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+                script.onload = function() {
+                  if (typeof emailjs !== 'undefined') {
+                    emailjs.init('dvKSuSLEjskV-yjTk');
+                  }
+                };
+                script.onerror = function() {
+                  console.error('Failed to load EmailJS');
+                };
+                document.head.appendChild(script);
               })();
             `,
           }}

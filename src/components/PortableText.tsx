@@ -4,16 +4,19 @@ import { PortableText as PortableTextComponent } from '@portabletext/react';
 import { urlFor } from '@/lib/sanity';
 import { useEffect, useRef } from 'react';
 import { addInternalLinks } from '@/lib/internalLinking';
+import Image from 'next/image';
 
 const components = {
   types: {
     image: ({ value }: any) => {
       return (
         <div className="my-8">
-          <img
+          <Image
             src={urlFor(value).url()}
             alt={value.alt || 'Blog image'}
             className="w-full h-auto rounded-lg"
+            width={800}
+            height={600}
           />
           {value.alt && (
             <p className="text-sm text-gray-600 mt-2 text-center">{value.alt}</p>
