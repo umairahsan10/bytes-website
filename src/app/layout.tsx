@@ -70,8 +70,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Google Tag Manager */}
-        <GTM id="GTM-MNW4L2XD" />
         {/* Page reload handler */}
         <PageReloadHandler />
         {/* EmailJS */}
@@ -96,6 +94,8 @@ export default function RootLayout({
           "text-black antialiased font-sans min-h-screen flex flex-col"
         )}
       >
+        {/* Google Tag Manager */}
+        <GTM id="GTM-MNW4L2XD" />
         {/* GTM noscript fallback */}
         <GTMNoScript id="GTM-MNW4L2XD" />
         {/* Lenis Provider for smooth scrolling */}

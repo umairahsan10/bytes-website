@@ -1,20 +1,18 @@
 "use client";
 
 import { Header } from "@/sections/Navbar";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, useMemo } from "react";
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ContactSection } from "@/sections/Contact";
 import Image from "next/image";
-import { motion, useScroll, useTransform, useMotionValue, animate, useInView } from "framer-motion";
+import { motion, useMotionValue, animate, useInView } from "framer-motion";
 import ReactIcon from "@/assets/icons/react.svg";
 import JsIcon from "@/assets/icons/square-js.svg";
 import HtmlIcon from "@/assets/icons/html5.svg";
 import CssIcon from "@/assets/icons/css3.svg";
 import GithubIcon from "@/assets/icons/github.svg";
 import ChromeIcon from "@/assets/icons/chrome.svg";
-import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg";
 import { useRouter } from "next/navigation";
 
 // Animated counter component
@@ -31,7 +29,7 @@ function Counter({ from = 0, to, duration = 2, className = "" }) {
       },
     });
     return () => controls.stop();
-  }, [to]);
+  }, [count, to, duration]);
 
   return <span ref={nodeRef} className={className}></span>;
 }
@@ -56,7 +54,7 @@ function CountUp({ end, duration = 2, suffix = "" }) {
       }
       requestAnimationFrame(step);
     }
-  }, [isInView]);
+  }, [hasAnimated, isInView, end, duration, suffix]);
 
   return (
     <span ref={ref} className="inline-block">0{suffix}</span>
@@ -652,6 +650,7 @@ const ServicesSection = () => {
 const AnimatedEnterpriseSystem = () => {
   const [activeConnections, setActiveConnections] = useState([]);
   const [dataFlow, setDataFlow] = useState([]);
+  const flowIdCounter = useRef(0);
 
   useEffect(() => {
     const connectionInterval = setInterval(() => {
@@ -662,7 +661,7 @@ const AnimatedEnterpriseSystem = () => {
     const dataInterval = setInterval(() => {
       setDataFlow(prev => [
         ...prev.slice(-5),
-        { id: Date.now(), path: Math.floor(Math.random() * 4) },
+        { id: `flow-${++flowIdCounter.current}`, path: Math.floor(Math.random() * 4) },
       ]);
     }, 300);
 
@@ -792,19 +791,94 @@ const AnimatedEnterpriseSystem = () => {
 };
 
 export default function AboutPage() {
-  const { scrollYProgress } = useScroll();
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [1, 0.8, 0.8, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
-
   // GSAP refs and state
   const heroRef = useRef(null);
   const overlayRef = useRef(null);
   const [canInteract, setCanInteract] = useState(false);
-  const [videoError, setVideoError] = useState(false);
-  const [videoLoading, setVideoLoading] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const videoRef = useRef(null);
   const router = useRouter();
+
+  // Memoize animation variants to prevent recreation on every render
+  const animationVariants = useMemo(() => ({
+    slideInLeft: {
+      hidden: { opacity: 0, x: -100, rotateY: -15 },
+      visible: {
+        opacity: 1,
+        x: 0,
+        rotateY: 0,
+        transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }
+      },
+      exit: {
+        opacity: 0,
+        x: -50,
+        transition: { duration: 0.5 }
+      }
+    },
+    slideInRight: {
+      hidden: { opacity: 0, x: 100, rotateY: 15 },
+      visible: {
+        opacity: 1,
+        x: 0,
+        rotateY: 0,
+        transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }
+      },
+      exit: {
+        opacity: 0,
+        x: 50,
+        transition: { duration: 0.5 }
+      }
+    },
+    fadeInUp: {
+      hidden: { opacity: 0, y: 60, scale: 0.9 },
+      visible: {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        transition: { duration: 0.7, ease: "easeOut" }
+      },
+      exit: {
+        opacity: 0,
+        y: 30,
+        transition: { duration: 0.4 }
+      }
+    },
+    scaleIn: {
+      hidden: { opacity: 0, scale: 0.8, rotateZ: -5 },
+      visible: {
+        opacity: 1,
+        scale: 1,
+        rotateZ: 0,
+        transition: { duration: 0.6, ease: "backOut" }
+      },
+      exit: {
+        opacity: 0,
+        scale: 0.9,
+        transition: { duration: 0.3 }
+      }
+    },
+    rotateIn: {
+      hidden: { opacity: 0, rotateX: 90, y: 50 },
+      visible: {
+        opacity: 1,
+        rotateX: 0,
+        y: 0,
+        transition: { duration: 0.8, ease: "easeOut" }
+      },
+      exit: {
+        opacity: 0,
+        rotateX: -30,
+        transition: { duration: 0.5 }
+      }
+    },
+    staggerContainer: {
+      hidden: {},
+      visible: {
+        transition: {
+          staggerChildren: 0.2,
+          delayChildren: 0.1
+        }
+      }
+    }
+  }), []);
 
 
 
@@ -916,130 +990,6 @@ export default function AboutPage() {
     };
   }, []);
 
-  // Video handler functions
-  const handleVideoError = (e) => {
-    setVideoError(true);
-    setVideoLoading(false);
-  };
-
-  const handleVideoLoadStart = () => {
-    setVideoLoading(true);
-    setVideoError(false);
-  };
-
-  const handleVideoCanPlay = () => {
-    setVideoLoading(false);
-  };
-
-  const handleVideoLoadedData = () => {
-    setVideoLoading(false);
-  };
-
-  const handlePlayPause = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
-
-  const handleVideoPlay = () => {
-    setIsPlaying(true);
-  };
-
-  const handleVideoPause = () => {
-    setIsPlaying(false);
-  };
-
-  // Custom animation variants
-  const slideInLeft = {
-    hidden: { opacity: 0, x: -100, rotateY: -15 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      rotateY: 0,
-      transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }
-    },
-    exit: {
-      opacity: 0,
-      x: -50,
-      transition: { duration: 0.5 }
-    }
-  };
-
-  const slideInRight = {
-    hidden: { opacity: 0, x: 100, rotateY: 15 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      rotateY: 0,
-      transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }
-    },
-    exit: {
-      opacity: 0,
-      x: 50,
-      transition: { duration: 0.5 }
-    }
-  };
-
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 60, scale: 0.9 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { duration: 0.7, ease: "easeOut" }
-    },
-    exit: {
-      opacity: 0,
-      y: 30,
-      transition: { duration: 0.4 }
-    }
-  };
-
-  const scaleIn = {
-    hidden: { opacity: 0, scale: 0.8, rotateZ: -5 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      rotateZ: 0,
-      transition: { duration: 0.6, ease: "backOut" }
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.9,
-      transition: { duration: 0.3 }
-    }
-  };
-
-  const rotateIn = {
-    hidden: { opacity: 0, rotateX: 90, y: 50 },
-    visible: {
-      opacity: 1,
-      rotateX: 0,
-      y: 0,
-      transition: { duration: 0.8, ease: "easeOut" }
-    },
-    exit: {
-      opacity: 0,
-      rotateX: -30,
-      transition: { duration: 0.5 }
-    }
-  };
-
-  const staggerContainer = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.1
-      }
-    }
-  };
-
   return (
     <main className="relative min-h-screen bg-white text-gray-900 overflow-hidden">
       <Header />
@@ -1048,7 +998,7 @@ export default function AboutPage() {
       <section ref={heroRef} className="relative h-screen w-full overflow-hidden pt-20">
         <div className="bg bg-[#010a14] absolute inset-0"></div>
         <div className="img-container relative flex flex-col gap-8 items-center justify-center h-full w-full will-change-transform transform-gpu">
-          <Image className="image" src="/assets/bg.jpg" alt="Background" fill priority />
+          <Image className="image" src="/assets/bg.webp" alt="Background" fill priority quality={85} sizes="100vw" />
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
             <h1 className="hero-title text-[12vw] sm:text-[10vw] md:text-[8vw] lg:text-8xl xl:text-9xl leading-none whitespace-nowrap will-change-transform transform-gpu">
               <span className="bg-gradient-to-r from-purple-900 via-white to-purple-900 bg-clip-text text-transparent">About</span> <span className="bg-gradient-to-r from-purple-500 via-white to-purple-400 bg-clip-text text-transparent">Us</span>
@@ -1063,7 +1013,7 @@ export default function AboutPage() {
         <div
           ref={overlayRef}
           className="info-overlay pointer-events-auto absolute inset-0 will-change-transform transform-gpu bg-white/90 backdrop-blur-xl"
-          style={{ backgroundImage: 'url("/assets/aboutUs/hero.jpg")', backgroundSize: 'cover', backgroundPosition: 'center' }}
+          style={{ backgroundImage: 'url("/assets/aboutUs/hero.webp")', backgroundSize: 'cover', backgroundPosition: 'center' }}
         >
           <div className="h-full flex flex-col items-center justify-center text-center px-4 py-8 sm:py-12">
             <div className="w-full max-w-7xl mx-auto space-y-6 sm:space-y-8">
@@ -1105,9 +1055,11 @@ export default function AboutPage() {
             <video
               className="w-full h-auto rounded-none sm:rounded-2xl"
               controls
-              poster="/assets/aboutUs/hero.jpg"
+              poster="/assets/aboutUs/hero.webp"
               autoPlay={false}
               playsInline
+              preload="metadata"
+              loading="lazy"
             >
               <source src="/Videos/About-Video.mp4" type="video/mp4" />
               Your browser does not support the video tag.
@@ -1144,7 +1096,7 @@ export default function AboutPage() {
         <div className="relative z-10 w-full px-4 pt-20 pb-8 bg-[#010a14] text-white">
           <motion.div
             className="text-center space-y-8 max-w-6xl mx-auto"
-            variants={fadeInUp}
+            variants={animationVariants.fadeInUp}
             initial="hidden"
             whileInView="visible"
             exit="exit"
@@ -1180,7 +1132,7 @@ export default function AboutPage() {
             </div>
             <motion.p
               className="text-sm sm:text-base md:text-lg lg:text-xl text-white max-w-5xl mx-auto leading-relaxed"
-              variants={fadeInUp}
+              variants={animationVariants.fadeInUp}
             >
               Your full-spectrum digital transformation partner, engineering tomorrow's most profitable brands with cutting-edge solutions that scale.
             </motion.p>
@@ -1196,7 +1148,7 @@ export default function AboutPage() {
             <div className="flex flex-col lg:flex-row items-stretch max-w-7xl mx-auto">
               <motion.div
                 className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-16"
-                variants={slideInLeft}
+                variants={animationVariants.slideInLeft}
                 initial="hidden"
                 whileInView="visible"
                 exit="exit"
@@ -1218,19 +1170,22 @@ Our mission is simple: to empower businesses with digital solutions that don’t
 
               <motion.div
                 className="w-full lg:w-1/2 p-4 lg:p-8"
-                variants={slideInRight}
+                variants={animationVariants.slideInRight}
                 initial="hidden"
                 whileInView="visible"
                 exit="exit"
                 viewport={{ once: false, margin: "-100px" }}
               >
-                <motion.div variants={fadeInUp}>
+                <motion.div variants={animationVariants.fadeInUp}>
                   <Image
-                    src="/assets/aboutUs/image1.png"
+                    src="/assets/aboutUs/image1.webp"
                     alt="Philosophy"
                     width={800}
                     height={600}
                     className="object-contain w-full h-[420px] lg:h-[500px]"
+                    loading="lazy"
+                    quality={85}
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 </motion.div>
               </motion.div>
@@ -1243,7 +1198,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
           <div className="container mx-auto px-4 max-w-7xl">
             <motion.h2
               className="text-2xl sm:text-3xl md:text-4xl font-bold text-center bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-4"
-              variants={scaleIn}
+              variants={animationVariants.scaleIn}
               initial="hidden"
               whileInView="visible"
               exit="exit"
@@ -1254,14 +1209,14 @@ Our mission is simple: to empower businesses with digital solutions that don’t
 
             <motion.div
               className="grid lg:grid-cols-2 gap-4"
-              variants={staggerContainer}
+              variants={animationVariants.staggerContainer}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: false, margin: "-100px" }}
             >
               <motion.div
                 className="w-full lg:row-span-1 bg-white border border-blue-100 rounded-3xl p-3 sm:p-5 hover:scale-105 transition-all duration-500 order-1"
-                variants={rotateIn}
+                variants={animationVariants.rotateIn}
               >
                 <h3 className="text-xl font-bold text-[#010a14] mb-3">Real-Time Development Visibility</h3>
                 <p className="text-[#010a14] leading-relaxed">
@@ -1271,7 +1226,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
 
               <motion.div
                 className="w-full lg:row-span-1 bg-white border border-blue-100 rounded-3xl p-3 sm:p-5 hover:scale-105 transition-all duration-500 order-2"
-                variants={slideInRight}
+                variants={animationVariants.slideInRight}
               >
                 <h3 className="text-xl font-bold text-[#010a14] mb-3">Hyper-Speed Delivery</h3>
                 <p className="text-[#010a14] leading-relaxed mb-6">
@@ -1281,7 +1236,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
 
               <motion.div
                 className="w-full lg:col-span-2 lg:w-1/2 mx-auto bg-white border border-blue-100 rounded-3xl p-3 sm:p-5 hover:scale-105 transition-all duration-500 order-5"
-                variants={fadeInUp}
+                variants={animationVariants.fadeInUp}
               >
                 <h3 className="text-xl font-bold text-[#010a14] mb-3">Bespoke Design Architecture</h3>
                 <p className="text-[#010a14] leading-relaxed">
@@ -1291,7 +1246,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
 
               <motion.div
                 className="w-full bg-white border border-blue-100 rounded-3xl p-3 sm:p-5 hover:scale-105 transition-all duration-500 order-4"
-                variants={slideInLeft}
+                variants={animationVariants.slideInLeft}
               >
                 <h3 className="text-xl font-bold text-[#010a14] mb-3">Infinite Scalability</h3>
                 <p className="text-[#010a14] leading-relaxed">
@@ -1302,7 +1257,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
               {/* Cost Effective Solution Card */}
               <motion.div
                 className="w-full bg-white border border-blue-100 rounded-3xl p-3 sm:p-5 hover:scale-105 transition-all duration-500 order-4"
-                variants={fadeInUp}
+                variants={animationVariants.fadeInUp}
               >
                 <h3 className="text-xl font-bold text-[#010a14] mb-3">Cost Effective Solution</h3>
                 <p className="text-[#010a14] leading-relaxed">
@@ -1320,23 +1275,26 @@ Our mission is simple: to empower businesses with digital solutions that don’t
               {/* Left Image */}
               <motion.div
                 className="w-full lg:w-1/3"
-                variants={fadeInUp}
+                variants={animationVariants.fadeInUp}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
               >
                 <Image
-                  src="/assets/aboutUs/img2.png"
+                  src="/assets/aboutUs/img2.webp"
                   alt="Tech Stack Image Left"
                   width={800}
                   height={600}
                   className="object-cover w-full h-64 rounded-2xl"
+                  loading="lazy"
+                  quality={85}
+                  sizes="(max-width: 768px) 100vw, 33vw"
                 />
               </motion.div>
 
               <motion.div
                 className="w-full lg:w-1/3"
-                variants={rotateIn}
+                variants={animationVariants.rotateIn}
                 initial="hidden"
                 whileInView="visible"
                 exit="exit"
@@ -1349,7 +1307,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
                       <div className="text-center space-y-6">
                         <motion.div
                           className="grid grid-cols-3 gap-4"
-                          variants={staggerContainer}
+                          variants={animationVariants.staggerContainer}
                           initial="hidden"
                           whileInView="visible"
                         >
@@ -1364,7 +1322,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
                             <motion.div
                               key={name}
                               className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center"
-                              variants={scaleIn}
+                              variants={animationVariants.scaleIn}
                               whileHover={{ scale: 1.1, rotate: 5 }}
                             >
                               <Icon className="w-8 h-8 sm:w-10 sm:h-10 text-[#010a14]" aria-label={name} />
@@ -1382,17 +1340,20 @@ Our mission is simple: to empower businesses with digital solutions that don’t
               {/* Right Image */}
               <motion.div
                 className="w-full lg:w-1/3 mt-8 lg:mt-0"
-                variants={fadeInUp}
+                variants={animationVariants.fadeInUp}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
               >
                 <Image
-                  src="/assets/aboutUs/tech-stack.png"
+                  src="/assets/aboutUs/tech-stack.webp"
                   alt="Tech Stack Image Right"
                   width={800}
                   height={600}
                   className="object-cover w-full h-64 rounded-2xl"
+                  loading="lazy"
+                  quality={85}
+                  sizes="(max-width: 768px) 100vw, 33vw"
                 />
               </motion.div>
             </div>
@@ -1404,7 +1365,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
           <div className="container mx-auto px-4 max-w-7xl">
             <motion.h2
               className="text-3xl sm:text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent mb-16"
-              variants={scaleIn}
+              variants={animationVariants.scaleIn}
               initial="hidden"
               whileInView="visible"
               exit="exit"
@@ -1415,7 +1376,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
 
             <motion.div
               className="grid md:grid-cols-2 gap-8"
-              variants={staggerContainer}
+              variants={animationVariants.staggerContainer}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: false, margin: "-100px" }}
@@ -1423,7 +1384,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
               <div className="w-full space-y-6">
                 <motion.div
                   className="bg-white border border-blue-100 rounded-2xl p-6 transition-all duration-500 hover:scale-105 hover:rotate-1"
-                  variants={slideInLeft}
+                  variants={animationVariants.slideInLeft}
                   whileHover={{ y: -10 }}
                 >
                   <h4 className="font-semibold text-[#010a14] mb-3 text-lg">Business Intelligence</h4>
@@ -1432,7 +1393,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
 
                 <motion.div
                   className="bg-white border border-blue-100 rounded-2xl p-6 transition-all duration-500 hover:scale-105 hover:-rotate-1"
-                  variants={slideInLeft}
+                  variants={animationVariants.slideInLeft}
                   whileHover={{ y: -10 }}
                   transition={{ delay: 0.1 }}
                 >
@@ -1444,7 +1405,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
               <div className="w-full space-y-4">
                 <motion.div
                   className="bg-white border border-blue-100 rounded-2xl p-6 transition-all duration-500 hover:scale-105 hover:rotate-1"
-                  variants={slideInRight}
+                  variants={animationVariants.slideInRight}
                   whileHover={{ y: -10 }}
                 >
                   <h4 className="font-semibold text-[#010a14] mb-3 text-lg">Commerce & Payments</h4>
@@ -1453,7 +1414,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
 
                 <motion.div
                   className="bg-white border border-blue-100 rounded-2xl p-6 transition-all duration-500 hover:scale-105 hover:-rotate-1"
-                  variants={slideInRight}
+                  variants={animationVariants.slideInRight}
                   whileHover={{ y: -10 }}
                   transition={{ delay: 0.1 }}
                 >
@@ -1463,7 +1424,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
 
                 <motion.div
                   className="bg-white border border-blue-100 rounded-2xl p-6 transition-all duration-500 hover:scale-105 hover:rotate-1"
-                  variants={slideInRight}
+                  variants={animationVariants.slideInRight}
                   whileHover={{ y: -10 }}
                   transition={{ delay: 0.2 }}
                 >
@@ -1508,7 +1469,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
           <div className="container mx-auto px-4 max-w-5xl relative z-10">
             <motion.div
               className="text-center space-y-8 bg-white/90 rounded-3xl py-16 px-4 shadow-lg"
-              variants={fadeInUp}
+              variants={animationVariants.fadeInUp}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: false, margin: "-100px" }}
@@ -1518,13 +1479,13 @@ Our mission is simple: to empower businesses with digital solutions that don’t
               </h2>
               <motion.p
                 className="text-lg sm:text-xl md:text-2xl text-[#18181b] max-w-3xl mx-auto leading-relaxed"
-                variants={fadeInUp}
+                variants={animationVariants.fadeInUp}
               >
                 Transform your vision into reality. Scale your impact. Dominate your market.
               </motion.p>
               <motion.div
                 className="flex flex-wrap justify-center gap-6 sm:gap-8 mt-12"
-                variants={staggerContainer}
+                variants={animationVariants.staggerContainer}
                 initial="hidden"
                 whileInView="visible"
               >
@@ -1549,7 +1510,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
                   <motion.div
                     key={item.label}
                     className="text-center"
-                    variants={scaleIn}
+                    variants={animationVariants.scaleIn}
                     whileHover={{ scale: 1.1, y: -5 }}
                   >
                     <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white/60 rounded-2xl flex items-center justify-center mb-3 mx-auto backdrop-blur-2xl border border-gray-200">
@@ -1568,11 +1529,13 @@ Our mission is simple: to empower businesses with digital solutions that don’t
       <section className="relative py-16 px-4 bg-[#E1E1E1] overflow-hidden">
         {/* Decorative background image */}
         <Image
-          src="/assets/aboutUs/aboutus-contact.png"
+          src="/assets/aboutUs/aboutus-contact.webp"
           alt="Contact illustration"
           fill
           className="object-cover absolute inset-0"
-          priority
+          loading="lazy"
+          quality={85}
+          sizes="100vw"
         />
         {/* Semi-transparent overlay to improve text readability */}
         <div className="absolute inset-0 bg-white/40" />
@@ -1614,3 +1577,4 @@ Our mission is simple: to empower businesses with digital solutions that don’t
     </main>
   );
 } 
+
