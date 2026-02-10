@@ -1,30 +1,26 @@
-import bytesTest2 from "../../public/portfolio/bytes-test-2.png";
-import bytesTest3 from "../../public/portfolio/bytes-test-3.png";
-import bytesTest5 from "../../public/portfolio/bytes-test-5.png";
-import bytesTest6 from "../../public/portfolio/bytes-test-6.png";
-import Image from "next/image";
+import OptimizedImage from "@/components/OptimizedImage";
 import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg"
 import { SectionHeader } from "@/components/SectionHeader"
 import { useState, useEffect, useCallback, useMemo } from "react";
 
 const portfolioProjects = [
   {
-    img: bytesTest2,
+    img: "/portfolio/bytes-test-2.webp",
     url: "https://bytes-test-2.com",
     title: "Bytes Test Domain 2",
   },
   {
-    img: bytesTest3,
+    img: "/portfolio/bytes-test-3.webp",
     url: "https://bytes-test-3.com",
     title: "Bytes Test Domain 3",
   },
   {
-    img: bytesTest5,
+    img: "/portfolio/bytes-test-5.webp",
     url: "https://bytes-test-5.com",
     title: "Bytes Test Domain 5",
   },
   {
-    img: bytesTest6,
+    img: "/portfolio/bytes-test-6.webp",
     url: "https://bytes-test-6.com",
     title: "Bytes Test Domain 6",
   },
@@ -160,10 +156,14 @@ export const ProjectsSection = () => {
               >
                 {slides.map((item, idx) => (
                   <div key={idx} className="min-w-full pl-0 md:pl-6">
-                    <Image
+                    <OptimizedImage
                       src={item.img}
                       alt={item.title}
                       className="w-full h-[45vh] lg:h-[60vh] object-contain rounded-3xl"
+                      width={1200}
+                      height={800}
+                      loading="lazy"
+                      quality={80}
                     />
                   </div>
                 ))}

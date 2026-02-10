@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import TextFlip from '../components/TextFlip';
 import { usePageReload } from '../hooks/usePageReload';
+import OptimizedImage from '../components/OptimizedImage';
 
 const HeroSection = () => {
   const textRef = useRef<HTMLHeadingElement>(null);
@@ -176,11 +177,12 @@ const HeroSection = () => {
           left: 0;
           width: 100%;
           height: 100%;
-          background-image: url('/assets/hero images/hero-4.png');
-          background-size: cover;
-          background-repeat: no-repeat;
-          background-position: center;
           z-index: 1;
+        }
+        
+        .background-image img {
+          object-fit: cover;
+          object-position: center;
         }
 
         .moon-container {
@@ -193,6 +195,8 @@ const HeroSection = () => {
           z-index: 3;
           animation: glow 3s ease-in-out infinite;
           opacity: 0;
+          will-change: transform, opacity; /* GPU acceleration */
+          transform: translate3d(50%, -50%, 0); /* Force GPU rendering */
         }
 
         .moon-container.visible {
@@ -213,15 +217,19 @@ const HeroSection = () => {
           position: absolute;
           width: 100%;
           height: 100%;
-          background-size: contain;
-          background-repeat: no-repeat;
-          background-position: center;
           border-radius: 50%;
           animation: rotate 60s linear infinite;
+          will-change: transform; /* GPU acceleration for rotation */
+          backface-visibility: hidden; /* Smoother animations */
+        }
+        
+        .moon img {
+          border-radius: 50%;
+          object-fit: contain;
         }
 
         .moon-1 {
-          background-image: url('/assets/hero images/hero-2.png');
+          /* Styles for moon container */
         }
 
         .land-image {
@@ -230,14 +238,16 @@ const HeroSection = () => {
           left: 0;
           width: 100%;
           height: 100%;
-          background-image: url('/assets/hero images/hero-1.png');
-          background-size: cover;
-          background-repeat: no-repeat;
-          background-position: bottom center;
           z-index: 4;
           transform: translateY(60%);
           opacity: 0;
           transition: all 0.8s ease-out;
+          will-change: transform, opacity; /* GPU acceleration */
+        }
+        
+        .land-image img {
+          object-fit: cover;
+          object-position: bottom center;
         }
 
         .land-image.loaded {
@@ -272,6 +282,7 @@ const HeroSection = () => {
           transform: translateY(50px);
           transition: all 1.5s ease-out;
           text-align: center;
+          will-change: opacity, transform; /* GPU acceleration */
         }
 
         .hero-title.loaded {
@@ -363,22 +374,51 @@ const HeroSection = () => {
       `}</style>
 
       <div className="hero-section">
-        {/* Background Image */}
-        <div className="background-image"></div>
+        {/* Background Image - Priority loading for hero */}
+        <div className="background-image">
+          <OptimizedImage 
+            src="/assets/hero images/hero-4.png"
+            alt="Hero background"
+            fill
+            priority
+            quality={90}
+            objectFit="cover"
+            sizes="100vw"
+          />
+        </div>
 
         {/* Single Moon Container */}
         <div className={`moon-container ${moonVisible ? 'visible' : ''}`}>
           <div 
             ref={moonRef}
             className="moon moon-1"
-          ></div>
+          >
+            <OptimizedImage 
+              src="/assets/hero images/hero-2.png"
+              alt="Moon"
+              fill
+              priority
+              quality={85}
+              objectFit="contain"
+            />
+          </div>
         </div>
 
         {/* Land Image */}
         <div 
           ref={landRef}
           className={`land-image ${isLoaded ? 'loaded' : ''}`}
-        ></div>
+        >
+          <OptimizedImage 
+            src="/assets/hero images/hero-1.png"
+            alt="Landscape"
+            fill
+            priority
+            quality={85}
+            objectFit="cover"
+            sizes="100vw"
+          />
+        </div>
 
         {/* Hero Content */}
         <div className="hero-content">

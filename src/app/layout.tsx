@@ -1,7 +1,8 @@
 // Abdullah Zindabad
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Calistoga } from "next/font/google";
 import "./globals.css";
+import "./critical.css"; // Critical above-the-fold CSS
 import { twMerge } from "tailwind-merge";
 import "../sections/cards.css";
 import { Footer } from "@/sections/Footer";
@@ -10,11 +11,17 @@ import PageLoader from "@/components/PageLoader";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { LenisProvider } from "@/components/LenisProvider";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const inter = Inter({ 
+  subsets: ["latin"], 
+  variable: "--font-sans",
+  display: 'swap', // Optimize font loading
+});
+
 const calistoga = Calistoga({
   subsets: ["latin"],
   variable: "--font-serif",
   weight: ["400"],
+  display: 'swap', // Optimize font loading
 });
 
 export const metadata: Metadata = {
@@ -27,6 +34,20 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/", // This will apply to homepage and any page without its own canonical
   },
+  other: {
+    'color-scheme': 'light dark',
+  },
+};
+
+// Export viewport separately as per Next.js 14+ requirements
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#010a14' },
+  ],
 };
 
 // Global page reload handler component
@@ -76,13 +97,34 @@ export default function RootLayout({
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
         
+        {/* Preload critical hero images for faster LCP */}
+        <link 
+          rel="preload" 
+          as="image" 
+          href="/assets/hero images/hero-4.webp"
+          type="image/webp"
+        />
+        <link 
+          rel="preload" 
+          as="image" 
+          href="/assets/hero images/hero-1.webp"
+          type="image/webp"
+        />
+        <link 
+          rel="preload" 
+          as="image" 
+          href="/assets/hero images/hero-2.webp"
+          type="image/webp"
+        />
+        
         {/* Page reload handler */}
         <PageReloadHandler />
-        {/* EmailJS */}
+        {/* EmailJS - Deferred loading for better performance */}
         <script
+          defer
           dangerouslySetInnerHTML={{
             __html: `
-              (function() {
+              window.addEventListener('load', function() {
                 var script = document.createElement('script');
                 script.type = 'text/javascript';
                 script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
@@ -95,7 +137,7 @@ export default function RootLayout({
                   console.error('Failed to load EmailJS');
                 };
                 document.head.appendChild(script);
-              })();
+              });
             `,
           }}
         />

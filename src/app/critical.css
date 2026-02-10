@@ -1,0 +1,92 @@
+/**
+ * Critical CSS for above-the-fold content
+ * This file contains only the CSS needed for initial paint
+ * Non-critical styles are loaded later
+ */
+
+/* Prevent layout shift during font load */
+.font-sans {
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+}
+
+.font-serif {
+  font-family: var(--font-serif), Georgia, serif;
+}
+
+/* Hero section critical styles */
+.hero-wrapper {
+  min-height: 100vh;
+  position: relative;
+  contain: layout style paint; /* CSS containment for better performance */
+}
+
+/* Prevent CLS (Cumulative Layout Shift) */
+.hero-section {
+  min-height: 100vh;
+  width: 100%;
+  content-visibility: auto; /* Only render when visible */
+}
+
+/* Optimize opacity animations */
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Prevent FOUC (Flash of Unstyled Content) */
+.loading-placeholder {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Optimize transform animations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Reduce repaints during scroll */
+.scroll-optimized {
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Prevent layout thrashing */
+.no-layout-shift {
+  contain: layout;
+}
+
+/* Image loading optimization */
+img[loading="lazy"] {
+  content-visibility: auto;
+}
+
+/* Smooth scroll performance */
+.smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
