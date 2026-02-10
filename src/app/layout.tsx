@@ -27,6 +27,14 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/", // This will apply to homepage and any page without its own canonical
   },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+  },
+  other: {
+    'color-scheme': 'light dark',
+  },
 };
 
 // Global page reload handler component
@@ -75,6 +83,26 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+        
+        {/* Preload critical hero images for faster LCP */}
+        <link 
+          rel="preload" 
+          as="image" 
+          href="/assets/hero images/hero-4.webp"
+          type="image/webp"
+        />
+        <link 
+          rel="preload" 
+          as="image" 
+          href="/assets/hero images/hero-1.webp"
+          type="image/webp"
+        />
+        <link 
+          rel="preload" 
+          as="image" 
+          href="/assets/hero images/hero-2.webp"
+          type="image/webp"
+        />
         
         {/* Page reload handler */}
         <PageReloadHandler />

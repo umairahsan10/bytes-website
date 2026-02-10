@@ -8,7 +8,8 @@
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint",
-    "setup-sanity": "node setup-sanity.js"
+    "setup-sanity": "node setup-sanity.js",
+    "convert-images": "node scripts/convert-to-webp.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",

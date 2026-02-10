@@ -1,5 +1,5 @@
 import { SectionHeader } from "@/components/SectionHeader";
-import Image from "next/image";
+import OptimizedImage from "@/components/OptimizedImage";
 import { Fragment } from "react";
 
 const brands = [
@@ -48,12 +48,14 @@ export const BrandsSection = () => {
                     rel="noopener noreferrer"
                     className="inline-block hover:scale-110 transition duration-300"
                   >
-                    <Image
+                    <OptimizedImage
                       src={brand.src}
                       alt="Client logo"
                       width={240}
                       height={120}
                       className="object-contain w-28 h-14"
+                      loading="lazy"
+                      quality={80}
                     />
                   </a>
                 ))}
