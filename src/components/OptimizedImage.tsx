@@ -68,7 +68,7 @@ export default function OptimizedImage({
 
   const imageProps: any = {
     src: imgError ? src : imgSrc,
-    alt,
+    alt: alt || '', // Ensure alt is always defined for accessibility
     className,
     priority,
     quality,
@@ -90,5 +90,5 @@ export default function OptimizedImage({
     }
   }
 
-  return <Image {...imageProps} />;
+  return <Image {...imageProps} alt={alt || ''} />;
 }

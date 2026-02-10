@@ -3,6 +3,7 @@
 import { Header } from "@/sections/Navbar";
 import HeroSection from "@/sections/Hero";
 import { useEffect, lazy, Suspense } from "react";
+import PerformanceMonitor from "@/components/PerformanceMonitor";
 
 // Lazy load non-critical sections for better initial load performance
 const ByteBotsSection = lazy(() => import("@/sections/ByteBot"));
@@ -26,6 +27,9 @@ export default function Home() {
 
   return (
     <main className="text-black min-h-screen">
+      {/* Performance monitoring for development */}
+      <PerformanceMonitor />
+      
       <Header transparentNav={true} />
       {/* Hero section loads immediately with priority */}
       <HeroSection />

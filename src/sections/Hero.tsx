@@ -195,6 +195,8 @@ const HeroSection = () => {
           z-index: 3;
           animation: glow 3s ease-in-out infinite;
           opacity: 0;
+          will-change: transform, opacity; /* GPU acceleration */
+          transform: translate3d(50%, -50%, 0); /* Force GPU rendering */
         }
 
         .moon-container.visible {
@@ -217,6 +219,8 @@ const HeroSection = () => {
           height: 100%;
           border-radius: 50%;
           animation: rotate 60s linear infinite;
+          will-change: transform; /* GPU acceleration for rotation */
+          backface-visibility: hidden; /* Smoother animations */
         }
         
         .moon img {
@@ -238,6 +242,7 @@ const HeroSection = () => {
           transform: translateY(60%);
           opacity: 0;
           transition: all 0.8s ease-out;
+          will-change: transform, opacity; /* GPU acceleration */
         }
         
         .land-image img {
@@ -277,6 +282,7 @@ const HeroSection = () => {
           transform: translateY(50px);
           transition: all 1.5s ease-out;
           text-align: center;
+          will-change: opacity, transform; /* GPU acceleration */
         }
 
         .hero-title.loaded {
