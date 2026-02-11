@@ -54,7 +54,6 @@ export const BrandsSection = () => {
                       width={240}
                       height={120}
                       className="object-contain w-28 h-14"
-                      loading="lazy"
                       quality={80}
                     />
                   </a>

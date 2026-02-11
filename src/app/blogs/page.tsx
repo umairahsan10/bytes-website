@@ -3,8 +3,27 @@ import { Header } from "@/sections/Navbar";
 import BlogGrid from "@/components/BlogGrid";
 import Link from "next/link";
 import BlogListingIntro from "@/components/BlogListingIntro";
+import { Metadata } from "next";
 
 const POSTS_PER_PAGE = 8;
+
+export const metadata: Metadata = {
+  title: "Blogs | Bytes Platform - Digital Marketing Insights",
+  description: "Stay updated with the latest digital marketing trends, SEO tips, web development insights, and technology news from Bytes Platform.",
+  alternates: {
+    canonical: "https://bytesplatform.com/blogs",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    title: "Blogs | Bytes Platform",
+    description: "Digital Marketing Insights and Technology Trends",
+    url: "https://bytesplatform.com/blogs",
+    type: "website",
+  },
+};
 
 // Dynamic pagination function to get posts for specific page ranges
 function getPostsForPage(allPosts: any[], pageNumber: number) {

@@ -53,7 +53,9 @@ export default function TextAnimation() {
       ref={containerRef}
       className="flex flex-col items-center justify-center w-full min-h-[60vh] sm:min-h-screen px-1 sm:px-4 space-y-8"
     >
-      <h2 className="text-white text-3xl sm:text-4xl md:text-6xl font-bold text-center">About Us</h2>
+      <h2 className="text-white text-3xl sm:text-4xl md:text-6xl font-bold text-center mb-6 opacity-100 z-20 relative">
+        About Us
+      </h2>
       <p className={`text-justify mx-auto text-white/90 text-lg sm:text-xl md:text-3xl leading-snug w-[95%] sm:w-[60%] max-w-none mt-4 px-1 sm:px-4 ${robotoSlab.className}`}>
         {phrase.split(" ").map((word, idx) => (
           <span key={`${word}-${idx}`} className="opacity-20">

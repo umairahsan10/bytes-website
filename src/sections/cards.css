@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+/* Fonts loaded globally in layout.tsx - removed duplicate import */
 
 /* Limit base resets only to the cards area to avoid overriding global site styles */
 .cards-container, .cards-container * {

@@ -13,6 +13,7 @@ interface LazySectionProps {
 /**
  * LazySection - Optimizes mobile performance by loading sections only when they enter viewport
  * Uses Intersection Observer API for efficient lazy loading
+ * Optimized for faster component display with eager loading
  */
 export default function LazySection({
   children,
@@ -25,10 +26,26 @@ export default function LazySection({
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Aggressive optimization: if rootMargin > 500px, load immediately on mobile
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+    const isAggressive = parseInt(rootMargin) >= 500;
+    
+    if (isMobile && isAggressive) {
+      // On mobile with aggressive settings, load after a tiny delay
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+    
+    // Create observer with reduced threshold for faster triggering
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true);
+          // Use RAF to avoid blocking main thread
+          requestAnimationFrame(() => {
+            setIsVisible(true);
+          });
           // Once visible, stop observing to save resources
           if (sectionRef.current) {
             observer.unobserve(sectionRef.current);
@@ -37,7 +54,7 @@ export default function LazySection({
       },
       {
         threshold,
-        rootMargin,
+        rootMargin, // Aggressive preloading distance
       }
     );
 

@@ -32,7 +32,18 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL("https://bytesplatform.com/"),
   alternates: {
-    canonical: "/", // This will apply to homepage and any page without its own canonical
+    canonical: "https://bytesplatform.com/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
   other: {
     'color-scheme': 'light dark',
@@ -99,40 +110,56 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://fonts.cdnfonts.com" />
         
         {/* Async load fonts to prevent render blocking - mobile optimized */}
-        <link 
-          rel="stylesheet" 
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap"
-          media="print"
-          // @ts-ignore
-          onLoad="this.media='all'"
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                var poppinsLink = document.createElement('link');
+                poppinsLink.rel = 'stylesheet';
+                poppinsLink.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap';
+                poppinsLink.media = 'print';
+                poppinsLink.onload = function() { this.media = 'all'; };
+                document.head.appendChild(poppinsLink);
+                
+                // Load remaining fonts after initial render
+                if ('requestIdleCallback' in window) {
+                  requestIdleCallback(function() {
+                    var fonts = [
+                      'https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap',
+                      'https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700&display=swap',
+                      'https://fonts.cdnfonts.com/css/discrdive-3d',
+                      'https://fonts.cdnfonts.com/css/goldrops-personal-use'
+                    ];
+                    fonts.forEach(function(url) {
+                      var link = document.createElement('link');
+                      link.rel = 'stylesheet';
+                      link.href = url;
+                      document.head.appendChild(link);
+                    });
+                  });
+                } else {
+                  setTimeout(function() {
+                    var fonts = [
+                      'https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap',
+                      'https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700&display=swap',
+                      'https://fonts.cdnfonts.com/css/discrdive-3d',
+                      'https://fonts.cdnfonts.com/css/goldrops-personal-use'
+                    ];
+                    fonts.forEach(function(url) {
+                      var link = document.createElement('link');
+                      link.rel = 'stylesheet';
+                      link.href = url;
+                      document.head.appendChild(link);
+                    });
+                  }, 1000);
+                }
+              })();
+            `,
+          }}
         />
         <noscript>
           <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" />
         </noscript>
-        
-        {/* Load remaining fonts after initial render for better performance */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if ('requestIdleCallback' in window) {
-                requestIdleCallback(function() {
-                  var fonts = [
-                    'https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap',
-                    'https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700&display=swap',
-                    'https://fonts.cdnfonts.com/css/discrdive-3d',
-                    'https://fonts.cdnfonts.com/css/goldrops-personal-use'
-                  ];
-                  fonts.forEach(function(url) {
-                    var link = document.createElement('link');
-                    link.rel = 'stylesheet';
-                    link.href = url;
-                    document.head.appendChild(link);
-                  });
-                });
-              }
-            `,
-          }}
-        />
         
         {/* Preload critical hero images for faster LCP - mobile optimized */}
         <link 

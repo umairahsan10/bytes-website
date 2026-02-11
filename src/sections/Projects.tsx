@@ -162,7 +162,6 @@ export const ProjectsSection = () => {
                       className="w-full h-[45vh] lg:h-[60vh] object-contain rounded-3xl"
                       width={1200}
                       height={800}
-                      loading="lazy"
                       quality={80}
                     />
                   </div>

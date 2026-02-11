@@ -5,8 +5,15 @@ import FadeIn from '@/components/FadeIn';
 import { Header } from '@/sections/Navbar';
 
 export const metadata = {
-  title: 'Bytes Platform',
-  description: 'Thank you for contacting Bytes Platform. We will get back to you soon.'
+  title: 'Thank You | Bytes Platform',
+  description: 'Thank you for contacting Bytes Platform. We will get back to you soon.',
+  alternates: {
+    canonical: "https://bytesplatform.com/thank-you",
+  },
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 export default function ThankYouPage() {
