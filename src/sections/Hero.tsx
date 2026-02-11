@@ -37,6 +37,10 @@ const HeroSection = () => {
       // Only trigger scroll animations after hero is fully loaded and moon is visible
       if (!isLoaded || !moonVisible) return;
       
+      // Disable scroll animations on mobile for better performance
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile) return;
+      
       const scrollY = window.scrollY;
       const windowHeight = window.innerHeight;
       const maxScroll = windowHeight * 0.8;
@@ -321,8 +325,33 @@ const HeroSection = () => {
         }
 
         @media (max-width: 768px) {
+          /* Mobile performance optimizations */
+          .hero-wrapper {
+            height: 100vh !important; /* Reduce scroll complexity */
+          }
+
+          /* Simplified animations for mobile */
+          .moon-container {
+            width: 500px;
+            height: 500px;
+            animation: glow 4s ease-in-out infinite !important;
+            will-change: auto; /* Reduce GPU usage */
+          }
+
+          /* Disable zoom effect on mobile for better performance */
+          .moon-container.zooming,
+          .moon-container.zooming-out {
+            animation: glow 4s ease-in-out infinite !important;
+          }
+
+          /* Reduce rotation complexity */
+          .moon {
+            animation: rotate 120s linear infinite !important; /* Slower rotation */
+          }
+
           .hero-title {
             font-size: 2.8rem; /* smaller heading on tablets/mobile */
+            animation-duration: 2s !important;
           }
           
           .future-word {
@@ -332,19 +361,30 @@ const HeroSection = () => {
           .hero-subtitle {
             font-size: 1rem; /* reduce subtitle size */
             text-align: center;
+            animation-duration: 1.5s !important;
           }
           
           .hero-content {
             padding: 2rem;
           }
-          
-          .moon-container {
-            width: 500px;
-            height: 500px;
-          }
 
           .mobile-break {
             display: block; /* reveal the break on mobile */
+          }
+
+          /* Optimize land image for mobile */
+          .land-image {
+            will-change: auto;
+          }
+
+          /* Reduce glow effects on mobile */
+          @keyframes glow {
+            0%, 100% {
+              filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
+            }
+            50% {
+              filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.6));
+            }
           }
         }
 

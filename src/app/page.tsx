@@ -4,6 +4,7 @@ import { Header } from "@/sections/Navbar";
 import HeroSection from "@/sections/Hero";
 import { useEffect, lazy, Suspense } from "react";
 import PerformanceMonitor from "@/components/PerformanceMonitor";
+import LazySection from "@/components/LazySection";
 
 // Lazy load non-critical sections for better initial load performance
 const ByteBotsSection = lazy(() => import("@/sections/ByteBot"));
@@ -34,60 +35,60 @@ export default function Home() {
       {/* Hero section loads immediately with priority */}
       <HeroSection />
       
-      {/* Other sections load lazily with Suspense fallback */}
-      <Suspense fallback={<div className="w-full min-h-screen" />}>
-        <div className="w-full">
+      {/* Sections lazy load only when entering viewport - optimized for mobile */}
+      <LazySection rootMargin="200px" className="w-full">
+        <Suspense fallback={<div className="w-full min-h-screen" />}>
           <ByteBotsSection />
-        </div>
-      </Suspense>
+        </Suspense>
+      </LazySection>
       
-      <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
-        <div className="w-full">
+      <LazySection rootMargin="150px" className="w-full">
+        <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
           <ServiceHead />
-        </div>
-      </Suspense>
+        </Suspense>
+      </LazySection>
       
-      <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
-        <div className="w-full">
+      <LazySection rootMargin="150px" className="w-full">
+        <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
           <CardsSection />
-        </div>
-      </Suspense>
+        </Suspense>
+      </LazySection>
       
-      <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
-        <div className="w-full">
+      <LazySection rootMargin="100px" className="w-full">
+        <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
           <LineAnimationSection />
-        </div>
-      </Suspense>
+        </Suspense>
+      </LazySection>
       
-      <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
-        <div className="w-full">
+      <LazySection rootMargin="100px" className="w-full">
+        <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
           <NumbersSection />
-        </div>
-      </Suspense>
+        </Suspense>
+      </LazySection>
       
-      <Suspense fallback={<div className="w-full min-h-screen" />}>
-        <div className="w-full">
+      <LazySection rootMargin="100px" className="w-full">
+        <Suspense fallback={<div className="w-full min-h-screen" />}>
           <ProjectsSection />
-        </div>
-      </Suspense>
+        </Suspense>
+      </LazySection>
       
-      <Suspense fallback={<div className="w-full min-h-screen" />}>
-        <div className="w-full">
+      <LazySection rootMargin="100px" className="w-full">
+        <Suspense fallback={<div className="w-full min-h-screen" />}>
           <BookSection />
-        </div>
-      </Suspense>
+        </Suspense>
+      </LazySection>
       
-      <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
-        <div className="w-full">
+      <LazySection rootMargin="50px" className="w-full">
+        <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
           <BrandsSection />
-        </div>
-      </Suspense>
+        </Suspense>
+      </LazySection>
       
-      <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
-        <div className="w-full">
+      <LazySection rootMargin="50px" className="w-full">
+        <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
           <ContactSection />
-        </div>
-      </Suspense>
+        </Suspense>
+      </LazySection>
       {/* Footer is now included globally in the RootLayout */}
     </main>
   );

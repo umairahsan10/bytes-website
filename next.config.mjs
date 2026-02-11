@@ -7,6 +7,35 @@ const nextConfig = {
     // Reduce memory usage during build
     workerThreads: false,
     cpus: 1,
+    // Optimize CSS chunking
+    optimizeCss: true,
+  },
+  // Optimize production builds
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
+  },
+  // Optimize headers for better caching
+  async headers() {
+    return [
+      {
+        source: '/:all*(svg|jpg|jpeg|png|webp|avif|gif|ico)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ];
   },
   // Turbopack configuration for SVG handling
   turbopack: {

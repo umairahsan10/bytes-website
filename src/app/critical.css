@@ -90,3 +90,67 @@ img[loading="lazy"] {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
 }
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+  /* Reduce animations on mobile for better performance */
+  * {
+    animation-duration: 0.3s !important;
+    transition-duration: 0.2s !important;
+  }
+
+  /* Hero section mobile optimization */
+  .hero-wrapper {
+    height: 100vh !important; /* Reduce scroll complexity on mobile */
+    contain: strict;
+  }
+
+  .hero-section {
+    min-height: 100vh;
+    contain: layout style paint;
+  }
+
+  /* Reduce repaints and reflows */
+  img, video {
+    will-change: auto;
+    transform: translateZ(0);
+  }
+
+  /* Optimize touch interactions */
+  button, a {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  /* Prevent zoom on input focus */
+  input, select, textarea {
+    font-size: 16px;
+  }
+
+  /* Lazy load images below the fold */
+  img[loading="lazy"] {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 500px;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Optimize for low-end devices */
+@media (max-width: 768px) and (max-resolution: 1dppx) {
+  /* Further reduce visual effects on low-end mobile devices */
+  .glow-effect,
+  .shadow-effect {
+    filter: none !important;
+    box-shadow: none !important;
+  }
+}

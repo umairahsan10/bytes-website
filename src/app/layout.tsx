@@ -96,25 +96,67 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+        <link rel="dns-prefetch" href="https://fonts.cdnfonts.com" />
         
-        {/* Preload critical hero images for faster LCP */}
+        {/* Async load fonts to prevent render blocking - mobile optimized */}
+        <link 
+          rel="stylesheet" 
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap"
+          media="print"
+          // @ts-ignore
+          onLoad="this.media='all'"
+        />
+        <noscript>
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" />
+        </noscript>
+        
+        {/* Load remaining fonts after initial render for better performance */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('requestIdleCallback' in window) {
+                requestIdleCallback(function() {
+                  var fonts = [
+                    'https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap',
+                    'https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700&display=swap',
+                    'https://fonts.cdnfonts.com/css/discrdive-3d',
+                    'https://fonts.cdnfonts.com/css/goldrops-personal-use'
+                  ];
+                  fonts.forEach(function(url) {
+                    var link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = url;
+                    document.head.appendChild(link);
+                  });
+                });
+              }
+            `,
+          }}
+        />
+        
+        {/* Preload critical hero images for faster LCP - mobile optimized */}
         <link 
           rel="preload" 
           as="image" 
           href="/assets/hero images/hero-4.webp"
           type="image/webp"
+          // @ts-ignore
+          imageSrcSet="/assets/hero images/hero-4.webp 1x"
+          media="(max-width: 768px)"
         />
         <link 
           rel="preload" 
           as="image" 
           href="/assets/hero images/hero-1.webp"
           type="image/webp"
+          media="(min-width: 769px)"
         />
         <link 
           rel="preload" 
           as="image" 
           href="/assets/hero images/hero-2.webp"
           type="image/webp"
+          media="(min-width: 769px)"
         />
         
         {/* Page reload handler */}
