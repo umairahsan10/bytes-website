@@ -7,8 +7,8 @@ const nextConfig = {
     // Reduce memory usage during build
     workerThreads: false,
     cpus: 1,
-    // Optimize CSS chunking
-    optimizeCss: true,
+    // optimizeCss disabled - requires deprecated critters package
+    // optimizeCss: true,
   },
   // Optimize production builds
   compiler: {

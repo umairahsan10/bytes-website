@@ -110,6 +110,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://fonts.cdnfonts.com" />
         
         {/* Async load fonts to prevent render blocking - mobile optimized */}
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
