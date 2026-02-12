@@ -9,7 +9,7 @@ import PerformanceMonitor from "@/components/PerformanceMonitor";
 const ByteBotsSection = lazy(() => import("@/sections/ByteBot"));
 const ServiceHead = lazy(() => import("@/sections/serviceHead"));
 const ProjectsSection = lazy(() => import("@/sections/Projects").then(mod => ({ default: mod.ProjectsSection })));
-const BookSection = lazy(() => import("@/sections/BookSection").then(mod => ({ default: mod.BookSection })));
+// const BookSection = lazy(() => import("@/sections/BookSection").then(mod => ({ default: mod.BookSection })));
 const ContactSection = lazy(() => import("@/sections/Contact").then(mod => ({ default: mod.ContactSection })));
 const CardsSection = lazy(() => import("@/sections/CardsSection"));
 const LineAnimationSection = lazy(() => import("@/sections/LineAnimationSection").then(mod => ({ default: mod.LineAnimationSection })));
@@ -71,11 +71,11 @@ export default function Home() {
         </div>
       </Suspense>
       
-      <Suspense fallback={<div className="w-full min-h-screen" />}>
+      {/* <Suspense fallback={<div className="w-full min-h-screen" />}>
         <div className="w-full">
           <BookSection />
         </div>
-      </Suspense>
+      </Suspense> */}
       
       <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
         <div className="w-full">
