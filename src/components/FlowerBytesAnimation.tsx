@@ -1,18 +1,29 @@
 'use client';
-import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react'
+import React, { useEffect, useRef, useState, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-function TextLine() {
+interface TextLineProps {
+  isVisible?: boolean
+  prefersReducedMotion?: boolean
+}
+
+function TextLine({ isVisible = true, prefersReducedMotion = false }: TextLineProps) {
   const tubeRefs = useRef<(THREE.Mesh | null)[]>([])
   const sphereRefs = useRef<(THREE.Mesh | null)[]>([])
 
   // Use refs for animation values to prevent re-renders inside useFrame
   const scrollProgressRef = useRef(0)
   const targetProgressRef = useRef(0)
+  const lastProgressRef = useRef(0) // Track if progress changed
+
+  // Update visibility ref when prop changes
+  useEffect(() => {
+    // Note: visibility check happens in useFrame via isVisible prop
+  }, [isVisible])
 
   const [dimensions, setDimensions] = useState({
     width: typeof window !== 'undefined' ? window.innerWidth : 0,
@@ -21,6 +32,17 @@ function TextLine() {
 
   const tubeRadius = useMemo(() => {
     return dimensions.width < 768 ? 0.2 : 0.4
+  }, [dimensions.width])
+
+  // Dynamic segment count based on device capability
+  const segmentCount = useMemo(() => {
+    if (dimensions.width < 768) {
+      // Check for low-end mobile devices
+      const isLowEnd = typeof navigator !== 'undefined' && 
+        (navigator.hardwareConcurrency <= 4 || /budget|lite/i.test(navigator.userAgent))
+      return isLowEnd ? 400 : 600
+    }
+    return 1000 // Desktop gets full quality
   }, [dimensions.width])
 
   // "CACHE IN THE POINTS": The letter path data (the "points") is calculated 
@@ -188,8 +210,8 @@ function TextLine() {
     const pink       = new THREE.Color('#F6C324')    
 
     return letterCurves.map(curve => {
-      // High segment count for smooth reveal
-      const geo = new THREE.TubeGeometry(curve, 1000, tubeRadius, 16, false)
+      // Dynamic segment count for performance
+      const geo = new THREE.TubeGeometry(curve, segmentCount, tubeRadius, 16, false)
       geo.setDrawRange(0, 0)
 
       // Build per-vertex gradient across global X axis
@@ -222,7 +244,27 @@ function TextLine() {
       geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
       return geo
     })
-  }, [letterCurves, tubeRadius, bounds])
+  }, [letterCurves, tubeRadius, bounds, segmentCount])
+
+  // Memoized tube material to prevent recreation every frame
+  const tubeMaterial = useMemo(() => {
+    return new THREE.MeshBasicMaterial({ 
+      vertexColors: true, 
+      transparent: true, 
+      opacity: 0.85 
+    })
+  }, [])
+
+  // Memoized sphere materials to prevent recreation
+  const sphereMaterials = useMemo(() => {
+    return letterCurves.map(() => 
+      new THREE.MeshBasicMaterial({ 
+        color: '#F6C324', 
+        transparent: true, 
+        opacity: 0.85 
+      })
+    )
+  }, [letterCurves.length])
 
   // Handle window resize
   useEffect(() => {
@@ -281,10 +323,19 @@ function TextLine() {
   // "how much" of the pre-built, cached geometry to render using `setDrawRange`.
   // This is extremely fast and efficient.
   useFrame(() => {
-    if (!animationStarted) return // wait for delay before drawing
+    // Skip animation if not visible or not started
+    if (!animationStarted || !isVisible) return
 
-    // Smaller lerp factor for smoother scrolling animation
-    scrollProgressRef.current += (targetProgressRef.current - scrollProgressRef.current) * 0.08
+    // Skip calculations if progress hasn't changed significantly
+    const progressDelta = Math.abs(targetProgressRef.current - lastProgressRef.current)
+    if (progressDelta < 0.001 && scrollProgressRef.current === targetProgressRef.current) {
+      return
+    }
+    lastProgressRef.current = targetProgressRef.current
+
+    // Use instant reveal for reduced motion, smoother lerp for normal
+    const lerpFactor = prefersReducedMotion ? 0.3 : 0.08
+    scrollProgressRef.current += (targetProgressRef.current - scrollProgressRef.current) * lerpFactor
 
     const totalLetters = letterCurves.length
     // Lower multiplier means letters reveal more slowly
@@ -321,12 +372,14 @@ function TextLine() {
     })
   })
   
-  // Cleanup geometries on unmount to prevent memory leaks
+  // Cleanup geometries and materials on unmount to prevent memory leaks
   useEffect(() => {
     return () => {
       fullGeometries.forEach(g => g.dispose())
+      tubeMaterial.dispose()
+      sphereMaterials.forEach(m => m.dispose())
     }
-  }, [fullGeometries])
+  }, [fullGeometries, tubeMaterial, sphereMaterials])
 
   return (
     <>
@@ -335,7 +388,7 @@ function TextLine() {
           <mesh
             ref={(ref) => { tubeRefs.current[index] = ref }}
             geometry={fullGeometries[index]}
-            material={new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.85 })}
+            material={tubeMaterial}
             visible={false}
           />
           <mesh
@@ -344,7 +397,7 @@ function TextLine() {
             visible={false}
           >
             <sphereGeometry args={[tubeRadius * 1.5, 16, 16]} />
-            <meshBasicMaterial color="#F6C324" transparent opacity={0.85} />
+            <primitive object={sphereMaterials[index]} attach="material" />
           </mesh>
         </React.Fragment>
       ))}
@@ -353,21 +406,67 @@ function TextLine() {
 }
 
 function FlowerBytesAnimation() {
+  const canvasRef = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(true)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const [dimensions, setDimensions] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 1920,
+  })
+
+  // Check for reduced motion preference
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setPrefersReducedMotion(mediaQuery.matches)
+    
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches)
+    mediaQuery.addEventListener('change', handler)
+    return () => mediaQuery.removeEventListener('change', handler)
+  }, [])
+
+  // Viewport visibility detection for performance
+  useEffect(() => {
+    if (!canvasRef.current) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting)
+      },
+      {
+        rootMargin: '100px', // Start animating slightly before visible
+      }
+    )
+
+    observer.observe(canvasRef.current)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    const handleResize = () => {
+      setDimensions({ width: window.innerWidth })
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   return (
-    <div style={{ 
-      position: 'absolute', 
-      top: '10vh', 
-      left: 0, 
-      width: '100%', 
-      height: '90vh', 
-      zIndex: -1,
-      background: 'transparent'
-    }}>
+    <div 
+      ref={canvasRef}
+      style={{ 
+        position: 'absolute', 
+        top: '10vh', 
+        left: 0, 
+        width: '100%', 
+        height: '90vh', 
+        zIndex: -1,
+        background: 'transparent'
+      }}>
       <Canvas camera={{ position: [0, 0, 25] }}>
-        <TextLine />
+        <TextLine isVisible={isVisible} prefersReducedMotion={prefersReducedMotion} />
         <EffectComposer>
           <Bloom 
-            intensity={2.5} 
+            intensity={dimensions.width < 768 ? 2.0 : 2.5}
             luminanceThreshold={0.1}
             luminanceSmoothing={0.9}
           />
