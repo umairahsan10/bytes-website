@@ -1,6 +1,6 @@
 'use client';
 
-import FlowerBytesAnimation from '@/components/FlowerBytesAnimation';
+// import FlowerBytesAnimation from '@/components/FlowerBytesAnimation'; // Commented for performance testing
 import TextAnimation from "@/components/TextAnimation";
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
@@ -34,7 +34,7 @@ export const LineAnimationSection = () => {
       {/* Sticky container keeps animation and text pinned together */}
       <div className="sticky top-0 h-screen w-full">
         {/* Background line animation */}
-        <FlowerBytesAnimation />
+        {/* <FlowerBytesAnimation /> */}
 
         {/* Text overlay */}
         <div className="absolute inset-0 flex items-center justify-center z-10">

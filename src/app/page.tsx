@@ -5,23 +5,60 @@ import HeroSection from "@/sections/Hero";
 import { useEffect, lazy, Suspense } from "react";
 import PerformanceMonitor from "@/components/PerformanceMonitor";
 
-// Lazy load non-critical sections for better initial load performance
+// Preload first sections immediately for faster display
 const ByteBotsSection = lazy(() => import("@/sections/ByteBot"));
 const ServiceHead = lazy(() => import("@/sections/serviceHead"));
-const ProjectsSection = lazy(() => import("@/sections/Projects").then(mod => ({ default: mod.ProjectsSection })));
-const BookSection = lazy(() => import("@/sections/BookSection").then(mod => ({ default: mod.BookSection })));
-const ContactSection = lazy(() => import("@/sections/Contact").then(mod => ({ default: mod.ContactSection })));
 const CardsSection = lazy(() => import("@/sections/CardsSection"));
+
+// Lazy load lower sections only when needed
 const LineAnimationSection = lazy(() => import("@/sections/LineAnimationSection").then(mod => ({ default: mod.LineAnimationSection })));
-const BrandsSection = lazy(() => import("@/sections/brands").then(mod => ({ default: mod.BrandsSection })));
 const NumbersSection = lazy(() => import("@/sections/numbers").then(mod => ({ default: mod.NumbersSection })));
+const ProjectsSection = lazy(() => import("@/sections/Projects").then(mod => ({ default: mod.ProjectsSection })));
+// const BookSection = lazy(() => import("@/sections/BookSection").then(mod => ({ default: mod.BookSection }))); // Commented for performance testing
+const BrandsSection = lazy(() => import("@/sections/brands").then(mod => ({ default: mod.BrandsSection })));
+const ContactSection = lazy(() => import("@/sections/Contact").then(mod => ({ default: mod.ContactSection })));
 
 export default function Home() {
   useEffect(() => {
     const html = document.documentElement;
     html.classList.add('home-scrollbars');
+    
+    // Preload critical below-fold sections immediately
+    const immediateTimer = setTimeout(() => {
+      import("@/sections/ByteBot");
+      import("@/sections/serviceHead");
+      import("@/sections/CardsSection");
+    }, 100);
+    
+    // Preload lower sections including Brands and Contact after a short delay
+    const lowerSectionsTimer = setTimeout(() => {
+      import("@/sections/brands").then(mod => mod.BrandsSection);
+      import("@/sections/Contact").then(mod => mod.ContactSection);
+      import("@/sections/LineAnimationSection").then(mod => mod.LineAnimationSection);
+      import("@/sections/numbers").then(mod => mod.NumbersSection);
+    }, 800);
+    
+    // Preload on scroll for even better UX - very aggressive
+    const handleScroll = () => {
+      const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+      
+      // When user scrolls past 20%, preload everything
+      if (scrollPercent > 20) {
+        import("@/sections/brands").then(mod => mod.BrandsSection);
+        import("@/sections/Contact").then(mod => mod.ContactSection);
+        import("@/sections/Projects").then(mod => mod.ProjectsSection);
+        import("@/sections/BookSection").then(mod => mod.BookSection);
+        window.removeEventListener('scroll', handleScroll);
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
     return () => {
       html.classList.remove('home-scrollbars');
+      clearTimeout(immediateTimer);
+      clearTimeout(lowerSectionsTimer);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -34,59 +71,55 @@ export default function Home() {
       {/* Hero section loads immediately with priority */}
       <HeroSection />
       
-      {/* Other sections load lazily with Suspense fallback */}
+      {/* First visible sections - load immediately without LazySection wrapper */}
       <Suspense fallback={<div className="w-full min-h-screen" />}>
-        <div className="w-full">
-          <ByteBotsSection />
-        </div>
+        <ByteBotsSection />
       </Suspense>
       
       <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
-        <div className="w-full">
-          <ServiceHead />
-        </div>
+        <ServiceHead />
       </Suspense>
       
       <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
-        <div className="w-full">
-          <CardsSection />
-        </div>
+        <CardsSection />
+      </Suspense>
+      
+      {/* Lower sections use React.lazy + Suspense for efficient lazy loading */}
+      <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
+        <LineAnimationSection />
       </Suspense>
       
       <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
-        <div className="w-full">
-          <LineAnimationSection />
-        </div>
-      </Suspense>
-      
-      <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
-        <div className="w-full">
-          <NumbersSection />
-        </div>
+        <NumbersSection />
       </Suspense>
       
       <Suspense fallback={<div className="w-full min-h-screen" />}>
-        <div className="w-full">
-          <ProjectsSection />
-        </div>
+        <ProjectsSection />
       </Suspense>
       
-      <Suspense fallback={<div className="w-full min-h-screen" />}>
-        <div className="w-full">
-          <BookSection />
+      {/* <Suspense fallback={<div className="w-full min-h-screen" />}>
+        <BookSection />
+      </Suspense> */}
+      
+      {/* Brands and Contact sections - preloaded via useEffect */}
+      <Suspense fallback={
+        <div className="w-full min-h-[50vh] bg-white flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-pulse text-gray-400 text-lg">Loading our clients...</div>
+          </div>
         </div>
+      }>
+        <BrandsSection />
       </Suspense>
       
-      <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
-        <div className="w-full">
-          <BrandsSection />
+      <Suspense fallback={
+        <div className="w-full min-h-[50vh] bg-gray-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-pulse text-gray-400 text-lg">Loading contact form...</div>
+          </div>
         </div>
-      </Suspense>
-      
-      <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
-        <div className="w-full">
-          <ContactSection />
-        </div>
+      }>
+        <ContactSection />
       </Suspense>
       {/* Footer is now included globally in the RootLayout */}
     </main>
