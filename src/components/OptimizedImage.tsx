@@ -13,9 +13,12 @@ interface OptimizedImageProps {
   fill?: boolean;
   sizes?: string;
   quality?: number;
+  mobileQuality?: number; // Separate quality for mobile devices
   loading?: 'lazy' | 'eager';
   objectFit?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
   onLoad?: () => void;
+  placeholder?: 'blur' | 'empty';
+  blurDataURL?: string;
 }
 
 /**
@@ -35,12 +38,26 @@ export default function OptimizedImage({
   fill = false,
   sizes,
   quality = 85,
+  mobileQuality,
   loading,
   objectFit = 'cover',
-  onLoad
+  onLoad,
+  placeholder,
+  blurDataURL
 }: OptimizedImageProps) {
   const [imgSrc, setImgSrc] = useState(src);
   const [imgError, setImgError] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile device for quality optimization
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     // Only try WebP conversion for string paths, not for imported images
@@ -62,21 +79,26 @@ export default function OptimizedImage({
   // Default responsive sizes if not provided
   const defaultSizes = sizes || (
     fill 
-      ? '100vw' 
+      ? '(max-width: 768px) 100vw, 1920px' 
       : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
   );
+
+  // Use mobile-specific quality if provided and on mobile device
+  const effectiveQuality = isMobile && mobileQuality ? mobileQuality : quality;
 
   const imageProps: any = {
     src: imgError ? src : imgSrc,
     alt: alt || '', // Ensure alt is always defined for accessibility
     className,
     priority,
-    quality,
+    quality: effectiveQuality,
     onLoad,
     onError: () => setImgError(true),
     loading: loading || (priority ? 'eager' : 'lazy'),
     style: objectFit ? { objectFit } : undefined,
     ...(priority && { fetchPriority: 'high' as const }), // Hint browser to prioritize critical images
+    ...(placeholder && { placeholder }),
+    ...(blurDataURL && { blurDataURL }),
   };
 
   if (fill) {
