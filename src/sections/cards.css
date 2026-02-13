@@ -191,10 +191,11 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate3d(-50%, -50%, 0);
     width: 100%;
     height: 100%;
     animation: floating 3s infinite ease-in-out;
+    will-change: transform;
 }
 
 .cards-container.desktop #card-1 .card-wrapper {
@@ -224,6 +225,7 @@
     width: 100%;
     height: 100%;
     transform-style: preserve-3d;
+    transform: translate3d(0, 0, 0);
 }
  
 .flip-card-front, .flip-card-back {
@@ -235,6 +237,7 @@
     overflow: hidden;
     transition: all 0.3s ease;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    will-change: transform;
 }
 
 /* Make the front face non-clickable so only the back side triggers actions */
@@ -432,13 +435,13 @@
 
 @keyframes floating {
     0% {
-        transform: translate(-50%, -50%);
+        transform: translate3d(-50%, -50%, 0);
     }
     50% {
-        transform: translate(-50%, -60%);
+        transform: translate3d(-50%, -60%, 0);
     }
     100% {
-        transform: translate(-50%, -50%);
+        transform: translate3d(-50%, -50%, 0);
     }
 }
 
