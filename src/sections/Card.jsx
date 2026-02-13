@@ -8,10 +8,11 @@ const Card = forwardRef(({id, frontSrc, frontAlt, category, title, services, ico
             <div className='flip-card-inner'>
                 <div className="flip-card-front">
                     <Image 
-                        priority
+                        loading="lazy"
                         src={frontSrc}
                         width={500}
                         height={500}
+                        sizes="(max-width: 768px) 300px, 500px"
                         alt={frontAlt}
                     />
                 </div>

@@ -22,20 +22,52 @@ export default function Home() {
   const cardRefs = useRef([]);
   const [focusedCard, setFocusedCard] = useState(null);
   const [isMobileDevice, setIsMobileDevice] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const router = useRouter();
+  const resizeTimeoutRef = useRef(null);
 
   // Lenis is now initialized globally in the main page
 
-  // Check if mobile on mount and resize
+  // Check if mobile on mount and resize with debounce
   useEffect(() => {
     const checkMobile = () => {
       setIsMobileDevice(isMobile());
     };
     
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
+    const debouncedResize = () => {
+      if (resizeTimeoutRef.current) {
+        clearTimeout(resizeTimeoutRef.current);
+      }
+      resizeTimeoutRef.current = setTimeout(checkMobile, 150);
+    };
     
-    return () => window.removeEventListener('resize', checkMobile);
+    checkMobile();
+    window.addEventListener('resize', debouncedResize);
+    
+    return () => {
+      window.removeEventListener('resize', debouncedResize);
+      if (resizeTimeoutRef.current) {
+        clearTimeout(resizeTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // IntersectionObserver for visibility detection
+  useEffect(() => {
+    if (!container.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsVisible(entry.isIntersecting);
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(container.current);
+
+    return () => observer.disconnect();
   }, []);
 
   const cardData = [
@@ -137,7 +169,7 @@ export default function Home() {
       const flipStart = isShortScreen ? "bottom 100%" : "top 70%";
       const flipEnd   = isShortScreen ? "bottom 80%" : "center center";
       
-      // Set initial states for mobile cards
+      // Set initial states for mobile cards with GPU acceleration
       cards.forEach((card) => {
         gsap.set(card, {
           // Start fully visible (remove fade-in)
@@ -148,7 +180,8 @@ export default function Home() {
           position: "relative",
           left: "auto",
           top: "auto",
-          transform: "none",
+          transform: "translate3d(0,0,0)",
+          willChange: isVisible ? "transform, opacity" : "auto",
           zIndex: 1,
         });
       });
@@ -228,7 +261,7 @@ export default function Home() {
         pinSpacing: true,
       });
 
-      // Initially set all cards visible and properly positioned
+      // Initially set all cards visible and properly positioned with GPU acceleration
       cards.forEach((card, index) => {
         gsap.set(card, {
           opacity: 1,
@@ -238,6 +271,7 @@ export default function Home() {
           rotation: 0,
           left: "50%",
           top: "50%",
+          willChange: isVisible ? "transform" : "auto",
           zIndex: 4 - index
         });
       });
@@ -325,7 +359,7 @@ export default function Home() {
           <Card
             key={index}
             id={`card-${index + 1}`}
-            frontSrc="/assets/card-front.png"
+            frontSrc="/assets/card-front.webp"
             frontAlt={`${card.category} service card`}
             category={card.category}
             title={card.title}

@@ -46,15 +46,62 @@ const ByteBotsSection = () => {
   const redefiningRef = useRef<HTMLHeadingElement>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const rafRef = useRef<number | null>(null);
 
+  // Debounced resize handler for better performance
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 640);
-    checkMobile(); // initial check
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    checkMobile();
+    
+    let timeoutId: NodeJS.Timeout;
+    const debouncedResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(checkMobile, 150);
+    };
+    
+    window.addEventListener('resize', debouncedResize);
+    return () => {
+      window.removeEventListener('resize', debouncedResize);
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
+  // Check for reduced motion preference
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+    
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener('change', handler);
+    return () => mediaQuery.removeEventListener('change', handler);
+  }, []);
+
+  // IntersectionObserver to only animate when visible
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      {
+        rootMargin: '50px',
+        threshold: 0.01,
+      }
+    );
+
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
+    // Skip animation if reduced motion or not visible
+    if (prefersReducedMotion || !isVisible) return;
+
     // For mobile we no longer skip the animation – instead we make sure the elements
     // start from the same initial state as desktop.  No early return here so the
     // scroll listener is always attached.
@@ -74,10 +121,16 @@ const ByteBotsSection = () => {
     const handleScroll = () => {
       if (!containerRef.current || !stickyContainerRef.current) return;
 
+      // BATCH ALL DOM READS FIRST (prevents layout thrashing)
       const containerRect = containerRef.current.getBoundingClientRect();
       const containerTop = containerRect.top;
       const containerHeight = containerRect.height;
       const windowHeight = window.innerHeight;
+      
+      // Pre-read all element rectangles before any writes
+      const nextGenRect = nextGenRef.current?.getBoundingClientRect();
+      const headingRect = headingRef.current?.getBoundingClientRect();
+      const stickyRect = stickyContainerRef.current.getBoundingClientRect();
 
       // Calculate scroll progress through the container
       const scrollStart = 0; // When container top hits viewport top
@@ -90,69 +143,71 @@ const ByteBotsSection = () => {
         // Calculate progress (0 to 1)
         const progress = Math.max(0, Math.min(1, (scrollStart - containerTop) / (scrollStart - scrollEnd)));
         
-                 // Make container sticky
-         stickyContainerRef.current.style.position = 'fixed';
-         stickyContainerRef.current.style.top = '0';
-         stickyContainerRef.current.style.left = '0';
-         stickyContainerRef.current.style.width = '100vw';
-         stickyContainerRef.current.style.height = '100vh';
-         stickyContainerRef.current.style.zIndex = '1000';
+        // Calculate all animation values BEFORE any DOM writes
+        const introducingPhase = Math.min(1, progress / 0.2);
+        const subheadingPhase = Math.max(0, Math.min(1, (progress - 0.2) / 0.2));
+        const secondSectionPhase = Math.max(0, Math.min(1, (progress - 0.4) / 0.6));
+        const headingProgress = Math.max(0, Math.min(1, (progress - 0.3) / 0.7));
+        
+        // Calculate positions
+        const viewportCenterX = window.innerWidth / 2;
+        const viewportCenterY = windowHeight / 2;
+        const mobileOffset = isMobile ? 40 : 0;
+        const textAlignmentOffset = 110;
+        const targetX = nextGenRect ? nextGenRect.left + textAlignmentOffset - mobileOffset : viewportCenterX;
+        const targetY = nextGenRect && headingRect ? nextGenRect.top - headingRect.height / 2 - 8 : viewportCenterY;
+        const currentX = viewportCenterX + (targetX - viewportCenterX) * headingProgress;
+        const currentY = viewportCenterY + (targetY - viewportCenterY) * headingProgress;
+        const currentScale = 1 - 0.5 * headingProgress;
+        
+        // NOW DO ALL DOM WRITES (batched for performance)
+        stickyContainerRef.current.style.cssText = `position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1000;`;
 
         // Animate elements based on progress
         if (headingRef.current && introducingRef.current && subheadingRef.current && 
-            secondSectionRef.current && nextGenRef.current && redefiningRef.current && aboutRef.current) {
+            secondSectionRef.current && redefiningRef.current && aboutRef.current) {
           
-          // Phase 1: Fade out "Introducing" (0-20%)
-          const introducingPhase = Math.min(1, progress / 0.2);
-          introducingRef.current.style.opacity = `${1 - introducingPhase}`;
-          introducingRef.current.style.transform = `translateY(${- 60 - introducingPhase * 60}px)`;
+          // Apply all styles with GPU acceleration hints
+          introducingRef.current.style.cssText = `
+            opacity: ${1 - introducingPhase};
+            transform: translate3d(0, ${-60 - introducingPhase * 60}px, 0);
+            will-change: opacity, transform;
+          `;
           
-          // Phase 2: Fade out subheading (20-40%)
-          const subheadingPhase = Math.max(0, Math.min(1, (progress - 0.2) / 0.2));
-        subheadingRef.current.style.opacity = `${1 - subheadingPhase}`;
-        subheadingRef.current.style.transform = `translateY(${subheadingPhase * 40}px)`;
+          subheadingRef.current.style.cssText = `
+            opacity: ${1 - subheadingPhase};
+            transform: translate3d(0, ${subheadingPhase * 40}px, 0);
+            will-change: opacity, transform;
+          `;
           
-          // Phase 3: Fade in second section from center (40-100%)
-          const secondSectionPhase = Math.max(0, Math.min(1, (progress - 0.4) / 0.6));
-          secondSectionRef.current.style.opacity = `${secondSectionPhase}`;
-          secondSectionRef.current.style.transform = `scale(${0.8 + secondSectionPhase * 0.2})`;
+          secondSectionRef.current.style.cssText = `
+            opacity: ${secondSectionPhase};
+            transform: scale(${0.8 + secondSectionPhase * 0.2}) translateZ(0);
+            will-change: opacity, transform;
+          `;
           
-          // Animate content within second section
-        redefiningRef.current.style.opacity = `${secondSectionPhase}`;
-        redefiningRef.current.style.transform = `translateY(${(1 - secondSectionPhase) * 60}px)`;
+          redefiningRef.current.style.cssText = `
+            opacity: ${secondSectionPhase};
+            transform: translate3d(0, ${(1 - secondSectionPhase) * 60}px, 0);
+            will-change: opacity, transform;
+          `;
 
-        aboutRef.current.style.opacity = `${secondSectionPhase}`;
-        aboutRef.current.style.transform = `translateY(${(1 - secondSectionPhase) * 60}px)`;
+          aboutRef.current.style.cssText = `
+            opacity: ${secondSectionPhase};
+            transform: translate3d(0, ${(1 - secondSectionPhase) * 60}px, 0);
+            will-change: opacity, transform;
+          `;
           
-          // Animate heading movement to land exactly on Next-Gen Chatbots
-          const headingProgress = Math.max(0, Math.min(1, (progress - 0.3) / 0.7)); // Start at 30%
-          
-          // Calculate positions
-          const viewportCenterX = window.innerWidth / 2;
-          const viewportCenterY = window.innerHeight / 2;
-          
-          // Target position: exactly where "Byte Bots" should be in the final section
-          const nextGenRect = nextGenRef.current.getBoundingClientRect();
-          const headingRect = headingRef.current.getBoundingClientRect();
-          // Align with the text content rather than centering over the block
-          const mobileOffset = isMobile ? 40 : 0;
-          const textAlignmentOffset = 110; // Adjust to better align with text content
-          const targetX = nextGenRect.left + textAlignmentOffset - mobileOffset;
-          const targetY = nextGenRect.top - headingRect.height / 2 - 8; // 8px spacing
-          
-          // Interpolate position
-          const currentX = viewportCenterX + (targetX - viewportCenterX) * headingProgress;
-          const currentY = viewportCenterY + (targetY - viewportCenterY) * headingProgress;
-          const currentScale = 1 - 0.5 * headingProgress; // Scale down to 50%
-          
-          // Apply heading styles
-          headingRef.current.style.position = 'fixed';
-          headingRef.current.style.left = `${currentX}px`;
-          headingRef.current.style.top = `${currentY}px`;
-          headingRef.current.style.transform = `translate(-50%, -50%) scale(${currentScale})`;
-          headingRef.current.style.transformOrigin = 'center center';
-          headingRef.current.style.zIndex = '1001';
-          headingRef.current.style.transition = 'none';
+          headingRef.current.style.cssText = `
+            position: fixed;
+            left: ${currentX}px;
+            top: ${currentY}px;
+            transform: translate(-50%, -50%) scale(${currentScale}) translateZ(0);
+            transform-origin: center center;
+            z-index: 1001;
+            transition: none;
+            will-change: transform;
+          `;
           
           // Change heading color as it moves
         const headingSpan = headingRef.current.querySelector('span');
@@ -237,15 +292,12 @@ const ByteBotsSection = () => {
              subheadingRef.current.style.opacity = '0';
              
              // Keep heading in final position relative to the second section
-             if (headingRef.current && nextGenRef.current) {
-               const nextGenRect = nextGenRef.current.getBoundingClientRect();
-               const containerRect = stickyContainerRef.current.getBoundingClientRect();
-               const headingRect = headingRef.current.getBoundingClientRect();
+             if (headingRef.current && nextGenRect && headingRect) {
                const mobileOffsetFinal = isMobile ? 80 : 0;
                const textAlignmentOffsetFinal = 40;
                headingRef.current.style.position = 'absolute';
-               headingRef.current.style.left = `${nextGenRect.left - containerRect.left + textAlignmentOffsetFinal - mobileOffsetFinal}px`;
-               headingRef.current.style.top = `${nextGenRect.top - containerRect.top - headingRect.height / 2 - 8}px`;
+               headingRef.current.style.left = `${nextGenRect.left - stickyRect.left + textAlignmentOffsetFinal - mobileOffsetFinal}px`;
+               headingRef.current.style.top = `${nextGenRect.top - stickyRect.top - headingRect.height / 2 - 8}px`;
                headingRef.current.style.transform = 'translate(-50%, -50%) scale(0.5)';
                headingRef.current.style.transformOrigin = 'center center';
                headingRef.current.style.zIndex = '10';
@@ -265,7 +317,7 @@ const ByteBotsSection = () => {
     let ticking = false;
     const scrollListener = () => {
       if (!ticking) {
-        requestAnimationFrame(() => {
+        rafRef.current = requestAnimationFrame(() => {
           handleScroll();
           ticking = false;
         });
@@ -278,18 +330,38 @@ const ByteBotsSection = () => {
 
     return () => {
       window.removeEventListener('scroll', scrollListener);
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
     };
-  }, [isMobile]);
+  }, [isMobile, isVisible, prefersReducedMotion]);
 
   return (
-    <div
-      ref={containerRef}
-      className="relative"
-      style={{ 
-        height: "200vh",
-        background: "linear-gradient(to bottom, #f9fafb 0%, #f9fafb 50%, #01084E 50%, #01084E 100%)"
-      }}
-    >
+    <>
+      <style dangerouslySetInnerHTML={{ __html: `
+        @media (prefers-reduced-motion: reduce) {
+          .byte-bots-section * {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+          }
+        }
+        @media (min-width: 640px) {
+          .bg-desktop-bot {
+            background-image: url('/assets/bytes-bot/bot_bg.webp') !important;
+          }
+          .final-bg-desktop {
+            background-image: url('/assets/bytes-bot/bot_bg.webp') !important;
+          }
+        }
+      `}} />
+      <div
+        ref={containerRef}
+        className="relative byte-bots-section"
+        style={{ 
+          height: "200vh",
+          background: "linear-gradient(to bottom, #f9fafb 0%, #f9fafb 50%, #01084E 50%, #01084E 100%)"
+        }}
+      >
       {/* Sticky container that will stick during animation */}
       <div
         ref={stickyContainerRef}
@@ -325,20 +397,13 @@ const ByteBotsSection = () => {
           ref={secondSectionRef}
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat flex flex-col sm:flex-row items-center justify-center"
           style={{
-            backgroundImage: `url('/assets/bytes-bot/botm_bg.png')`,
+            backgroundImage: `url('/assets/bytes-bot/botm_bg.webp')`,
             opacity: 0,
             transform: "scale(0.8)",
             minHeight: "100vh",
             minWidth: "100vw"
           }}
         >
-          <style>{`
-            @media (min-width: 640px) {
-              .bg-desktop-bot {
-                background-image: url('/assets/bytes-bot/bot_bg.png') !important;
-              }
-            }
-          `}</style>
           {/* Desktop background overlay */}
           <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat bg-desktop-bot pointer-events-none" style={{ zIndex: 0 }}></div>
           
@@ -396,15 +461,8 @@ const ByteBotsSection = () => {
       {/* Final section - visible after animation */}
       <div className="min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center relative"
            style={{
-             backgroundImage: `url('/assets/bytes-bot/botm_bg.png')`
+             backgroundImage: `url('/assets/bytes-bot/botm_bg.webp')`
            }}>
-        <style>{`
-          @media (min-width: 640px) {
-            .final-bg-desktop {
-              background-image: url('/assets/bytes-bot/bot_bg.png') !important;
-            }
-          }
-        `}</style>
         {/* Desktop background overlay */}
         <div className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat final-bg-desktop pointer-events-none"></div>
         
@@ -449,6 +507,7 @@ const ByteBotsSection = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
