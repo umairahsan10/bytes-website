@@ -35,6 +35,12 @@ export default function Home() {
       <HeroSection />
       
       {/* Other sections load lazily with Suspense fallback */}
+      <Suspense fallback={<div className="w-full min-h-screen" />}>
+        <div className="w-full">
+          <ByteBotsSection />
+        </div>
+      </Suspense>
+      
       <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
         <div className="w-full">
           <ServiceHead />
@@ -44,12 +50,6 @@ export default function Home() {
       <Suspense fallback={<div className="w-full min-h-[50vh]" />}>
         <div className="w-full">
           <CardsSection />
-        </div>
-      </Suspense>
-      
-      <Suspense fallback={<div className="w-full min-h-screen" />}>
-        <div className="w-full">
-          <ByteBotsSection />
         </div>
       </Suspense>
       
