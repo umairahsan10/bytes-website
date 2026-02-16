@@ -102,22 +102,6 @@ const ByteBotsSection = () => {
     // Skip animation if reduced motion or not visible
     if (prefersReducedMotion || !isVisible) return;
 
-    // For mobile we no longer skip the animation – instead we make sure the elements
-    // start from the same initial state as desktop.  No early return here so the
-    // scroll listener is always attached.
-    if (isMobile) {
-      if (secondSectionRef.current) {
-        secondSectionRef.current.style.opacity = '0';
-        secondSectionRef.current.style.transform = 'scale(0.8)';
-      }
-      if (headingRef.current) {
-        headingRef.current.style.position = '';
-        headingRef.current.style.left = '';
-        headingRef.current.style.top = '';
-        headingRef.current.style.transform = '';
-      }
-    }
-
     const handleScroll = () => {
       if (!containerRef.current || !stickyContainerRef.current) return;
 
@@ -152,9 +136,8 @@ const ByteBotsSection = () => {
         // Calculate positions
         const viewportCenterX = window.innerWidth / 2;
         const viewportCenterY = windowHeight / 2;
-        const mobileOffset = isMobile ? 40 : 0;
         const textAlignmentOffset = 110;
-        const targetX = nextGenRect ? nextGenRect.left + textAlignmentOffset - mobileOffset : viewportCenterX;
+        const targetX = nextGenRect ? nextGenRect.left + textAlignmentOffset : viewportCenterX;
         const targetY = nextGenRect && headingRect ? nextGenRect.top - headingRect.height / 2 - 8 : viewportCenterY;
         const currentX = viewportCenterX + (targetX - viewportCenterX) * headingProgress;
         const currentY = viewportCenterY + (targetY - viewportCenterY) * headingProgress;
@@ -209,17 +192,19 @@ const ByteBotsSection = () => {
             will-change: transform;
           `;
           
-          // Change heading color as it moves
-        const headingSpan = headingRef.current.querySelector('span');
-        if (headingSpan) {
-            if (headingProgress > 0.5) {
-            headingSpan.classList.remove('text-[#01084E]');
-            headingSpan.classList.add('text-white');
-          } else {
-            headingSpan.classList.add('text-[#01084E]');
-            headingSpan.classList.remove('text-white');
+          // Smooth color transition as heading moves to dark background
+          const headingSpan = headingRef.current.querySelector('span');
+          if (headingSpan) {
+            // Start transitioning color when heading starts moving (headingProgress > 0)
+            // Complete transition by 40% of heading movement
+            if (headingProgress > 0.4) {
+              headingSpan.classList.remove('text-[#01084E]');
+              headingSpan.classList.add('text-white');
+            } else {
+              headingSpan.classList.add('text-[#01084E]');
+              headingSpan.classList.remove('text-white');
+            }
           }
-        }
 
           // Final landing position
         if (progress >= 1) {
@@ -269,7 +254,7 @@ const ByteBotsSection = () => {
             aboutRef.current.style.opacity = '0';
             aboutRef.current.style.transform = 'translateY(60px)';
             
-            // Reset heading color
+            // Ensure heading starts with dark blue color
             const headingSpan = headingRef.current.querySelector('span');
             if (headingSpan) {
               headingSpan.classList.add('text-[#01084E]');
@@ -293,15 +278,15 @@ const ByteBotsSection = () => {
              
              // Keep heading in final position relative to the second section
              if (headingRef.current && nextGenRect && headingRect) {
-               const mobileOffsetFinal = isMobile ? 80 : 0;
                const textAlignmentOffsetFinal = 40;
                headingRef.current.style.position = 'absolute';
-               headingRef.current.style.left = `${nextGenRect.left - stickyRect.left + textAlignmentOffsetFinal - mobileOffsetFinal}px`;
+               headingRef.current.style.left = `${nextGenRect.left - stickyRect.left + textAlignmentOffsetFinal}px`;
                headingRef.current.style.top = `${nextGenRect.top - stickyRect.top - headingRect.height / 2 - 8}px`;
                headingRef.current.style.transform = 'translate(-50%, -50%) scale(0.5)';
                headingRef.current.style.transformOrigin = 'center center';
                headingRef.current.style.zIndex = '10';
                
+               // Keep heading white on dark background
                const headingSpan = headingRef.current.querySelector('span');
                if (headingSpan) {
                  headingSpan.classList.remove('text-[#01084E]');
@@ -345,13 +330,11 @@ const ByteBotsSection = () => {
             transition-duration: 0.01ms !important;
           }
         }
-        @media (min-width: 640px) {
-          .bg-desktop-bot {
-            background-image: url('/assets/bytes-bot/bot_bg.webp') !important;
-          }
-          .final-bg-desktop {
-            background-image: url('/assets/bytes-bot/bot_bg.webp') !important;
-          }
+        .bg-desktop-bot {
+          background-image: url('/assets/bytes-bot/bot_bg.webp') !important;
+        }
+        .final-bg-desktop {
+          background-image: url('/assets/bytes-bot/bot_bg.webp') !important;
         }
       `}} />
       <div
