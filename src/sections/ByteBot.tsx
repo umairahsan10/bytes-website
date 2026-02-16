@@ -102,6 +102,22 @@ const ByteBotsSection = () => {
     // Skip animation if reduced motion or not visible
     if (prefersReducedMotion || !isVisible) return;
 
+    // For mobile we no longer skip the animation – instead we make sure the elements
+    // start from the same initial state as desktop.  No early return here so the
+    // scroll listener is always attached.
+    if (isMobile) {
+      if (secondSectionRef.current) {
+        secondSectionRef.current.style.opacity = '0';
+        secondSectionRef.current.style.transform = 'scale(0.8)';
+      }
+      if (headingRef.current) {
+        headingRef.current.style.position = '';
+        headingRef.current.style.left = '';
+        headingRef.current.style.top = '';
+        headingRef.current.style.transform = '';
+      }
+    }
+
     const handleScroll = () => {
       if (!containerRef.current || !stickyContainerRef.current) return;
 
@@ -136,8 +152,9 @@ const ByteBotsSection = () => {
         // Calculate positions
         const viewportCenterX = window.innerWidth / 2;
         const viewportCenterY = windowHeight / 2;
+        const mobileOffset = isMobile ? 40 : 0;
         const textAlignmentOffset = 110;
-        const targetX = nextGenRect ? nextGenRect.left + textAlignmentOffset : viewportCenterX;
+        const targetX = nextGenRect ? nextGenRect.left + textAlignmentOffset - mobileOffset : viewportCenterX;
         const targetY = nextGenRect && headingRect ? nextGenRect.top - headingRect.height / 2 - 8 : viewportCenterY;
         const currentX = viewportCenterX + (targetX - viewportCenterX) * headingProgress;
         const currentY = viewportCenterY + (targetY - viewportCenterY) * headingProgress;
@@ -192,12 +209,10 @@ const ByteBotsSection = () => {
             will-change: transform;
           `;
           
-          // Smooth color transition as heading moves to dark background
+          // Change heading color as it moves to blue background
           const headingSpan = headingRef.current.querySelector('span');
           if (headingSpan) {
-            // Start transitioning color when heading starts moving (headingProgress > 0)
-            // Complete transition by 40% of heading movement
-            if (headingProgress > 0.4) {
+            if (headingProgress > 0.5) {
               headingSpan.classList.remove('text-[#01084E]');
               headingSpan.classList.add('text-white');
             } else {
@@ -254,7 +269,7 @@ const ByteBotsSection = () => {
             aboutRef.current.style.opacity = '0';
             aboutRef.current.style.transform = 'translateY(60px)';
             
-            // Ensure heading starts with dark blue color
+            // Reset heading color to dark blue
             const headingSpan = headingRef.current.querySelector('span');
             if (headingSpan) {
               headingSpan.classList.add('text-[#01084E]');
@@ -278,15 +293,16 @@ const ByteBotsSection = () => {
              
              // Keep heading in final position relative to the second section
              if (headingRef.current && nextGenRect && headingRect) {
+               const mobileOffsetFinal = isMobile ? 80 : 0;
                const textAlignmentOffsetFinal = 40;
                headingRef.current.style.position = 'absolute';
-               headingRef.current.style.left = `${nextGenRect.left - stickyRect.left + textAlignmentOffsetFinal}px`;
+               headingRef.current.style.left = `${nextGenRect.left - stickyRect.left + textAlignmentOffsetFinal - mobileOffsetFinal}px`;
                headingRef.current.style.top = `${nextGenRect.top - stickyRect.top - headingRect.height / 2 - 8}px`;
                headingRef.current.style.transform = 'translate(-50%, -50%) scale(0.5)';
                headingRef.current.style.transformOrigin = 'center center';
                headingRef.current.style.zIndex = '10';
                
-               // Keep heading white on dark background
+               // Keep heading white on blue background
                const headingSpan = headingRef.current.querySelector('span');
                if (headingSpan) {
                  headingSpan.classList.remove('text-[#01084E]');
