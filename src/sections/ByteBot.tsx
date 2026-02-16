@@ -209,17 +209,17 @@ const ByteBotsSection = () => {
             will-change: transform;
           `;
           
-          // Change heading color as it moves
-        const headingSpan = headingRef.current.querySelector('span');
-        if (headingSpan) {
+          // Change heading color as it moves to blue background
+          const headingSpan = headingRef.current.querySelector('span');
+          if (headingSpan) {
             if (headingProgress > 0.5) {
-            headingSpan.classList.remove('text-[#01084E]');
-            headingSpan.classList.add('text-white');
-          } else {
-            headingSpan.classList.add('text-[#01084E]');
-            headingSpan.classList.remove('text-white');
+              headingSpan.classList.remove('text-[#01084E]');
+              headingSpan.classList.add('text-white');
+            } else {
+              headingSpan.classList.add('text-[#01084E]');
+              headingSpan.classList.remove('text-white');
+            }
           }
-        }
 
           // Final landing position
         if (progress >= 1) {
@@ -269,7 +269,7 @@ const ByteBotsSection = () => {
             aboutRef.current.style.opacity = '0';
             aboutRef.current.style.transform = 'translateY(60px)';
             
-            // Reset heading color
+            // Reset heading color to dark blue
             const headingSpan = headingRef.current.querySelector('span');
             if (headingSpan) {
               headingSpan.classList.add('text-[#01084E]');
@@ -302,6 +302,7 @@ const ByteBotsSection = () => {
                headingRef.current.style.transformOrigin = 'center center';
                headingRef.current.style.zIndex = '10';
                
+               // Keep heading white on blue background
                const headingSpan = headingRef.current.querySelector('span');
                if (headingSpan) {
                  headingSpan.classList.remove('text-[#01084E]');
@@ -345,13 +346,11 @@ const ByteBotsSection = () => {
             transition-duration: 0.01ms !important;
           }
         }
-        @media (min-width: 640px) {
-          .bg-desktop-bot {
-            background-image: url('/assets/bytes-bot/bot_bg.webp') !important;
-          }
-          .final-bg-desktop {
-            background-image: url('/assets/bytes-bot/bot_bg.webp') !important;
-          }
+        .bg-desktop-bot {
+          background-image: url('/assets/bytes-bot/bot_bg.webp') !important;
+        }
+        .final-bg-desktop {
+          background-image: url('/assets/bytes-bot/bot_bg.webp') !important;
         }
       `}} />
       <div
