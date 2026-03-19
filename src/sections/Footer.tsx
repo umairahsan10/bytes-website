@@ -101,9 +101,9 @@ export const Footer = () => {
           </ul>
           {/* Socials */}
           <div className="flex gap-5 mt-4 justify-center sm:justify-start">
-            <Link href="https://www.facebook.com/share/1BT8jkeBKK/?mibextid=wwXIfr" target="_blank" aria-label="Facebook" className="hover:text-white"><Facebook size={18} /></Link>
+            <Link href="https://www.facebook.com/share/1Kc3xtzhqa/" target="_blank" aria-label="Facebook" className="hover:text-white"><Facebook size={18} /></Link>
             <Link href="https://www.instagram.com/bytesplatform?igsh=aG50c3VvZmlrMG5o" target="_blank" aria-label="Instagram" className="hover:text-white"><Instagram size={18} /></Link>
-            <Link href="#" aria-label="LinkedIn" className="hover:text-white"><Linkedin size={18} /></Link>
+            <Link href="https://www.linkedin.com/company/bytebloom-solutionss" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:text-white"><Linkedin size={18} /></Link>
           </div>
         </div>
       </div>

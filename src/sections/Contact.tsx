@@ -124,13 +124,13 @@ function Contact() {
               <div className="social-media">
                 <p>Connect with us :</p>
                 <div className="social-icons">
-                  <a href="https://www.facebook.com/share/1BT8jkeBKK/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">
+                  <a href="https://www.facebook.com/share/1Kc3xtzhqa/" target="_blank" rel="noopener noreferrer">
                     <FontAwesomeIcon icon={faFacebookF} />
                   </a>
                   <a href="https://www.instagram.com/bytesplatform?igsh=aG50c3VvZmlrMG5o" target="_blank" rel="noopener noreferrer">
                     <FontAwesomeIcon icon={faInstagram} />
                   </a>
-                  <a href="#" target="_blank" rel="noopener noreferrer">
+                  <a href="https://www.linkedin.com/company/bytebloom-solutionss" target="_blank" rel="noopener noreferrer">
                     <FontAwesomeIcon icon={faLinkedinIn} />
                   </a>
                 </div>
