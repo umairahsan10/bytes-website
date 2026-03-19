@@ -6,7 +6,7 @@ import { Header } from '@/sections/Navbar';
 
 export const metadata = {
   title: 'Bytes Platform',
-  description: 'Thank you for contacting Bytes Platform. We will get back to you soon.'
+  description: 'Thank you for reaching out to Bytes Platform! Your message has been received. Our team will review your inquiry and get back to you within 24 hours to discuss your project.'
 };
 
 export default function ThankYouPage() {
