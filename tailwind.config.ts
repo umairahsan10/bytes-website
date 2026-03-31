@@ -21,11 +21,21 @@ const config = {
     extend: {
       colors: {
         foreground: "hsl(var(--foreground))",
+        // Portfolio custom colors
+        primary: "#050816",
+        accent: "#915EFF",
+        cyan: "#00D4FF",
+        cta: "#FF6B35",
+        muted: "#94A3B8",
       },
       fontFamily: {
         sans: ["var(--font-sans)"],
         serif: ["var(--font-serif)"],
         league: ["'League Spartan'", "sans-serif"],
+        // Portfolio fonts
+        heading: ["var(--font-heading)", "sans-serif"],
+        body: ["var(--font-body)", "sans-serif"],
+        mono: ["var(--font-mono)", "monospace"],
       },
       animation: {
         // 'ping-large': "ping-large 1s ease-in-out infinite",
@@ -33,6 +43,12 @@ const config = {
         'slide-in-right': "slide-in-right 1s ease-out forwards",
         "flip-words": "flip-words 8s infinite",
         "tilt": "tilt 10s infinite linear",
+        // Portfolio animations
+        "marquee-left": "marquee-left 40s linear infinite",
+        "marquee-right": "marquee-right 40s linear infinite",
+        "shimmer": "shimmer 2s linear infinite",
+        "about-float": "about-float 6s ease-in-out infinite",
+        "blink": "blink 1s step-end infinite",
       },
       keyframes: {
         // 'ping-large': {
@@ -88,10 +104,34 @@ const config = {
             transform: "rotate(-0.5deg)",
           },
         },
+        // Portfolio keyframes
+        "marquee-left": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+        "marquee-right": {
+          "0%": { transform: "translateX(-50%)" },
+          "100%": { transform: "translateX(0)" },
+        },
+        "shimmer": {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(100%)" },
+        },
+        "about-float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-20px)" },
+        },
+        "blink": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0" },
+        },
       },
       spacing: {
         '90': '22.5rem', // 360px equivalent
         '100': '25rem',  // 400px equivalent
+      },
+      maxWidth: {
+        'content': '1280px',
       },
     },
   },

@@ -1,0 +1,177 @@
+/* Portfolio-scoped styles */
+/* Tailwind base/components/utilities are already loaded by the root layout */
+
+:root {
+  --bg: #050816;
+  --accent: #915EFF;
+  --cyan: #00D4FF;
+  --cta: #FF6B35;
+  --text: #FFFFFF;
+  --muted: #94A3B8;
+}
+
+.portfolio-root {
+  color: var(--text);
+  background: var(--bg);
+  font-family: "Inter", sans-serif;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar - scoped to portfolio */
+.portfolio-root ::-webkit-scrollbar {
+  width: 6px;
+}
+.portfolio-root ::-webkit-scrollbar-track {
+  background: #050816;
+}
+.portfolio-root ::-webkit-scrollbar-thumb {
+  background: #915EFF;
+  border-radius: 3px;
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(90deg, #915EFF, #00D4FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Card glass */
+.glass-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+}
+
+/* Glitch effect */
+.glitch {
+  position: relative;
+}
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.glitch::before {
+  color: #00D4FF;
+  z-index: -1;
+  animation: glitch-1 8s infinite;
+}
+.glitch::after {
+  color: #FF6B35;
+  z-index: -2;
+  animation: glitch-2 8s infinite;
+}
+
+@keyframes glitch-1 {
+  0%, 94%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+  95% { clip-path: inset(20% 0 40% 0); transform: translate(-3px, 2px); }
+  96% { clip-path: inset(60% 0 10% 0); transform: translate(3px, -2px); }
+  97% { clip-path: inset(0 0 0 0); transform: translate(0); }
+}
+@keyframes glitch-2 {
+  0%, 94%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+  95% { clip-path: inset(40% 0 20% 0); transform: translate(3px, -2px); }
+  96% { clip-path: inset(10% 0 60% 0); transform: translate(-3px, 2px); }
+  97% { clip-path: inset(0 0 0 0); transform: translate(0); }
+}
+
+/* Chart glow */
+.chart-glow {
+  filter: drop-shadow(0 0 8px #915EFF);
+}
+
+/* ─── Projects Section: Infinite Scroll ─── */
+.projects-parallax-wrap {
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translate(var(--px, 0px), var(--py, 0px));
+}
+
+.projects-scroll-track {
+  animation: projects-drift 55s linear infinite;
+}
+
+@keyframes projects-drift {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.project-float-item {
+  transition: filter 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .projects-scroll-track {
+    animation: none;
+  }
+  .project-float-item {
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+  }
+}
+
+/* Noise overlay */
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Loader */
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: #050816;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.8s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.loader-overlay.loaded {
+  transform: translateY(-100%);
+}
+
+/* Horizontal scroll hide scrollbar */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
