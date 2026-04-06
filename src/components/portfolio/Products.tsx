@@ -469,7 +469,7 @@ export default function Products() {
         animate={hasEntered ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.9, ease: "easeOut" }}
       >
-        <span className="font-mono text-sm text-white/30 block mb-3 tracking-widest uppercase">
+        <span className="font-mono text-sm text-[#00D4FF] block mb-3 tracking-widest uppercase ">
           Product Lab
         </span>
         <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">

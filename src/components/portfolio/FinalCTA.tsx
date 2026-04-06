@@ -1,6 +1,82 @@
 "use client";
 import { useEffect, useRef } from "react";
 
+interface Neuron { x: number; y: number; vx: number; vy: number; r: number; opacity: number }
+
+function NeuronField() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let w = 0, h = 0;
+    let neurons: Neuron[] = [];
+    const LINK_DIST = 140;
+    const COUNT = 60;
+
+    const resize = () => {
+      w = canvas.parentElement?.clientWidth || window.innerWidth;
+      h = canvas.parentElement?.clientHeight || window.innerHeight;
+      canvas.width = w;
+      canvas.height = h;
+      if (neurons.length === 0) {
+        neurons = Array.from({ length: COUNT }, () => ({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          r: 1 + Math.random() * 1.5,
+          opacity: 0.12 + Math.random() * 0.2,
+        }));
+      }
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    let raf: number;
+    const draw = () => {
+      ctx.clearRect(0, 0, w, h);
+      for (const n of neurons) {
+        n.x += n.vx;
+        n.y += n.vy;
+        if (n.x < 0 || n.x > w) n.vx *= -1;
+        if (n.y < 0 || n.y > h) n.vy *= -1;
+      }
+      for (let i = 0; i < neurons.length; i++) {
+        for (let j = i + 1; j < neurons.length; j++) {
+          const dx = neurons[i].x - neurons[j].x;
+          const dy = neurons[i].y - neurons[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < LINK_DIST) {
+            ctx.strokeStyle = `rgba(255,255,255,${(1 - dist / LINK_DIST) * 0.08})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(neurons[i].x, neurons[i].y);
+            ctx.lineTo(neurons[j].x, neurons[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+      for (const n of neurons) {
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${n.opacity})`;
+        ctx.fill();
+      }
+      raf = requestAnimationFrame(draw);
+    };
+    raf = requestAnimationFrame(draw);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
+  }, []);
+
+  return (
+    <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-[1] pointer-events-none" style={{ opacity: 0.7 }} />
+  );
+}
+
 export default function FinalCTA() {
   const buttonRef = useRef<HTMLAnchorElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
@@ -67,18 +143,16 @@ export default function FinalCTA() {
       ref={sectionRef}
       id="cta"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      style={{
-        background:
-          "linear-gradient(135deg, #050816 0%, #0f0a2e 50%, #050816 100%)",
-        animation: "gradient-shift 8s ease-in-out infinite",
-      }}
+      style={{ background: "#050816" }}
     >
+      <NeuronField />
+
       {/* Central glow */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[1]">
         <div className="w-[800px] h-[800px] rounded-full bg-accent/[0.15] blur-[200px]" />
       </div>
 
-      <div className="cta-content relative z-10 text-center px-6 max-w-3xl">
+      <div className="cta-content relative z-[2] text-center px-6 max-w-3xl">
         <span className="font-mono text-sm text-cyan block mb-4">
           Ready to Build?
         </span>

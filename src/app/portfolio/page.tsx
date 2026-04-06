@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 
-const Loader = dynamic(() => import("@/components/portfolio/Loader"), { ssr: false });
 const Navbar = dynamic(() => import("@/components/portfolio/Navbar"), { ssr: false });
 const Hero = dynamic(() => import("@/components/portfolio/Hero"), { ssr: false });
 const About = dynamic(() => import("@/components/portfolio/About"), { ssr: false });
@@ -29,7 +28,6 @@ const Footer = dynamic(() => import("@/components/portfolio/Footer"), { ssr: fal
 export default function Home() {
   return (
     <>
-      <Loader />
       <Navbar />
       <main>
         <Hero />
@@ -40,7 +38,7 @@ export default function Home() {
         <Portfolio />
         <SeoResults />
         <WhyChoose />
-        <Testimonials />
+        {/* <Testimonials /> */}
         <FinalCTA />
       </main>
       <Footer />

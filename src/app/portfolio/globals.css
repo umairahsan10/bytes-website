@@ -145,21 +145,6 @@
   }
 }
 
-/* Loader */
-.loader-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  background: #050816;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.8s cubic-bezier(0.76, 0, 0.24, 1);
-}
-.loader-overlay.loaded {
-  transform: translateY(-100%);
-}
 
 /* Horizontal scroll hide scrollbar */
 .hide-scrollbar::-webkit-scrollbar {

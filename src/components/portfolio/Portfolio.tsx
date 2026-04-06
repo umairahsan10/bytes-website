@@ -189,9 +189,7 @@ export default function Portfolio() {
           : undefined,
         filter: isHovered ? "blur(0px) brightness(1.1)" : undefined,
         transition: "transform 0.4s cubic-bezier(.4,0,.2,1), filter 0.4s ease, box-shadow 0.4s ease",
-        boxShadow: isHovered
-          ? "0 0 40px rgba(145,94,255,0.4), 0 0 80px rgba(0,212,255,0.15)"
-          : "0 0 0px transparent",
+
       };
     },
     [hoveredIdx]
@@ -209,21 +207,14 @@ export default function Portfolio() {
     <section
       ref={sectionRef}
       id="portfolio"
-      className="relative py-[120px] overflow-hidden"
+      className="relative py-[120px] overflow-x-clip overflow-y-visible"
       style={{ perspective: "1200px" }}
     >
-      {/* Center glow highlight */}
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at center, rgba(145,94,255,0.12) 0%, rgba(0,212,255,0.05) 40%, transparent 70%)",
-        }}
-      />
+
 
       {/* Header */}
       <div className="portfolio-heading text-center mb-16 relative z-10">
-        <span className="font-mono text-sm text-cyan block mb-3">
+        <span className="font-mono text-sm text-cyan block mb-3 text-[#00D4FF]">
           Portfolio
         </span>
         <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold">
@@ -231,49 +222,13 @@ export default function Portfolio() {
         </h2>
       </div>
 
-      {/* Background conveyor layer (slower, dimmer) */}
-      <div className="relative mb-8 overflow-hidden" style={{ height: "200px" }}>
-        <div
-          ref={trackBgRef}
-          className="flex gap-6 absolute left-0 top-0"
-          style={{ willChange: "transform" }}
-        >
-          {loopedProjects.map((project, i) => (
-            <div
-              key={`bg-${i}`}
-              className="flex-shrink-0 rounded-xl overflow-hidden"
-              style={{
-                width: "340px",
-                height: "180px",
-                opacity: 0.2,
-                filter: "blur(3px) saturate(0.6)",
-                transform: "scale(0.85)",
-              }}
-            >
-              <img
-                src={project.image}
-                alt=""
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
 
       {/* Main conveyor track */}
       <div
-        className="relative overflow-hidden"
+        className="relative overflow-visible"
         style={{ height: "380px", perspective: "1000px" }}
       >
-        {/* Track glow line */}
-        <div
-          className="absolute bottom-0 left-0 right-0 h-px"
-          style={{
-            background:
-              "linear-gradient(90deg, transparent, rgba(145,94,255,0.4), rgba(0,212,255,0.3), rgba(145,94,255,0.4), transparent)",
-          }}
-        />
+
 
         <div
           ref={trackRef}
@@ -281,7 +236,7 @@ export default function Portfolio() {
           style={{
             willChange: "transform",
             height: "100%",
-            paddingLeft: "10vw",
+            paddingLeft: "5vw",
           }}
         >
           {loopedProjects.map((project, i) => (
@@ -289,8 +244,8 @@ export default function Portfolio() {
               key={`main-${i}`}
               className="conveyor-item flex-shrink-0 relative cursor-pointer group"
               style={{
-                width: "380px",
-                height: "320px",
+                width: "520px",
+                height: "300px",
                 transformStyle: "preserve-3d",
                 ...getItemStyle(i),
               }}
@@ -300,11 +255,8 @@ export default function Portfolio() {
             >
               {/* Card container */}
               <div
-                className="relative w-full h-full rounded-2xl overflow-hidden"
+                className="relative w-full h-full rounded-xl overflow-hidden"
                 style={{
-                  border: hoveredIdx === i
-                    ? "1px solid rgba(145,94,255,0.4)"
-                    : "1px solid rgba(255,255,255,0.06)",
                   transition: "border 0.4s ease",
                 }}
               >
@@ -312,7 +264,7 @@ export default function Portfolio() {
                 <img
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-full object-cover transition-all duration-500"
+                  className="w-full h-full object-cover object-top transition-all duration-500"
                   style={{
                     filter: hoveredIdx === i ? "brightness(1)" : "brightness(0.7)",
                   }}
@@ -329,16 +281,7 @@ export default function Portfolio() {
                   }}
                 />
 
-                {/* Neon edge glow on hover */}
-                {hoveredIdx === i && (
-                  <div
-                    className="absolute inset-0 pointer-events-none rounded-2xl"
-                    style={{
-                      boxShadow:
-                        "inset 0 0 30px rgba(145,94,255,0.15), inset 0 0 60px rgba(0,212,255,0.05)",
-                    }}
-                  />
-                )}
+
 
                 {/* Text content */}
                 <div

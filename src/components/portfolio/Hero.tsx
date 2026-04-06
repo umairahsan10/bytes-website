@@ -17,7 +17,7 @@ function AutoTyper() {
   const [displayed, setDisplayed] = useState("");
   const [taglineIdx, setTaglineIdx] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const tick = useCallback(() => {
     const current = taglines[taglineIdx];
@@ -44,13 +44,15 @@ function AutoTyper() {
 
   useEffect(() => {
     timeoutRef.current = setTimeout(tick, 100);
-    return () => clearTimeout(timeoutRef.current);
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
   }, [tick]);
 
   return (
-    <span className="font-mono text-sm md:text-base text-cyan inline-block min-h-[1.5em]">
+    <span className="font-mono text-sm md:text-base text-[#00D4FF] inline-block min-h-[1.5em] tracking-[0.05em]" style={{ textShadow: '0 0 10px rgba(0,212,255,0.5)' }}>
       {displayed}
-      <span className="inline-block w-[2px] h-[1.1em] bg-cyan ml-0.5 align-middle animate-pulse" />
+      <span className="inline-block w-[2px] h-[1.1em] bg-[#00D4FF] ml-0.5 align-middle animate-pulse" />
     </span>
   );
 }

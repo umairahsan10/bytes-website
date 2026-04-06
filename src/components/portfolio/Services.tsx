@@ -390,9 +390,9 @@ export default function Services() {
           </div>
 
           <h2
-            className="font-heading font-extrabold mb-6 leading-[1.1]"
+            className="font-heading font-extrabold mb-6 leading-[1.1] whitespace-nowrap"
             style={{
-              fontSize: "clamp(32px, 5vw, 72px)",
+              fontSize: "clamp(24px, 3vw, 48px)",
               color: "#fff",
               textShadow: revealed ? "0 0 60px rgba(145,94,255,0.12)" : "none",
               transition: "text-shadow 1s",
@@ -413,16 +413,6 @@ export default function Services() {
           {capabilities.slice(3).map((item, i) => (
             <CapabilityItem key={item.title} item={item} index={i + 3} revealed={revealed} />
           ))}
-        </div>
-
-        {/* Bottom line */}
-        <div
-          className="mt-20 flex items-center justify-center gap-3 font-mono text-[10px] tracking-[0.2em] uppercase transition-all duration-1000"
-          style={{ color: "rgba(255,255,255,0.06)", opacity: revealed ? 1 : 0, transitionDelay: "2s" }}
-        >
-          <span className="w-12 h-[1px] bg-white/5" />
-          sys.capabilities — 5 modules active
-          <span className="w-12 h-[1px] bg-white/5" />
         </div>
       </div>
 

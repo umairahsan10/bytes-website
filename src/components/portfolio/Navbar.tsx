@@ -9,7 +9,6 @@ const navLinks = [
   { label: "Products", href: "#products" },
   { label: "Portfolio", href: "#portfolio" },
   { label: "SEO", href: "#seo" },
-  { label: "Testimonials", href: "#testimonials" },
 ];
 
 export default function Navbar() {
@@ -49,7 +48,11 @@ export default function Navbar() {
             <a
               key={link.href}
               href={link.href}
-              className="font-body text-sm text-muted hover:text-white transition-colors duration-200"
+              onClick={(e) => {
+                e.preventDefault();
+                document.querySelector(link.href)?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="relative font-body text-sm text-muted hover:text-cyan transition-colors duration-200 after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-cyan after:transition-all after:duration-300 hover:after:w-full"
             >
               {link.label}
             </a>
@@ -59,6 +62,10 @@ export default function Navbar() {
         {/* CTA */}
         <a
           href="#cta"
+          onClick={(e) => {
+            e.preventDefault();
+            document.querySelector("#cta")?.scrollIntoView({ behavior: "smooth" });
+          }}
           className="hidden lg:inline-flex px-5 py-2.5 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent/80 transition-colors duration-200"
         >
           Get a Proposal
@@ -98,7 +105,11 @@ export default function Navbar() {
           <a
             key={link.href}
             href={link.href}
-            onClick={() => setMenuOpen(false)}
+            onClick={(e) => {
+              e.preventDefault();
+              setMenuOpen(false);
+              document.querySelector(link.href)?.scrollIntoView({ behavior: "smooth" });
+            }}
             className="font-heading text-2xl font-semibold text-white hover:text-accent transition-colors"
             style={{ transitionDelay: menuOpen ? `${i * 60}ms` : "0ms" }}
           >
@@ -107,7 +118,11 @@ export default function Navbar() {
         ))}
         <a
           href="#cta"
-          onClick={() => setMenuOpen(false)}
+          onClick={(e) => {
+            e.preventDefault();
+            setMenuOpen(false);
+            document.querySelector("#cta")?.scrollIntoView({ behavior: "smooth" });
+          }}
           className="px-8 py-3 bg-accent text-white font-medium rounded-lg mt-4"
         >
           Get a Proposal

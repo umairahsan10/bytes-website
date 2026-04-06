@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
+import { Space_Grotesk, Inter, JetBrains_Mono, Syne } from "next/font/google";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -20,6 +20,12 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
 });
 
+const syne = Syne({
+  subsets: ["latin"],
+  weight: ["700", "800"],
+  variable: "--font-syne",
+});
+
 export const metadata: Metadata = {
   title: "Bytes — Digital Agency | CRM, SaaS, Web & SEO",
   description:
@@ -33,7 +39,7 @@ export default function PortfolioLayout({
 }>) {
   return (
     <div
-      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} portfolio-root font-body antialiased`}
+      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} ${syne.variable} portfolio-root font-body antialiased`}
       style={{ background: "#050816", color: "#FFFFFF" }}
     >
       <div className="noise-overlay" aria-hidden="true" />

@@ -36,6 +36,7 @@ const config = {
         heading: ["var(--font-heading)", "sans-serif"],
         body: ["var(--font-body)", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
+        syne: ["var(--font-syne)", "sans-serif"],
       },
       animation: {
         // 'ping-large': "ping-large 1s ease-in-out infinite",

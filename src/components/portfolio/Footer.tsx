@@ -5,13 +5,92 @@ const serviceLinks = [
   "UI/UX Design",
   "Mobile Apps",
 ];
+import { useEffect, useRef, useState, useCallback } from "react";
+
+interface Neuron { x: number; y: number; vx: number; vy: number; r: number; opacity: number }
+
+function NeuronField() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let w = 0, h = 0;
+    let neurons: Neuron[] = [];
+    const LINK_DIST = 140;
+    const COUNT = 50;
+
+    const resize = () => {
+      w = canvas.parentElement?.clientWidth || window.innerWidth;
+      h = canvas.parentElement?.clientHeight || window.innerHeight;
+      canvas.width = w;
+      canvas.height = h;
+      if (neurons.length === 0) {
+        neurons = Array.from({ length: COUNT }, () => ({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          r: 1 + Math.random() * 1.5,
+          opacity: 0.1 + Math.random() * 0.2,
+        }));
+      }
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    let raf: number;
+    const draw = () => {
+      ctx.clearRect(0, 0, w, h);
+      for (const n of neurons) {
+        n.x += n.vx;
+        n.y += n.vy;
+        if (n.x < 0 || n.x > w) n.vx *= -1;
+        if (n.y < 0 || n.y > h) n.vy *= -1;
+      }
+      for (let i = 0; i < neurons.length; i++) {
+        for (let j = i + 1; j < neurons.length; j++) {
+          const dx = neurons[i].x - neurons[j].x;
+          const dy = neurons[i].y - neurons[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < LINK_DIST) {
+            ctx.strokeStyle = `rgba(255,255,255,${(1 - dist / LINK_DIST) * 0.08})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(neurons[i].x, neurons[i].y);
+            ctx.lineTo(neurons[j].x, neurons[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+      for (const n of neurons) {
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${n.opacity})`;
+        ctx.fill();
+      }
+      raf = requestAnimationFrame(draw);
+    };
+    raf = requestAnimationFrame(draw);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
+  }, []);
+
+  return (
+    <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-[1] pointer-events-none" style={{ opacity: 0.7 }} />
+  );
+}
+
 
 const productLinks = ["BytesReach CRM", "BytesCart", "BytesSuite"];
 
 export default function Footer() {
   return (
-    <footer className="relative border-t border-white/[0.06] py-16">
-      <div className="max-w-content mx-auto px-6 md:px-20">
+    <footer className="relative border-t border-white/[0.06] py-16 overflow-hidden" style={{ background: "#050816" }}>
+      <NeuronField />
+      <div className="relative z-[2] max-w-content mx-auto px-6 md:px-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Col 1 — Brand */}
           <div>
@@ -66,7 +145,7 @@ export default function Footer() {
                 </svg>
               </a>
             </div>
-          </div>
+        </div>
 
           {/* Col 2 — Services */}
           <div>
@@ -79,13 +158,13 @@ export default function Footer() {
                   <a
                     href="#services"
                     className="text-muted text-sm hover:text-white transition-colors"
-                  >
+                >
                     {link}
                   </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+              </li>
+            ))}
+          </ul>
+        </div>
 
           {/* Col 3 — Products */}
           <div>
@@ -98,13 +177,13 @@ export default function Footer() {
                   <a
                     href="#products"
                     className="text-muted text-sm hover:text-white transition-colors"
-                  >
+                >
                     {link}
                   </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+              </li>
+            ))}
+          </ul>
+        </div>
 
           {/* Col 4 — Contact */}
           <div>
@@ -119,10 +198,10 @@ export default function Footer() {
                 >
                   hello@bytes.agency
                 </a>
-              </li>
+            </li>
               <li>Serving clients in 3 countries</li>
               <li>Remote-first team</li>
-            </ul>
+          </ul>
           </div>
         </div>
 
@@ -148,6 +227,10 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      <hr className="border-white/20 my-4" />
+
+      <p className="text-center text-sm">Developed by Bytes Platform Inc.</p>
     </footer>
   );
 }
