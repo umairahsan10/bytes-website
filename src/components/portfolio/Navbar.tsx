@@ -61,11 +61,9 @@ export default function Navbar() {
 
         {/* CTA */}
         <a
-          href="#cta"
-          onClick={(e) => {
-            e.preventDefault();
-            document.querySelector("#cta")?.scrollIntoView({ behavior: "smooth" });
-          }}
+          href="https://calendly.com/bytesplatform/new-meeting-1"
+          target="_blank"
+          rel="noopener noreferrer"
           className="hidden lg:inline-flex px-5 py-2.5 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent/80 transition-colors duration-200"
         >
           Get a Proposal
@@ -117,12 +115,10 @@ export default function Navbar() {
           </a>
         ))}
         <a
-          href="#cta"
-          onClick={(e) => {
-            e.preventDefault();
-            setMenuOpen(false);
-            document.querySelector("#cta")?.scrollIntoView({ behavior: "smooth" });
-          }}
+          href="https://calendly.com/bytesplatform/new-meeting-1"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => setMenuOpen(false)}
           className="px-8 py-3 bg-accent text-white font-medium rounded-lg mt-4"
         >
           Get a Proposal

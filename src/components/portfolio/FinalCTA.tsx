@@ -171,7 +171,9 @@ export default function FinalCTA() {
         {/* CTA Button */}
         <a
           ref={buttonRef}
-          href="#"
+          href="https://calendly.com/bytesplatform/new-meeting-1"
+          target="_blank"
+          rel="noopener noreferrer"
           className="relative inline-flex items-center justify-center px-12 py-[18px] bg-accent text-white font-heading font-semibold text-lg rounded-xl hover:bg-cyan transition-colors duration-300 overflow-hidden group"
           style={{ transition: "transform 0.2s ease-out, background-color 0.3s" }}
         >
@@ -184,7 +186,9 @@ export default function FinalCTA() {
 
         <p className="mt-6">
           <a
-            href="#"
+            href="https://bytesplatform.com/contact"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-muted text-sm hover:text-white transition-colors duration-200"
           >
             Or send us a message →

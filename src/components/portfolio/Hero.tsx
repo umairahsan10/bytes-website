@@ -92,8 +92,14 @@ export default function Hero() {
       );
       tl.fromTo(
         ".hero-3d",
-        { opacity: 0, scale: 0.6, x: 60 },
-        { opacity: 1, scale: 1, x: 0, duration: 1.4, ease: "power2.out" },
+        { opacity: 0, x: 60 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 1.4,
+          ease: "power2.out",
+          onComplete: () => window.dispatchEvent(new Event("resize")),
+        },
         0.3
       );
     });
@@ -146,7 +152,9 @@ export default function Hero() {
               <span className="absolute inset-0 bg-gradient-to-r from-accent to-cyan opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </a>
             <a
-              href="#contact"
+              href="https://calendly.com/bytesplatform/new-meeting-1"
+              target="_blank"
+              rel="noopener noreferrer"
               className="px-8 py-4 border-2 border-white/20 text-white rounded-xl font-heading font-semibold text-lg backdrop-blur-sm hover:border-accent hover:text-accent transition-all duration-300 hover:scale-105"
             >
               Let&apos;s Talk

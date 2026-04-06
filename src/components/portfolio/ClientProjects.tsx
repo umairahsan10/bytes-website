@@ -557,7 +557,7 @@ export default function ClientProjects() {
     <section
       ref={sectionRef}
       id="projects"
-      className="relative py-[100px] md:py-[140px] overflow-clip"
+      className="relative py-[100px] md:py-[140px] overflow-x-clip overflow-y-visible"
       style={{ background: "#050816" }}
     >
       <NeuronField />
