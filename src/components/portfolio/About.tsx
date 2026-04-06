@@ -168,7 +168,7 @@ export default function About() {
       <div className="relative z-10 max-w-content mx-auto w-full px-6 md:px-20 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         {/* Content — Left */}
         <div className="about-content">
-          <span className="font-mono text-sm text-accent block mb-3">
+          <span className="font-mono text-sm text-accent block mb-3 text-[#00D4FF]">
             About Us
           </span>
           <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight">

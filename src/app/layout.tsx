@@ -5,7 +5,7 @@ import "./globals.css";
 import "./critical.css"; // Critical above-the-fold CSS
 import { twMerge } from "tailwind-merge";
 import "../sections/cards.css";
-import { Footer } from "@/sections/Footer";
+import ConditionalFooter from "@/components/ConditionalFooter";
 import GTM, { GTMNoScript } from "@/components/GTM";
 import PageLoader from "@/components/PageLoader";
 import { ScrollToTop } from "@/components/ScrollToTop";
@@ -161,7 +161,7 @@ export default function RootLayout({
             <main className="flex-1">
               {children}
             </main>
-            <Footer />
+            <ConditionalFooter />
           </PageLoader>
         </LenisProvider>
       </body>

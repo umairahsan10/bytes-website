@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 /* ─── Neuron Field Background ─── */
@@ -154,84 +154,74 @@ const projects: Project[] = [
       result: "2× Conversions",
     },
   },
+  {
+    id: 5,
+    name: "Nexus Alliance",
+    impact: "Federal waste management platform with nationwide reach",
+    tags: ["Web", "Government", "B2B"],
+    accent: "#2196F3",
+    image: "/portfolio/bytes-test-2.webp",
+    caseStudy: {
+      client: "Nexus Alliance Inc.",
+      challenge:
+        "A legacy web presence failed to convey their federal expertise and couldn't generate qualified leads from government agencies.",
+      solution:
+        "Designed a professional corporate website highlighting federal contracting capabilities, service areas, and compliance certifications.",
+      result: "4× Lead Growth",
+    },
+  },
+  {
+    id: 6,
+    name: "Synergistic",
+    impact: "Business networking platform driving team collaboration",
+    tags: ["Web", "SaaS", "Networking"],
+    accent: "#1E88E5",
+    image: "/portfolio/bytes-test-3.webp",
+    caseStudy: {
+      client: "Synergistic",
+      challenge:
+        "The company had no digital presence to showcase their business networking services and connect potential partners.",
+      solution:
+        "Built a modern, interactive website with a clean design emphasizing connections and results through dynamic visuals and clear CTAs.",
+      result: "60% More Signups",
+    },
+  },
+  {
+    id: 7,
+    name: "Vertical Worx",
+    impact: "Aviation services site with 2× more quote requests",
+    tags: ["Web", "Aviation", "Design"],
+    accent: "#FF5722",
+    image: "/portfolio/bytes-test-5.webp",
+    caseStudy: {
+      client: "Vertical Worx",
+      challenge:
+        "A veteran-operated helicopter service company in Hawaii needed a professional online presence to attract commercial and government clients.",
+      solution:
+        "Created a high-impact website with bold visuals, service breakdowns, certifications display, and an integrated quote request system.",
+      result: "2× Quote Requests",
+    },
+  },
+  {
+    id: 8,
+    name: "Lampados Financial",
+    impact: "Financial advisory platform with seamless client onboarding",
+    tags: ["Web", "FinTech", "CRM"],
+    accent: "#FFC107",
+    image: "/portfolio/bytes-test-6.webp",
+    caseStudy: {
+      client: "Lampados Financial Group",
+      challenge:
+        "A financial advisory firm needed a digital platform to educate clients, offer services, and streamline the onboarding process.",
+      solution:
+        "Developed a content-rich financial services website with client login portal, pricing tiers, blog integration, and appointment booking.",
+      result: "3× Client Retention",
+    },
+  },
 ];
 
-/* ─── Project Visual ─── */
-
-function ProjectVisual({
-  project,
-  isHovered,
-}: {
-  project: Project;
-  isHovered: boolean;
-}) {
-  return (
-    <div
-      className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden"
-      style={{
-        background: `
-          radial-gradient(ellipse at 25% 20%, ${project.accent}15, transparent 55%),
-          radial-gradient(ellipse at 75% 80%, ${project.accent}0a, transparent 50%),
-          linear-gradient(135deg, rgba(5,8,22,0.95), rgba(10,12,30,0.9))
-        `,
-      }}
-    >
-      {/* Project image */}
-      <img
-        src={project.image}
-        alt={project.name}
-        className="absolute inset-0 w-full h-full object-cover"
-        loading="lazy"
-        draggable={false}
-      />
-
-      {/* Hover overlay */}
-      <div
-        className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 transition-all duration-500"
-        style={{
-          background: isHovered
-            ? "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, transparent 100%)"
-            : "linear-gradient(to top, rgba(0,0,0,0.3) 0%, transparent 40%)",
-        }}
-      >
-        <div
-          className="transition-all duration-500 ease-out"
-          style={{
-            opacity: isHovered ? 1 : 0,
-            transform: isHovered ? "translateY(0)" : "translateY(16px)",
-          }}
-        >
-          <h3 className="font-heading text-xl md:text-2xl lg:text-3xl font-bold text-white mb-2">
-            {project.name}
-          </h3>
-          <p className="text-white/60 text-sm md:text-base mb-3 max-w-md">
-            {project.impact}
-          </p>
-          <div className="flex gap-2 flex-wrap">
-            {project.tags.map((tag) => (
-              <span
-                key={tag}
-                className="font-mono text-[11px] px-2 py-[3px] rounded-full text-white/50 bg-white/[0.08]"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Neon glow border on hover */}
-      <div
-        className="absolute inset-0 rounded-2xl pointer-events-none transition-all duration-700"
-        style={{
-          boxShadow: isHovered
-            ? `0 0 60px -12px ${project.accent}80, inset 0 0 60px -12px ${project.accent}15`
-            : "0 0 0px transparent",
-        }}
-      />
-    </div>
-  );
-}
+// Triple for seamless infinite loop
+const loopedProjects = [...projects, ...projects, ...projects];
 
 /* ─── Fullscreen Case Study ─── */
 
@@ -435,202 +425,82 @@ function CaseStudyOverlay({
 export default function ClientProjects() {
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const rafRef = useRef<number>(0);
-  const mouseRef = useRef({ x: 0, y: 0 });
-  const hoveredRef = useRef<number | null>(null);
-  const isVisibleRef = useRef(false);
+  const trackBgRef = useRef<HTMLDivElement>(null);
+  const animRef = useRef<number | null>(null);
+  const scrollSpeedRef = useRef(0);
+  const baseSpeed = 0.5;
 
-  const [isPaused, setIsPaused] = useState(false);
   const [expandedProjectIndex, setExpandedProjectIndex] = useState<number | null>(null);
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const isDragging = useRef(false);
-  const dragStartX = useRef(0);
-  const scrollStartX = useRef(0);
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
-  const scrollToProject = (direction: "prev" | "next") => {
-    const track = trackRef.current;
-    if (!track) return;
-    const scrollTrack = track.querySelector<HTMLElement>(".projects-scroll-track");
-    if (!scrollTrack) return;
-    scrollTrack.style.animationPlayState = "paused";
-    setIsPaused(true);
-    const transform = getComputedStyle(scrollTrack).transform;
-    const matrix = new DOMMatrix(transform);
-    const currentX = matrix.m41;
-    // Get width of one project item + gap
-    const item = itemsRef.current[0];
-    if (!item) return;
-    const itemWidth = item.getBoundingClientRect().width;
-    const gap = parseFloat(getComputedStyle(scrollTrack).gap) || 48;
-    const step = itemWidth + gap;
-    const newX = direction === "next" ? currentX - step : currentX + step;
-    scrollTrack.style.transition = "transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
-    scrollTrack.style.transform = `translateX(${newX}px)`;
-    setCurrentIndex((prev) =>
-      direction === "next"
-        ? (prev + 1) % projects.length
-        : (prev - 1 + projects.length) % projects.length
-    );
-    setTimeout(() => {
-      scrollTrack.style.transition = "";
-    }, 700);
-  };
-
-  const allProjects = [...projects, ...projects];
-
-  /* Manual drag scroll */
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-
-    const onPointerDown = (e: PointerEvent) => {
-      isDragging.current = true;
-      dragStartX.current = e.clientX;
-      const scrollTrack = track.querySelector<HTMLElement>(".projects-scroll-track");
-      if (scrollTrack) {
-        const transform = getComputedStyle(scrollTrack).transform;
-        const matrix = new DOMMatrix(transform);
-        scrollStartX.current = matrix.m41;
-      }
-      track.style.cursor = "grabbing";
-    };
-
-    const onPointerMove = (e: PointerEvent) => {
-      if (!isDragging.current) return;
-      const dx = e.clientX - dragStartX.current;
-      const scrollTrack = track.querySelector<HTMLElement>(".projects-scroll-track");
-      if (scrollTrack) {
-        scrollTrack.style.animationPlayState = "paused";
-        scrollTrack.style.transform = `translateX(${scrollStartX.current + dx}px)`;
-      }
-    };
-
-    const onPointerUp = () => {
-      isDragging.current = false;
-      track.style.cursor = "grab";
-    };
-
-    track.addEventListener("pointerdown", onPointerDown);
-    window.addEventListener("pointermove", onPointerMove);
-    window.addEventListener("pointerup", onPointerUp);
-
-    return () => {
-      track.removeEventListener("pointerdown", onPointerDown);
-      window.removeEventListener("pointermove", onPointerMove);
-      window.removeEventListener("pointerup", onPointerUp);
-    };
-  }, []);
-
-  /* Mouse parallax tracking */
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      mouseRef.current = {
-        x: (e.clientX / window.innerWidth - 0.5) * 2,
-        y: (e.clientY / window.innerHeight - 0.5) * 2,
-      };
-    };
-    window.addEventListener("mousemove", handler, { passive: true });
-    return () => window.removeEventListener("mousemove", handler);
-  }, []);
-
-  /* Depth & focus rAF loop */
+  // Continuous dual-conveyor animation
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
     if (prefersReducedMotion) return;
 
-    let active = true;
+    let posMain = 0;
+    let posBg = 0;
+    const track = trackRef.current;
+    const trackBg = trackBgRef.current;
+    if (!track) return;
 
-    const update = () => {
-      if (!active || !isVisibleRef.current) {
-        rafRef.current = requestAnimationFrame(update);
-        return;
+    const itemWidth = 540;
+    const totalWidth = itemWidth * projects.length;
+
+    const animate = () => {
+      const speed = baseSpeed + scrollSpeedRef.current;
+      posMain -= speed;
+      if (posMain <= -totalWidth) posMain += totalWidth;
+
+      track.style.transform = `translateX(${posMain}px)`;
+
+      if (trackBg) {
+        posBg -= speed * 0.4;
+        if (posBg <= -totalWidth) posBg += totalWidth;
+        trackBg.style.transform = `translateX(${posBg}px)`;
       }
 
-      const centerX = window.innerWidth / 2;
-      const halfViewport = window.innerWidth * 0.55;
-
-      // Read phase: gather all rects first
-      const rects = itemsRef.current.map((item) =>
-        item ? item.getBoundingClientRect() : null
-      );
-
-      // Write phase: apply transforms
-      rects.forEach((rect, i) => {
-        const item = itemsRef.current[i];
-        if (!rect || !item) return;
-
-        const itemCenter = rect.left + rect.width / 2;
-        const normalizedDist = (itemCenter - centerX) / halfViewport;
-        const absD = Math.min(Math.abs(normalizedDist), 1.5);
-
-        let scale = Math.max(0.85, 1.12 - absD * 0.25);
-        const opacity = Math.max(0.55, 1 - absD * 0.35);
-        const rotateY = Math.max(-12, Math.min(12, normalizedDist * -10));
-        const translateY = absD * 10;
-
-        // Hover boost
-        if (hoveredRef.current === i) {
-          scale = Math.min(scale * 1.05, 1.2);
-        }
-
-        item.style.transform = `scale(${scale}) rotateY(${rotateY}deg) translateY(${translateY}px)`;
-        item.style.opacity = `${opacity}`;
-        item.style.filter = "none";
-
-        // Radial glow behind center item
-        const glow = item.querySelector<HTMLElement>(".project-glow-ring");
-        if (glow) {
-          const glowOpacity = Math.max(0, 1 - absD * 3);
-          glow.style.opacity = `${glowOpacity}`;
-        }
-      });
-
-      // Parallax on wrapper
-      if (trackRef.current) {
-        const px = mouseRef.current.x * -12;
-        const py = mouseRef.current.y * -6;
-        trackRef.current.style.setProperty("--px", `${px}px`);
-        trackRef.current.style.setProperty("--py", `${py}px`);
-      }
-
-      rafRef.current = requestAnimationFrame(update);
+      animRef.current = requestAnimationFrame(animate);
     };
 
-    // Visibility observer
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        isVisibleRef.current = entry.isIntersecting;
-      },
-      { threshold: 0.05 }
-    );
-
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    rafRef.current = requestAnimationFrame(update);
+    animRef.current = requestAnimationFrame(animate);
 
     return () => {
-      active = false;
-      cancelAnimationFrame(rafRef.current);
-      observer.disconnect();
+      if (animRef.current) cancelAnimationFrame(animRef.current);
     };
   }, []);
 
-  /* Lock body scroll when expanded */
+  // Scroll speed influence
   useEffect(() => {
-    if (expandedProjectIndex !== null) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [expandedProjectIndex]);
+    let lastScroll = window.scrollY;
+    let decayTimer: ReturnType<typeof setTimeout>;
 
-  /* Heading entrance animation */
+    const handleScroll = () => {
+      const delta = Math.abs(window.scrollY - lastScroll);
+      scrollSpeedRef.current = Math.min(delta * 0.08, 4);
+      lastScroll = window.scrollY;
+
+      clearTimeout(decayTimer);
+      decayTimer = setTimeout(() => {
+        const decay = () => {
+          scrollSpeedRef.current *= 0.92;
+          if (scrollSpeedRef.current > 0.01) {
+            requestAnimationFrame(decay);
+          } else {
+            scrollSpeedRef.current = 0;
+          }
+        };
+        decay();
+      }, 60);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Heading entrance animation
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
@@ -658,141 +528,159 @@ export default function ClientProjects() {
     });
   }, []);
 
+  // Lock body scroll when expanded
+  useEffect(() => {
+    if (expandedProjectIndex !== null) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [expandedProjectIndex]);
+
+  const getItemStyle = useCallback(
+    (index: number) => {
+      const isHovered = hoveredIdx === index;
+      return {
+        transform: isHovered ? "translateY(-12px) scale(1.05)" : undefined,
+        filter: isHovered ? "blur(0px) brightness(1.1)" : undefined,
+        transition:
+          "transform 0.4s cubic-bezier(.4,0,.2,1), filter 0.4s ease",
+      };
+    },
+    [hoveredIdx]
+  );
+
   return (
     <section
       ref={sectionRef}
       id="projects"
-      className="relative py-[100px] md:py-[140px] overflow-hidden"
+      className="relative py-[100px] md:py-[140px] overflow-x-clip overflow-y-visible"
       style={{ background: "#050816" }}
     >
-      {/* Animated neuron field background */}
       <NeuronField />
-
-      {/* Background ambient glows */}
-      <div className="absolute inset-0 pointer-events-none z-[2]">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] rounded-full bg-accent/[0.03] blur-[150px]" />
-        <div className="absolute bottom-0 right-0 w-[500px] h-[400px] rounded-full bg-cyan/[0.025] blur-[120px]" />
-      </div>
 
       {/* Heading */}
       <div className="projects-heading text-center mb-16 md:mb-24 relative z-10 px-6">
+        <span className="font-mono text-sm text-cyan block mb-3 text-[#00D4FF]">Projects</span>
         <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
           Our Work
         </h2>
         <p className="text-muted text-base md:text-lg lg:text-xl font-light">
-        Built to Perform. Designed to Scale.
+          Built to Perform. Designed to Scale.
         </p>
       </div>
 
-      {/* Perspective viewport */}
+      {/* Main conveyor track */}
       <div
-        className="relative"
-        style={{ perspective: "1200px", perspectiveOrigin: "50% 50%" }}
+        className="relative overflow-visible z-[3]"
+        style={{ height: "420px", perspective: "1000px" }}
       >
-        {/* Left arrow */}
-        <button
-          onClick={() => scrollToProject("prev")}
-          className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 group w-11 h-11 md:w-14 md:h-14 rounded-full flex items-center justify-center border border-white/10 bg-black/30 backdrop-blur-md hover:border-accent/50 hover:bg-accent/15 transition-all duration-300"
-          aria-label="Previous project"
-        >
-          <svg
-            className="w-5 h-5 md:w-6 md:h-6 text-white/50 group-hover:text-accent transition-colors"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
-        </button>
 
-        {/* Right arrow */}
-        <button
-          onClick={() => scrollToProject("next")}
-          className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 group w-11 h-11 md:w-14 md:h-14 rounded-full flex items-center justify-center border border-white/10 bg-black/30 backdrop-blur-md hover:border-accent/50 hover:bg-accent/15 transition-all duration-300"
-          aria-label="Next project"
-        >
-          <svg
-            className="w-5 h-5 md:w-6 md:h-6 text-white/50 group-hover:text-accent transition-colors"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M9 18l6-6-6-6" />
-          </svg>
-        </button>
-
-        {/* Counter */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 font-mono text-xs text-white/30">
-          {String(currentIndex + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
-        </div>
-
-        {/* Parallax wrapper */}
         <div
           ref={trackRef}
-          className="projects-parallax-wrap"
-          style={{ cursor: "grab" }}
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => {
-            setIsPaused(false);
-            setHoveredIndex(null);
-            hoveredRef.current = null;
+          className="flex gap-6 absolute left-0 top-0 items-center"
+          style={{
+            willChange: "transform",
+            height: "100%",
           }}
         >
-          {/* Scroll track */}
-          <div
-            className="projects-scroll-track flex items-center"
-            style={{
-              animationPlayState:
-                isPaused || expandedProjectIndex !== null ? "paused" : "running",
-              gap: "clamp(32px, 4vw, 64px)",
-              paddingLeft: "clamp(32px, 4vw, 64px)",
-              paddingRight: "clamp(32px, 4vw, 64px)",
-            }}
-          >
-            {allProjects.map((project, i) => (
+          {loopedProjects.map((project, i) => (
+            <div
+              key={`main-${i}`}
+              className="flex-shrink-0 relative cursor-pointer group"
+              style={{
+                width: "520px",
+                height: "300px",
+                transformStyle: "preserve-3d",
+                ...getItemStyle(i),
+              }}
+              onMouseEnter={() => setHoveredIdx(i)}
+              onMouseLeave={() => setHoveredIdx(null)}
+              onClick={() => setExpandedProjectIndex(i % projects.length)}
+            >
               <div
-                key={`${project.id}-${i}`}
-                ref={(el) => {
-                  itemsRef.current[i] = el;
-                }}
-                className="project-float-item flex-shrink-0 relative cursor-pointer"
+                className="relative w-full h-full rounded-xl overflow-hidden"
                 style={{
-                  width: "clamp(320px, 42vw, 620px)",
-                  willChange: "transform, opacity, filter",
-                  transformStyle: "preserve-3d",
-                }}
-                onClick={() => setExpandedProjectIndex(i % projects.length)}
-                onMouseEnter={() => {
-                  setHoveredIndex(i);
-                  hoveredRef.current = i;
-                }}
-                onMouseLeave={() => {
-                  setHoveredIndex(null);
-                  hoveredRef.current = null;
+                  transition: "border 0.4s ease",
                 }}
               >
-                {/* Radial glow behind item */}
-                <div
-                  className="project-glow-ring absolute -inset-12 rounded-full pointer-events-none opacity-0"
+                <img
+                  src={project.image}
+                  alt={project.name}
+                  className="w-full h-full object-cover object-top transition-all duration-500"
                   style={{
-                    background: `radial-gradient(ellipse at center, ${project.accent}12, transparent 70%)`,
+                    filter:
+                      hoveredIdx === i ? "brightness(1)" : "brightness(0.7)",
+                  }}
+                  loading="lazy"
+                />
+
+                <div
+                  className="absolute inset-0 transition-opacity duration-500"
+                  style={{
+                    background:
+                      "linear-gradient(to top, rgba(5,8,22,0.95) 0%, rgba(5,8,22,0.4) 40%, transparent 100%)",
+                    opacity: hoveredIdx === i ? 1 : 0.7,
                   }}
                 />
 
-                <ProjectVisual
-                  project={project}
-                  isHovered={hoveredIndex === i}
-                />
+
+
+                {/* Hover content */}
+                <div
+                  className="absolute bottom-0 left-0 right-0 p-6 transition-all duration-500"
+                  style={{
+                    transform:
+                      hoveredIdx === i ? "translateY(0)" : "translateY(10px)",
+                    opacity: hoveredIdx === i ? 1 : 0,
+                  }}
+                >
+                  <h3 className="font-heading text-xl font-bold text-white mb-1">
+                    {project.name}
+                  </h3>
+                  <p className="font-body text-sm text-muted leading-relaxed mb-3">
+                    {project.impact}
+                  </p>
+                  <div className="flex gap-2 flex-wrap">
+                    {project.tags.map((t) => (
+                      <span
+                        key={t}
+                        className="font-mono text-[10px] px-2 py-0.5 rounded-full border"
+                        style={{
+                          borderColor: `${project.accent}4d`,
+                          color: project.accent,
+                          background: `${project.accent}14`,
+                        }}
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Always-visible title */}
+                <div
+                  className="absolute bottom-0 left-0 right-0 p-6 transition-opacity duration-300"
+                  style={{ opacity: hoveredIdx === i ? 0 : 0.9 }}
+                >
+                  <h3 className="font-heading text-lg font-semibold text-white/80">
+                    {project.name}
+                  </h3>
+                </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
+      </div>
+
+      {/* Scroll hint */}
+      <div className="text-center mt-10 opacity-40 relative z-[3]">
+        <p className="font-mono text-xs text-muted tracking-widest uppercase">
+          Scroll to accelerate · Hover to explore · Click to expand
+        </p>
       </div>
 
       {/* Expanded case study */}
@@ -803,8 +691,16 @@ export default function ClientProjects() {
             projectIndex={expandedProjectIndex}
             total={projects.length}
             onClose={() => setExpandedProjectIndex(null)}
-            onPrev={() => setExpandedProjectIndex((expandedProjectIndex - 1 + projects.length) % projects.length)}
-            onNext={() => setExpandedProjectIndex((expandedProjectIndex + 1) % projects.length)}
+            onPrev={() =>
+              setExpandedProjectIndex(
+                (expandedProjectIndex - 1 + projects.length) % projects.length
+              )
+            }
+            onNext={() =>
+              setExpandedProjectIndex(
+                (expandedProjectIndex + 1) % projects.length
+              )
+            }
           />
         )}
       </AnimatePresence>

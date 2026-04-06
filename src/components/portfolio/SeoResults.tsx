@@ -1,328 +1,220 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
+import Image from "next/image";
 
-function StatCounter({
-  value,
-  suffix,
-  label,
-}: {
-  value: number;
-  suffix: string;
-  label: string;
-}) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const hasAnimated = useRef(false);
+/* ─── design tokens ─── */
+const BG = "#050816";
+const CYAN = "#00C8FF";
+const GREEN = "#00E589";
+const MUTED = "#5A6B8A";
+const NEON_PURPLE = "#915EFF";
+const BLUE = "#1D6CF6";
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasAnimated.current) {
-          hasAnimated.current = true;
-          const duration = 2000;
-          const startTime = performance.now();
-          const animate = (now: number) => {
-            const elapsed = now - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
-            setCount(Math.round(eased * value));
-            if (progress < 1) requestAnimationFrame(animate);
-          };
-          requestAnimationFrame(animate);
-        }
-      },
-      { threshold: 0.5 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [value]);
+/* ─── DATA ─── */
+const CASE_STUDIES = [
+  {
+    title: "Safe Travel Charters",
+    url: "safetravelcharters.com",
+    beforeImg: "/portfolioo/seo/seo-1-before.png",
+    afterImg: "/portfolioo/seo/seo-1-after.png",
+    stats: [
+      { label: "Total Clicks", value: 207 },
+      { label: "Impressions", value: 122000 },
+      { label: "CTR", value: 0.2, suffix: "%" },
+      { label: "Avg Position", value: 61.4 },
+    ],
+    badges: ["+207 Clicks", "122K Impressions", "28-Day Growth"],
+  },
+  {
+    title: "Nexus Alliance Inc.",
+    url: "nexusallianceinc.com",
+    beforeImg: "/portfolioo/seo/seo-2-before.png",
+    afterImg: "/portfolioo/seo/seo-2-after.png",
+    stats: [
+      { label: "Total Clicks", value: 1030 },
+      { label: "Impressions", value: 37000 },
+      { label: "CTR", value: 2.8, suffix: "%" },
+      { label: "Avg Position", value: 65.8 },
+    ],
+    badges: ["1.03K Clicks", "37K Impressions", "2.8% CTR"],
+  },
+  {
+    title: "Team Smith Logistics",
+    url: "teamsmithlogistics.com",
+    beforeImg: "/portfolioo/seo/seo-3-before.png",
+    afterImg: "/portfolioo/seo/seo-3-after.png",
+    stats: [
+      { label: "Total Clicks", value: 146 },
+      { label: "Impressions", value: 50900 },
+      { label: "CTR", value: 0.3, suffix: "%" },
+      { label: "Avg Position", value: 52 },
+    ],
+    badges: ["146 Clicks", "50.9K Impressions", "Position 52"],
+  },
+  {
+    title: "This Week in Public Health",
+    url: "thisweekinpublichealth.com",
+    beforeImg: "/portfolioo/seo/seo-4-before.png",
+    afterImg: "/portfolioo/seo/seo-4-after.png",
+    stats: [
+      { label: "Total Clicks", value: 836 },
+      { label: "Impressions", value: 96200 },
+      { label: "CTR", value: 0.9, suffix: "%" },
+      { label: "Avg Position", value: 25.6 },
+    ],
+    badges: ["836 Clicks", "96.2K Impressions", "Position 25.6"],
+  },
+  {
+    title: "Dawg Team Products",
+    url: "dawgteamproducts.com",
+    beforeImg: "/portfolioo/seo/seo-5-before.png",
+    afterImg: "/portfolioo/seo/seo-5-after.png",
+    stats: [
+      { label: "Total Clicks", value: 15600 },
+      { label: "Impressions", value: 1000000 },
+      { label: "CTR", value: 1.6, suffix: "%" },
+      { label: "Avg Position", value: 18.7 },
+    ],
+    badges: ["15.6K Clicks", "1M Impressions", "1.6% CTR"],
+  },
+];
 
-  return (
-    <div ref={ref} className="text-center">
-      <p className="font-heading text-4xl md:text-6xl font-bold gradient-text">
-        {count}
-        {suffix}
-      </p>
-      <p className="font-body text-muted text-sm mt-2">{label}</p>
-    </div>
-  );
-}
-
-function BeforeAfterSlider() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [sliderPos, setSliderPos] = useState(50);
-  const isDragging = useRef(false);
-
-  const handleMove = (clientX: number) => {
-    if (!containerRef.current || !isDragging.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = clientX - rect.left;
-    const percent = Math.max(0, Math.min(100, (x / rect.width) * 100));
-    setSliderPos(percent);
-  };
-
-  return (
-    <div
-      ref={containerRef}
-      className="relative w-full max-w-2xl mx-auto rounded-2xl overflow-hidden border border-white/10 select-none cursor-ew-resize"
-      onMouseDown={() => (isDragging.current = true)}
-      onMouseUp={() => (isDragging.current = false)}
-      onMouseLeave={() => (isDragging.current = false)}
-      onMouseMove={(e) => handleMove(e.clientX)}
-      onTouchStart={() => (isDragging.current = true)}
-      onTouchEnd={() => (isDragging.current = false)}
-      onTouchMove={(e) => handleMove(e.touches[0].clientX)}
-    >
-      {/* After (full width behind) */}
-      <div className="w-full p-8 md:p-12 bg-gradient-to-br from-accent/10 to-cyan/5 min-h-[250px]">
-        <p className="font-mono text-xs text-cyan/60 mb-4">AFTER</p>
-        <div className="space-y-3">
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-muted">Organic Traffic</span>
-            <span className="font-mono text-sm text-green-400">12,847/mo</span>
-          </div>
-          <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-accent to-cyan rounded-full" style={{ width: "85%" }} />
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-muted">Keywords Page 1</span>
-            <span className="font-mono text-sm text-green-400">47</span>
-          </div>
-          <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-accent to-cyan rounded-full" style={{ width: "78%" }} />
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-muted">Monthly Revenue</span>
-            <span className="font-mono text-sm text-green-400">$84,200</span>
-          </div>
-          <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-accent to-cyan rounded-full" style={{ width: "90%" }} />
-          </div>
-        </div>
-      </div>
-
-      {/* Before (clipped) */}
-      <div
-        className="absolute inset-0 p-8 md:p-12 bg-gradient-to-br from-red-900/20 to-gray-900/40"
-        style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
-      >
-        <p className="font-mono text-xs text-red-400/60 mb-4">BEFORE</p>
-        <div className="space-y-3">
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-muted">Organic Traffic</span>
-            <span className="font-mono text-sm text-red-400">1,203/mo</span>
-          </div>
-          <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full bg-red-500/40 rounded-full" style={{ width: "12%" }} />
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-muted">Keywords Page 1</span>
-            <span className="font-mono text-sm text-red-400">3</span>
-          </div>
-          <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full bg-red-500/40 rounded-full" style={{ width: "5%" }} />
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-muted">Monthly Revenue</span>
-            <span className="font-mono text-sm text-red-400">$9,800</span>
-          </div>
-          <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full bg-red-500/40 rounded-full" style={{ width: "10%" }} />
-          </div>
-        </div>
-      </div>
-
-      {/* Divider */}
-      <div
-        className="absolute top-0 bottom-0 w-0.5 bg-white/50 z-10"
-        style={{ left: `${sliderPos}%` }}
-      >
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center">
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="white"
-            strokeWidth="2"
-            strokeLinecap="round"
-          >
-            <path d="M18 8L22 12L18 16" />
-            <path d="M6 8L2 12L6 16" />
-          </svg>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default function SeoResults() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const chartRef = useRef<SVGPathElement>(null);
+/* ─── OPTIMIZED CANVAS ─── */
+function NeuronField() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isScrolling = useRef(false);
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    if (prefersReducedMotion) return;
+    let timeout: any;
+    const onScroll = () => {
+      isScrolling.current = true;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => (isScrolling.current = false), 120);
+    };
+    window.addEventListener("scroll", onScroll);
 
-    import("gsap").then(({ default: gsap }) => {
-      import("gsap/ScrollTrigger").then(({ ScrollTrigger }) => {
-        gsap.registerPlugin(ScrollTrigger);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-        // Chart draw animation
-        if (chartRef.current) {
-          const length = chartRef.current.getTotalLength();
-          chartRef.current.style.strokeDasharray = `${length}`;
-          chartRef.current.style.strokeDashoffset = `${length}`;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-          gsap.to(chartRef.current, {
-            strokeDashoffset: 0,
-            duration: 2,
-            ease: "power2.inOut",
-            scrollTrigger: {
-              trigger: ".seo-chart",
-              start: "top 75%",
-            },
-          });
-        }
+    let raf: number;
+    const draw = () => {
+      if (!isScrolling.current) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      raf = requestAnimationFrame(draw);
+    };
+    draw();
 
-        // Data points
-        gsap.fromTo(
-          ".chart-dot",
-          { opacity: 0, scale: 0 },
-          {
-            opacity: 1,
-            scale: 1,
-            duration: 0.3,
-            stagger: 0.15,
-            ease: "back.out(1.7)",
-            scrollTrigger: {
-              trigger: ".seo-chart",
-              start: "top 75%",
-            },
-            delay: 2,
-          }
-        );
-      });
-    });
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
-  const chartPoints = [
-    { x: 0, y: 180 },
-    { x: 100, y: 160 },
-    { x: 200, y: 150 },
-    { x: 300, y: 120 },
-    { x: 400, y: 80 },
-    { x: 500, y: 50 },
-    { x: 600, y: 30 },
-  ];
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-70 pointer-events-none" />;
+}
 
-  const pathD = chartPoints
-    .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`)
-    .join(" ");
+/* ─── COUNTUP SAFE ─── */
+function CountUp({ value, suffix = "" }: any) {
+  return <span>{value.toLocaleString()}{suffix}</span>;
+}
 
-  const months = ["Jan", "Mar", "May", "Jul", "Sep", "Nov", "Jan"];
+/* ─── MAIN ─── */
+export default function SeoResults() {
+  const [active, setActive] = useState(0);
+  const study = CASE_STUDIES[active];
+
+  const goPrev = () => setActive((p) => (p - 1 + CASE_STUDIES.length) % CASE_STUDIES.length);
+  const goNext = () => setActive((p) => (p + 1) % CASE_STUDIES.length);
 
   return (
-    <section
-      ref={sectionRef}
-      id="seo"
-      className="relative min-h-screen py-[120px]"
-      style={{ background: "#0a0f2e" }}
-    >
-      <div className="max-w-content mx-auto px-6 md:px-20">
-        {/* Header */}
-        <div className="text-center mb-20">
-          <span className="font-mono text-sm text-accent block mb-3">
-            SEO Impact
+    <section className="relative py-20" style={{ background: BG }}>
+      <NeuronField />
+
+      <div className="max-w-6xl mx-auto px-6">
+
+        <div className="text-center mb-10 relative z-10">
+          <span className="font-mono text-sm text-[#00D4FF] block mb-3">
+            SEO Results
           </span>
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold">
-            Rankings Earned. Traffic Grown.
-            <br />
-            Revenue Generated.
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+            SEO Case Studies
           </h2>
         </div>
 
-        {/* Chart */}
-        <div className="seo-chart mb-20 p-6 md:p-10 rounded-2xl bg-white/[0.03] border border-white/[0.06]">
-          <p className="font-mono text-xs text-muted mb-4">
-            Organic Traffic Growth — Client Case Study
-          </p>
-          <svg
-            viewBox="-20 0 660 220"
-            className="w-full h-auto chart-glow"
-            preserveAspectRatio="xMidYMid meet"
-          >
-            {/* Grid lines */}
-            {[0, 50, 100, 150].map((y) => (
-              <line
-                key={y}
-                x1="0"
-                y1={y}
-                x2="600"
-                y2={y}
-                stroke="rgba(255,255,255,0.05)"
-                strokeWidth="1"
-              />
+        <div
+          className="rounded-2xl p-6"
+          style={{
+            background: "rgba(10,20,40,0.75)",
+            border: "1px solid rgba(255,255,255,0.06)",
+            transform: "translateZ(0)",
+            willChange: "transform",
+            backfaceVisibility: "hidden",
+            contain: "layout paint",
+          }}
+        >
+
+          {/* TOP */}
+          <div className="flex justify-between mb-6">
+            <div>
+              <h3 className="text-white font-bold">{study.title}</h3>
+              <p className="text-xs text-gray-400">{study.url}</p>
+            </div>
+
+            <div className="flex gap-2">
+              <button onClick={goPrev}>◀</button>
+              <button onClick={goNext}>▶</button>
+            </div>
+          </div>
+
+          {/* IMAGES */}
+          <div className="grid md:grid-cols-2 gap-4 mb-6">
+            <div className="group">
+              <span className="inline-block mb-2 px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider"
+                style={{ background: "rgba(230,57,70,0.25)", border: "1px solid rgba(230,57,70,0.4)", color: "#E63946" }}>
+                Before SEO
+              </span>
+              <div className="rounded-xl overflow-hidden bg-white/[0.02]">
+                <Image src={study.beforeImg} alt={`${study.title} — Before SEO`} width={800} height={600} loading="eager" className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-[1.03]" />
+              </div>
+            </div>
+            <div className="group">
+              <span className="inline-block mb-2 px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider"
+                style={{ background: "rgba(0,229,137,0.2)", border: "1px solid rgba(0,229,137,0.4)", color: "#00E589" }}>
+                After SEO
+              </span>
+              <div className="rounded-xl overflow-hidden bg-white/[0.02]">
+                <Image src={study.afterImg} alt={`${study.title} — After SEO`} width={800} height={600} loading="eager" className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-[1.03]" />
+              </div>
+            </div>
+          </div>
+
+          {/* STATS */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {study.stats.map((stat) => (
+              <div key={stat.label} className="text-center">
+                <p className="text-cyan-400 text-2xl font-bold">
+                  <CountUp value={stat.value} suffix={stat.suffix} />
+                </p>
+                <p className="text-xs text-gray-400">{stat.label}</p>
+              </div>
             ))}
+          </div>
 
-            {/* Path */}
-            <path
-              ref={chartRef}
-              d={pathD}
-              fill="none"
-              stroke="#915EFF"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-
-            {/* Data dots */}
-            {chartPoints.map((p, i) => (
-              <circle
-                key={i}
-                cx={p.x}
-                cy={p.y}
-                r="5"
-                fill="#915EFF"
-                className="chart-dot"
-                style={{ opacity: 0 }}
-              />
+          {/* BADGES */}
+          <div className="flex flex-wrap gap-2 mt-6">
+            {study.badges.map((b) => (
+              <span key={b} className="px-3 py-1 text-xs rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
+                {b}
+              </span>
             ))}
+          </div>
 
-            {/* Month labels */}
-            {months.map((m, i) => (
-              <text
-                key={i}
-                x={i * 100}
-                y="208"
-                fill="#94A3B8"
-                fontSize="11"
-                fontFamily="JetBrains Mono, monospace"
-                textAnchor="middle"
-              >
-                {m}
-              </text>
-            ))}
-          </svg>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-          <StatCounter value={312} suffix="%" label="Traffic Increase" />
-          <StatCounter value={47} suffix="" label="Keywords Ranked #1" />
-          <StatCounter value={8} suffix="×" label="ROI Achieved" />
-        </div>
-
-        {/* Before/After */}
-        <div>
-          <h3 className="font-heading text-2xl font-semibold text-center mb-8">
-            Drag to Compare
-          </h3>
-          <BeforeAfterSlider />
         </div>
       </div>
     </section>

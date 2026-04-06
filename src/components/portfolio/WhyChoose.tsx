@@ -79,7 +79,13 @@ export default function WhyChoose() {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion) {
+      document.querySelectorAll<HTMLElement>(".why-block").forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      });
+      return;
+    }
 
     import("gsap").then(({ default: gsap }) => {
       import("gsap/ScrollTrigger").then(({ ScrollTrigger }) => {
@@ -127,6 +133,7 @@ export default function WhyChoose() {
             <div
               key={d.number}
               className="why-block relative p-6 md:p-8 rounded-2xl bg-white/[0.02] border-l-2 border-accent overflow-hidden"
+              style={{ opacity: 0, transform: "translateY(40px)" }}
             >
               {/* Large faint number */}
               <span className="absolute top-2 right-4 font-heading text-8xl font-bold text-white/[0.04] select-none">
