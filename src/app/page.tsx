@@ -5,6 +5,32 @@ import HeroSection from "@/sections/Hero";
 import { useEffect, lazy, Suspense } from "react";
 import PerformanceMonitor from "@/components/PerformanceMonitor";
 
+// Organization / LocalBusiness structured data (JSON-LD) for the homepage
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": ["Organization", "LocalBusiness"],
+  name: "Bytes Platform",
+  legalName: "Bytes Platform LLC",
+  url: "https://bytesplatform.com",
+  logo: "https://bytesplatform.com/assets/bytes-logo.png",
+  email: "info@bytesplatform.com",
+  telephone: "+1-833-323-0371",
+  description:
+    "Bytes Platform is a Denton, TX digital agency building custom websites, apps, SEO, and AI solutions that grow your business. Get a free consultation today.",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "2809 Joshua Street",
+    addressLocality: "Denton",
+    addressRegion: "TX",
+    addressCountry: "US",
+  },
+  sameAs: [
+    "https://www.facebook.com/share/1Kc3xtzhqa/",
+    "https://www.instagram.com/bytesplatform",
+    "https://www.linkedin.com/company/bytebloom-solutionss/",
+  ],
+};
+
 // Lazy load non-critical sections for better initial load performance
 const ByteBotsSection = lazy(() => import("@/sections/ByteBot"));
 const ServiceHead = lazy(() => import("@/sections/serviceHead"));
@@ -27,6 +53,12 @@ export default function Home() {
 
   return (
     <main className="text-black min-h-screen">
+      {/* Organization / LocalBusiness structured data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
+
       {/* Performance monitoring for development */}
       <PerformanceMonitor />
       

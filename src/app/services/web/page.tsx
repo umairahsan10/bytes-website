@@ -12,6 +12,34 @@ import Shopping from "../../../../public/assets/WebDev/animations/Shopping.json"
 // lucide-react icons
 import { ChevronDown, Menu, X, Code, Zap, Users, Award, ArrowRight, Star, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Play, Smartphone, Monitor, Database, Cloud, Globe, Layers, BarChart, TrendingUp, LayoutDashboard, CreditCard, Plug, ShoppingCart } from 'lucide-react';
 
+// Service structured data (JSON-LD) for the web development page
+const webDevServiceJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: "Web Development",
+  name: "Web Development Services",
+  url: "https://bytesplatform.com/services/web",
+  provider: {
+    "@type": "Organization",
+    name: "Bytes Platform",
+    url: "https://bytesplatform.com",
+  },
+  areaServed: { "@type": "Country", name: "United States" },
+  description:
+    "Custom, high-performance website and web application development. Bytes Platform builds fast, responsive, SEO-ready sites tailored to your brand, from design through launch and maintenance.",
+};
+
+// Breadcrumb structured data (JSON-LD)
+const webDevBreadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://bytesplatform.com" },
+    { "@type": "ListItem", position: 2, name: "Services", item: "https://bytesplatform.com/services" },
+    { "@type": "ListItem", position: 3, name: "Web Development", item: "https://bytesplatform.com/services/web" },
+  ],
+};
+
 const WebDevelopmentLanding = () => {
   const [scrollY, setScrollY] = useState(0);
   const [counters, setCounters] = useState({
@@ -312,6 +340,15 @@ const WebDevelopmentLanding = () => {
 
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
+      {/* Structured data: Service + Breadcrumb */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webDevServiceJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webDevBreadcrumbJsonLd) }}
+      />
       <Header />
       {/* Hero Section */}
       <section id="home" className="min-h-screen bg-blue-200 flex items-center relative overflow-hidden pt-16 lg:pt-24">

@@ -106,6 +106,34 @@ const SEOGraphAnimation: React.FC = () => {
 
 
 
+// Service structured data (JSON-LD) for the SEO page
+const seoServiceJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: "Search Engine Optimization",
+  name: "SEO Services",
+  url: "https://bytesplatform.com/services/seo",
+  provider: {
+    "@type": "Organization",
+    name: "Bytes Platform",
+    url: "https://bytesplatform.com",
+  },
+  areaServed: { "@type": "Country", name: "United States" },
+  description:
+    "SEO services that grow organic rankings, traffic, and visibility, including technical SEO, on-page optimization, content strategy, and AEO/GEO to earn placement in AI-driven search.",
+};
+
+// Breadcrumb structured data (JSON-LD)
+const seoBreadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://bytesplatform.com" },
+    { "@type": "ListItem", position: 2, name: "Services", item: "https://bytesplatform.com/services" },
+    { "@type": "ListItem", position: 3, name: "SEO", item: "https://bytesplatform.com/services/seo" },
+  ],
+};
+
 const SEOPage: React.FC = () => {
   const router = useRouter();
   const heroRef = useRef<HTMLDivElement>(null);
@@ -430,6 +458,16 @@ const SEOPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white text-black overflow-hidden">
+      {/* Structured data: Service + Breadcrumb */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(seoServiceJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(seoBreadcrumbJsonLd) }}
+      />
+
       {/* Inject critical CSS */}
       <style dangerouslySetInnerHTML={{ __html: criticalStyles }} />
       

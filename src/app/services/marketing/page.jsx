@@ -91,6 +91,34 @@ const AnimatedParagraph = ({ text, className = "" }) => {
   );
 };
 
+// Service structured data (JSON-LD) for the marketing page
+const marketingServiceJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: "Digital Marketing",
+  name: "Digital Marketing Services",
+  url: "https://bytesplatform.com/services/marketing",
+  provider: {
+    "@type": "Organization",
+    name: "Bytes Platform",
+    url: "https://bytesplatform.com",
+  },
+  areaServed: { "@type": "Country", name: "United States" },
+  description:
+    "Full-funnel digital marketing, including paid media, social media, content, and email campaigns, designed to generate qualified leads and measurable ROI.",
+};
+
+// Breadcrumb structured data (JSON-LD)
+const marketingBreadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://bytesplatform.com" },
+    { "@type": "ListItem", position: 2, name: "Services", item: "https://bytesplatform.com/services" },
+    { "@type": "ListItem", position: 3, name: "Marketing", item: "https://bytesplatform.com/services/marketing" },
+  ],
+};
+
 const MarketingPage = () => {
   const [seoNumbersAnimated, setSeoNumbersAnimated] = useState(false);
   const [smmNumbersAnimated, setSmmNumbersAnimated] = useState(false);
@@ -313,6 +341,16 @@ const MarketingPage = () => {
 
   return (
     <div className="font-sans bg-[#010a14] overflow-x-hidden" style={{ scrollBehavior: 'smooth' }}>
+      {/* Structured data: Service + Breadcrumb */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(marketingServiceJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(marketingBreadcrumbJsonLd) }}
+      />
+
       {/* Inject critical CSS */}
       <style dangerouslySetInnerHTML={{ __html: criticalStyles }} />
       

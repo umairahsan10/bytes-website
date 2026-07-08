@@ -47,6 +47,34 @@ const AnimatedParagraph = ({ text, className = "", speed = 0.03 }: { text: strin
   );
 };
 
+// Service structured data (JSON-LD) for the app development page
+const appDevServiceJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: "Mobile App Development",
+  name: "App Development Services",
+  url: "https://bytesplatform.com/services/app",
+  provider: {
+    "@type": "Organization",
+    name: "Bytes Platform",
+    url: "https://bytesplatform.com",
+  },
+  areaServed: { "@type": "Country", name: "United States" },
+  description:
+    "Native and cross-platform mobile app development for iOS and Android, covering UX design, development, testing, launch, and ongoing support.",
+};
+
+// Breadcrumb structured data (JSON-LD)
+const appDevBreadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://bytesplatform.com" },
+    { "@type": "ListItem", position: 2, name: "Services", item: "https://bytesplatform.com/services" },
+    { "@type": "ListItem", position: 3, name: "App Development", item: "https://bytesplatform.com/services/app" },
+  ],
+};
+
 const AppDevelopmentPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const topHeroRef = useRef<HTMLDivElement>(null);
@@ -171,6 +199,16 @@ const AppDevelopmentPage = () => {
 
   return (
     <>
+      {/* Structured data: Service + Breadcrumb */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(appDevServiceJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(appDevBreadcrumbJsonLd) }}
+      />
+
       <Header className="app-header" />
 
       {/* Simple Hero Section */}
