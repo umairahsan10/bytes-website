@@ -15,6 +15,34 @@ declare global {
   }
 }
 
+// Service structured data (JSON-LD) for the advanced services page
+const advancedServiceJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: "Advanced Digital Solutions",
+  name: "Advanced Services",
+  url: "https://bytesplatform.com/services/advanced-services",
+  provider: {
+    "@type": "Organization",
+    name: "Bytes Platform",
+    url: "https://bytesplatform.com",
+  },
+  areaServed: { "@type": "Country", name: "United States" },
+  description:
+    "Advanced digital solutions from Bytes Platform, including AI chatbots (Byte Bots) and custom ERP/CRM systems (Byte Suites) that automate operations and help your business scale.",
+};
+
+// Breadcrumb structured data (JSON-LD)
+const advancedBreadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://bytesplatform.com" },
+    { "@type": "ListItem", position: 2, name: "Services", item: "https://bytesplatform.com/services" },
+    { "@type": "ListItem", position: 3, name: "Advanced Services", item: "https://bytesplatform.com/services/advanced-services" },
+  ],
+};
+
 const AdvancedServicesPage: React.FC = () => {
   const router = useRouter();
   const heroRef = useRef<HTMLElement>(null);
@@ -106,6 +134,16 @@ const AdvancedServicesPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white text-black">
+      {/* Structured data: Service + Breadcrumb */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(advancedServiceJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(advancedBreadcrumbJsonLd) }}
+      />
+
       {/* Navigation Bar */}
       <Header  />
 

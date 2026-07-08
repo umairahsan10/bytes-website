@@ -16,6 +16,32 @@ import Image from 'next/image';
 const PRIMARY_COLOR = '#010a14';   // Dark
 const SECONDARY_COLOR = '#ffffff'; // Light
 
+// Product structured data (JSON-LD) for the Byte Suites page
+const byteSuitesProductJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: "Byte Suites",
+  url: "https://bytesplatform.com/products/byte-suites",
+  brand: {
+    "@type": "Organization",
+    name: "Bytes Platform",
+    url: "https://bytesplatform.com",
+  },
+  description:
+    "Byte Suites are custom ERP and CRM systems from Bytes Platform that centralize operations, automate workflows, and give your business a single connected platform to manage and scale.",
+};
+
+// Breadcrumb structured data (JSON-LD)
+const byteSuitesBreadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://bytesplatform.com" },
+    { "@type": "ListItem", position: 2, name: "Products", item: "https://bytesplatform.com/products" },
+    { "@type": "ListItem", position: 3, name: "Byte Suites", item: "https://bytesplatform.com/products/byte-suites" },
+  ],
+};
+
 const ByteSuitePage: React.FC = () => {
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
@@ -414,6 +440,15 @@ const ByteSuitePage: React.FC = () => {
   /* -------------------------- Markup -------------------------- */
   return (
     <div className="min-h-screen bg-[#010a14] text-white overflow-hidden">
+      {/* Structured data: Product + Breadcrumb */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(byteSuitesProductJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(byteSuitesBreadcrumbJsonLd) }}
+      />
 
       {/* Header */}
       <Header />

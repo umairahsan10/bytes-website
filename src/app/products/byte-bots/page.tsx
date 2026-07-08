@@ -30,6 +30,32 @@ declare global {
   }
 }
 
+// Product structured data (JSON-LD) for the Byte Bots page
+const byteBotsProductJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: "Byte Bots",
+  url: "https://bytesplatform.com/products/byte-bots",
+  brand: {
+    "@type": "Organization",
+    name: "Bytes Platform",
+    url: "https://bytesplatform.com",
+  },
+  description:
+    "Byte Bots are custom AI chatbots built and trained on your business's own data. They answer accurately in your brand's voice, qualify leads, and automate customer support around the clock.",
+};
+
+// Breadcrumb structured data (JSON-LD)
+const byteBotsBreadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://bytesplatform.com" },
+    { "@type": "ListItem", position: 2, name: "Products", item: "https://bytesplatform.com/products" },
+    { "@type": "ListItem", position: 3, name: "Byte Bots", item: "https://bytesplatform.com/products/byte-bots" },
+  ],
+};
+
 const ByteBotLanding: React.FC = () => {
   const router = useRouter();
   const heroRef = useRef<HTMLElement>(null);
@@ -250,6 +276,16 @@ const ByteBotLanding: React.FC = () => {
 
   return (
     <>
+      {/* Structured data: Product + Breadcrumb */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(byteBotsProductJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(byteBotsBreadcrumbJsonLd) }}
+      />
+
       {/* Preconnect to external resources */}
       <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
       <link rel="preconnect" href="https://cdn.jsdelivr.net" />
