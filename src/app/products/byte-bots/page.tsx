@@ -1237,7 +1237,7 @@ const ByteBotLanding: React.FC = () => {
                   <div className="chatbot-container">
                     <Image
                       src="/assets/newimages/chatbot.png"
-                      alt="Data Intelligence Dashboard"
+                      alt="Byte Bots data intelligence dashboard displaying real-time analytics"
                       className="chatbot-image"
                       width={600}
                       height={600}
@@ -1322,7 +1322,7 @@ const ByteBotLanding: React.FC = () => {
                       <div className="relative w-full h-full flex items-center justify-center">
                         <Image
                           src="/assets/newimages/snake.png"
-                          alt="AI Learning System"
+                          alt="Byte Bots AI learning system trained on your business data"
                           className="w-65 h-65 object-contain drop-shadow-2xl filter brightness-110 contrast-110"
                           width={320}
                           height={320}
@@ -1366,7 +1366,7 @@ const ByteBotLanding: React.FC = () => {
         {/* Background Image */}
         <Image
           src="/bots/cta_bot.png"
-          alt="Call to Action Background"
+          alt="Background for the Byte Bots call-to-action section"
           fill
           className="object-cover"
           sizes="100vw"

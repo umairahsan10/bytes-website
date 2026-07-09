@@ -428,7 +428,7 @@ const IndustriesPage = () => {
         <div className="absolute inset-0 z-0">
           <Image
             src="/assets/industry/optimized/hero.webp"
-            alt="Industry Background"
+            alt="Background showcasing the industries served by Bytes Platform"
             fill
             className="object-cover"
             priority
@@ -875,7 +875,7 @@ const IndustriesPage = () => {
         <div className="absolute inset-0 z-0">
           <Image
             src="/assets/WebDev/optimized/buildwithus-1536.webp"
-            alt="Build with us background"
+            alt="Background inviting businesses to partner with Bytes Platform"
             fill
             className="object-cover opacity-70 pointer-events-none"
             quality={85}

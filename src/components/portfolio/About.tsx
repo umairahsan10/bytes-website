@@ -248,7 +248,7 @@ export default function About() {
               <div className="cube-container animate-about-float">
                 <Image
                   src="/portfolioo/numbers/cube.png"
-                  alt="Decorative Cube"
+                  alt="Floating 3D cube graphic in the Bytes Platform portfolio section"
                   width={500}
                   height={500}
                   priority

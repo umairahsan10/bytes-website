@@ -373,7 +373,7 @@ const WebDevelopmentLanding = () => {
           <div className="relative flex items-center justify-center h-full min-h-[350px]">
             <Image
               src="/assets/newimages/laptop.png"
-              alt="Web Development Services"
+              alt="Bytes Platform web development services building custom, responsive websites"
               fill
               className="object-contain object-center"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px"
@@ -697,7 +697,7 @@ const WebDevelopmentLanding = () => {
             >
               <Image
                 src="/assets/newimages/whychoseus.png"
-                alt="Why choose our web development services"
+                alt="Reasons to choose Bytes Platform for professional web development"
                 fill
                 className="object-contain object-center"
                 sizes="(max-width: 640px) 384px, (max-width: 1024px) 448px, 512px"
@@ -755,7 +755,7 @@ const WebDevelopmentLanding = () => {
         <div className="absolute inset-0 pointer-events-none opacity-70">
           <Image
             src="/assets/WebDev/buildwithus.png"
-            alt="Build with us background"
+            alt="Background inviting businesses to build a website with Bytes Platform"
             fill
             className="object-cover object-center"
             sizes="100vw"

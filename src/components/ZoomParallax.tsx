@@ -47,7 +47,7 @@ function PictureItem({
         <div className="relative w-full h-full rounded-xl overflow-hidden bg-gray-100">
           <Image
             src={src}
-            alt={`Gallery image ${index + 1}`}
+            alt={`Bytes Platform project gallery image ${index + 1}`}
             className="object-cover transition-transform duration-500 hover:scale-110"
             fill
           />

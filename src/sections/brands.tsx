@@ -40,7 +40,12 @@ export const BrandsSection = () => {
           <div className="flex gap-8 pr-8 flex-none brands-scroll">
             {[...new Array(2)].fill(0).map((_, idx) => (
               <Fragment key={idx}>
-                {brands.map((brand) => (
+                {brands.map((brand) => {
+                  const clientDomain = brand.link
+                    .replace(/^https?:\/\//, '')
+                    .replace(/^www\./, '')
+                    .replace(/\/$/, '');
+                  return (
                   <a
                     key={`${idx}-${brand.src}`}
                     href={brand.link}
@@ -50,7 +55,7 @@ export const BrandsSection = () => {
                   >
                     <OptimizedImage
                       src={brand.src}
-                      alt="Client logo"
+                      alt={`${clientDomain} logo — a Bytes Platform client`}
                       width={240}
                       height={120}
                       className="object-contain w-28 h-14"
@@ -58,7 +63,8 @@ export const BrandsSection = () => {
                       quality={80}
                     />
                   </a>
-                ))}
+                  );
+                })}
               </Fragment>
             ))}
           </div>

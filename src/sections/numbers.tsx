@@ -172,7 +172,7 @@ export const NumbersSection = () => {
             <div className="cube-container animate-float">
               <Image
                 src="/assets/numbers/cube.png"
-                alt="Decorative Cube"
+                alt="Floating 3D cube graphic representing Bytes Platform's digital services"
                 width={500}
                 height={500}
                 priority

@@ -13,7 +13,7 @@ export default function ContactPage() {
       <section className="relative flex items-center justify-center h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-screen overflow-hidden text-center bg-gray-800">
         <Image
           src="/assets/contactbg.png"
-          alt="Contact background"
+          alt="Bytes Platform contact page background"
           fill
           priority
           quality={100}

@@ -409,7 +409,7 @@ const MarketingPage = () => {
           <div className="relative w-full h-full">
             <Image
               src="/assets/Marketing/market(2).webp"
-              alt="Marketing Illustration"
+              alt="Digital marketing illustration for Bytes Platform marketing services"
               fill
               className="object-contain object-center"
               priority
@@ -437,7 +437,7 @@ const MarketingPage = () => {
             <div className="absolute -top-2 -right-2 left-2 bottom-2 sm:-top-4 sm:-right-4 sm:left-4 sm:bottom-4 border-2 sm:border-4 border-purple-400 -z-10 rounded-full"></div>
             <Image
               src="/assets/Marketing/smm.webp"
-              alt="Social Media Marketing"
+              alt="Social media marketing services by Bytes Platform"
               fill
               className="object-cover"
               loading="lazy"
@@ -812,7 +812,7 @@ const MarketingPage = () => {
           >
             <Image
               src="/assets/Marketing/PPC_Management.webp"
-              alt="Professional PPC"
+              alt="Professional pay-per-click (PPC) advertising management by Bytes Platform"
               fill
               className="object-cover"
               loading="lazy"
