@@ -162,7 +162,7 @@ const HeroSection = () => {
         <div className={styles.backgroundImage}>
           <OptimizedImage 
             src="/assets/hero images/hero-4.png"
-            alt="Hero background"
+            alt="Bytes Platform homepage hero background with a night sky"
             fill
             priority
             quality={90}
@@ -184,7 +184,7 @@ const HeroSection = () => {
           >
             <OptimizedImage 
               src="/assets/hero images/hero-2.png"
-              alt="Moon"
+              alt="Glowing moon in the Bytes Platform homepage hero"
               fill
               priority
               quality={85}
@@ -201,7 +201,7 @@ const HeroSection = () => {
         >
           <OptimizedImage 
             src="/assets/hero images/hero-1.png"
-            alt="Landscape"
+            alt="Illustrated mountain landscape in the Bytes Platform homepage hero"
             fill
             priority
             quality={85}

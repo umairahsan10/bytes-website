@@ -998,7 +998,7 @@ export default function AboutPage() {
       <section ref={heroRef} className="relative h-screen w-full overflow-hidden pt-20">
         <div className="bg bg-[#010a14] absolute inset-0"></div>
         <div className="img-container relative flex flex-col gap-8 items-center justify-center h-full w-full will-change-transform transform-gpu">
-          <Image className="image" src="/assets/bg.webp" alt="Background" fill priority quality={85} sizes="100vw" />
+          <Image className="image" src="/assets/bg.webp" alt="Bytes Platform About page background" fill priority quality={85} sizes="100vw" />
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
             <h1 className="hero-title text-[12vw] sm:text-[10vw] md:text-[8vw] lg:text-8xl xl:text-9xl leading-none whitespace-nowrap will-change-transform transform-gpu">
               <span className="bg-gradient-to-r from-purple-900 via-white to-purple-900 bg-clip-text text-transparent">About</span> <span className="bg-gradient-to-r from-purple-500 via-white to-purple-400 bg-clip-text text-transparent">Us</span>
@@ -1179,7 +1179,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
                 <motion.div variants={animationVariants.fadeInUp}>
                   <Image
                     src="/assets/aboutUs/image1.webp"
-                    alt="Philosophy"
+                    alt="Illustration of the Bytes Platform design and development philosophy"
                     width={800}
                     height={600}
                     className="object-contain w-full h-[420px] lg:h-[500px]"
@@ -1282,7 +1282,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
               >
                 <Image
                   src="/assets/aboutUs/img2.webp"
-                  alt="Tech Stack Image Left"
+                  alt="Technologies and tools in the Bytes Platform development tech stack"
                   width={800}
                   height={600}
                   className="object-cover w-full h-64 rounded-2xl"
@@ -1347,7 +1347,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
               >
                 <Image
                   src="/assets/aboutUs/tech-stack.webp"
-                  alt="Tech Stack Image Right"
+                  alt="Programming frameworks and platforms used by the Bytes Platform team"
                   width={800}
                   height={600}
                   className="object-cover w-full h-64 rounded-2xl"
@@ -1530,7 +1530,7 @@ Our mission is simple: to empower businesses with digital solutions that don’t
         {/* Decorative background image */}
         <Image
           src="/assets/aboutUs/aboutus-contact.webp"
-          alt="Contact illustration"
+          alt="Bytes Platform contact call-to-action background"
           fill
           className="object-cover absolute inset-0"
           loading="lazy"

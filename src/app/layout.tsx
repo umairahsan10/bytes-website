@@ -26,7 +26,7 @@ const calistoga = Calistoga({
 
 export const metadata: Metadata = {
   title: "Digital Marketing Agency | Bytes Platform",
-  description: "Bytes Platform is a full-service digital marketing agency. We provide SEO, PPC, social media, web design, and more.",
+  description: "Bytes Platform is a Denton, TX digital agency building custom websites, apps, SEO, and AI solutions that grow your business. Get a free consultation today.",
   icons: {
     icon: "/favicon.png",
   },

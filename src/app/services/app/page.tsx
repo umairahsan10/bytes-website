@@ -635,7 +635,7 @@ const AppDevelopmentPage = () => {
             >
               <Image
                 src="/assets/newimages/mobileapp.webp"
-                alt="Mobile app hero mockup"
+                alt="Mockup of a custom mobile app built by Bytes Platform"
                 fill
                 className="object-contain"
                 sizes="(max-width: 640px) 90vw, (max-width: 1024px) 50vw, 40vw"
@@ -864,7 +864,7 @@ const AppDevelopmentPage = () => {
           {/* Decorative background image */}
           <Image
             src="/assets/app-img-3.webp"
-            alt="Mobile app showcase"
+            alt="Showcase of mobile apps developed by Bytes Platform"
             fill
             className="object-cover absolute inset-0"
             sizes="100vw"

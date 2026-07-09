@@ -30,7 +30,7 @@ export const Footer = () => {
       <div className="max-w-7xl items-start mx-auto grid grid-cols-1 sm:grid-cols-2 gap-y-12 sm:gap-12 lg:flex lg:gap-12">
         {/* Logo / About */}
         <div className="lg:w-1/5 sm:col-span-2 mb-6 lg:mb-0 text-center sm:text-left">
-          <Image src="/assets/bytes-logo.png" alt="Bytes Logo" width={140} height={40} className="mb-4 mx-auto sm:mx-0" />
+          <Image src="/assets/bytes-logo.png" alt="Bytes Platform logo" width={140} height={40} className="mb-4 mx-auto sm:mx-0" />
           <p className="text-sm leading-relaxed max-w-xs mx-auto sm:mx-0">
             Bytes Platform delivers cutting-edge digital solutions that empower businesses to innovate and grow.
           </p>

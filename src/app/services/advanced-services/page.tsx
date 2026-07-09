@@ -156,7 +156,7 @@ const AdvancedServicesPage: React.FC = () => {
         {/* Background Image */}
         <Image
           src="/assets/servicebg.webp"
-          alt="Advanced Services Background"
+          alt="Bytes Platform advanced digital services background"
           fill
           priority
           className="object-cover object-center absolute inset-0 z-0"
@@ -340,7 +340,7 @@ const AdvancedServicesPage: React.FC = () => {
         {/* Background Wallpaper */}
         <Image
           src="/assets/wallpaper.webp"
-          alt="Transform business background wallpaper"
+          alt="Background inviting businesses to transform with Bytes Platform advanced services"
           fill
           priority
           className="object-cover object-center fixed inset-0 z-0"

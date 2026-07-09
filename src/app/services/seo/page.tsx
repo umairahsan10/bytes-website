@@ -1482,7 +1482,7 @@ const SEOPage: React.FC = () => {
                 <div className="relative aspect-square rounded-lg overflow-hidden shadow-lg">
                   <Image
                     src="/assets/seo-img-1.webp"
-                    alt="SEO Strategy"
+                    alt="Bytes Platform SEO strategy for improving search engine rankings"
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 50vw"
