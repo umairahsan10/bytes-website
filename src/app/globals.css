@@ -10,6 +10,28 @@
 @import "tailwindcss/preflight";
 @import "tailwindcss/utilities";
 
+/* ─────────────────────────────────────────────────────────────
+   BYTES // DIGITAL INFRASTRUCTURE IN MOTION — design tokens
+   Prefixed `bytes-` to avoid collisions with existing utilities.
+   Generates: bg-bytes-ink, text-bytes-steel, border-bytes-line, etc.
+   ───────────────────────────────────────────────────────────── */
+@theme {
+  --color-bytes-ink: #02050C;
+  --color-bytes-midnight: #071426;
+  --color-bytes-navy: #0C1D36;
+  --color-bytes-graphite: #111A29;
+  --color-bytes-blue: #2F6BFF;
+  --color-bytes-signal: #4C92FF;
+  --color-bytes-cyan: #72DAFF;
+  --color-bytes-ice: #F2F7FC;
+  --color-bytes-steel: #B9C7D8;
+  --color-bytes-line: rgba(111, 167, 255, 0.18);
+  --color-bytes-glass: rgba(10, 24, 45, 0.58);
+
+  --font-bytes-display: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-bytes-mono: var(--font-plex-mono), ui-monospace, "SF Mono", monospace;
+}
+
 /* Font removed - using system fonts instead */
 
 @font-face {

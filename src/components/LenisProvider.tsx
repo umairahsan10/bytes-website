@@ -2,6 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Lenis from "lenis";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface LenisProviderProps {
   children: React.ReactNode;
@@ -34,12 +38,15 @@ export function LenisProvider({ children }: LenisProviderProps) {
     // Expose Lenis instance globally so other components can access it
     (window as any).lenis = lenis;
 
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
+    // Keep ScrollTrigger in sync with Lenis-driven scroll. Without this,
+    // pinned/scrubbed timelines sample stale positions during smoothing.
+    lenis.on("scroll", ScrollTrigger.update);
 
-    requestAnimationFrame(raf);
+    const tickerCallback = (time: number) => {
+      lenis.raf(time * 1000);
+    };
+    gsap.ticker.add(tickerCallback);
+    gsap.ticker.lagSmoothing(0);
 
     // Mark as initialized
     setIsInitialized(true);
@@ -54,6 +61,7 @@ export function LenisProvider({ children }: LenisProviderProps) {
     window.addEventListener('beforeunload', handleBeforeUnload);
 
     return () => {
+      gsap.ticker.remove(tickerCallback);
       lenis.destroy();
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };

@@ -1,6 +1,6 @@
 // Abdullah Zindabad
 import type { Metadata, Viewport } from "next";
-import { Inter, Calistoga } from "next/font/google";
+import { Inter, Calistoga, Instrument_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import "./critical.css"; // Critical above-the-fold CSS
 import { twMerge } from "tailwind-merge";
@@ -22,6 +22,20 @@ const calistoga = Calistoga({
   variable: "--font-serif",
   weight: ["400"],
   display: 'swap', // Optimize font loading
+});
+
+// Homepage revamp type system: engineered grotesk display/body + mono metadata
+const instrumentSans = Instrument_Sans({
+  subsets: ["latin"],
+  variable: "--font-instrument",
+  display: "swap",
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-plex-mono",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -146,6 +160,8 @@ export default function RootLayout({
         className={twMerge(
           inter.variable,
           calistoga.variable,
+          instrumentSans.variable,
+          plexMono.variable,
           "text-black antialiased font-sans min-h-screen flex flex-col"
         )}
       >
