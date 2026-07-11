@@ -1,0 +1,1 @@
+export { AboutProof } from './AboutProof';

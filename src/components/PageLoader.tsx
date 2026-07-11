@@ -8,9 +8,14 @@ interface PageLoaderProps {
   children: React.ReactNode;
 }
 
+// Routes that run their own boot sequence (SystemLoader) instead of the
+// global loading overlay.
+const SELF_LOADING_ROUTES = ["/home-v2"];
+
 const PageLoader: React.FC<PageLoaderProps> = ({ children }) => {
   const pathname = usePathname();
-  const [loading, setLoading] = useState<boolean>(true);
+  const selfLoading = SELF_LOADING_ROUTES.some((r) => pathname.startsWith(r));
+  const [loading, setLoading] = useState<boolean>(!selfLoading);
   const isMountedRef = useRef(true);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -102,7 +107,7 @@ const PageLoader: React.FC<PageLoaderProps> = ({ children }) => {
       // Use setTimeout to defer the state update
       timeoutRef.current = setTimeout(() => {
         if (isMountedRef.current) {
-          setLoading(true);
+          setLoading(!SELF_LOADING_ROUTES.some((r) => pathname.startsWith(r)));
         }
       }, 0);
     }

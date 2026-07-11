@@ -1,0 +1,1 @@
+export { IndustryStage } from './IndustryStage';

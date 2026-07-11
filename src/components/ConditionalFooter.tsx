@@ -6,7 +6,8 @@ import { Footer } from "@/sections/Footer";
 export default function ConditionalFooter() {
   const pathname = usePathname();
 
-  if (pathname.startsWith("/portfolio")) {
+  // Portfolio has its own layout; the revamped homepage renders PremiumFooter itself.
+  if (pathname.startsWith("/portfolio") || pathname.startsWith("/home-v2")) {
     return null;
   }
 

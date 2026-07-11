@@ -15,7 +15,9 @@
    Prefixed `bytes-` to avoid collisions with existing utilities.
    Generates: bg-bytes-ink, text-bytes-steel, border-bytes-line, etc.
    ───────────────────────────────────────────────────────────── */
-@theme {
+/* `inline` because this stylesheet only imports preflight+utilities (no theme
+   layer), so var(--color-*) references would never resolve at runtime. */
+@theme inline {
   --color-bytes-ink: #02050C;
   --color-bytes-midnight: #071426;
   --color-bytes-navy: #0C1D36;
@@ -262,6 +264,15 @@ a[aria-label="Built with Spline"] {
 
 .prose li {
   margin-bottom: 0.5rem;
+}
+
+/* Homepage revamp: the bare ul/ol rules below exist for blog content and leak
+   markers/margins into layout lists. Neutralized inside the revamped home tree. */
+[data-bytes-home] ul,
+[data-bytes-home] ol {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
 }
 
 /* Ensure bullet points are visible even without prose class */
